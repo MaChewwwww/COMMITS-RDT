@@ -12,7 +12,19 @@
     git clone https://github.com/AltheaEHEM1/COMMITS-RDT.git
     ```
 
-### Step 2: Configure the Environment
+### Step 2: Set Up the Database (MySQL)
+This project specifically uses MySQL as the database management system. Follow the steps below to set up the database:
+1. Open your MySQL client (e.g., MySQL Workbench, phpMyAdmin, or the MySQL command line).
+2. Create a new database (schema) named `prms`.
+    - Using the MySQL command line:
+        ```bash
+        git clone https://github.com/AltheaEHEM1/COMMITS-RDT.git
+        ```
+    - In MySQL Workbench or phpMyAdmin, select "Create New Database" and name it `prms`.
+3. Ensure the database user credentials (username and password) have the necessary privileges to access and modify the prms database.
+
+
+### Step 3: Configure the Environment
 - Rename the `.env.example` file to `.env` by simply right-click and rename or by running the following command in Terminal:
     ```cmd
     ren .env.example .env
@@ -28,19 +40,19 @@
     ```
     *Note: The default `DB_PORT` is `3306`. Adjust it if your setup uses a different port. Same goes for `DB_USERNAME` and `DB_PASSWORD`.*
 
-### Step 3: Install Dependencies
+### Step 4: Install Dependencies
 - Install the required Laravel dependencies using Composer:
     ```bash
     composer install
     ```
 
-### Step 4: Generate the Application Key
+### Step 5: Generate the Application Key
 - Generate a new application key to secure your installation:
     ```bash
     php artisan key:generate
     ```
 
-### Step 5: Set Up the Database
+### Step 6: Set Up the Database
 - Run the migrations to create the necessary database tables:
     ```bash
     php artisan migrate
@@ -50,7 +62,7 @@
     php artisan db:seed
     ```
 
-### Step 6: Start the Development Server
+### Step 7: Start the Development Server
 - Start the Laravel development server:
     ```bash
     php artisan serve
