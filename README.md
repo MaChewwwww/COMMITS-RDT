@@ -18,7 +18,7 @@ This project specifically uses MySQL as the database management system. Follow t
 2. Create a new database (schema) named `prms`.
     - Using the MySQL command line:
         ```bash
-        git clone https://github.com/AltheaEHEM1/COMMITS-RDT.git
+        CREATE DATABASE prms;
         ```
     - In MySQL Workbench or phpMyAdmin, select "Create New Database" and name it `prms`.
 3. Ensure the database user credentials (username and password) have the necessary privileges to access and modify the prms database.
