@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('description', 250); // Corrected `Description`
             $table->string('status', 50); // Corrected `Status`
             $table->string('supplier_name', 150); // Corrected `Supplier Name`
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade'); // Reference the box to user
         });
     }
 

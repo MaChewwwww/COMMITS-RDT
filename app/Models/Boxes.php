@@ -20,6 +20,7 @@ class Boxes extends Model
         'description',
         'status',
         'supplier_name',
+        'user_id', // for user relationship
     ];
 
     /**
@@ -28,5 +29,13 @@ class Boxes extends Model
     public function medicine()
     {
         return $this->hasOne(Medicine::class, 'box_id');
+    }
+
+    /**
+     * Get the user that owns the box.
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }

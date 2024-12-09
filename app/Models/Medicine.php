@@ -17,9 +17,7 @@ class Medicine extends Model
         'box_id'
     ];
 
-    // Laravel will automatically look for 'medicines' table
-    protected $table = 'medicines'; // Optional - Laravel assumes this by default
-
+    protected $table = 'medicines'; 
     public function box()
     {
         return $this->belongsTo(Boxes::class, 'box_id');
