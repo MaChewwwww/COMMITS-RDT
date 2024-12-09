@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Boxes;
 use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Medicine;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -14,15 +14,26 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
-        User::factory()->create([
+        // Create test user
+        $user = User::factory()->create([
             'id' => 1,
             'name' => 'Test User',
             'email' => 'test@example.com',
             'password' => bcrypt('pass123')
         ]);
 
-        Boxes::factory(100)->create();
+        // Create boxes first
+        $boxes = Boxes::factory()
+            ->count(10)
+            ->create([
+                'user_id' => $user->id
+            ]);
+
+        // Create medicines for each box
+        foreach ($boxes as $box) {
+            Medicine::factory()->create([
+                'box_id' => $box->id
+            ]);
+        }
     }
 }
