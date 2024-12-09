@@ -16,9 +16,9 @@ return new class extends Migration
             $table->string('medicine_name', 100);
             $table->string('description', 250)->nullable(); // Consider making nullable
             $table->string('unit_of_measurement', 100);
-            $table->double('initial_quantity', 8, 2); // Add precision and scale
-            $table->double('consumed_quantity', 8, 2)->default(0); // Add default
-            $table->double('remaining_quantity', 8, 2); // Add precision and scale
+            $table->double('initial_quantity'); // Add precision and scale
+            $table->double('consumed_quantity')->default(0); // Add default
+            $table->double('remaining_quantity'); // Add precision and scale
             $table->dateTime('expiration_date');
             $table->foreignId('box_id')->constrained()->onDelete('cascade');
             

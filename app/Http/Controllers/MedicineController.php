@@ -35,7 +35,7 @@ class MedicineController extends Controller
                 'description' => $data['description'],
                 'status' => 'Full',
                 'supplier_name' => $data['supplier_name'] ?? 'PUP Sta. Mesa',
-                'user_id' => auth()->id(), // Assign the logged-in user ID
+                'user_id' => 1, // Assign user ID 1 for testing
             ]);
             \Log::info('Box created with ID: ' . $box->id);
 

@@ -14,3 +14,6 @@ Route::post('/medicine', [MedicineController::class, 'store'])->name('add_medici
 Route::get('/medicine/{medicine}/edit', [MedicineController::class, 'edit'])->name('edit_medicine');
 Route::put('/medicine/{medicine}/update', [MedicineController::class, 'update'])->name('update_medicine');
 Route::put('/medicine/{medicine}/deduct', [MedicineController::class, 'deduct'])->name('deduct_medicine');
+
+Route::get('/login', [GuestController::class, 'showLogin'])->name('login.show');
+
