@@ -1,10 +1,10 @@
 <?php
 
-use App\Http\Controllers\GuestController;
+use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
 
-Route::get('/login', [GuestController::class, 'showLogin'])->name('login.show');
+Route::get('/', [AuthController::class, 'showLogin'])->name('login.show');
