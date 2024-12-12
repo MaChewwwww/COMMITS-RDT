@@ -45,6 +45,10 @@ This project specifically uses MySQL as the database management system. Follow t
     ```bash
     composer install
     ```
+- Install vite for TailwindCSS:
+   ```bash
+    npm install
+   ```
 
 ### Step 5: Generate the Application Key
 - Generate a new application key to secure your installation:
