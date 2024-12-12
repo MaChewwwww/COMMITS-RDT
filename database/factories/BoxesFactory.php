@@ -19,10 +19,9 @@ class BoxesFactory extends Factory
     {
         return [
             'date_received' => $this->faker->dateTimeBetween('-1 year', 'now'),
-            'box_name' => 'Box ' . $this->faker->unique()->numberBetween(1000, 9999),
-            'description' => $this->faker->sentence(),
-            'status' => 'Full',
-            'supplier_name' => $this->faker->company(),
+            'stock_number' => str_pad($this->faker->unique()->numberBetween(0, 999), 3, '0', STR_PAD_LEFT) . '-' . str_pad($this->faker->unique()->numberBetween(0, 999), 3, '0', STR_PAD_LEFT),
+            'isReturned' => false,
+            'supplier_name' => $this->faker->randomElement(['United Laboratories (Unilab)', 'Mercury Drug Corporation', 'RiteMED', 'Pascual Laboratories']),
             'user_id' => 1
         ];
     }

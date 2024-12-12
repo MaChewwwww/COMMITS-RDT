@@ -16,9 +16,8 @@ class Boxes extends Model
      */
     protected $fillable = [
         'date_received',
-        'box_name', 
-        'description',
-        'status',
+        'stock_number', 
+        'isReturned',
         'supplier_name',
         'user_id', // for user relationship
     ];

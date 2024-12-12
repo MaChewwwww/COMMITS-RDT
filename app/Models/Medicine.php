@@ -11,13 +11,13 @@ class Medicine extends Model
 
     protected $fillable = [
         'medicine_name',
-        'description',
         'initial_quantity',
         'consumed_quantity',
         'remaining_quantity',
-        'unit_of_measurement',
+        'unit',
         'expiration_date',
-        'box_id'
+        'box_id',
+        'status'
     ];
 
     protected $table = 'medicines'; 

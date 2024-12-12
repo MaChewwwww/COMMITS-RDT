@@ -5,53 +5,75 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Boxes;
 use App\Models\Medicine;
+use App\Models\User;
+use Carbon\Carbon;
 
 class MedicineController extends Controller
 {
-    public function index(){
+    public function index()
+    {
+        // Get all medicines with box relationship
         $medicines = Medicine::with('box')->get();
-        return view('medicine.medicine_index', compact('medicines'));
+
+        // Calculate quantities
+        $totalMedicine = $medicines->sum('remaining_quantity');
+        $expiredMedicine = Medicine::where('expiration_date', '<', Carbon::now()->addDay())
+            ->sum('remaining_quantity');
+        $nearExpiredMedicine = Medicine::whereBetween('expiration_date', [
+            Carbon::now(),
+            Carbon::now()->addMonth()
+        ])->sum('remaining_quantity');
+
+        // Count returned and not returned medicines
+        $returnedMedicines = $medicines->filter(function($medicine) {
+            return $medicine->box->isReturned == true;
+        })->count();
+
+        $notReturnedMedicines = $medicines->filter(function($medicine) {
+            return $medicine->box->isReturned == false;
+        })->count();
+
+        return view('medicine.medicine_index', 
+            compact('medicines', 'totalMedicine', 'expiredMedicine', 'nearExpiredMedicine',
+                    'returnedMedicines', 'notReturnedMedicines'));
     }
 
     public function add(){
-        return view('medicine.add_medicine');
+        $users = User::all();
+        return view('medicine.add_medicine', compact('users'));
     }
 
     public function store(Request $request)
     {
             // Validate medicine data
             $data = $request->validate([
-                'medicine_name' => 'required',
-                'description' => 'required',
-                'initial_quantity' => 'required|numeric',
+                'stock_number' => 'required',
                 'unit_of_measurement' => 'required',
+                'medicine_name' => 'required',
+                'initial_quantity' => 'required|numeric',
+                'supplier_name' => 'required',
+                'date_received' => 'required|date',
+                'user_id' => 'required',
                 'expiration_date' => 'required|date',
             ]);
 
             // Create box 
             $box = Boxes::create([
-                'date_received' => now(),
-                'box_name' => 'Box for ' . $data['medicine_name'],
-                'description' => $data['description'],
-                'status' => 'Full',
+                'date_received' => $data['date_received'],
+                'stock_number' => $data['stock_number'],
+                'isReturned' => False,
                 'supplier_name' => $data['supplier_name'] ?? 'PUP Sta. Mesa',
                 'user_id' => 1, // Assign user ID 1 for testing
             ]);
-            \Log::info('Box created with ID: ' . $box->id);
 
-            // Create medicine 
-            \Log::info('Creating medicine with data:', [
-                'medicine_data' => $data,
-                'box_id' => $box->id
-            ]);
-            
+            // Create medicine             
             // Try using relationship instead of direct creation
             $medicine = $box->medicine()->create([
                 'medicine_name' => $data['medicine_name'],
-                'description' => $data['description'],
                 'initial_quantity' => $data['initial_quantity'],
                 'remaining_quantity' => $data['initial_quantity'], 
-                'unit_of_measurement' => $data['unit_of_measurement'],
+                'unit' => $data['unit_of_measurement'],
+                'status' => 'Full', 
                 'expiration_date' => $data['expiration_date']
             ]);
 
@@ -61,7 +83,8 @@ class MedicineController extends Controller
     }
 
     public function edit(Medicine $medicine){
-        return view('medicine.edit_medicine', ['medicine' => $medicine]);
+        $users = User::all();
+        return view('medicine.edit_medicine', compact('medicine', 'users'));
     }
 
     public function update(Request $request, Medicine $medicine)
@@ -69,26 +92,39 @@ class MedicineController extends Controller
         // Validate medicine data
         $data = $request->validate([
             'medicine_name' => 'required',
-            'description' => 'required',
-            'initial_quantity' => 'required|numeric',
+            'stock_number' => 'required',
+            'initial_quantity' => 'required|numeric|min:'.$medicine['consumed_quantity'].'|max:999999',
             'unit_of_measurement' => 'required',
+            'supplier_name' => 'required',
+            'date_received' => 'required|date',
+            'user_id' => 'required',
             'expiration_date' => 'required|date',
         ]);
 
         // Update medicine
+        $remainingQty = $data['initial_quantity'] - $medicine['consumed_quantity'];
+        if ($remainingQty < 1) {
+            $remainingQty = 0;
+        }
+
         $medicine->update([
             'medicine_name' => $data['medicine_name'],
-            'description' => $data['description'],
             'initial_quantity' => $data['initial_quantity'],
-            'remaining_quantity' => $data['initial_quantity'],
-            'unit_of_measurement' => $data['unit_of_measurement'],
-            'expiration_date' => $data['expiration_date']
+            'consumed_quantity' => $medicine['consumed_quantity'],
+            'remaining_quantity' => $remainingQty,
+            'unit' => $data['unit_of_measurement'],
+            'expiration_date' => $data['expiration_date'],
+            'status' => $remainingQty == $data['initial_quantity'] ? 'Full' :
+                   ($remainingQty == 0 ? 'Out of Stock' :
+                   ($remainingQty <= ($data['initial_quantity'] * 0.2) ? 'Low Stock' : 'In Stock'))
         ]);
 
         // Update associated box
         $medicine->box->update([
-            'box_name' => 'Box for ' . $data['medicine_name'],
-            'description' => $data['description'],
+            'stock_number' => $data['stock_number'],
+            'date_received' => $data['date_received'],
+            'supplier_name' => $data['supplier_name'],
+            'user_id' => $data['user_id']
         ]);
 
         return redirect()->route('medicine_dashboard')
@@ -103,24 +139,13 @@ class MedicineController extends Controller
 
         $medicine->update([
             'consumed_quantity' => $medicine->consumed_quantity + $data['quantity'],
-            'remaining_quantity' => $medicine->remaining_quantity - $data['quantity']
+            'remaining_quantity' => $medicine->remaining_quantity - $data['quantity'],
+            'status' => $medicine->remaining_quantity - $data['quantity'] == $medicine->initial_quantity ? 'Full' :
+                   ($medicine->remaining_quantity - $data['quantity'] == 0 ? 'Out of Stock' :
+                   ($medicine->remaining_quantity - $data['quantity'] <= ($medicine->initial_quantity * 0.2) ? 'Low Stock' : 'In Stock'))
         ]);
-
-        // Calculate and update box status after deduction
-        $this->calculateBoxStatus($medicine);
 
         return redirect()->route('medicine_dashboard')
             ->with('success', 'Medicine quantity has been deducted');
-    }
-
-    public function calculateBoxStatus(Medicine $medicine)
-    {
-        $percentageRemaining = ($medicine->remaining_quantity / $medicine->initial_quantity) * 100;
-        
-        if ($medicine->remaining_quantity == 0) {
-            $medicine->box->update(['status' => 'Empty']);
-        } elseif ($percentageRemaining <= 20) {
-            $medicine->box->update(['status' => 'Low Stock']);
-        }
     }
 }

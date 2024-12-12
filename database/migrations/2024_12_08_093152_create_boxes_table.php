@@ -15,10 +15,9 @@ return new class extends Migration
             $table->id();
             $table->timestamps(); // Includes `created_at` and `updated_at`
             $table->timestamp('date_received')->nullable(); // Corrected `Date Received`
-            $table->string('box_name', 100); // Corrected `Box Name`
-            $table->string('description', 250); // Corrected `Description`
-            $table->string('status', 50); // Corrected `Status`
+            $table->string('stock_number', 100); // Corrected `Box Name`
             $table->string('supplier_name', 150); // Corrected `Supplier Name`
+            $table->boolean('isReturned')->default(false);
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade'); // Reference the box to user
         });
     }

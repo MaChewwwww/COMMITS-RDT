@@ -29,8 +29,9 @@
         <!-- Flash Messages -->
         @if(session('success'))
             <div class="container mt-3">
-                <div class="alert alert-success">
+                <div class="alert alert-success alert-dismissible fade show" id="successAlert" role="alert">
                     {{ session('success') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             </div>
         @endif
@@ -43,6 +44,19 @@
 
     <!-- Add JavaScript files or scripts here -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const successAlert = document.getElementById('successAlert');
+            if (successAlert) {
+                setTimeout(function() {
+                    successAlert.classList.remove('show');
+                    setTimeout(function() {
+                        successAlert.remove();
+                    }, 150);
+                }, 5000);
+            }
+        });
+    </script>
     @stack('scripts')
 </body>
 </html>
