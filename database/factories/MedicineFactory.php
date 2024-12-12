@@ -14,14 +14,24 @@ class MedicineFactory extends Factory
     {
         $initialQuantity = $this->faker->randomFloat(2, 1, 1000);
         $consumedQuantity = $this->faker->randomFloat(2, 0, $initialQuantity);
+        $remainingQuantity = $initialQuantity - $consumedQuantity;
         
+        $status = 'In Stock';
+        if ($remainingQuantity == $initialQuantity) {
+            $status = 'Full';
+        } elseif ($remainingQuantity == 0) {
+            $status = 'Out of Stock';
+        } elseif ($remainingQuantity <= ($initialQuantity * 0.2)) {
+            $status = 'Low Stock';
+        }
+
         return [
             'medicine_name' => $this->faker->words(3, true),
-            'description' => $this->faker->sentence(),
-            'unit_of_measurement' => $this->faker->randomElement(['tablets', 'ml', 'mg', 'capsules']),
+            'unit' => $this->faker->randomElement(['tablets', 'ml', 'mg', 'capsules']),
+            'status' => $status,
             'initial_quantity' => $initialQuantity,
             'consumed_quantity' => $consumedQuantity,
-            'remaining_quantity' => $initialQuantity - $consumedQuantity,
+            'remaining_quantity' => $remainingQuantity,
             'expiration_date' => $this->faker->dateTimeBetween('now', '+2 years'),
             'box_id' => Boxes::factory(),
         ];
