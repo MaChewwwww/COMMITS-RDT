@@ -2,54 +2,58 @@
 
 @extends('layouts.guest-layout')
 
-@section('guest-content')
-<div class="flex items-center justify-center min-h-screen bg-gray-100">
-    <div class="w-full max-w-md p-6 bg-white rounded-lg shadow-md">
-        <h2 class="mb-6 text-2xl font-bold text-center">Login</h2>
-        
-        <form action="{{ route('login') }}" method="POST">
+@section('guest_content')
+    <div class="bg-[#D9D9D9] bg-opacity-80 p-8 flex flex-col rounded-3xl items-center justify-center w-[423px] h-[490px]">
+        <div class="flex flex-col items-center mt-5">
+            <img class="w-[60px] h-[60px]" src="{{ asset('src/images/logo.png') }}" alt="logo">
+            <h2 class="mt-2 text-sm font-bold">Patient Record Management System</h2>
+        </div>
+        <form id="form" action="" method="post" class="flex flex-col items-center">
             @csrf
 
-            <div class="mb-4">
-                <label for="email" class="block mb-2 text-sm font-bold text-gray-700">
-                    Email <span class="text-red-500">*</span>
-                </label>
-                <input type="email" 
-                       name="email" 
-                       id="email" 
-                       class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 @error('email') border-red-500 @enderror"
-                       value="{{ old('email') }}" 
-                       required>
-                @error('email')
-                    <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
-                @enderror
+            {{-- Email --}}
+            <div class="mt-8 input-control">
+                <div class="inline-flex items-center space-x-1">
+                    <x-input-label class="ml-1 text-xs font-medium text-gray-800" for="email" value="Email" />
+                    <span class="text-red-500">*</span>
+                </div>
+                <x-input-textfield id="email" name="email" class="block mt-1 border-2"
+                    placeholder="Enter your email" />
+                <div class="mt-2 ml-1 text-xs text-red-500 error"></div> <!-- Error div for email -->
             </div>
 
-            <div class="mb-4">
-                <label for="password" class="block mb-2 text-sm font-bold text-gray-700">
-                    Password <span class="text-red-500">*</span>
-                </label>
-                <input type="password" 
-                       name="password" 
-                       id="password" 
-                       class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 @error('password') border-red-500 @enderror"
-                       required>
-                @error('password')
-                    <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
-                @enderror
+            {{-- Password --}}
+            <div class="mt-2">
+                <div class="inline-flex items-center space-x-1">
+                    <x-input-label class="ml-1 text-xs font-medium text-gray-800" for="password" value="Password" />
+                    <span class="text-red-500">*</span>
+                </div>
+                <div class="relative input-control">
+                    <x-input-textfield id="password" type="password" name="password" class="block mt-1 border-2"
+                        placeholder="Enter your password" />
+                    <span id="password-hidden"
+                        class="absolute text-gray-600 transform -translate-y-1/2 cursor-pointer right-3 top-1/2">
+                        <i class="text-sm fas fa-eye-slash"></i>
+                    </span>
+                    <span id="password-show"
+                        class="absolute hidden text-gray-600 transform -translate-y-1/2 cursor-pointer right-3 top-1/2">
+                        <i class="text-sm fas fa-eye"></i>
+                    </span>
+                </div>
+                <div id="password-error" class="block mt-2 ml-1 text-xs text-red-500 w-80"></div>
             </div>
 
-            <div class="mb-6">
-                <label class="flex items-center">
-                    <input type="checkbox" name="remember" class="text-blue-600 border-gray-300 rounded shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
-                    <span class="ml-2 text-sm text-gray-600">Remember me</span>
-                </label>
+            {{-- Forgot Password --}}
+            <div class="flex justify-end w-full mt-2">
+                <a class="text-xs font-normal text-gray-700 underline hover:text-yellow-600" href="#">Forgot
+                    password?</a>
             </div>
 
-            <button type="submit" class="w-full px-4 py-2 text-white bg-blue-500 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
+            {{-- Submit Button --}}
+            <button type="submit"
+                class="bg-[#3CAA38] w-[260px] h-[42px] rounded-3xl mt-8 mb-5 text-white text-sm flex justify-center items-center">
                 Login
             </button>
         </form>
     </div>
-</div>
 @endsection
