@@ -13,6 +13,7 @@ class MedicineController extends Controller
     public function index()
     {
         // Get all medicines with box relationship
+        $users = User::all();
         $medicines = Medicine::with('box')->get();
 
         // Calculate quantities
@@ -35,7 +36,7 @@ class MedicineController extends Controller
 
         return view('medicine.medicine_index', 
             compact('medicines', 'totalMedicine', 'expiredMedicine', 'nearExpiredMedicine',
-                    'returnedMedicines', 'notReturnedMedicines'));
+                    'returnedMedicines', 'notReturnedMedicines', 'users'));
     }
 
     public function add(){
@@ -48,7 +49,7 @@ class MedicineController extends Controller
             // Validate medicine data
             $data = $request->validate([
                 'stock_number' => 'required',
-                'unit_of_measurement' => 'required',
+                'unit_of_measurement' => 'required|alpha',
                 'medicine_name' => 'required',
                 'initial_quantity' => 'required|numeric',
                 'supplier_name' => 'required',
@@ -82,11 +83,6 @@ class MedicineController extends Controller
 
     }
 
-    public function edit(Medicine $medicine){
-        $users = User::all();
-        return view('medicine.edit_medicine', compact('medicine', 'users'));
-    }
-
     public function update(Request $request, Medicine $medicine)
     {
         // Validate medicine data
@@ -94,7 +90,7 @@ class MedicineController extends Controller
             'medicine_name' => 'required',
             'stock_number' => 'required',
             'initial_quantity' => 'required|numeric|min:'.$medicine['consumed_quantity'].'|max:999999',
-            'unit_of_measurement' => 'required',
+            'unit_of_measurement' => 'required|alpha',
             'supplier_name' => 'required',
             'date_received' => 'required|date',
             'user_id' => 'required',
