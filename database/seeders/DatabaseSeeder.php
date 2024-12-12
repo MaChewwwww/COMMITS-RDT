@@ -10,7 +10,7 @@ use Illuminate\Database\Seeder;
 class DatabaseSeeder extends Seeder
 {
     /**
-     * Seed the application's database.
+     * Seed the application's database. - php artisan migrate:fresh --seed
      */
     public function run(): void
     {
@@ -19,7 +19,7 @@ class DatabaseSeeder extends Seeder
             'id' => 1,
             'name' => 'Test User',
             'email' => 'test@example.com',
-            'password' => bcrypt('pass123')
+            'password' => bcrypt('Ionlylovemyself123')
         ]);
 
         // Create boxes first

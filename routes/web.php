@@ -6,7 +6,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\MedicineController;
 
 // Guest routes
-Route::get('/login', [GuestController::class, 'showLogin'])->name('login.show');
+Route::get('/login', [AuthController::class, 'showLogin'])->name('login.show');
 Route::post('/login', [UserController::class, 'login'])->name('login');
 
 // Protected routes

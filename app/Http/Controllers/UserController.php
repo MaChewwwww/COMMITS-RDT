@@ -36,6 +36,6 @@ class UserController extends Controller
     public function logout(Request $request)
     {
         Auth::logout();
-        return response()->json(['message' => 'Logout successful'], 200);
+        return redirect()->route('login.show')->with('success', 'Logout successful');
     }
 }
