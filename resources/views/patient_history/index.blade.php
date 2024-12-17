@@ -7,7 +7,7 @@
     <h1>History</h1>
 
     <!-- Form for filtering records by identity and date range -->
-    <form method="GET" action="{{ route('patient_records.index') }}">
+    <form method="GET" action="{{ route('patient_history.index') }}">
         <label for="identity">Identity:</label>
         <select name="identity" id="identity">
             <option value="">All Identities</option>

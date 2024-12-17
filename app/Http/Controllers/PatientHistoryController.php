@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\PatientRecord;
 use Carbon\Carbon;
 
-class PatientRecordController extends Controller
+class PatientHistoryController extends Controller
 {
     public function index(Request $request)
     {
@@ -51,7 +51,7 @@ class PatientRecordController extends Controller
         ];
         
         // Return the view with filtered records and month options for the dropdown
-        return view('patient_records.index', [
+        return view('patient_history.index', [
             'records' => $records,
             'identityFilter' => $identityFilter,
             'months' => $months,
