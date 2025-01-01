@@ -25,38 +25,38 @@
             <a href="{{ route('patients.add') }}" class="inline-block px-4 py-2 bg-blue-500 text-white rounded-md mb-4 hover:bg-blue-600">
                 Add New Patient
             </a>
-            
+
             <!-- Patients Table -->
             <table class="min-w-full border-collapse border border-gray-300 mt-4">
                 <thead>
                     <tr>
-                        <th class="border border-gray-300 px-4 py-2 bg-gray-100 text-left font-medium text-gray-600">ID</th>
-                        <th class="border border-gray-300 px-4 py-2 bg-gray-100 text-left font-medium text-gray-600">Full Name</th>
+                        <th class="border border-gray-300 px-4 py-2 bg-gray-100 text-left font-medium text-gray-600">Date</th>
+                        <th class="border border-gray-300 px-4 py-2 bg-gray-100 text-left font-medium text-gray-600">Time</th>
+                        <th class="border border-gray-300 px-4 py-2 bg-gray-100 text-left font-medium text-gray-600">Printed Name</th>
                         <th class="border border-gray-300 px-4 py-2 bg-gray-100 text-left font-medium text-gray-600">Sex</th>
-                        <th class="border border-gray-300 px-4 py-2 bg-gray-100 text-left font-medium text-gray-600">Year/Course/Dept</th>
-                        <th class="border border-gray-300 px-4 py-2 bg-gray-100 text-left font-medium text-gray-600">Contact Details</th>
-                        <th class="border border-gray-300 px-4 py-2 bg-gray-100 text-left font-medium text-gray-600">Patient Status</th>
-                        <th class="border border-gray-300 px-4 py-2 bg-gray-100 text-left font-medium text-gray-600">Patient Type</th>
-                        <th class="border border-gray-300 px-4 py-2 bg-gray-100 text-left font-medium text-gray-600">Student Number</th>
-                        <th class="border border-gray-300 px-4 py-2 bg-gray-100 text-left font-medium text-gray-600">User ID</th>
+                        <th class="border border-gray-300 px-4 py-2 bg-gray-100 text-left font-medium text-gray-600">Course - Yr & Sect./Dept</th>
+                        <th class="border border-gray-300 px-4 py-2 bg-gray-100 text-left font-medium text-gray-600">Treatment / Medicine</th>
+                        <th class="border border-gray-300 px-4 py-2 bg-gray-100 text-left font-medium text-gray-600">Qty</th>
+                        <th class="border border-gray-300 px-4 py-2 bg-gray-100 text-left font-medium text-gray-600">Phyiscian</th>
+                        <th class="border border-gray-300 px-4 py-2 bg-gray-100 text-left font-medium text-gray-600">Status</th>
                         <th class="border border-gray-300 px-4 py-2 bg-gray-100 text-left font-medium text-gray-600">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($patients as $patient)
                     <tr class="hover:bg-gray-50">
-                        <td class="border border-gray-300 px-4 py-2">{{$patient->id}}</td>
+                        <td class="border border-gray-300 px-4 py-2">{{ $patient->created_at->format('Y-m-d') }}</td>
+                        <td class="border border-gray-300 px-4 py-2">{{ $patient->created_at->format('H:i A') }}</td>
                         <td class="border border-gray-300 px-4 py-2">{{$patient->fullname}}</td>
                         <td class="border border-gray-300 px-4 py-2">{{$patient->sex}}</td>
                         <td class="border border-gray-300 px-4 py-2">{{$patient->year_course_dept}}</td>
-                        <td class="border border-gray-300 px-4 py-2">{{$patient->contactDetails}}</td>
-                        <td class="border border-gray-300 px-4 py-2">{{$patient->patient_status}}</td>
-                        <td class="border border-gray-300 px-4 py-2">{{$patient->patientType}}</td>
-                        <td class="border border-gray-300 px-4 py-2">{{$patient->student_number}}</td>
+                        <td class="border border-gray-300 px-4 py-2">Lorem Ipsum</td>
+                        <td class="border border-gray-300 px-4 py-2">Lorem Ipsum</td>
                         <td class="border border-gray-300 px-4 py-2">{{$patient->user_id}}</td>
+                        <td class="border border-gray-300 px-4 py-2">{{$patient->patient_status}}</td>
                         <td class="border border-gray-300 px-4 py-2">
                             <!-- Edit Button -->
-                            <a href="{{ route('patients.edit', $patient->id) }}" class="text-blue-500 hover:text-blue-700 mr-2">Edit</a> | 
+                            <a href="{{ route('patients.edit', $patient->id) }}" class="text-blue-500 hover:text-blue-700 mr-2">Edit</a> |
                             <!-- Delete Button -->
                             <form action="{{ route('patients.destroy', $patient->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Are you sure you want to delete this patient?');">
                                 @csrf

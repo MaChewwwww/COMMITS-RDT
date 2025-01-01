@@ -2,39 +2,6 @@
 
 namespace App\Http\Controllers;
 
-<<<<<<< Updated upstream
-use App\Models\Patient;
-use Illuminate\Http\Request;
-
-class PatientController extends Controller
-{
-    public function index()
-    {
-        $patients = Patient::all();
-        return view('patients.index', compact('patients'));
-    }
-
-    public function create()
-    {
-
-    }
-
-    public function store()
-    {
-
-    }
-
-    public function edit()
-    {
-
-    }
-
-    // add isDeleted boolean first
-    public function destroy()
-    {
-
-    }
-=======
 use Illuminate\Http\Request;
 use App\Models\Patient;
 
@@ -45,7 +12,7 @@ class PatientController extends Controller
 
         return view('patient.patients', compact('patients'));
     }
-    
+
     public function add() {
         return view('patient.add');
     }
@@ -75,8 +42,8 @@ class PatientController extends Controller
     {
         // Find patient by ID
         $patient = Patient::findOrFail($id);
-
-        // Validate input
+        //dd($request->all());
+        //Validate input
         $validated = $request->validate([
             'fullname' => 'required|string|max:255',
             'sex' => 'required|in:Male,Female',
@@ -84,22 +51,23 @@ class PatientController extends Controller
             'contactDetails' => 'required|string|max:255',
             'patient_status' => 'required|string|max:255',
             'patientType' => 'required|in:Student,Faculty,Admin,Visitor,Dependent',
-            'user_id' => 'nullable|exists:users,id',
             'student_number' => 'nullable|string|max:255',
+            'user_id' => 'nullable|exists:users,id',
         ]);
 
         $patient->update([
-            'fullname'  => $request->input('fullname'),
-            'sex' => $request->input('sex'),
-            'year_course_dept' => $request->input('year_and_section'),
-            'contactDetails' => $request->input('contactDetails'),
-            'patient_status' => $request->input('patient_status'),
-            'patientType' => $request->input('patientType'),
-            'user_id' => $request->input('user_id'),
-            'student_number'  => $request->input('student_number'),
-        ]);
+                'fullname'  => $request->input('fullname'),
+                'sex' => $request->input('sex'),
+                'year_course_dept' => $request->input('year_course_dept'),
+                'contactDetails' => $request->input('contactDetails'),
+                'patient_status' => $request->input('patient_status'),
+                'patientType' => $request->input('patientType'),
+                'student_number'  => $request->input('student_number'),
+                'user_id' => $request->input('user_id'),
+            ]);
 
-        // Redirect back or to another page
+        //dd($patient->update());
+        // // Redirect back or to another page
         return redirect()->route('patients')->with('success', 'Patient updated successfully!');
     }
 
@@ -121,8 +89,5 @@ class PatientController extends Controller
         return view('patient.edit', compact('patient'));  // Pass the patient data to the view
     }
 
-        
 
-
->>>>>>> Stashed changes
 }
