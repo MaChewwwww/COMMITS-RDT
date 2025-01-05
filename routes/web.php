@@ -32,16 +32,76 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/logout', [UserController::class, 'logout'])->name('logout');
 });
 
-// Display a list of reports, allowing filters
-Route::get('/', [ReportController::class, 'index'])->name('report.index');
+Route::prefix('reports')->group(function () {
 
-// Show a single report
-Route::get('/reports/{id}', [ReportController::class, 'show'])->name('report.show');
+    // Display a list of reports, allowing filters
+    Route::get('/', [ReportController::class, 'index'])->name('report.index');
 
-// Store a new report
-Route::post('/reports', [ReportController::class, 'store'])->name('report.store');
+    // Show a single report
+    Route::get('/{id}', [ReportController::class, 'show'])->name('report.show');
 
-// Delete a report
-Route::delete('/reports/{id}', [ReportController::class, 'destroy'])->name('report.destroy');
+    // Store a new report
+    Route::post('/', [ReportController::class, 'store'])->name('report.store');
+
+    // Delete a report
+    Route::delete('/{id}', [ReportController::class, 'destroy'])->name('report.destroy');
+});
 
 
+//History
+Route::prefix('history')->group(function () {
+
+    Route::get('/', function () {
+        return view('HISTORY.all');
+    });
+
+    Route::get('/student', function () {
+        return view('HISTORY.student');
+    });
+
+    Route::get('/faculty', function () {
+        return view('HISTORY.faculty');
+    });
+
+    Route::get('/visitor', function () {
+        return view('HISTORY.visitor');
+    });
+
+    Route::get('/dependent', function () {
+        return view('HISTORY.dependent');
+    });
+
+    //Documents
+    Route::get('/', function () {
+        return view('Documents.adocument_file');
+    });
+
+    // Specific document views
+    Route::get('/med_certif', function () {
+        return view('Documents.med_certif');
+    });
+
+    Route::get('/med_clear', function () {
+        return view('Documents.med_clear');
+    });
+
+    Route::get('/annual_med_clear', function () {
+        return view('Documents.annual_med_clear');
+    });
+
+    Route::get('/excuse_letter', function () {
+        return view('Documents.excuse_letter');
+    });
+
+    Route::get('/waiver', function () {
+        return view('Documents.waiver');
+    });
+
+    Route::get('/waiver_for_pulm', function () {
+        return view('Documents.waiver_for_pulm');
+    });
+
+    Route::get('/dmdc_consent_form', function () {
+        return view('Documents.dmdc_consent_form');
+    });
+});
