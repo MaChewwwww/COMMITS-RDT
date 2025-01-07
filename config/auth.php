@@ -1,7 +1,7 @@
 <?php
 
 return [
-
+    //pre-defined account for authentication
     /*
     |--------------------------------------------------------------------------
     | Authentication Defaults
