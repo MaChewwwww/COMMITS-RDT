@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\MedicineController;
 
+
 // Guest routes
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login.show');
 Route::post('/login', [UserController::class, 'login'])->name('login');

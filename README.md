@@ -61,12 +61,14 @@ This project specifically uses MySQL as the database management system. Follow t
     ```bash
     php artisan db:seed
     ```
+    php artisan migrate:fresh --seed
 
 ### Step 7: Start the Development Server
 - Start the Laravel development server:
     ```bash
     php artisan serve
     ```
+    npm run dev
 
 ---
 
