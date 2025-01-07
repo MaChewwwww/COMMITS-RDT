@@ -12,8 +12,8 @@ class MedicineFactory extends Factory
 
     public function definition(): array
     {
-        $initialQuantity = $this->faker->randomFloat(2, 1, 1000);
-        $consumedQuantity = $this->faker->randomFloat(2, 0, $initialQuantity);
+        $initialQuantity = $this->faker->numberBetween(1, 1000);
+        $consumedQuantity = $this->faker->numberBetween(0, $initialQuantity);
         $remainingQuantity = $initialQuantity - $consumedQuantity;
         
         $status = 'In Stock';
