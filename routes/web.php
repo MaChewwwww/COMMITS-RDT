@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\MedicineController;
+use App\Http\Controllers\ReportController;
 
 
 // Guest routes
@@ -32,3 +33,6 @@ Route::middleware(['auth'])->group(function () {
 });
 
 
+
+# Report -Camar
+Route::get('/', [ReportController::class, 'index']);
