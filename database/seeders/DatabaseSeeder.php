@@ -19,7 +19,7 @@ class DatabaseSeeder extends Seeder
             'id' => 1,
             'name' => 'Test User',
             'email' => 'test@example.com',
-            'password' => bcrypt('pass123')
+            'password' => bcrypt('Pass12345')
         ]);
 
         // Create boxes first
