@@ -13,6 +13,7 @@ class CreateReportsTable extends Migration
             $table->string('title');
             $table->text('contents');
             $table->string('category');
+            $table->date('date');
             $table->timestamps();
         });
     }

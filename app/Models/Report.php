@@ -14,5 +14,6 @@ class Report extends Model
         'type',
         'identifier',
         'copy',
+        'contents',
     ];
 }

@@ -1,9 +1,8 @@
 <?php
 
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\ReportController;
-use App\Http\Controllers\PatientController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\PatientController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\MedicineController;
 use App\Http\Controllers\ReportController;
@@ -11,7 +10,6 @@ use App\Http\Controllers\PatientHistoryController;
 use App\Http\Controllers\DocumentController;
 
 
-<<<<<<<<< Temporary merge branch 1
 // Guest routes
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login.show');
 Route::post('/login', [UserController::class, 'login'])->name('login');
@@ -23,28 +21,28 @@ Route::middleware(['auth'])->group(function () {
         return view('welcome');
     });
 
-Route::prefix('patient')->group(function () {
+    Route::prefix('patient')->group(function () {
 
-    Route::get('/', [PatientController::class, "index"])->name('patients');
+        Route::get('/', [PatientController::class, "index"])->name('patients');
 
-    // Show all patients (index page)
-    Route::get('/', [PatientController::class, 'index'])->name('patients');
+        // Show all patients (index page)
+        Route::get('/', [PatientController::class, 'index'])->name('patients');
 
-    // Show form to add a new patient
-    Route::get('/new', [PatientController::class, 'add'])->name('patients.add');
+        // Show form to add a new patient
+        Route::get('/new', [PatientController::class, 'add'])->name('patients.add');
 
-    // Store a new patient
-    Route::post('/store', [PatientController::class, 'store'])->name('patients.store');
+        // Store a new patient
+        Route::post('/store', [PatientController::class, 'store'])->name('patients.store');
 
-    // Show the edit form for a specific patient
-    Route::get('/edit/{id}', [PatientController::class, 'edit'])->name('patients.edit');
+        // Show the edit form for a specific patient
+        Route::get('/edit/{id}', [PatientController::class, 'edit'])->name('patients.edit');
 
-    // Update a patient record
-    Route::put('/update/{id}', [PatientController::class, 'update'])->name('patients.update');
+        // Update a patient record
+        Route::put('/update/{id}', [PatientController::class, 'update'])->name('patients.update');
 
-    // Delete a patient record
-    Route::delete('/destroy/{id}', [PatientController::class, 'destroy'])->name('patients.destroy');
-});
+        // Delete a patient record
+        Route::delete('/destroy/{id}', [PatientController::class, 'destroy'])->name('patients.destroy');
+    });
 
     // Medicine routes
     Route::prefix('medicine')->group(function () {
@@ -60,7 +58,8 @@ Route::prefix('patient')->group(function () {
     Route::post('/logout', [UserController::class, 'logout'])->name('logout');
 });
 
-
+#Report -Camar
+Route::get('/reports', [ReportController::class, 'index']);
 
 Route::prefix('reports')->group(function () {
 
@@ -78,7 +77,7 @@ Route::prefix('reports')->group(function () {
 });
 
 // Route for patient history
-Route::get('/history', [PatientHistoryController::class, 'index'])->name('patient_history.index');
+Route::get('/history.backend', [PatientHistoryController::class, 'index'])->name('patient_history.index');
 // Route for document
 Route::get('/documents', [DocumentController::class, 'index'])->name('documents.index');
 Route::get('/documents/{id}/edit', [DocumentController::class, 'edit'])->name('documents.edit');
@@ -110,41 +109,38 @@ Route::prefix('history')->group(function () {
         return view('HISTORY.dependent');
     });
 
-//Documents
-Route::get('/', function () {
-    return view('Documents.adocument_file');
-});
+    //Documents
+    Route::get('/', function () {
+        return view('Documents.adocument_file');
+    });
 
-// Specific document views
-Route::get('/med_certif', function () {
-    return view('Documents.med_certif');
-});
+    // Specific document views
+    Route::get('/med_certif', function () {
+        return view('Documents.med_certif');
+    });
 
-Route::get('/med_clear', function () {
-    return view('Documents.med_clear');
-});
+    Route::get('/med_clear', function () {
+        return view('Documents.med_clear');
+    });
 
-Route::get('/annual_med_clear', function () {
-    return view('Documents.annual_med_clear');
-});
+    Route::get('/annual_med_clear', function () {
+        return view('Documents.annual_med_clear');
+    });
 
-Route::get('/excuse_letter', function () {
-    return view('Documents.excuse_letter');
-});
+    Route::get('/excuse_letter', function () {
+        return view('Documents.excuse_letter');
+    });
 
-Route::get('/waiver', function () {
-    return view('Documents.waiver');
-});
+    Route::get('/waiver', function () {
+        return view('Documents.waiver');
+    });
 
-Route::get('/waiver_for_pulm', function () {
-    return view('Documents.waiver_for_pulm');
-});
+    Route::get('/waiver_for_pulm', function () {
+        return view('Documents.waiver_for_pulm');
+    });
 
     Route::get('/dmdc_consent_form', function () {
         return view('Documents.dmdc_consent_form');
     });
 });
->>>>>>>>> Temporary merge branch 2
 
-# Report -Camar
-#Route::get('/', [ReportController::class, 'index']);
