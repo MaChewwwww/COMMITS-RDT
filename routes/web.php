@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\MedicineController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\PatientHistoryController;
+use App\Http\Controllers\DocumentController;
 
 
 // Guest routes
@@ -33,6 +35,15 @@ Route::middleware(['auth'])->group(function () {
 });
 
 
+// Route for patient history
+Route::get('/history', [PatientHistoryController::class, 'index'])->name('patient_history.index');
+// Route for document
+Route::get('/documents', [DocumentController::class, 'index'])->name('documents.index');
+Route::get('/documents/{id}/edit', [DocumentController::class, 'edit'])->name('documents.edit');
+Route::get('/documents/{document_id}/view', [DocumentController::class, 'show'])->name('documents.view');
+Route::put('/documents/{document_id}', [DocumentController::class, 'update'])->name('documents.update');
+
+
 
 # Report -Camar
-Route::get('/', [ReportController::class, 'index']);
+#Route::get('/', [ReportController::class, 'index']);
