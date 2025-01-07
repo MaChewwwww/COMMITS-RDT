@@ -6,6 +6,7 @@
             <img class="w-[60px] h-[60px]" src="{{ asset('src/images/logo.png') }}" alt="logo">
             <h2 class="mt-2 text-sm font-bold">Patient Record Management System</h2>
         </div>
+
         <form id="form" action="{{ route('login') }}" method="post" class="flex flex-col items-center">
             @csrf
 
