@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.app') <!-- You must have 'views/layouts/app.blade.php' for this to work -->
 
 @section('content')
     <h1 class="text-2xl font-bold">Welcome to MyApp</h1>
