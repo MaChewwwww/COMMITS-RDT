@@ -52,6 +52,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/{medicine}/edit', [MedicineController::class, 'edit'])->name('edit_medicine');
         Route::put('/{medicine}/update', [MedicineController::class, 'update'])->name('update_medicine');
         Route::put('/{medicine}/deduct', [MedicineController::class, 'deduct'])->name('deduct_medicine');
+        Route::delete('/medicines/{medicine}', [MedicineController::class, 'delete'])->name('delete_medicine');
     });
 
     // Logout route
