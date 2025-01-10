@@ -1,10 +1,8 @@
 <!DOCTYPE html>
-<<<<<<< HEAD
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-=======
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -30,7 +28,6 @@
     <header class="mb-6">
         <h2 class="text-xl font-bold text-gray-800">History</h2>
     </header>
->>>>>>> 87e4b8b7fbe4728c300cdd067de603fc78fc94a0
     <title>PRMS</title>
 
     <!-- Fonts -->
