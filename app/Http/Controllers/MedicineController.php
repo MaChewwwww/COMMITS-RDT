@@ -144,4 +144,14 @@ class MedicineController extends Controller
         return redirect()->route('medicine_dashboard')
             ->with('success', 'Medicine quantity has been deducted');
     }
+
+    public function delete(Medicine $medicine)
+    {
+        $medicine->delete();
+
+        return redirect()->route('medicine_dashboard')
+            ->with('success', 'Medicine deleted successfully');
+    }
+
 }
+

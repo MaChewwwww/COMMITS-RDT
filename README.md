@@ -45,6 +45,10 @@ This project specifically uses MySQL as the database management system. Follow t
     ```bash
     composer install
     ```
+- Install vite for TailwindCSS:
+   ```bash
+    npm install
+   ```
 
 ### Step 5: Generate the Application Key
 - Generate a new application key to secure your installation:
@@ -61,12 +65,14 @@ This project specifically uses MySQL as the database management system. Follow t
     ```bash
     php artisan db:seed
     ```
+    php artisan migrate:fresh --seed
 
 ### Step 7: Start the Development Server
 - Start the Laravel development server:
     ```bash
     php artisan serve
     ```
+    npm run dev
 
 ---
 

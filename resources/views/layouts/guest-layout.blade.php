@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
 </head>
 
-<body class="bg-cover bg-center min-h-screen" style="background-image: url('{{ asset('src/images/pylon-front.jpg') }}');">
+<body class="min-h-screen bg-center bg-cover" style="background-image: url('{{ asset('src/images/pylon-front.jpg') }}');">
 
     <div class="flex items-center justify-end min-h-screen bg-[#3F0A0A] bg-opacity-70">
         <div class=" mx-[70px]">
