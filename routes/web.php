@@ -81,8 +81,8 @@ Route::get('/history.backend', [PatientHistoryController::class, 'index'])->name
 // Route for document
 Route::get('/documents', [DocumentController::class, 'index'])->name('documents.index');
 Route::get('/documents/{id}/edit', [DocumentController::class, 'edit'])->name('documents.edit');
-Route::get('/documents/{document_id}/view', [DocumentController::class, 'show'])->name('documents.view');
-Route::put('/documents/{document_id}', [DocumentController::class, 'update'])->name('documents.update');
+Route::get('/documents/{id}/view', [DocumentController::class, 'show'])->name('documents.view');
+Route::put('/documents/{id}', [DocumentController::class, 'update'])->name('documents.update');
 
 
 

@@ -15,8 +15,8 @@
     </head>
     <body>
         <!-- Button container -->
-        <div class="m-4 p-4">
-            <h1 class="text-2xl font-semibold mb-4">Edit Patient</h1>
+        <div class="p-4 m-4">
+            <h1 class="mb-4 text-2xl font-semibold">Edit Patient</h1>
 
             <!-- Form to Edit Patient Details -->
             <form action="{{ route('patients.update', $patient->id) }}" method="POST" class="space-y-4">
@@ -28,7 +28,7 @@
                     <label for="fullname" class="font-medium text-gray-700">Full Name</label>
                     <input type="text" name="fullname" id="fullname" value="{{ old('fullname', $patient->fullname) }}" class="border border-gray-300 p-2 rounded-md @error('fullname') border-red-500 @enderror">
                     @error('fullname')
-                        <p class="text-red-500 text-sm">{{ $message }}</p>
+                        <p class="text-sm text-red-500">{{ $message }}</p>
                     @enderror
                 </div>
 
@@ -40,7 +40,7 @@
                         <option value="Female" {{ old('sex', $patient->sex) == 'Female' ? 'selected' : '' }}>Female</option>
                     </select>
                     @error('sex')
-                        <p class="text-red-500 text-sm">{{ $message }}</p>
+                        <p class="text-sm text-red-500">{{ $message }}</p>
                     @enderror
                 </div>
 
@@ -49,7 +49,7 @@
                     <label for="year_course_dept" class="font-medium text-gray-700">Year/Course/Dept</label>
                     <input type="text" name="year_course_dept" id="year_course_dept" value="{{ old('year_course_dept', $patient->year_course_dept) }}" class="border border-gray-300 p-2 rounded-md @error('year_course_dept') border-red-500 @enderror">
                     @error('year_course_dept')
-                        <p class="text-red-500 text-sm">{{ $message }}</p>
+                        <p class="text-sm text-red-500">{{ $message }}</p>
                     @enderror
                 </div>
 
@@ -58,7 +58,7 @@
                     <label for="contactDetails" class="font-medium text-gray-700">Contact Details</label>
                     <input type="text" name="contactDetails" id="contactDetails" value="{{ old('contactDetails', $patient->contactDetails) }}" class="border border-gray-300 p-2 rounded-md @error('contactDetails') border-red-500 @enderror">
                     @error('contactDetails')
-                        <p class="text-red-500 text-sm">{{ $message }}</p>
+                        <p class="text-sm text-red-500">{{ $message }}</p>
                     @enderror
                 </div>
 
@@ -67,7 +67,7 @@
                     <label for="patient_status" class="font-medium text-gray-700">Patient Status</label>
                     <input type="text" name="patient_status" id="patient_status" value="{{ old('patient_status', $patient->patient_status) }}" class="border border-gray-300 p-2 rounded-md @error('patient_status') border-red-500 @enderror">
                     @error('patient_status')
-                        <p class="text-red-500 text-sm">{{ $message }}</p>
+                        <p class="text-sm text-red-500">{{ $message }}</p>
                     @enderror
                 </div>
 
@@ -82,14 +82,14 @@
                         <option value="Dependent" {{ old('patientType', $patient->patientType) == 'Dependent' ? 'selected' : '' }}>Dependent</option>
                     </select>
                     @error('patientType')
-                        <p class="text-red-500 text-sm">{{ $message }}</p>
+                        <p class="text-sm text-red-500">{{ $message }}</p>
                     @enderror
                 </div>
 
                 <!-- Student Number -->
                 <div class="flex flex-col">
                     <label for="student_number" class="block text-sm font-medium text-gray-700">Student Number</label>
-                    <input type="text" id="student_number" name="student_number" class="mt-1 p-2 border rounded" value="{{ $patient->student_number }}">
+                    <input type="text" id="student_number" name="student_number" class="p-2 mt-1 border rounded" value="{{ $patient->student_number }}">
                 </div>
 
                 <!-- User ID -->
@@ -97,13 +97,13 @@
                     <label for="user_id" class="font-medium text-gray-700">User ID (Optional)</label>
                     <input type="number" name="user_id" id="user_id" value="{{ old('user_id', $patient->user_id) }}" class="border border-gray-300 p-2 rounded-md @error('user_id') border-red-500 @enderror">
                     @error('user_id')
-                        <p class="text-red-500 text-sm">{{ $message }}</p>
+                        <p class="text-sm text-red-500">{{ $message }}</p>
                     @enderror
                 </div>
 
                 <!-- Submit Button -->
                 <div class="flex justify-end">
-                    <button type="submit" class="px-6 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">Update Patient</button>
+                    <button type="submit" class="px-6 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600">Update Patient</button>
                 </div>
             </form>
         </div>

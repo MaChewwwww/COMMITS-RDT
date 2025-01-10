@@ -20,43 +20,43 @@
         @endif
     </head>
     <body>
-        <div class="m-4 p-4">
+        <div class="p-4 m-4">
             <!-- Add Patient Button -->
-            <a href="{{ route('patients.add') }}" class="inline-block px-4 py-2 bg-blue-500 text-white rounded-md mb-4 hover:bg-blue-600">
+            <a href="{{ route('patients.add') }}" class="inline-block px-4 py-2 mb-4 text-white bg-blue-500 rounded-md hover:bg-blue-600">
                 Add New Patient
             </a>
 
             <!-- Patients Table -->
-            <table class="min-w-full border-collapse border border-gray-300 mt-4">
+            <table class="min-w-full mt-4 border border-collapse border-gray-300">
                 <thead>
                     <tr>
-                        <th class="border border-gray-300 px-4 py-2 bg-gray-100 text-left font-medium text-gray-600">Date</th>
-                        <th class="border border-gray-300 px-4 py-2 bg-gray-100 text-left font-medium text-gray-600">Time</th>
-                        <th class="border border-gray-300 px-4 py-2 bg-gray-100 text-left font-medium text-gray-600">Printed Name</th>
-                        <th class="border border-gray-300 px-4 py-2 bg-gray-100 text-left font-medium text-gray-600">Sex</th>
-                        <th class="border border-gray-300 px-4 py-2 bg-gray-100 text-left font-medium text-gray-600">Course - Yr & Sect./Dept</th>
-                        <th class="border border-gray-300 px-4 py-2 bg-gray-100 text-left font-medium text-gray-600">Treatment / Medicine</th>
-                        <th class="border border-gray-300 px-4 py-2 bg-gray-100 text-left font-medium text-gray-600">Qty</th>
-                        <th class="border border-gray-300 px-4 py-2 bg-gray-100 text-left font-medium text-gray-600">Phyiscian</th>
-                        <th class="border border-gray-300 px-4 py-2 bg-gray-100 text-left font-medium text-gray-600">Status</th>
-                        <th class="border border-gray-300 px-4 py-2 bg-gray-100 text-left font-medium text-gray-600">Actions</th>
+                        <th class="px-4 py-2 font-medium text-left text-gray-600 bg-gray-100 border border-gray-300">Date</th>
+                        <th class="px-4 py-2 font-medium text-left text-gray-600 bg-gray-100 border border-gray-300">Time</th>
+                        <th class="px-4 py-2 font-medium text-left text-gray-600 bg-gray-100 border border-gray-300">Printed Name</th>
+                        <th class="px-4 py-2 font-medium text-left text-gray-600 bg-gray-100 border border-gray-300">Sex</th>
+                        <th class="px-4 py-2 font-medium text-left text-gray-600 bg-gray-100 border border-gray-300">Course - Yr & Sect./Dept</th>
+                        <th class="px-4 py-2 font-medium text-left text-gray-600 bg-gray-100 border border-gray-300">Treatment / Medicine</th>
+                        <th class="px-4 py-2 font-medium text-left text-gray-600 bg-gray-100 border border-gray-300">Qty</th>
+                        <th class="px-4 py-2 font-medium text-left text-gray-600 bg-gray-100 border border-gray-300">Phyiscian</th>
+                        <th class="px-4 py-2 font-medium text-left text-gray-600 bg-gray-100 border border-gray-300">Status</th>
+                        <th class="px-4 py-2 font-medium text-left text-gray-600 bg-gray-100 border border-gray-300">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($patients as $patient)
                     <tr class="hover:bg-gray-50">
-                        <td class="border border-gray-300 px-4 py-2">{{ $patient->created_at->format('Y-m-d') }}</td>
-                        <td class="border border-gray-300 px-4 py-2">{{ $patient->created_at->format('H:i A') }}</td>
-                        <td class="border border-gray-300 px-4 py-2">{{$patient->fullname}}</td>
-                        <td class="border border-gray-300 px-4 py-2">{{$patient->sex}}</td>
-                        <td class="border border-gray-300 px-4 py-2">{{$patient->year_course_dept}}</td>
-                        <td class="border border-gray-300 px-4 py-2">Lorem Ipsum</td>
-                        <td class="border border-gray-300 px-4 py-2">Lorem Ipsum</td>
-                        <td class="border border-gray-300 px-4 py-2">{{$patient->user_id}}</td>
-                        <td class="border border-gray-300 px-4 py-2">{{$patient->patient_status}}</td>
-                        <td class="border border-gray-300 px-4 py-2">
+                        <td class="px-4 py-2 border border-gray-300">{{ $patient->created_at->format('Y-m-d') }}</td>
+                        <td class="px-4 py-2 border border-gray-300">{{ $patient->created_at->format('H:i A') }}</td>
+                        <td class="px-4 py-2 border border-gray-300">{{$patient->fullname}}</td>
+                        <td class="px-4 py-2 border border-gray-300">{{$patient->sex}}</td>
+                        <td class="px-4 py-2 border border-gray-300">{{$patient->year_course_dept}}</td>
+                        <td class="px-4 py-2 border border-gray-300">Lorem Ipsum</td>
+                        <td class="px-4 py-2 border border-gray-300">Lorem Ipsum</td>
+                        <td class="px-4 py-2 border border-gray-300">{{$patient->user_id}}</td>
+                        <td class="px-4 py-2 border border-gray-300">{{$patient->patient_status}}</td>
+                        <td class="px-4 py-2 border border-gray-300">
                             <!-- Edit Button -->
-                            <a href="{{ route('patients.edit', $patient->id) }}" class="text-blue-500 hover:text-blue-700 mr-2">Edit</a> |
+                            <a href="{{ route('patients.edit', $patient->id) }}" class="mr-2 text-blue-500 hover:text-blue-700">Edit</a> |
                             <!-- Delete Button -->
                             <form action="{{ route('patients.destroy', $patient->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Are you sure you want to delete this patient?');">
                                 @csrf
