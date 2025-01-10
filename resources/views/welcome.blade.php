@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <<<<<<< HEAD
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 =======
 <html lang="en">
 <head>
@@ -31,12 +31,11 @@
         <h2 class="text-xl font-bold text-gray-800">History</h2>
     </header>
 >>>>>>> 87e4b8b7fbe4728c300cdd067de603fc78fc94a0
+    <title>PRMS</title>
 
-        <title>Laravel</title>
-
-        <!-- Fonts -->
-        <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.bunny.net">
+    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
         <!-- Styles / Scripts -->
         @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
@@ -198,11 +197,26 @@
                         Laravel v{{ Illuminate\Foundation\Application::VERSION }} (PHP v{{ PHP_VERSION }})
                     </footer>
                 </div>
+    <!-- Styles -->
+    <link href="{{ mix('css/app.css') }}" rel="stylesheet">
+</head>
+<body class="font-sans antialiased dark:bg-black dark:text-white/50">
+    <!-- Your content here -->
+    <nav class="p-4 bg-gray-800">
+        <div class="container flex items-center justify-between mx-auto">
+            <div class="text-lg font-bold text-white">
+                <a href="{{ url('/') }}">MyApp</a>
+            </div>
+            <div class="space-x-4">
+                <a href="{{ url('/') }}" class="text-gray-300 hover:text-white">Home</a>
+                <a href="{{ url('/about') }}" class="text-gray-300 hover:text-white">About</a>
+                <a href="{{ url('/contact') }}" class="text-gray-300 hover:text-white">Contact</a>
             </div>
         </div>
-    </body>
-</html>
-<<<<<<< HEAD
-=======
+    </nav>
 
->>>>>>> 87e4b8b7fbe4728c300cdd067de603fc78fc94a0
+    <div class="container mx-auto mt-4">
+        @yield('content')
+    </div>
+</body>
+</html>
