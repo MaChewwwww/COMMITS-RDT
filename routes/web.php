@@ -10,10 +10,12 @@ Route::get('/', function () {
 });
 
 // Route for patient history
-Route::get('/history', [PatientHistoryController::class, 'index'])->name('patient_history.index');
+Route::get('/history', [PatientHistoryController::class, 'index'])->name('HISTORY.all');
 // Route for document
-Route::get('/documents', [DocumentController::class, 'index'])->name('documents.index');
-Route::get('/documents/{id}/edit', [DocumentController::class, 'edit'])->name('documents.edit');
+Route::get('/documents', [DocumentController::class, 'index'])->name('documents.adocument_file');
+Route::get('/documents/{id}/edit', [DocumentController::class, 'edit'])->name('documents.excuse_letter.edit');
 Route::get('/documents/{id}/view', [DocumentController::class, 'show'])->name('documents.view');
 Route::put('/documents/{id}', [DocumentController::class, 'update'])->name('documents.update');
+Route::get('/documents/create', [DocumentController::class, 'create'])->name('documents.excuse_letter.create');
+Route::post('/documents', [DocumentController::class, 'store'])->name('documents.excuse_letter.store');
 

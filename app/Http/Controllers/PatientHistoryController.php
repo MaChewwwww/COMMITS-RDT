@@ -13,7 +13,7 @@ class PatientHistoryController extends Controller
         $query = PatientRecord::query();
         
         // Filter by healed status (required)
-        $query->where('status', 'healed');
+        $query->where('status', 'Healed');
         
         // Filter by identity if selected
         $identityFilter = $request->input('identity');
@@ -51,7 +51,7 @@ class PatientHistoryController extends Controller
         ];
         
         // Return the view with filtered records and month options for the dropdown
-        return view('patient_history.index', [
+        return view('HISTORY.all', [
             'records' => $records,
             'identityFilter' => $identityFilter,
             'months' => $months,
