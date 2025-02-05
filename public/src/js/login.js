@@ -57,6 +57,7 @@ document.addEventListener("DOMContentLoaded", function () {
     email.addEventListener("input", () => validateEmail());
     password.addEventListener("input", () => validatePassword());
 
+
     function validateEmail() {
         const emailValue = email.value.trim();
         const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.com$/;
@@ -75,22 +76,13 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
+
     function validatePassword() {
         const passwordValue = password.value.trim();
-        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/;
-
-        console.log("Validating password:", passwordValue); // Debugging log
-
         const errorDisplay = document.getElementById("password-error"); // Get the error message div
 
         if (passwordValue === "") {
             errorDisplay.innerText = "Password field is required"; // Populate error message
-            password.classList.add("border-red-500");
-            password.classList.remove("border-green-500");
-            return false;
-        } else if (!passwordRegex.test(passwordValue)) {
-            errorDisplay.innerText =
-                "Password must be at least 8 characters, with uppercase, lowercase, and a number"; // Populate error message
             password.classList.add("border-red-500");
             password.classList.remove("border-green-500");
             return false;
@@ -101,6 +93,7 @@ document.addEventListener("DOMContentLoaded", function () {
             return true;
         }
     }
+
 
     function setError(element, message) {
         const inputControl = element.parentElement;
@@ -114,6 +107,7 @@ document.addEventListener("DOMContentLoaded", function () {
         element.classList.add("border-red-500");
         element.classList.remove("border-green-500");
     }
+
 
     function setSuccess(element) {
         const inputControl = element.parentElement;

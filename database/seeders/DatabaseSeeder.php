@@ -14,26 +14,31 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Create test user
-        $user = User::factory()->create([
-            'id' => 1,
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-            'password' => bcrypt('Pass12345')
+        $this->call([
+            UserSeeder::class,
+            PatientRecordsSeeder::class,
         ]);
 
-        // Create boxes first
-        $boxes = Boxes::factory()
-            ->count(10)
-            ->create([
-                'user_id' => $user->id
-            ]);
+        // // Create test user
+        // $user = User::factory()->create([
+        //     'id' => 1,
+        //     'name' => 'Test User',
+        //     'email' => 'test@example.com',
+        //     'password' => bcrypt('Pass12345')
+        // ]);
 
-        // Create medicines for each box
-        foreach ($boxes as $box) {
-            Medicine::factory()->create([
-                'box_id' => $box->id
-            ]);
-        }
+        // // Create boxes first
+        // $boxes = Boxes::factory()
+        //     ->count(10)
+        //     ->create([
+        //         'user_id' => $user->id
+        //     ]);
+
+        // // Create medicines for each box
+        // foreach ($boxes as $box) {
+        //     Medicine::factory()->create([
+        //         'box_id' => $box->id
+        //     ]);
+        // }
     }
 }

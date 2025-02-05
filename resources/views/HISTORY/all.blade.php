@@ -1,21 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Patient Record Management</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-100 p-5 font-sans">
+@extends('layouts.app-layout')
+
+@section('content')
     <header class="mb-5 px-16">
         <div class="flex justify-between items-center">
             <h1 class="text-2xl font-bold mb-2">History</h1>
             <div class="relative">
-                <button class="dropdown-button bg-yellow-400 text-white px-4 py-2 rounded-md hover:bg-yellow-500 flex items-center">
+                <button
+                    class="dropdown-button bg-yellow-400 text-white px-4 py-2 rounded-md hover:bg-yellow-500 flex items-center">
                     <p class="mr-2">Filter</p>
                     <svg xmlns="http://www.w3.org/2000/svg" width="32" height="25" viewBox="0 0 32 25" fill="none">
-                        <path d="M15.5993 15.4256L10.1191 11.2891L11.9458 9.91016L15.5993 12.6679L19.2526 9.91016L21.0793 11.2891L15.5993 15.4256Z" fill="#FFFFFF"/>
+                        <path
+                            d="M15.5993 15.4256L10.1191 11.2891L11.9458 9.91016L15.5993 12.6679L19.2526 9.91016L21.0793 11.2891L15.5993 15.4256Z"
+                            fill="#FFFFFF" />
                     </svg>
                 </button>
                 <div class="dropdown-content hidden absolute right-0 mt-2 bg-white shadow-lg rounded-lg w-48">
@@ -87,5 +83,4 @@
             document.querySelector('.dropdown-content').classList.toggle('hidden');
         });
     </script>
-</body>
-</html>
+@endsection

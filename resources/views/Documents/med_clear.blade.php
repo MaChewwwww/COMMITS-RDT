@@ -1,76 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
+@extends('layouts.app-layout')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <title>Waiver Form</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        /* Adjusting for print */
-        @media print {
-            header {
-                padding: 0;
-            }
-
-            @page {
-                size: A4;
-                margin: 0;
-
-            }
-
-            .page {
-                margin-top: 0;
-                /* Move the form up */
-                position: relative;
-                top: -40px;
-                /* Adjust to move the form higher */
-                margin-top: 0;
-            }
-
-            body {
-                font-family: Arial;
-                font-size: 12px;
-            }
-
-            /* Hide all content except the container */
-            body * {
-                visibility: hidden;
-            }
-
-            .container,
-            .container * {
-                visibility: visible;
-            }
-
-            .page {
-                display: block;
-                height: 100%;
-
-            }
-
-            .flex-container {
-                flex-direction: column;
-                /* gap: 5px; */
-            }
-        }
-
-        /* Make the modal scrollable */
-        .modal-content1 {
-            max-height: 80vh;
-            /* Limit the height to 80% of the viewport */
-            overflow-y: auto;
-            /* Enable vertical scrolling if content exceeds */
-            padding-right: 15px;
-            /* Add space for scrollbar */
-        }
-    </style>
-</head>
-
-<body class="bg-gray-100">
-
+@section('content')
     <!-- Buttons (Optional for print view, you can hide them when printing) -->
     <div class="flex space-x-10 justify-between mb-5 p-4">
         <button class="px-4 py-2 bg-gray-300 text-black rounded hover:bg-gray-400 flex items-center space-x-2"
@@ -138,7 +68,9 @@
                     </p>
                     <p class="indent-8">
                         This certification is issued upon his/her request for <span id="excuse-placeholder"
-                            class="underline-offset-4"> ______________________________________________________________________________________________</span> purposes but not for medico-legal
+                            class="underline-offset-4">
+                            ______________________________________________________________________________________________</span>
+                        purposes but not for medico-legal
                         reason.
                     </p>
 
@@ -155,8 +87,8 @@
                     <div class="w-11/30 text-left">
                         <p><br>Melissa Sarapuddin M.D.</p>
                         <p>Quezon City Campus Physician</p>
-                        <p>Lic No. <span id="lic_no-placeholder"
-                                class="underline-underoffset-4">____________________</span></p>
+                        <p>Lic No. <span id="lic_no-placeholder" class="underline-underoffset-4">____________________</span>
+                        </p>
                     </div>
                 </div>
             </div>
@@ -196,7 +128,9 @@
                 </p>
                 <p class="indent-8">
                     This certification is issued upon his/her request for <span id="excuse-placeholder2"
-                        class="underline-offset-4"> ______________________________________________________________________________________________</span> purposes but not for medico-legal
+                        class="underline-offset-4">
+                        ______________________________________________________________________________________________</span>
+                    purposes but not for medico-legal
                     reason.
                 </p>
 
@@ -218,7 +152,8 @@
                 <div class="w-11/30 text-left">
                     <p>Melissa Sarapuddin M.D.</p>
                     <p>Quezon City Campus Physician</p>
-                    <p>Lic No. <span id="lic_no-placeholder2" class="underline-underoffset-4"> ____________________</span></p>
+                    <p>Lic No. <span id="lic_no-placeholder2" class="underline-underoffset-4"> ____________________</span>
+                    </p>
                 </div>
             </div>
         </div>
@@ -248,8 +183,8 @@
                     <div class="form-group">
                         <label class="block text-gray-600 font-medium mb-1">Patient's Name:</label>
                         <input type="text" id="editPatientName"
-                            class="editPatientName w-full border rounded-md px-3 py-2"
-                            placeholder="Enter patient's name" required>
+                            class="editPatientName w-full border rounded-md px-3 py-2" placeholder="Enter patient's name"
+                            required>
                         <span id="nameError" class="text-red-500 text-sm hidden">Name is required.</span>
                     </div>
 
@@ -312,259 +247,259 @@
             <div class="bg-white rounded-lg shadow-lg p-6 w-96 text-center">
                 <div class="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
                     <!-- Green Checkmark Icon -->
-                    <svg class="w-8 h-8 text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.707a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 10-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                    <svg class="w-8 h-8 text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                        fill="currentColor" aria-hidden="true">
+                        <path fill-rule="evenodd"
+                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.707a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 10-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                            clip-rule="evenodd" />
                     </svg>
                 </div>
                 <p class="text-lg font-semibold">Successfully Saved!</p>
             </div>
         </div>
+    </div>
 
 
 
-        <script>
-            function printWaiver() {
-                window.print();
+    <script>
+        function printWaiver() {
+            window.print();
+        }
+
+        function goBack() {
+            window.history.back();
+        }
+
+        function openEditForm() {
+            document.getElementById("editFormModal").classList.remove("hidden");
+        }
+
+        function closeEditForm() {
+            document.getElementById("editFormModal").classList.add("hidden");
+        }
+
+        let formCount = 1; // To keep track of form count
+
+        function addForm() {
+            if (formCount < 2) {
+                console.log("Add Form button clicked");
+                // Select the container where new forms will be added
+                const formContainer = document.getElementById('formContainer');
+
+                // Create a new form group
+                const newFormGroup = document.createElement('div');
+                newFormGroup.classList.add('form-group', 'mt-8'); // Add spacing for clarity
+
+                // Set the HTML structure of the new form
+                newFormGroup.innerHTML = `
+        <h2 class="text-xl font-semibold mb-4 text-gray-700">Form ${formCount + 1}</h2>
+<div class="space-y-4"> <!-- Added space-y-4 here -->
+    <label class="block text-gray-600 font-medium mb-1">Date:</label>
+    <input type="date" id="editDate${formCount}"
+        class="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+
+    <label class="block text-gray-600 font-medium mb-1">Patient's Name:</label>
+    <input type="text" id="editPatientName${formCount}"
+        class="w-full border rounded-md px-3 py-2" placeholder="Enter patient's name">
+
+    <label class="block text-gray-600 font-medium mb-1">Excuse for:</label>
+    <input type="text" id="editExcuse${formCount}"
+        class="w-full border rounded-md px-3 py-2" placeholder="Reason for excuse">
+
+    <label class="block text-gray-600 font-medium mb-1">X-ray result:</label>
+    <input type="text" id="editXray${formCount}"
+        class="w-full border rounded-md px-3 py-2" placeholder="X-ray result">
+
+    <label class="block text-gray-600 font-medium mb-2">COVID-19 Vaccination Status:</label>
+    <div class="space-y-2">
+        <label class="inline-flex items-center">
+            <input type="radio" name="vaccination${formCount}" value="Unvaccinated" class="text-blue-500">
+            <span class="ml-2 text-gray-700">Unvaccinated</span>
+        </label><br>
+        <label class="inline-flex items-center">
+            <input type="radio" name="vaccination${formCount}" value="Primary series incomplete" class="text-blue-500">
+            <span class="ml-2 text-gray-700">Primary series incomplete</span>
+        </label><br>
+        <label class="inline-flex items-center">
+            <input type="radio" name="vaccination${formCount}" value="Primary dose completed" class="text-blue-500">
+            <span class="ml-2 text-gray-700">Primary dose / series completed</span>
+        </label><br>
+        <label class="inline-flex items-center">
+            <input type="radio" name="vaccination${formCount}" value="Boosters" class="text-blue-500">
+            <span class="ml-2 text-gray-700">1st / second Boosters</span>
+        </label>
+    </div>
+
+    <label class="block text-gray-600 font-medium mb-1">Lic No:</label>
+    <input type="text" id="licNo${formCount}"
+        class="w-full border rounded-md px-3 py-2" placeholder="License number">
+</div> <!-- End of space-y-4 -->
+    `;
+
+                // Append the new form group to the container
+                formContainer.appendChild(newFormGroup);
+
+                // Increment formCount
+                formCount++;
+
+                // Hide the "Add Form" button after adding the second form
+                if (formCount === 2) {
+                    document.querySelector("button[onclick='addForm()']").style.display = 'none';
+                }
+            } else {
+                alert("You can only add 2 forms.");
             }
+        }
 
-            function goBack() {
-                window.history.back();
-            }
+        function saveEdits() {
+            // Capture user inputs for Form 1
+            const waiverDate1 = document.querySelector(".editDate").value;
+            const patientName1 = document.querySelector(".editPatientName").value;
+            const excuse1 = document.querySelector(".editExcuse").value;
+            const licNoValue1 = document.querySelector(".Licno").value;
 
-            function openEditForm() {
-                document.getElementById("editFormModal").classList.remove("hidden");
-            }
+            // Capture user inputs for Form 2
+            const waiverDate2 = document.getElementById("editDate1")?.value || ""; // Check if form exists
+            const patientName2 = document.getElementById("editPatientName1")?.value || "";
+            const excuse2 = document.getElementById("editExcuse1")?.value || "";
+            // const xrayResult2 = document.getElementById("editXray1")?.value || "";
+            const licNoValue2 = document.getElementById("licNo1")?.value || "";
+            const xrayResult2 = document.getElementById("editXray1")?.value || "";
 
-            function closeEditForm() {
-                document.getElementById("editFormModal").classList.add("hidden");
-            }
 
-            let formCount = 1; // To keep track of form count
 
-            function addForm() {
-                if (formCount < 2) {
-                    console.log("Add Form button clicked");
-                    // Select the container where new forms will be added
-                    const formContainer = document.getElementById('formContainer');
-
-                    // Create a new form group
-                    const newFormGroup = document.createElement('div');
-                    newFormGroup.classList.add('form-group', 'mt-8'); // Add spacing for clarity
-
-                    // Set the HTML structure of the new form
-                    newFormGroup.innerHTML = `
-            <h2 class="text-xl font-semibold mb-4 text-gray-700">Form ${formCount + 1}</h2>
-    <div class="space-y-4"> <!-- Added space-y-4 here -->
-        <label class="block text-gray-600 font-medium mb-1">Date:</label>
-        <input type="date" id="editDate${formCount}"
-            class="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
-
-        <label class="block text-gray-600 font-medium mb-1">Patient's Name:</label>
-        <input type="text" id="editPatientName${formCount}"
-            class="w-full border rounded-md px-3 py-2" placeholder="Enter patient's name">
-
-        <label class="block text-gray-600 font-medium mb-1">Excuse for:</label>
-        <input type="text" id="editExcuse${formCount}"
-            class="w-full border rounded-md px-3 py-2" placeholder="Reason for excuse">
-
-        <label class="block text-gray-600 font-medium mb-1">X-ray result:</label>
-        <input type="text" id="editXray${formCount}"
-            class="w-full border rounded-md px-3 py-2" placeholder="X-ray result">
-
-        <label class="block text-gray-600 font-medium mb-2">COVID-19 Vaccination Status:</label>
-        <div class="space-y-2">
-            <label class="inline-flex items-center">
-                <input type="radio" name="vaccination${formCount}" value="Unvaccinated" class="text-blue-500">
-                <span class="ml-2 text-gray-700">Unvaccinated</span>
-            </label><br>
-            <label class="inline-flex items-center">
-                <input type="radio" name="vaccination${formCount}" value="Primary series incomplete" class="text-blue-500">
-                <span class="ml-2 text-gray-700">Primary series incomplete</span>
-            </label><br>
-            <label class="inline-flex items-center">
-                <input type="radio" name="vaccination${formCount}" value="Primary dose completed" class="text-blue-500">
-                <span class="ml-2 text-gray-700">Primary dose / series completed</span>
-            </label><br>
-            <label class="inline-flex items-center">
-                <input type="radio" name="vaccination${formCount}" value="Boosters" class="text-blue-500">
-                <span class="ml-2 text-gray-700">1st / second Boosters</span>
-            </label>
-        </div>
-
-        <label class="block text-gray-600 font-medium mb-1">Lic No:</label>
-        <input type="text" id="licNo${formCount}"
-            class="w-full border rounded-md px-3 py-2" placeholder="License number">
-    </div> <!-- End of space-y-4 -->
-        `;
-
-                    // Append the new form group to the container
-                    formContainer.appendChild(newFormGroup);
-
-                    // Increment formCount
-                    formCount++;
-
-                    // Hide the "Add Form" button after adding the second form
-                    if (formCount === 2) {
-                        document.querySelector("button[onclick='addForm()']").style.display = 'none';
-                    }
-                } else {
-                    alert("You can only add 2 forms.");
+            // Function to update placeholders with underline styling
+            function updateWithUnderline(elementId, value) {
+                const element = document.getElementById(elementId);
+                if (element) {
+                    element.style.textDecoration = "underline";
+                    element.style.textUnderlineOffset = "4px"; // Adjust the offset for styling
+                    element.innerText = value || "_____"; // Fallback to empty placeholder if no value
                 }
             }
 
-            function saveEdits() {
-                // Capture user inputs for Form 1
-                const waiverDate1 = document.querySelector(".editDate").value;
-                const patientName1 = document.querySelector(".editPatientName").value;
-                const excuse1 = document.querySelector(".editExcuse").value;
-                const licNoValue1 = document.querySelector(".Licno").value;
-
-                // Capture user inputs for Form 2
-                const waiverDate2 = document.getElementById("editDate1")?.value || ""; // Check if form exists
-                const patientName2 = document.getElementById("editPatientName1")?.value || "";
-                const excuse2 = document.getElementById("editExcuse1")?.value || "";
-                // const xrayResult2 = document.getElementById("editXray1")?.value || "";
-                const licNoValue2 = document.getElementById("licNo1")?.value || "";
-                const xrayResult2 = document.getElementById("editXray1")?.value || "";
 
 
 
-                // Function to update placeholders with underline styling
-                function updateWithUnderline(elementId, value) {
-                    const element = document.getElementById(elementId);
-                    if (element) {
-                        element.style.textDecoration = "underline";
-                        element.style.textUnderlineOffset = "4px"; // Adjust the offset for styling
-                        element.innerText = value || "_____"; // Fallback to empty placeholder if no value
-                    }
+            // Handle vaccination status updates for both forms
+            const selectedVaccination1 = document.querySelector('input[name="vaccination"]:checked');
+            const selectedVaccination2 = document.querySelector('input[name="vaccination1"]:checked');
+
+            if (selectedVaccination1) {
+                document.querySelectorAll('.checkbox').forEach(el => (el.textContent = '_____ ')); // Reset all checkboxes
+                switch (selectedVaccination1.value) {
+                    case 'Unvaccinated':
+                        document.getElementById('status-unvaccinated').textContent = '__✔__';
+                        break;
+                    case 'Primary series incomplete':
+                        document.getElementById('status-incomplete').textContent = '__✔__';
+                        break;
+                    case 'Primary dose completed':
+                        document.getElementById('status-completed').textContent = '__✔__';
+                        break;
+                    case 'Boosters':
+                        document.getElementById('status-boosters').textContent = '__✔__';
+                        break;
                 }
+            }
 
-
-
-
-                // Handle vaccination status updates for both forms
-                const selectedVaccination1 = document.querySelector('input[name="vaccination"]:checked');
-                const selectedVaccination2 = document.querySelector('input[name="vaccination1"]:checked');
-
-                if (selectedVaccination1) {
-                    document.querySelectorAll('.checkbox').forEach(el => (el.textContent = '_____ ')); // Reset all checkboxes
-                    switch (selectedVaccination1.value) {
-                        case 'Unvaccinated':
-                            document.getElementById('status-unvaccinated').textContent = '__✔__';
-                            break;
-                        case 'Primary series incomplete':
-                            document.getElementById('status-incomplete').textContent = '__✔__';
-                            break;
-                        case 'Primary dose completed':
-                            document.getElementById('status-completed').textContent = '__✔__';
-                            break;
-                        case 'Boosters':
-                            document.getElementById('status-boosters').textContent = '__✔__';
-                            break;
-                    }
+            if (selectedVaccination2) {
+                switch (selectedVaccination2.value) {
+                    case 'Unvaccinated':
+                        const unvaccinated2 = document.getElementById('status-unvaccinated2');
+                        unvaccinated2.textContent = '__✔__'; // Add underscores here
+                        break;
+                    case 'Primary series incomplete':
+                        const incomplete2 = document.getElementById('status-incomplete2');
+                        incomplete2.textContent = '__✔__'; // Add underscores here
+                        break;
+                    case 'Primary dose completed':
+                        const completed2 = document.getElementById('status-completed2');
+                        completed2.textContent = '__✔__'; // Add underscores here
+                        break;
+                    case 'Boosters':
+                        const boosters2 = document.getElementById('status-boosters2');
+                        boosters2.textContent = '__✔__'; // Add underscores here
+                        break;
                 }
+            }
 
-                if (selectedVaccination2) {
-                    switch (selectedVaccination2.value) {
-                        case 'Unvaccinated':
-                            const unvaccinated2 = document.getElementById('status-unvaccinated2');
-                            unvaccinated2.textContent = '__✔__';  // Add underscores here
-                            break;
-                        case 'Primary series incomplete':
-                            const incomplete2 = document.getElementById('status-incomplete2');
-                            incomplete2.textContent = '__✔__';  // Add underscores here
-                            break;
-                        case 'Primary dose completed':
-                            const completed2 = document.getElementById('status-completed2');
-                            completed2.textContent = '__✔__';  // Add underscores here
-                            break;
-                        case 'Boosters':
-                            const boosters2 = document.getElementById('status-boosters2');
-                            boosters2.textContent = '__✔__';  // Add underscores here
-                            break;
-                    }
-                }
+            // Validation logic for Form 1
+            let isValid = true;
 
-                // Validation logic for Form 1
-                let isValid = true;
+            // Validate Date for Form 1
+            const dateError = document.getElementById("dateError");
+            if (!waiverDate1) {
+                dateError.classList.remove("hidden");
+                isValid = false;
+            } else {
+                dateError.classList.add("hidden");
+            }
 
-                // Validate Date for Form 1
-                const dateError = document.getElementById("dateError");
-                if (!waiverDate1) {
-                    dateError.classList.remove("hidden");
+            // Validate Name for Form 1
+            const nameError = document.getElementById("nameError");
+            if (!patientName1.trim()) {
+                nameError.classList.remove("hidden");
+                isValid = false;
+            } else {
+                nameError.classList.add("hidden");
+            }
+
+            // Validate License for Form 1
+            const licError = document.getElementById("licError");
+            if (!licNoValue1.trim()) {
+                licError.classList.remove("hidden");
+                isValid = false;
+            } else {
+                licError.classList.add("hidden");
+            }
+
+
+
+            // Validation logic for Form 2 (if it exists)
+            if (waiverDate2 || patientName2 || excuse2 || licNoValue2 || xrayResult2) {
+                if (!waiverDate2) {
                     isValid = false;
-                } else {
-                    dateError.classList.add("hidden");
+                    alert("Please fill in the Date for Form 2.");
                 }
-
-                // Validate Name for Form 1
-                const nameError = document.getElementById("nameError");
-                if (!patientName1.trim()) {
-                    nameError.classList.remove("hidden");
+                if (!patientName2.trim()) {
                     isValid = false;
-                } else {
-                    nameError.classList.add("hidden");
+                    alert("Please fill in the Patient Name for Form 2.");
                 }
-
-                                // Validate License for Form 1
-                                const licError = document.getElementById("licError");
-                if (!licNoValue1.trim()) {
-                    licError.classList.remove("hidden");
+                if (!licNoValue2.trim()) {
                     isValid = false;
-                } else {
-                    licError.classList.add("hidden");
+                    alert("Please fill in the License Number for Form 2.");
                 }
+            }
 
+            // If validation passes
+            if (isValid) {
+                // Update placeholders for Form 1
+                updateWithUnderline("date-placeholder", waiverDate1);
+                updateWithUnderline("name-placeholder", patientName1);
+                updateWithUnderline("excuse-placeholder", excuse1);
+                updateWithUnderline("lic_no-placeholder", licNoValue1);
 
-
-                // Validation logic for Form 2 (if it exists)
+                // Update placeholders for Form 2 (if it exists)
                 if (waiverDate2 || patientName2 || excuse2 || licNoValue2 || xrayResult2) {
-                    if (!waiverDate2) {
-                        isValid = false;
-                        alert("Please fill in the Date for Form 2.");
-                    }
-                    if (!patientName2.trim()) {
-                        isValid = false;
-                        alert("Please fill in the Patient Name for Form 2.");
-                    }
-                    if (!licNoValue2.trim()) {
-                        isValid = false;
-                        alert("Please fill in the License Number for Form 2.");
-                    }
+                    updateWithUnderline("date-placeholder2", waiverDate2);
+                    updateWithUnderline("name-placeholder2", patientName2);
+                    updateWithUnderline("excuse-placeholder2", excuse2);
+                    updateWithUnderline("lic_no-placeholder2", licNoValue2);
+                    updateWithUnderline("x-ray-placeholder2", xrayResult2);
+
                 }
+                // Show success message
+                const successMessage = document.getElementById("successMessage");
+                successMessage.classList.remove("hidden");
 
-                // If validation passes
-                if (isValid) {
-                    // Update placeholders for Form 1
-                    updateWithUnderline("date-placeholder", waiverDate1);
-                    updateWithUnderline("name-placeholder", patientName1);
-                    updateWithUnderline("excuse-placeholder", excuse1);
-                    updateWithUnderline("lic_no-placeholder", licNoValue1);
-
-                    // Update placeholders for Form 2 (if it exists)
-                    if (waiverDate2 || patientName2 || excuse2 || licNoValue2 || xrayResult2) {
-                        updateWithUnderline("date-placeholder2", waiverDate2);
-                        updateWithUnderline("name-placeholder2", patientName2);
-                        updateWithUnderline("excuse-placeholder2", excuse2);
-                        updateWithUnderline("lic_no-placeholder2", licNoValue2);
-                        updateWithUnderline("x-ray-placeholder2", xrayResult2);
-
-                    }
-                    // Show success message
-                    const successMessage = document.getElementById("successMessage");
-                    successMessage.classList.remove("hidden");
-
-                    // Hide success message and trigger print after a delay
-                    setTimeout(() => {
-                        successMessage.classList.add("hidden");
-                        closeEditForm();
-                        window.print();
-                    }, 2000);
-                }
+                // Hide success message and trigger print after a delay
+                setTimeout(() => {
+                    successMessage.classList.add("hidden");
+                    closeEditForm();
+                    window.print();
+                }, 2000);
             }
-
-        </script>
-
-</body>
-
-</html>
+        }
+    </script>
+@endsection

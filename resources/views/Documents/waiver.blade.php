@@ -1,78 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
+@extends('layouts.app-layout')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <title>Waiver Form</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        /* Adjusting for print */
-        @media print {
-            header {
-                padding: 0;
-            }
-
-            @page {
-                size: A4;
-                margin: 0;
-
-            }
-
-            .page {
-                margin-top: 0;
-                /* Move the form up */
-                position: relative;
-                top: -40px;
-                padding-left: 20px;
-                padding-right: 20px;
-                /* Adjust to move the form higher */
-
-            }
-
-            body {
-                font-family: Arial;
-                font-size: 12px;
-            }
-
-            /* Hide all content except the container */
-            body * {
-                visibility: hidden;
-            }
-
-            .container,
-            .container * {
-                visibility: visible;
-            }
-
-            .page {
-                display: block;
-                height: 100%;
-
-            }
-
-            .flex-container {
-                flex-direction: column;
-                /* gap: 5px; */
-            }
-        }
-
-        /* Make the modal scrollable */
-        .modal-content1 {
-            max-height: 80vh;
-            /* Limit the height to 80% of the viewport */
-            overflow-y: auto;
-            /* Enable vertical scrolling if content exceeds */
-            padding-right: 15px;
-            /* Add space for scrollbar */
-        }
-    </style>
-</head>
-
-<body class="bg-gray-100">
-
+@section('content')
     <!-- Buttons (Optional for print view, you can hide them when printing) -->
     <div class="flex space-x-10 justify-between mb-5 p-4">
         <button class="px-4 py-2 bg-gray-300 text-black rounded hover:bg-gray-400 flex items-center space-x-2"
@@ -88,8 +16,7 @@
         <div>
             <button class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 mr-2" onclick="openEditForm()"
                 aria-label="Edit Form">
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="20" viewBox="0 0 18 20"
-                    fill="none">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="20" viewBox="0 0 18 20" fill="none">
                     <path
                         d="M3.41421 13.9706L13.5563 3.82843L12.1421 2.41421L2 12.5564V13.9706H3.41421ZM4.24264 15.9706H0V11.7279L11.435 0.29289C11.8256 -0.09763 12.4587 -0.09763 12.8492 0.29289L15.6777 3.12132C16.0682 3.51184 16.0682 4.14501 15.6777 4.53553L4.24264 15.9706ZM0 17.9706H18V19.9706H0V17.9706Z"
                         fill="white" />
@@ -97,8 +24,7 @@
             </button>
             <button class="px-4 py-2 bg-[#7A0019] text-white rounded-md hover:bg-[#7A0019] hover:bg-opacity-80 mr-5"
                 onclick="printWaiver()" aria-label="Print the form">
-                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="20" viewBox="0 0 25 20"
-                    fill="none">
+                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="20" viewBox="0 0 25 20" fill="none">
                     <path
                         d="M18.75 0.000488281C19.4404 0.000488281 20 0.448208 20 1.00049V5.00049H23.75C24.4404 5.00049 25 5.44821 25 6.00049V16.0005C25 16.5528 24.4404 17.0005 23.75 17.0005H20V19.0005C20 19.5528 19.4404 20.0005 18.75 20.0005H6.25C5.55965 20.0005 5 19.5528 5 19.0005V17.0005H1.25C0.55965 17.0005 0 16.5528 0 16.0005V6.00049C0 5.44821 0.55965 5.00049 1.25 5.00049H5V1.00049C5 0.448208 5.55965 0.000488281 6.25 0.000488281H18.75ZM17.5 15.0005H7.5V18.0005H17.5V15.0005ZM22.5 7.00049H2.5V15.0005H5V14.0005C5 13.4482 5.55965 13.0005 6.25 13.0005H18.75C19.4404 13.0005 20 13.4482 20 14.0005V15.0005H22.5V7.00049ZM7.5 8.00049V10.0005H3.75V8.00049H7.5ZM17.5 2.00049H7.5V5.00049H17.5V2.00049Z"
                         fill="white" />
@@ -223,9 +149,8 @@
                 <!-- Patient Name Field -->
                 <div class="form-group">
                     <label class="block text-gray-600 font-medium mb-1">Patient's Name:</label>
-                    <input type="text" id="editPatientName"
-                        class="editPatientName w-full border rounded-md px-3 py-2" placeholder="Enter patient's name"
-                        required>
+                    <input type="text" id="editPatientName" class="editPatientName w-full border rounded-md px-3 py-2"
+                        placeholder="Enter patient's name" required>
                     <span id="nameError" class="text-red-500 text-sm hidden">Name is required.</span>
                 </div>
 
@@ -339,47 +264,47 @@
 <h2 class="text-xl font-semibold mb-4 text-gray-700">Form ${formCount + 1}</h2>
 <!-- Second Form (Medical Clearance) -->
 <div class="form-group">
-    <label class="block text-gray-600 font-medium mb-1">Date:</label>
-    <input type="date" id="editDate-clearance" class="w-full border rounded-md px-3 py-2" required>
+<label class="block text-gray-600 font-medium mb-1">Date:</label>
+<input type="date" id="editDate-clearance" class="w-full border rounded-md px-3 py-2" required>
 </div>
 
 <div class="form-group">
-    <label class="block text-gray-600 font-medium mb-1">Patient's Name:</label>
-    <input type="text" id="editPatientName-clearance" class="w-full border rounded-md px-3 py-2" required>
+<label class="block text-gray-600 font-medium mb-1">Patient's Name:</label>
+<input type="text" id="editPatientName-clearance" class="w-full border rounded-md px-3 py-2" required>
 </div>
 
 <div class="form-group">
-    <label class="block text-gray-600 font-medium mb-1">School Name:</label>
-    <input type="text" id="editExcuse-clearance" class="w-full border rounded-md px-3 py-2">
+<label class="block text-gray-600 font-medium mb-1">School Name:</label>
+<input type="text" id="editExcuse-clearance" class="w-full border rounded-md px-3 py-2">
 </div>
 
 <div class="form-group">
-    <label class="block text-gray-600 font-medium mb-1">Department:</label>
-    <input type="text" id="editXray1-clearance" class="w-full border rounded-md px-3 py-2">
+<label class="block text-gray-600 font-medium mb-1">Department:</label>
+<input type="text" id="editXray1-clearance" class="w-full border rounded-md px-3 py-2">
 </div>
 
 <div class="form-group">
-    <label class="block text-gray-600 font-medium mb-1">Date Examined:</label>
-    <input type="date" id="editDateexa-clearance" class="w-full border rounded-md px-3 py-2" required>
+<label class="block text-gray-600 font-medium mb-1">Date Examined:</label>
+<input type="date" id="editDateexa-clearance" class="w-full border rounded-md px-3 py-2" required>
 </div>
 
 <div class="form-group">
-    <label class="block text-gray-600 font-medium mb-1">Diagnosis:</label>
-    <input type="text" id="editXray2-clearance" class="w-full border rounded-md px-3 py-2">
+<label class="block text-gray-600 font-medium mb-1">Diagnosis:</label>
+<input type="text" id="editXray2-clearance" class="w-full border rounded-md px-3 py-2">
 </div>
 
 <div class="form-group">
-    <label class="block text-gray-600 font-medium mb-1">Follow-up Date:</label>
-    <input type="date" id="editDatefollow-clearance" class="w-full border rounded-md px-3 py-2" required>
+<label class="block text-gray-600 font-medium mb-1">Follow-up Date:</label>
+<input type="date" id="editDatefollow-clearance" class="w-full border rounded-md px-3 py-2" required>
 </div>
 
 <div class="form-group">
-    <label class="block text-gray-600 font-medium mb-1">License No:</label>
-    <input type="text" id="licNo-clearance" class="w-full border rounded-md px-3 py-2" required>
+<label class="block text-gray-600 font-medium mb-1">License No:</label>
+<input type="text" id="licNo-clearance" class="w-full border rounded-md px-3 py-2" required>
 </div>
 
 
-                `;
+            `;
 
                 // Append the new form group to the container
                 formContainer.appendChild(newFormGroup);
@@ -498,7 +423,4 @@
             }
         }
     </script>
-
-</body>
-
-</html>
+@endsection
