@@ -29,4 +29,33 @@ class Document extends Model
         return $this->hasOne(ExcuseLetter::class, 'document_id');
     }
     
+    public function medicalcertificate()
+    {
+        return $this->hasOne(MedicalCertificate::class, 'document_id');
+    }
+
+    public function medicalclearance()
+    {
+        return $this->hasOne(MedicalClearance::class, 'document_id');
+    }
+
+    public function annualmedicalclearance()
+    {
+        return $this->hasOne(AnnualMedicalClearance::class, 'document_id');
+    }
+
+    public function dmdcconsentform()
+    {
+        return $this->hasOne(DMDCConsentForm::class, 'document_id');
+    }
+
+    public function waiver()
+    {
+        return $this->hasOne(Waiver::class, 'document_id');
+    }
+
+    public function waiverforpulmonarycase()
+    {
+        return $this->hasOne(WaiverForPulmonaryCase::class, 'document_id');
+    }
 }

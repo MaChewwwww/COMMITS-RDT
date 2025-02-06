@@ -12,7 +12,7 @@ Route::get('/', function () {
 // Route for patient history
 Route::get('/history', [PatientHistoryController::class, 'index'])->name('HISTORY.all');
 // Route for document
-Route::get('/documents', [DocumentController::class, 'index'])->name('documents.adocument_file');
+Route::get('/documents', [DocumentController::class, 'adocument_file'])->name('documents.adocument_file');
 Route::get('/documents/{id}/edit', [DocumentController::class, 'edit'])->name('documents.excuse_letter.edit');
 Route::get('/documents/{id}/view', [DocumentController::class, 'show'])->name('documents.view');
 Route::put('/documents/{id}', [DocumentController::class, 'update'])->name('documents.update');

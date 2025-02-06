@@ -5,25 +5,26 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Excuseletter extends Model
+class MedicalCertificate extends Model
 {
     use HasFactory;
-    protected $table = 'excuseletter'; 
     
+    protected $table = 'medical_certificates';
+
     protected $fillable = [
-        'phone_number',
+        'document_id',
+        'clearance_type',
         'date',
         'patient_name',
-        'excuse_for',
-        'cause',
+        'sickness',
+        'startDate',
+        'endDate',
+        'reason',
         'doctorName',
-        'document_id',
-        'address',
-        'date_today',
     ];
 
     public function document()
     {
-        return $this->belongsTo(Document::class, 'document_id');
+        return $this->belongsTo(Document::class);
     }
 }

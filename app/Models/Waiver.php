@@ -5,21 +5,19 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Excuseletter extends Model
+class Waiver extends Model
 {
     use HasFactory;
-    protected $table = 'excuseletter'; 
+    protected $table = 'waiver'; 
     
     protected $fillable = [
-        'phone_number',
         'date',
-        'patient_name',
-        'excuse_for',
-        'cause',
-        'doctorName',
-        'document_id',
-        'address',
-        'date_today',
+        'name',
+        'collegeName',
+        'department',
+        'diagnosedDate',
+        'diagnosedIllness',
+        'followUpDate',
     ];
 
     public function document()

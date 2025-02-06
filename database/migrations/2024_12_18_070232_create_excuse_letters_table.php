@@ -14,16 +14,18 @@ return new class extends Migration
     {
         Schema::create('excuseletter', function (Blueprint $table) {
             $table->id(); // Auto-increment primary key
+            $table->unsignedBigInteger('document_id'); // Foreign key to the documents table
             $table->string('phone_number', 15); // Patient's phone number
             $table->date('date'); // The date for the excuse letter
             $table->string('patient_name'); // Name of the patient
             $table->date('excuse_for'); // Date the excuse applies to
             $table->string('cause'); // Reason for the excuse
-            $table->foreignId('document_id')->constrained('documents')->onDelete('cascade'); // Foreign key for the document
             $table->timestamps(); // created_at and updated_at columns
             $table->string('doctorName');
             $table->string('address');
             $table->date('date_today');
+
+            $table->foreign('document_id')->references('id')->on('documents')->onDelete('cascade');
         });
     }
 
