@@ -1,13 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Patient Record Management</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-100 p-5 font-sans">
+@extends('layouts.app-layout')
+
+@section('content')
     <header class="mb-5 px-16">
         <!-- Title Section -->
         <div>
@@ -41,62 +34,62 @@
             </div>
         </div>
     </header>
-        <div class="container mx-auto bg-white rounded-lg shadow-lg p-5">
-            <table class="w-full table-auto border-collapse">
-                <thead class="bg-gray-200">
-                    <tr>
-                        <th class="py-2 px-4 text-left text-sm text-gray-700">Date</th>
-                        <th class="py-2 px-4 text-left text-sm text-gray-700">Time</th>
-                        <th class="py-2 px-4 text-left text-sm text-gray-700">Printed Name</th>
-                        <th class="py-2 px-4 text-left text-sm text-gray-700">Sex</th>
-                        <th class="py-2 px-4 text-left text-sm text-gray-700">Student Number</th>
-                        <th class="py-2 px-4 text-left text-sm text-gray-700">Course-Yr & Sect./Dept</th>
-                        <th class="py-2 px-4 text-left text-sm text-gray-700">Treatment Medicine</th>
-                        <th class="py-2 px-4 text-left text-sm text-gray-700">Quantity</th>
-                        <th class="py-2 px-4 text-left text-sm text-gray-700">Physician</th>
-                        <th class="py-2 px-4 text-left text-sm text-gray-700">Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr class="border-b border-gray-200">
-                        <td class="py-3 px-4 text-sm text-gray-700">Lorem</td>
-                        <td class="py-3 px-4 text-sm text-gray-700">Lorem</td>
-                        <td class="py-3 px-4 text-sm text-gray-700">Lorem</td>
-                        <td class="py-3 px-4 text-sm text-gray-700">Lorem</td>
-                        <td class="py-3 px-4 text-sm text-gray-700">Lorem</td>
-                        <td class="py-3 px-4 text-sm text-gray-700">Lorem</td>
-                        <td class="py-3 px-4 text-sm text-gray-700">Lorem</td>
-                        <td class="py-3 px-4 text-sm text-gray-700">Lorem</td>
-                        <td class="py-3 px-4 text-sm text-gray-700">Lorem</td>
-                        <td class="py-3 px-4 text-sm text-gray-700">Lorem</td>
-                    </tr>
-                    <tr class="border-b border-gray-200">
-                        <td class="py-3 px-4 text-sm text-gray-700">Lorem</td>
-                        <td class="py-3 px-4 text-sm text-gray-700">Lorem</td>
-                        <td class="py-3 px-4 text-sm text-gray-700">Lorem</td>
-                        <td class="py-3 px-4 text-sm text-gray-700">Lorem</td>
-                        <td class="py-3 px-4 text-sm text-gray-700">Lorem</td>
-                        <td class="py-3 px-4 text-sm text-gray-700">Lorem</td>
-                        <td class="py-3 px-4 text-sm text-gray-700">Lorem</td>
-                        <td class="py-3 px-4 text-sm text-gray-700">Lorem</td>
-                        <td class="py-3 px-4 text-sm text-gray-700">Lorem</td>
-                        <td class="py-3 px-4 text-sm text-gray-700">Lorem</td>
-                    </tr>
-                    <tr class="border-b border-gray-200">
-                        <td class="py-3 px-4 text-sm text-gray-700">Lorem</td>
-                        <td class="py-3 px-4 text-sm text-gray-700">Lorem</td>
-                        <td class="py-3 px-4 text-sm text-gray-700">Lorem</td>
-                        <td class="py-3 px-4 text-sm text-gray-700">Lorem</td>
-                        <td class="py-3 px-4 text-sm text-gray-700">Lorem</td>
-                        <td class="py-3 px-4 text-sm text-gray-700">Lorem</td>
-                        <td class="py-3 px-4 text-sm text-gray-700">Lorem</td>
-                        <td class="py-3 px-4 text-sm text-gray-700">Lorem</td>
-                        <td class="py-3 px-4 text-sm text-gray-700">Lorem</td>
-                        <td class="py-3 px-4 text-sm text-gray-700">Lorem</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+    <div class="container mx-auto bg-white rounded-lg shadow-lg p-5">
+        <table class="w-full table-auto border-collapse">
+            <thead class="bg-gray-200">
+                <tr>
+                    <th class="py-2 px-4 text-left text-sm text-gray-700">Date</th>
+                    <th class="py-2 px-4 text-left text-sm text-gray-700">Time</th>
+                    <th class="py-2 px-4 text-left text-sm text-gray-700">Printed Name</th>
+                    <th class="py-2 px-4 text-left text-sm text-gray-700">Sex</th>
+                    <th class="py-2 px-4 text-left text-sm text-gray-700">Student Number</th>
+                    <th class="py-2 px-4 text-left text-sm text-gray-700">Course-Yr & Sect./Dept</th>
+                    <th class="py-2 px-4 text-left text-sm text-gray-700">Treatment Medicine</th>
+                    <th class="py-2 px-4 text-left text-sm text-gray-700">Quantity</th>
+                    <th class="py-2 px-4 text-left text-sm text-gray-700">Physician</th>
+                    <th class="py-2 px-4 text-left text-sm text-gray-700">Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="border-b border-gray-200">
+                    <td class="py-3 px-4 text-sm text-gray-700">Lorem</td>
+                    <td class="py-3 px-4 text-sm text-gray-700">Lorem</td>
+                    <td class="py-3 px-4 text-sm text-gray-700">Lorem</td>
+                    <td class="py-3 px-4 text-sm text-gray-700">Lorem</td>
+                    <td class="py-3 px-4 text-sm text-gray-700">Lorem</td>
+                    <td class="py-3 px-4 text-sm text-gray-700">Lorem</td>
+                    <td class="py-3 px-4 text-sm text-gray-700">Lorem</td>
+                    <td class="py-3 px-4 text-sm text-gray-700">Lorem</td>
+                    <td class="py-3 px-4 text-sm text-gray-700">Lorem</td>
+                    <td class="py-3 px-4 text-sm text-gray-700">Lorem</td>
+                </tr>
+                <tr class="border-b border-gray-200">
+                    <td class="py-3 px-4 text-sm text-gray-700">Lorem</td>
+                    <td class="py-3 px-4 text-sm text-gray-700">Lorem</td>
+                    <td class="py-3 px-4 text-sm text-gray-700">Lorem</td>
+                    <td class="py-3 px-4 text-sm text-gray-700">Lorem</td>
+                    <td class="py-3 px-4 text-sm text-gray-700">Lorem</td>
+                    <td class="py-3 px-4 text-sm text-gray-700">Lorem</td>
+                    <td class="py-3 px-4 text-sm text-gray-700">Lorem</td>
+                    <td class="py-3 px-4 text-sm text-gray-700">Lorem</td>
+                    <td class="py-3 px-4 text-sm text-gray-700">Lorem</td>
+                    <td class="py-3 px-4 text-sm text-gray-700">Lorem</td>
+                </tr>
+                <tr class="border-b border-gray-200">
+                    <td class="py-3 px-4 text-sm text-gray-700">Lorem</td>
+                    <td class="py-3 px-4 text-sm text-gray-700">Lorem</td>
+                    <td class="py-3 px-4 text-sm text-gray-700">Lorem</td>
+                    <td class="py-3 px-4 text-sm text-gray-700">Lorem</td>
+                    <td class="py-3 px-4 text-sm text-gray-700">Lorem</td>
+                    <td class="py-3 px-4 text-sm text-gray-700">Lorem</td>
+                    <td class="py-3 px-4 text-sm text-gray-700">Lorem</td>
+                    <td class="py-3 px-4 text-sm text-gray-700">Lorem</td>
+                    <td class="py-3 px-4 text-sm text-gray-700">Lorem</td>
+                    <td class="py-3 px-4 text-sm text-gray-700">Lorem</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 
     </div>
 
@@ -105,5 +98,4 @@
             document.querySelector('.dropdown-content').classList.toggle('hidden');
         });
     </script>
-</body>
-</html>
+@endsection

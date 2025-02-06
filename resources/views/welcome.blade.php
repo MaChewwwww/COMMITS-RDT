@@ -10,7 +10,6 @@
     <h1>Welcome</h1>
 </body>
 </html>
-=========
     <title>Patient Record Management</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
@@ -121,4 +120,3 @@
     </script>
 </body>
 </html>
->>>>>>>>> Temporary merge branch 2

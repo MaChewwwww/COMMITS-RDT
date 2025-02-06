@@ -1,83 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
+@extends('layouts.app-layout')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <title>Waiver Form</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        /* Adjusting for print */
-        .underlined {
-            text-decoration: underline;
-            text-decoration-color: #000;
-            text-decoration-style: solid;
-        }
-
-
-        @media print {
-    .header-print img {
-        margin-left: -20px; /* Adjust this value to decrease the left margin */
-    }
-
-    .header-print {
-        padding-left: 0;
-        /* Remove or reduce left padding if needed */
-    }
-
-    .header-print p {
-        font-size: 12px;
-        line-height: 1.3;
-        /* Adjust line spacing for paragraphs */
-    }
-
-    .header-print h2 {
-        font-size: 14px;
-        line-height: 1.2;
-    }
-
-    @page {
-        margin: 0;
-    }
-
-    .page {
-        margin-top: 0;
-        position: relative;
-        top: -70px;
-        padding-right: 10px;
-    }
-
-    body {
-        font-family: Arial;
-        font-size: 12px;
-    }
-
-    body * {
-        visibility: hidden;
-    }
-
-    .container,
-    .container * {
-        visibility: visible;
-    }
-
-    .page {
-        display: block;
-        height: 100%;
-    }
-
-    .flex-container {
-        flex-direction: column;
-    }
-}
-
-    </style>
-</head>
-
-<body class="bg-gray-100">
-
+@section('content')
     <!-- Buttons (Optional for print view, you can hide them when printing) -->
     <div class="flex space-x-10 justify-between mb-5 p-4">
         <button class="px-4 py-2 bg-gray-300 text-black rounded hover:bg-gray-400 flex items-center space-x-2"
@@ -224,8 +147,8 @@
         <div class="bg-white rounded-lg shadow-lg p-6 w-96 text-center">
             <div class="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
                 <!-- Green Checkmark Icon -->
-                <svg class="w-8 h-8 text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
-                    fill="currentColor" aria-hidden="true">
+                <svg class="w-8 h-8 text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                    aria-hidden="true">
                     <path fill-rule="evenodd"
                         d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.707a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 10-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
                         clip-rule="evenodd" />
@@ -299,11 +222,5 @@
                 }, 2000);
             }
         }
-
-
-
     </script>
-
-</body>
-
-</html>
+@endsection

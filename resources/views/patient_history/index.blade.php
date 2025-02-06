@@ -1,10 +1,7 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>History</title>
-</head>
-<body>
-    <h1>History</h1>
+@extends('layouts.app-layout')
+
+@section('content')
+<h1>History</h1>
 
     <!-- Form for filtering records by identity and date range -->
     <form method="GET" action="{{ route('patient_history.index') }}">
@@ -58,5 +55,4 @@
             </tbody>
         </table>
     @endif
-</body>
-</html>
+@endsection

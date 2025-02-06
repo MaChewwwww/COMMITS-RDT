@@ -1,78 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
+@extends('layouts.app-layout')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <title>Waiver Form</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        /* Adjusting for print */
-        @media print {
-            header {
-                padding: 0;
-            }
-
-            @page {
-                size: A4;
-                margin: 0;
-
-            }
-
-            .page {
-                margin-top: 0;
-                /* Move the form up */
-                position: relative;
-                top: -40px;
-                padding-left: 20px;
-                padding-right: 20px;
-                /* Adjust to move the form higher */
-
-            }
-
-            body {
-                font-family: Arial;
-                font-size: 12px;
-            }
-
-            /* Hide all content except the container */
-            body * {
-                visibility: hidden;
-            }
-
-            .container,
-            .container * {
-                visibility: visible;
-            }
-
-            .page {
-                display: block;
-                height: 100%;
-
-            }
-
-            .flex-container {
-                flex-direction: column;
-                /* gap: 5px; */
-            }
-        }
-
-        /* Make the modal scrollable */
-        .modal-content1 {
-            max-height: 80vh;
-            /* Limit the height to 80% of the viewport */
-            overflow-y: auto;
-            /* Enable vertical scrolling if content exceeds */
-            padding-right: 15px;
-            /* Add space for scrollbar */
-        }
-    </style>
-</head>
-
-<body class="bg-gray-100">
-
+@section('content')
     <!-- Buttons (Optional for print view, you can hide them when printing) -->
     <div class="flex space-x-10 justify-between mb-5 p-4">
         <button class="px-4 py-2 bg-gray-300 text-black rounded hover:bg-gray-400 flex items-center space-x-2"
@@ -321,38 +249,38 @@
 
                 // Set the HTML structure of the new form
                 newFormGroup.innerHTML = `
-        <h2 class="text-xl font-semibold mb-4 text-gray-700">Form ${formCount + 1}</h2>
-        <!-- Form 2 Inputs -->
-        <div class="form-group">
-            <label class="block text-gray-600 font-medium mb-1">Date:</label>
-            <input type="date" id="editDate2_${formCount}" class="w-full border rounded-md px-3 py-2" required>
-            <span id="editDate2Error_${formCount}" class="text-red-500 text-sm hidden">Date is required.</span>
-        </div>
+    <h2 class="text-xl font-semibold mb-4 text-gray-700">Form ${formCount + 1}</h2>
+    <!-- Form 2 Inputs -->
+    <div class="form-group">
+        <label class="block text-gray-600 font-medium mb-1">Date:</label>
+        <input type="date" id="editDate2_${formCount}" class="w-full border rounded-md px-3 py-2" required>
+        <span id="editDate2Error_${formCount}" class="text-red-500 text-sm hidden">Date is required.</span>
+    </div>
 
-        <div class="form-group">
-            <label class="block text-gray-600 font-medium mb-1">Student's Name:</label>
-            <input type="text" id="editPatientName2_${formCount}" class="w-full border rounded-md px-3 py-2" required>
-            <span id="editPatientName2Error_${formCount}" class="text-red-500 text-sm hidden">Student's name is required.</span>
-        </div>
+    <div class="form-group">
+        <label class="block text-gray-600 font-medium mb-1">Student's Name:</label>
+        <input type="text" id="editPatientName2_${formCount}" class="w-full border rounded-md px-3 py-2" required>
+        <span id="editPatientName2Error_${formCount}" class="text-red-500 text-sm hidden">Student's name is required.</span>
+    </div>
 
-        <div class="form-group">
-            <label class="block text-gray-600 font-medium mb-1">School Name:</label>
-            <input type="text" id="editschoolname2_${formCount}" class="w-full border rounded-md px-3 py-2">
-            <span id="editschoolname2Error_${formCount}" class="text-red-500 text-sm hidden">School name is required.</span>
-        </div>
+    <div class="form-group">
+        <label class="block text-gray-600 font-medium mb-1">School Name:</label>
+        <input type="text" id="editschoolname2_${formCount}" class="w-full border rounded-md px-3 py-2">
+        <span id="editschoolname2Error_${formCount}" class="text-red-500 text-sm hidden">School name is required.</span>
+    </div>
 
-        <div class="form-group">
-            <label class="block text-gray-600 font-medium mb-1">School Year:</label>
-            <input type="text" id="schoolyear2_${formCount}" class="w-full border rounded-md px-3 py-2">
-            <span id="schoolyear2Error_${formCount}" class="text-red-500 text-sm hidden">School year is required.</span>
-        </div>
+    <div class="form-group">
+        <label class="block text-gray-600 font-medium mb-1">School Year:</label>
+        <input type="text" id="schoolyear2_${formCount}" class="w-full border rounded-md px-3 py-2">
+        <span id="schoolyear2Error_${formCount}" class="text-red-500 text-sm hidden">School year is required.</span>
+    </div>
 
-        <div class="form-group">
-            <label class="block text-gray-600 font-medium mb-1">Follow-up Check-up Date:</label>
-            <input type="date" id="editDateefollowcheck2_${formCount}" class="w-full border rounded-md px-3 py-2" required>
-            <span id="editDateefollowcheck2Error_${formCount}" class="text-red-500 text-sm hidden">Follow-up date is required.</span>
-        </div>
-        `;
+    <div class="form-group">
+        <label class="block text-gray-600 font-medium mb-1">Follow-up Check-up Date:</label>
+        <input type="date" id="editDateefollowcheck2_${formCount}" class="w-full border rounded-md px-3 py-2" required>
+        <span id="editDateefollowcheck2Error_${formCount}" class="text-red-500 text-sm hidden">Follow-up date is required.</span>
+    </div>
+    `;
 
                 // Append the new form group to the container
                 formContainer.appendChild(newFormGroup);
@@ -381,86 +309,88 @@
                 return true;
             }
         }
+
         function updateWithUnderline(elementId, value) {
-                    const element = document.getElementById(elementId);
-                    if (element) {
-                        element.style.textDecoration = "underline";
-                        element.style.textUnderlineOffset = "4px"; // Adjust the offset for styling
-                        element.innerText = value || "_____"; // Fallback to empty placeholder if no value
-                    }
+            const element = document.getElementById(elementId);
+            if (element) {
+                element.style.textDecoration = "underline";
+                element.style.textUnderlineOffset = "4px"; // Adjust the offset for styling
+                element.innerText = value || "_____"; // Fallback to empty placeholder if no value
+            }
         }
         // Function to save the form data
         function saveEdits() {
-    let isValid = true;
+            let isValid = true;
 
-    // Validate the first form fields
-    isValid &= validateField("editDate", "editDateError");
-    isValid &= validateField("editPatientName", "editPatientNameError");
-    isValid &= validateField("editschoolname", "editschoolnameError");
-    isValid &= validateField("schoolyear", "schoolyearError");
-    isValid &= validateField("editDateefollowcheck", "editDateefollowcheckError");
+            // Validate the first form fields
+            isValid &= validateField("editDate", "editDateError");
+            isValid &= validateField("editPatientName", "editPatientNameError");
+            isValid &= validateField("editschoolname", "editschoolnameError");
+            isValid &= validateField("schoolyear", "schoolyearError");
+            isValid &= validateField("editDateefollowcheck", "editDateefollowcheckError");
 
-    if (!isValid) return; // Stop if first form is invalid
+            if (!isValid) return; // Stop if first form is invalid
 
-    // Capture values for the first form
-    const editDate = document.getElementById("editDate").value;
-    const editPatientName = document.getElementById("editPatientName").value;
-    const editschoolname = document.getElementById("editschoolname").value;
-    const schoolyear = document.getElementById("schoolyear").value;
-    const editDateefollowcheck = document.getElementById("editDateefollowcheck").value;
+            // Capture values for the first form
+            const editDate = document.getElementById("editDate").value;
+            const editPatientName = document.getElementById("editPatientName").value;
+            const editschoolname = document.getElementById("editschoolname").value;
+            const schoolyear = document.getElementById("schoolyear").value;
+            const editDateefollowcheck = document.getElementById("editDateefollowcheck").value;
 
-    // Update the first form placeholders
-    document.getElementById("date-placeholder").textContent = editDate;
-    document.getElementById("name-placeholder").textContent = editPatientName;
-    document.getElementById("school").textContent = editschoolname;
-    document.getElementById("department").textContent = schoolyear;
-    document.getElementById("date").textContent = editDateefollowcheck;
+            // Update the first form placeholders
+            document.getElementById("date-placeholder").textContent = editDate;
+            document.getElementById("name-placeholder").textContent = editPatientName;
+            document.getElementById("school").textContent = editschoolname;
+            document.getElementById("department").textContent = schoolyear;
+            document.getElementById("date").textContent = editDateefollowcheck;
 
-    // Add underline style to first form placeholders
-    updateWithUnderline("date-placeholder", editDate);
-    updateWithUnderline("name-placeholder", editPatientName);
-    updateWithUnderline("school", editschoolname);
-    updateWithUnderline("department", schoolyear);
-    updateWithUnderline("date", editDateefollowcheck);
+            // Add underline style to first form placeholders
+            updateWithUnderline("date-placeholder", editDate);
+            updateWithUnderline("name-placeholder", editPatientName);
+            updateWithUnderline("school", editschoolname);
+            updateWithUnderline("department", schoolyear);
+            updateWithUnderline("date", editDateefollowcheck);
 
-    // If the second form exists, validate it
-    if (formCount > 1) {
-        isValid &= validateField(`editDate2_${formCount - 1}`, `editDate2Error_${formCount - 1}`);
-        isValid &= validateField(`editPatientName2_${formCount - 1}`, `editPatientName2Error_${formCount - 1}`);
-        isValid &= validateField(`editschoolname2_${formCount - 1}`, `editschoolname2Error_${formCount - 1}`);
-        isValid &= validateField(`schoolyear2_${formCount - 1}`, `schoolyear2Error_${formCount - 1}`);
-        isValid &= validateField(`editDateefollowcheck2_${formCount - 1}`, `editDateefollowcheck2Error_${formCount - 1}`);
+            // If the second form exists, validate it
+            if (formCount > 1) {
+                isValid &= validateField(`editDate2_${formCount - 1}`, `editDate2Error_${formCount - 1}`);
+                isValid &= validateField(`editPatientName2_${formCount - 1}`, `editPatientName2Error_${formCount - 1}`);
+                isValid &= validateField(`editschoolname2_${formCount - 1}`, `editschoolname2Error_${formCount - 1}`);
+                isValid &= validateField(`schoolyear2_${formCount - 1}`, `schoolyear2Error_${formCount - 1}`);
+                isValid &= validateField(`editDateefollowcheck2_${formCount - 1}`,
+                    `editDateefollowcheck2Error_${formCount - 1}`);
 
-        if (!isValid) return; // Stop if second form is invalid
+                if (!isValid) return; // Stop if second form is invalid
 
-        // Capture values for the second form
-        const editDate2 = document.getElementById(`editDate2_${formCount - 1}`).value;
-        const editPatientName2 = document.getElementById(`editPatientName2_${formCount - 1}`).value;
-        const editschoolname2 = document.getElementById(`editschoolname2_${formCount - 1}`).value;
-        const schoolyear2 = document.getElementById(`schoolyear2_${formCount - 1}`).value;
-        const editDateefollowcheck2 = document.getElementById(`editDateefollowcheck2_${formCount - 1}`).value;
+                // Capture values for the second form
+                const editDate2 = document.getElementById(`editDate2_${formCount - 1}`).value;
+                const editPatientName2 = document.getElementById(`editPatientName2_${formCount - 1}`).value;
+                const editschoolname2 = document.getElementById(`editschoolname2_${formCount - 1}`).value;
+                const schoolyear2 = document.getElementById(`schoolyear2_${formCount - 1}`).value;
+                const editDateefollowcheck2 = document.getElementById(`editDateefollowcheck2_${formCount - 1}`).value;
 
-        // Update the second form placeholders
-        document.getElementById("date-placeholder2").textContent = editDate2;
-        document.getElementById("name-placeholder2").textContent = editPatientName2;
-        document.getElementById("school2").textContent = editschoolname2;
-        document.getElementById("department2").textContent = schoolyear2;
-        document.getElementById("date2").textContent = editDateefollowcheck2;
+                // Update the second form placeholders
+                document.getElementById("date-placeholder2").textContent = editDate2;
+                document.getElementById("name-placeholder2").textContent = editPatientName2;
+                document.getElementById("school2").textContent = editschoolname2;
+                document.getElementById("department2").textContent = schoolyear2;
+                document.getElementById("date2").textContent = editDateefollowcheck2;
 
-        // Add underline style to second form placeholders
-        updateWithUnderline("date-placeholder2", editDate2);
-        updateWithUnderline("name-placeholder2", editPatientName2);
-        updateWithUnderline("school2", editschoolname2);
-        updateWithUnderline("department2", schoolyear2);
-        updateWithUnderline("date2", editDateefollowcheck2);
-    }
+                // Add underline style to second form placeholders
+                updateWithUnderline("date-placeholder2", editDate2);
+                updateWithUnderline("name-placeholder2", editPatientName2);
+                updateWithUnderline("school2", editschoolname2);
+                updateWithUnderline("department2", schoolyear2);
+                updateWithUnderline("date2", editDateefollowcheck2);
+            }
 
-    // Show success message
-    showSuccessMessage();
+            // Show success message
+            showSuccessMessage();
 
-    // Close the modal
-    closeEditForm();
-}
+            // Close the modal
+            closeEditForm();
+        }
 
         // Function to show the success message
         function showSuccessMessage() {
@@ -486,7 +416,4 @@
             modal.classList.remove("hidden");
         }
     </script>
-
-</body>
-
-</html>
+@endsection

@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.app-layout')
 
 @section('content')
 <div class="container">
@@ -17,7 +17,7 @@
             </select>
         </div>
     </form>
-    
+
 
 
     @if(session('success'))
