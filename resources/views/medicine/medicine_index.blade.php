@@ -1,4 +1,5 @@
-@extends('layouts.app')
+@extends('layouts.app-layout')
+
 @section('content')
 
 <div class="container flex flex-col gap-10 m-8 mx-auto">
@@ -20,7 +21,7 @@
                     <div class="w-5 h-5 bg-lime-600"></div>
                     <p class="label">Remainings</p>
                 </div>
-            </div>    
+            </div>
         </div>
 
         <div class="min-w-[350px] flex flex-col items-center gap-4 p-4 border rounded-2xl shadow-xl">
@@ -37,7 +38,7 @@
                     <div class="w-5 h-5 bg-lime-600"></div>
                     <p class="label">Remainings</p>
                 </div>
-            </div>    
+            </div>
         </div>
 
         <div class="min-w-[350px] flex flex-col items-center gap-4 p-4 border rounded-2xl shadow-xl">
@@ -54,7 +55,7 @@
                     <div class="w-5 h-5 bg-lime-600"></div>
                     <p class="label">Remainings</p>
                 </div>
-            </div>    
+            </div>
         </div>
     </div>-->
 
@@ -147,12 +148,12 @@
                                     <label class="block mb-2 text-sm text-slate-600">
                                         Unit
                                     </label>
-                                    <input type="text" 
-                                        name="unit_of_measurement" 
+                                    <input type="text"
+                                        name="unit_of_measurement"
                                         pattern="[A-Za-z\s]+"
                                         title="Please enter letters only"
-                                        class="w-full px-3 py-2 text-sm transition duration-300 bg-transparent border rounded-md shadow-sm placeholder:text-slate-400 text-slate-700 border-slate-200 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 focus:shadow" 
-                                        placeholder="Capsule/Tablet" 
+                                        class="w-full px-3 py-2 text-sm transition duration-300 bg-transparent border rounded-md shadow-sm placeholder:text-slate-400 text-slate-700 border-slate-200 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 focus:shadow"
+                                        placeholder="Capsule/Tablet"
                                         required/>
                                     @error('unit_of_measurement')
                                         <span class="text-sm text-red-600">{{ $message }}</span>
@@ -197,7 +198,7 @@
                     </div>
                 </div>
             </div>
-            
+
         </div> <!-- END OF CATEGORY -->
 
         <!-- Table -->
@@ -240,7 +241,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($medicines as $medicine) 
+                @foreach ($medicines as $medicine)
                 <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700">
                     <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                         {{ \Carbon\Carbon::parse($medicine->box->date_received)->format('Y-m-d') }}
@@ -296,7 +297,7 @@
                                     <form method="POST" action="{{ route('update_medicine', $medicine->id) }}" class="flex flex-col gap-4 p-12">
                                         @csrf
                                         @method('PUT')
-                                        
+
                                         <div class="flex justify-between w-full gap-8">
                                             <div class="w-full max-w-sm min-w-[200px]">
                                                 <label class="block mb-2 text-sm text-slate-600">
@@ -317,7 +318,7 @@
                                                 @enderror
                                             </div>
                                         </div>
-                                        
+
                                         <div class="flex justify-between w-full gap-8">
                                             <div class="w-full max-w-sm min-w-[200px]">
                                                 <label class="block mb-2 text-sm text-slate-600">
@@ -338,19 +339,19 @@
                                                 @enderror
                                             </div>
                                         </div>
-                                        
+
                                         <div class="flex gap-8 justify-space-between">
                                             <div class="w-full max-w-sm min-w-[200px]">
                                                 <label class="block mb-2 text-sm text-slate-600">
                                                     Unit
                                                 </label>
-                                                <input type="text" 
-                                                    name="unit_of_measurement" 
-                                                    value="{{ old('unit_of_measurement', $medicine->unit) }}" 
+                                                <input type="text"
+                                                    name="unit_of_measurement"
+                                                    value="{{ old('unit_of_measurement', $medicine->unit) }}"
                                                     pattern="[A-Za-z\s]+"
                                                     title="Please enter letters only"
-                                                    class="w-full px-3 py-2 text-sm transition duration-300 bg-transparent border rounded-md shadow-sm placeholder:text-slate-400 text-slate-700 border-slate-200 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 focus:shadow" 
-                                                    placeholder="Capsule/Tablet" 
+                                                    class="w-full px-3 py-2 text-sm transition duration-300 bg-transparent border rounded-md shadow-sm placeholder:text-slate-400 text-slate-700 border-slate-200 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 focus:shadow"
+                                                    placeholder="Capsule/Tablet"
                                                     required/>
                                                 @error('unit_of_measurement')
                                                     <span class="text-sm text-red-600">{{ $message }}</span>
@@ -360,19 +361,19 @@
                                                 <label class="block mb-2 text-sm text-slate-600">
                                                     Quantity
                                                 </label>
-                                                <input type="number" 
-                                                    name="initial_quantity" 
-                                                    value="{{ old('initial_quantity', $medicine->initial_quantity) }}" 
-                                                    class="w-full px-3 py-2 text-sm transition duration-300 bg-transparent border rounded-md shadow-sm placeholder:text-slate-400 text-slate-700 border-slate-200 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 focus:shadow" 
-                                                    min="{{ $medicine->consumed_quantity }}" 
-                                                    placeholder="200" 
+                                                <input type="number"
+                                                    name="initial_quantity"
+                                                    value="{{ old('initial_quantity', $medicine->initial_quantity) }}"
+                                                    class="w-full px-3 py-2 text-sm transition duration-300 bg-transparent border rounded-md shadow-sm placeholder:text-slate-400 text-slate-700 border-slate-200 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 focus:shadow"
+                                                    min="{{ $medicine->consumed_quantity }}"
+                                                    placeholder="200"
                                                     required/>
                                                 @error('initial_quantity')
                                                     <span class="text-sm text-red-600">{{ $message }}</span>
                                                 @enderror
                                             </div>
                                         </div>
-                                        
+
                                         <div class="flex justify-between w-full gap-8">
                                             <div class="w-full max-w-sm min-w-[200px]">
                                                 <label class="block mb-2 text-sm text-slate-600">
@@ -404,10 +405,10 @@
                                 </div>
                             </div>
                         </div>
-                    </td>   
+                    </td>
                 </tr>
                 @endforeach
-                
+
             </tbody>
         </table>
     </div>
@@ -419,12 +420,12 @@
 document.addEventListener('DOMContentLoaded', function() {
     // First Chart (existing code)
     const ctx = document.getElementById('medicineChart').getContext('2d');
-    
+
     const totalMedicine = {{ $totalMedicine }};
     const expiredMedicine = {{ $expiredMedicine }};
     const nearExpiredMedicine = {{ $nearExpiredMedicine }};
     const goodMedicine = totalMedicine - expiredMedicine - nearExpiredMedicine;
-    
+
     // Calculate percentages
     const expiredPercentage = ((expiredMedicine / totalMedicine) * 100).toFixed(1);
     const nearExpiredPercentage = ((nearExpiredMedicine / totalMedicine) * 100).toFixed(1);
@@ -464,11 +465,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Second Chart for Returned Medicines
     const returnedCtx = document.getElementById('returnedChart').getContext('2d');
-    
+
     const returnedMedicines = {{ $returnedMedicines }};
     const notReturnedMedicines = {{ $notReturnedMedicines }};
     const total = returnedMedicines + notReturnedMedicines;
-    
+
     // Calculate percentages
     const returnedPercentage = ((returnedMedicines / total) * 100).toFixed(1);
     const notReturnedPercentage = ((notReturnedMedicines / total) * 100).toFixed(1);

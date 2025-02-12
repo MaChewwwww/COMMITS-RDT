@@ -1,85 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
+@extends('layouts.app-layout')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <title>Waiver Form</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        /* Adjusting for print */
-        .underlined {
-            text-decoration: underline;
-            text-decoration-color: #000;
-            text-decoration-style: solid;
-        }
-
-
-        @media print {
-            header {
-                padding: 0;
-            }
-
-            @page {
-                size: A4;
-                margin: 0;
-
-            }
-
-            .page {
-                margin-top: 0;
-                /* Move the form up */
-                position: relative;
-                top: -40px;
-                padding-left: 20px;
-                padding-right: 20px;
-                /* Adjust to move the form higher */
-
-            }
-
-            body {
-                font-family: Arial;
-                font-size: 12px;
-            }
-
-            /* Hide all content except the container */
-            body * {
-                visibility: hidden;
-            }
-
-            .container,
-            .container * {
-                visibility: visible;
-            }
-
-            .page {
-                display: block;
-                height: 100%;
-
-            }
-
-            .flex-container {
-                flex-direction: column;
-                /* gap: 5px; */
-            }
-        }
-
-        /* Make the modal scrollable */
-        .modal-content1 {
-            max-height: 80vh;
-            /* Limit the height to 80% of the viewport */
-            overflow-y: auto;
-            /* Enable vertical scrolling if content exceeds */
-            padding-right: 15px;
-            /* Add space for scrollbar */
-        }
-    </style>
-</head>
-
-<body class="bg-gray-100">
-
+@section('content')
     <!-- Buttons (Optional for print view, you can hide them when printing) -->
     <div class="flex space-x-10 justify-between mb-5 p-4">
         <button class="px-4 py-2 bg-gray-300 text-black rounded hover:bg-gray-400 flex items-center space-x-2"
@@ -145,8 +66,8 @@
                             class="underline-offset-4">________________________</span>
                         has been treated/ is currently being treated for <span id="reason-placeholder1"
                             class="underline-offset-4">____________________</span>
-                        from <span id="start-date-placeholder1"
-                            class="underline-offset-4">________________________</span> to
+                        from <span id="start-date-placeholder1" class="underline-offset-4">________________________</span>
+                        to
                         <span id="end-date-placeholder1" class="underline-offset-4">________________________</span>.
                     </p>
                     <p class="indent-8">
@@ -303,8 +224,7 @@
             </div>
         </div>
         <!-- Success Notification -->
-        <div id="successMessage"
-            class="hidden fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
+        <div id="successMessage" class="hidden fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
             <div class="bg-white rounded-lg shadow-lg p-6 w-96 text-center">
                 <div class="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
                     <!-- Green Checkmark Icon -->
@@ -349,51 +269,51 @@
                     newFormGroup.classList.add('space-y-4');
 
                     newFormGroup.innerHTML = `
-           <h2 class="text-xl font-semibold mb-4 text-gray-700">Form 2</h2>
+       <h2 class="text-xl font-semibold mb-4 text-gray-700">Form 2</h2>
 
 <div class="form-group">
-    <label class="block text-gray-600 font-medium mb-1" for="dateInput2">Date:</label>
-    <input type="date" id="dateInput2" class="w-full border rounded-md px-3 py-2" required>
-    <span id="dateError2" class="text-red-500 text-sm hidden">Date is required.</span>
+<label class="block text-gray-600 font-medium mb-1" for="dateInput2">Date:</label>
+<input type="date" id="dateInput2" class="w-full border rounded-md px-3 py-2" required>
+<span id="dateError2" class="text-red-500 text-sm hidden">Date is required.</span>
 </div>
 
 <div class="form-group">
-    <label class="block text-gray-600 font-medium mb-1" for="patientNameInput2">Patient's Name:</label>
-    <input type="text" id="patientNameInput2" class="w-full border rounded-md px-3 py-2" placeholder="Enter patient's name" required>
-    <span id="nameError2" class="text-red-500 text-sm hidden">Name is required.</span>
+<label class="block text-gray-600 font-medium mb-1" for="patientNameInput2">Patient's Name:</label>
+<input type="text" id="patientNameInput2" class="w-full border rounded-md px-3 py-2" placeholder="Enter patient's name" required>
+<span id="nameError2" class="text-red-500 text-sm hidden">Name is required.</span>
 </div>
 
 <div class="form-group">
-    <label class="block text-gray-600 font-medium mb-1" for="reasonInput2">Being Treated For:</label>
-    <input type="text" id="reasonInput2" class="w-full border rounded-md px-3 py-2" placeholder="Reason for treatment" required>
-    <span id="reasonError2" class="text-red-500 text-sm hidden">Reason is required.</span>
+<label class="block text-gray-600 font-medium mb-1" for="reasonInput2">Being Treated For:</label>
+<input type="text" id="reasonInput2" class="w-full border rounded-md px-3 py-2" placeholder="Reason for treatment" required>
+<span id="reasonError2" class="text-red-500 text-sm hidden">Reason is required.</span>
 </div>
 
 <div class="form-group">
-    <label class="block text-gray-600 font-medium mb-1" for="startDateInput2">Start Date:</label>
-    <input type="date" id="startDateInput2" class="w-full border rounded-md px-3 py-2" required>
-    <span id="startDateError2" class="text-red-500 text-sm hidden">Start date is required.</span>
+<label class="block text-gray-600 font-medium mb-1" for="startDateInput2">Start Date:</label>
+<input type="date" id="startDateInput2" class="w-full border rounded-md px-3 py-2" required>
+<span id="startDateError2" class="text-red-500 text-sm hidden">Start date is required.</span>
 </div>
 
 <div class="form-group">
-    <label class="block text-gray-600 font-medium mb-1" for="endDateInput2">End Date:</label>
-    <input type="date" id="endDateInput2" class="w-full border rounded-md px-3 py-2" required>
-    <span id="endDateError2" class="text-red-500 text-sm hidden">End date is required.</span>
+<label class="block text-gray-600 font-medium mb-1" for="endDateInput2">End Date:</label>
+<input type="date" id="endDateInput2" class="w-full border rounded-md px-3 py-2" required>
+<span id="endDateError2" class="text-red-500 text-sm hidden">End date is required.</span>
 </div>
 
 <div class="form-group">
-    <label class="block text-gray-600 font-medium mb-1" for="purposeInput2">Purpose:</label>
-    <input type="text" id="purposeInput2" class="w-full border rounded-md px-3 py-2" placeholder="Purpose of visit" required>
-    <span id="purposeError2" class="text-red-500 text-sm hidden">Purpose is required.</span>
+<label class="block text-gray-600 font-medium mb-1" for="purposeInput2">Purpose:</label>
+<input type="text" id="purposeInput2" class="w-full border rounded-md px-3 py-2" placeholder="Purpose of visit" required>
+<span id="purposeError2" class="text-red-500 text-sm hidden">Purpose is required.</span>
 </div>
 
 <div class="form-group">
-    <label class="block text-gray-600 font-medium mb-1" for="physicianInput2">Physician Name:</label>
-    <input type="text" id="physicianInput2" class="w-full border rounded-md px-3 py-2" placeholder="Physician's name" required>
-    <span id="physicianError2" class="text-red-500 text-sm hidden">Physician's name is required.</span>
+<label class="block text-gray-600 font-medium mb-1" for="physicianInput2">Physician Name:</label>
+<input type="text" id="physicianInput2" class="w-full border rounded-md px-3 py-2" placeholder="Physician's name" required>
+<span id="physicianError2" class="text-red-500 text-sm hidden">Physician's name is required.</span>
 </div>
 
-        `;
+    `;
 
                     formContainer.appendChild(newFormGroup);
                     formCount++;
@@ -403,122 +323,118 @@
             }
 
             function saveEdits() {
-    let isValid = true;
+                let isValid = true;
 
-    // Define input and placeholder mapping for both forms
-    const forms = {
-        1: {
-            date: 'dateInput',
-            patientName: 'patientNameInput',
-            reason: 'reasonInput',
-            startDate: 'startDateInput',
-            endDate: 'endDateInput',
-            purpose: 'purposeInput',
-            physicianName: 'physicianInput',
-            placeholders: {
-                date: 'date-placeholder1',
-                patientName: 'name-placeholder1',
-                reason: 'reason-placeholder1',
-                startDate: 'start-date-placeholder1',
-                endDate: 'end-date-placeholder1',
-                purpose: 'purpose-placeholder1',
-                physicianName: 'physician-name-placeholder1',
-            },
-            errors: {
-                date: 'dateError',
-                patientName: 'nameError',
-                reason: 'reasonError',
-                startDate: 'startDateError',
-                endDate: 'endDateError',
-                purpose: 'purposeError',
-            },
-        },
-        2: {
-            date: 'dateInput2',
-            patientName: 'patientNameInput2',
-            reason: 'reasonInput2',
-            startDate: 'startDateInput2',
-            endDate: 'endDateInput2',
-            purpose: 'purposeInput2',
-            physicianName: 'physicianInput2',
-            placeholders: {
-                date: 'date-placeholder2',
-                patientName: 'name-placeholder2',
-                reason: 'reason-placeholder2',
-                startDate: 'start-date-placeholder2',
-                endDate: 'end-date-placeholder2',
-                purpose: 'purpose-placeholder2',
-                physicianName: 'physician-name-placeholder2',
-            },
-            errors: {
-                date: 'dateError2',
-                patientName: 'nameError2',
-                reason: 'reasonError2',
-                startDate: 'startDateError2',
-                endDate: 'endDateError2',
-                purpose: 'purposeError2',
-            },
-        },
-    };
+                // Define input and placeholder mapping for both forms
+                const forms = {
+                    1: {
+                        date: 'dateInput',
+                        patientName: 'patientNameInput',
+                        reason: 'reasonInput',
+                        startDate: 'startDateInput',
+                        endDate: 'endDateInput',
+                        purpose: 'purposeInput',
+                        physicianName: 'physicianInput',
+                        placeholders: {
+                            date: 'date-placeholder1',
+                            patientName: 'name-placeholder1',
+                            reason: 'reason-placeholder1',
+                            startDate: 'start-date-placeholder1',
+                            endDate: 'end-date-placeholder1',
+                            purpose: 'purpose-placeholder1',
+                            physicianName: 'physician-name-placeholder1',
+                        },
+                        errors: {
+                            date: 'dateError',
+                            patientName: 'nameError',
+                            reason: 'reasonError',
+                            startDate: 'startDateError',
+                            endDate: 'endDateError',
+                            purpose: 'purposeError',
+                        },
+                    },
+                    2: {
+                        date: 'dateInput2',
+                        patientName: 'patientNameInput2',
+                        reason: 'reasonInput2',
+                        startDate: 'startDateInput2',
+                        endDate: 'endDateInput2',
+                        purpose: 'purposeInput2',
+                        physicianName: 'physicianInput2',
+                        placeholders: {
+                            date: 'date-placeholder2',
+                            patientName: 'name-placeholder2',
+                            reason: 'reason-placeholder2',
+                            startDate: 'start-date-placeholder2',
+                            endDate: 'end-date-placeholder2',
+                            purpose: 'purpose-placeholder2',
+                            physicianName: 'physician-name-placeholder2',
+                        },
+                        errors: {
+                            date: 'dateError2',
+                            patientName: 'nameError2',
+                            reason: 'reasonError2',
+                            startDate: 'startDateError2',
+                            endDate: 'endDateError2',
+                            purpose: 'purposeError2',
+                        },
+                    },
+                };
 
-    // Function to update placeholders with underline styling
-    function updateWithUnderline(elementId, value) {
-        const element = document.getElementById(elementId);
-        if (element) {
-            element.style.textDecoration = "underline";
-            element.style.textUnderlineOffset = "4px"; // Adjust the offset for styling
-            element.innerText = value || "_____"; // Fallback to empty placeholder if no value
-        }
-    }
+                // Function to update placeholders with underline styling
+                function updateWithUnderline(elementId, value) {
+                    const element = document.getElementById(elementId);
+                    if (element) {
+                        element.style.textDecoration = "underline";
+                        element.style.textUnderlineOffset = "4px"; // Adjust the offset for styling
+                        element.innerText = value || "_____"; // Fallback to empty placeholder if no value
+                    }
+                }
 
-    // Validate and process both forms if present
-    Object.keys(forms).forEach((formId) => {
-        const form = forms[formId];
-        let formPresent = false;
+                // Validate and process both forms if present
+                Object.keys(forms).forEach((formId) => {
+                    const form = forms[formId];
+                    let formPresent = false;
 
-        // Check if the form exists by checking the first field
-        if (document.getElementById(form.date)) {
-            formPresent = true;
-        }
+                    // Check if the form exists by checking the first field
+                    if (document.getElementById(form.date)) {
+                        formPresent = true;
+                    }
 
-        if (formPresent) {
-            // Validate inputs and update placeholders
-            for (const field in form.placeholders) {
-                const inputElement = document.getElementById(form[field]);
-                const errorElement = document.getElementById(form.errors[field]);
+                    if (formPresent) {
+                        // Validate inputs and update placeholders
+                        for (const field in form.placeholders) {
+                            const inputElement = document.getElementById(form[field]);
+                            const errorElement = document.getElementById(form.errors[field]);
 
-                if (!inputElement || inputElement.value.trim() === '') {
-                    errorElement?.classList.remove('hidden'); // Show error if invalid
-                    isValid = false;
-                } else {
-                    errorElement?.classList.add('hidden'); // Hide error if valid
+                            if (!inputElement || inputElement.value.trim() === '') {
+                                errorElement?.classList.remove('hidden'); // Show error if invalid
+                                isValid = false;
+                            } else {
+                                errorElement?.classList.add('hidden'); // Hide error if valid
 
-                    // Use updateWithUnderline for placeholder update
-                    const placeholderId = form.placeholders[field];
-                    updateWithUnderline(placeholderId, inputElement.value);
+                                // Use updateWithUnderline for placeholder update
+                                const placeholderId = form.placeholders[field];
+                                updateWithUnderline(placeholderId, inputElement.value);
+                            }
+                        }
+                    }
+                });
+
+                // If all inputs are valid
+                if (isValid) {
+                    // Close the form or modal
+                    closeEditForm();
+
+                    // Show success message
+                    const successMessage = document.getElementById('successMessage');
+                    if (successMessage) {
+                        successMessage.classList.remove('hidden');
+                        setTimeout(() => {
+                            successMessage.classList.add('hidden');
+                        }, 2000); // Hide success message after 2 seconds
+                    }
                 }
             }
-        }
-    });
-
-    // If all inputs are valid
-    if (isValid) {
-        // Close the form or modal
-        closeEditForm();
-
-        // Show success message
-        const successMessage = document.getElementById('successMessage');
-        if (successMessage) {
-            successMessage.classList.remove('hidden');
-            setTimeout(() => {
-                successMessage.classList.add('hidden');
-            }, 2000); // Hide success message after 2 seconds
-        }
-    }
-}
-
         </script>
-
-</body>
-
-</html>
+    @endsection

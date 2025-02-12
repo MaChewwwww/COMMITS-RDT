@@ -1,26 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Documents</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        .dropdown-content {
-            display: none;
-        }
+@extends('layouts.app-layout')
 
-        .dropdown-content.show {
-            display: block;
-        }
-
-        .hover-bg {
-            background-color: #f3f4f6; /* light gray for hover */
-        }
-    </style>
-</head>
-<body class="bg-gray-100">
-
+@section('content')
 <div class="max-w-6xl mx-auto mt-10">
     <h1 class="text-2xl font-bold mb-2">Document's</h1>
     <!-- Header -->
@@ -162,5 +142,6 @@
     }
 </script>
 
-</body>
-</html>
+@endsection
+
+

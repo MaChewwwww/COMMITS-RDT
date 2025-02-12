@@ -1,15 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
+@extends('layouts.app-layout')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Patient Record Management</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-
-<body class="bg-gray-100 p-5 font-sans">
+@section('content')
     <header class="mb-5 px-16">
         <!-- Title Section -->
         <div>
@@ -100,10 +91,8 @@
     </div>
 
     <script>
-        document.querySelector('.dropdown-button').addEventListener('click', function () {
+        document.querySelector('.dropdown-button').addEventListener('click', function() {
             document.querySelector('.dropdown-content').classList.toggle('hidden');
         });
     </script>
-</body>
-
-</html>
+@endsection

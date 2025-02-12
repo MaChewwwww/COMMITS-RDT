@@ -11,19 +11,22 @@ use App\Http\Controllers\DocumentController;
 
 
 // Guest routes
-Route::get('/login', [AuthController::class, 'showLogin'])->name('login.show');
-Route::post('/login', [UserController::class, 'login'])->name('login');
+Route::middleware(['guest'])->group(function () {
+    // Default landing
+    Route::get('/', function () {
+        return redirect()->route('login.show');
+    });
+
+    Route::get('/login', [UserController::class, 'showLogin'])->name('login.show');
+    Route::post('/login', [UserController::class, 'login'])->name('login');
+});
 
 // Protected routes
 Route::middleware(['auth'])->group(function () {
-    // Default landing
-    Route::get('/', function () {
-        return view('welcome');
-    });
 
-    Route::prefix('patient')->group(function () {
+    Route::prefix('patients')->group(function () {
 
-        Route::get('/', [PatientController::class, "index"])->name('patients');
+        // Route::get('/', [PatientController::class, "index"])->name('patients');
 
         // Show all patients (index page)
         Route::get('/', [PatientController::class, 'index'])->name('patients');
@@ -60,7 +63,7 @@ Route::middleware(['auth'])->group(function () {
 });
 
 #Report -Camar
-Route::get('/reports', [ReportController::class, 'index']);
+Route::get('/reports', [ReportController::class, 'index'])->name('reports');
 
 Route::prefix('reports')->group(function () {
 
@@ -78,7 +81,8 @@ Route::prefix('reports')->group(function () {
 });
 
 // Route for patient history
-Route::get('/history.backend', [PatientHistoryController::class, 'index'])->name('patient_history.index');
+Route::get('/history', [PatientHistoryController::class, 'index'])->name('patient_history.index');
+
 // Route for document
 Route::get('/documents', [DocumentController::class, 'index'])->name('documents.index');
 Route::get('/documents/{id}/edit', [DocumentController::class, 'edit'])->name('documents.edit');
@@ -92,7 +96,7 @@ Route::prefix('history')->group(function () {
 
     Route::get('/', function () {
         return view('HISTORY.all');
-    });
+    })->name('history.show');
 
     Route::get('/student', function () {
         return view('HISTORY.student');

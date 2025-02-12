@@ -1,56 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
+@extends('layouts.app-layout')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <title>Waiver Form</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        /* Adjusting for print */
-
-        /* Print-specific styles */
-        @media print {
-            .print\\:hidden {
-                display: none !important;
-            }
-
-            @page {
-                /* size: A4; */
-                margin: 0;
-
-            }
-
-            .container {
-                width: 100% !important;
-                margin: 10 auto !important;
-                padding: 10;
-            }
-
-            .page {
-                margin-top: 10;
-                /* Move the form up */
-                position: relative;
-                padding-top: 40px;
-                /* padding-left: 10px; */
-                padding-right: 10px;
-                /* Adjust to move the form higher */
-
-            }
-
-            .container,
-            .container * {
-                visibility: visible;
-            }
-
-        }
-    </style>
-</head>
-
-<body class="bg-gray-100">
-
+@section('content')
     <div class="flex space-x-10 justify-between mb-5 p-4 print:hidden">
         <button class="px-4 py-2 bg-gray-300 text-black rounded hover:bg-gray-400 flex items-center space-x-2"
             onclick="goBack()" aria-label="Go Back">
@@ -65,17 +15,15 @@
         <div>
             <button class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 mr-2" onclick="openEditForm()"
                 aria-label="Edit Form">
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="20" viewBox="0 0 18 20"
-                    fill="none">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="20" viewBox="0 0 18 20" fill="none">
                     <path
                         d="M3.41421 13.9706L13.5563 3.82843L12.1421 2.41421L2 12.5564V13.9706H3.41421ZM4.24264 15.9706H0V11.7279L11.435 0.29289C11.8256 -0.09763 12.4587 -0.09763 12.8492 0.29289L15.6777 3.12132C16.0682 3.51184 16.0682 4.14501 15.6777 4.53553L4.24264 15.9706ZM0 17.9706H18V19.9706H0V17.9706Z"
                         fill="white" />
                 </svg>
             </button>
-            <button class="px-4 py-2 bg-[#7A0019] text-white rounded-md hover:bg-opacity-80 mr-5"
-                onclick="printWaiver()" aria-label="Print the form">
-                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="20" viewBox="0 0 25 20"
-                    fill="none">
+            <button class="px-4 py-2 bg-[#7A0019] text-white rounded-md hover:bg-opacity-80 mr-5" onclick="printWaiver()"
+                aria-label="Print the form">
+                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="20" viewBox="0 0 25 20" fill="none">
                     <path
                         d="M18.75 0.000488281C19.4404 0.000488281 20 0.448208 20 1.00049V5.00049H23.75C24.4404 5.00049 25 5.44821 25 6.00049V16.0005C25 16.5528 24.4404 17.0005 23.75 17.0005H20V19.0005C20 19.5528 19.4404 20.0005 18.75 20.0005H6.25C5.55965 20.0005 5 19.5528 5 19.0005V17.0005H1.25C0.55965 17.0005 0 16.5528 0 16.0005V6.00049C0 5.44821 0.55965 5.00049 1.25 5.00049H5V1.00049C5 0.448208 5.55965 0.000488281 6.25 0.000488281H18.75ZM17.5 15.0005H7.5V18.0005H17.5V15.0005ZM22.5 7.00049H2.5V15.0005H5V14.0005C5 13.4482 5.55965 13.0005 6.25 13.0005H18.75C19.4404 13.0005 20 13.4482 20 14.0005V15.0005H22.5V7.00049ZM7.5 8.00049V10.0005H3.75V8.00049H7.5ZM17.5 2.00049H7.5V5.00049H17.5V2.00049Z"
                         fill="white" />
@@ -146,8 +94,7 @@
                     <div id="successMessage"
                         class="hidden fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-10">
                         <div class="bg-white rounded-lg shadow-lg p-6 w-96 text-center">
-                            <div
-                                class="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <div class="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
                                 <!-- Green Checkmark Icon -->
                                 <svg class="w-8 h-8 text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
                                     fill="currentColor" aria-hidden="true">
@@ -185,8 +132,7 @@
 
                                 <div class="form-group">
                                     <label class="block text-gray-600 font-medium mb-1">Dear (Recipient):</label>
-                                    <input type="text" id="recipientInput"
-                                        class="w-full border rounded-md px-3 py-2"
+                                    <input type="text" id="recipientInput" class="w-full border rounded-md px-3 py-2"
                                         placeholder="Enter recipient's name" required>
                                     <div id="nameError" class="hidden text-red-500">Please enter the recipient's name.
                                     </div>
@@ -201,9 +147,8 @@
 
                                 <div class="form-group">
                                     <label class="block text-gray-600 font-medium mb-1">Department:</label>
-                                    <input type="text" id="departmentInput"
-                                        class="w-full border rounded-md px-3 py-2" placeholder="Enter department"
-                                        required>
+                                    <input type="text" id="departmentInput" class="w-full border rounded-md px-3 py-2"
+                                        placeholder="Enter department" required>
                                 </div>
 
                                 <div class="form-group">
@@ -225,17 +170,16 @@
 
                                 <div class="form-group">
                                     <label class="block text-gray-600 font-medium mb-1">Sincerely:</label>
-                                    <input type="text" id="sincerelyInput"
-                                        class="w-full border rounded-md px-3 py-2" placeholder="Enter your name"
-                                        required>
+                                    <input type="text" id="sincerelyInput" class="w-full border rounded-md px-3 py-2"
+                                        placeholder="Enter your name" required>
                                     <div id="sincerelyError" class="hidden text-red-500">Please enter your name.</div>
                                 </div>
 
                                 <div class="form-group">
                                     <label class="block text-gray-600 font-medium mb-1">Physician's Name:</label>
                                     <input type="text" id="physicianNameInput"
-                                        class="w-full border rounded-md px-3 py-2"
-                                        placeholder="Enter physician's name" required>
+                                        class="w-full border rounded-md px-3 py-2" placeholder="Enter physician's name"
+                                        required>
                                     <div id="licenseNoError" class="hidden text-red-500">Please enter the physician's
                                         name.
                                     </div>
@@ -249,120 +193,121 @@
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
 
-                    <!-- Modal Scripts -->
-                    <script>
-                        function updateWithUnderline(placeholderId, text) {
-                            const placeholder = document.getElementById(placeholderId);
-                            if (placeholder) {
-                                placeholder.style.textDecoration = "underline";
-                                placeholder.style.textUnderlineOffset = "4px"; // Adjust the offset for styling
-                                placeholder.innerText = text || "_____"; // Fallback to empty placeholder if no value
-                            }
-                        }
+    <!-- Modal Scripts -->
+    <script>
+        function updateWithUnderline(placeholderId, text) {
+            const placeholder = document.getElementById(placeholderId);
+            if (placeholder) {
+                placeholder.style.textDecoration = "underline";
+                placeholder.style.textUnderlineOffset = "4px"; // Adjust the offset for styling
+                placeholder.innerText = text || "_____"; // Fallback to empty placeholder if no value
+            }
+        }
 
-                        function goBack() {
-                            window.history.back();
-                        }
+        function goBack() {
+            window.history.back();
+        }
 
-                        function printWaiver() {
-                            window.print();
-                        }
-                        // Function to open the modal
-                        function openEditForm() {
-                            document.getElementById('editFormModal').classList.remove('hidden');
-                        }
+        function printWaiver() {
+            window.print();
+        }
+        // Function to open the modal
+        function openEditForm() {
+            document.getElementById('editFormModal').classList.remove('hidden');
+        }
 
-                        // Function to close the modal
-                        function closeEditForm() {
-                            document.getElementById('editFormModal').classList.add('hidden');
-                        }
+        // Function to close the modal
+        function closeEditForm() {
+            document.getElementById('editFormModal').classList.add('hidden');
+        }
 
-                        function saveEdits() {
-                            const date = document.getElementById('DateInput').value;
-                            const recipientName = document.getElementById('recipientInput').value;
-                            const studentName = document.getElementById('studentNameInput').value;
-                            const department = document.getElementById('departmentInput').value;
-                            const absenceDate = document.getElementById('absenceDateInput').value;
-                            const reason = document.getElementById('reasonInput').value;
-                            const sincerely = document.getElementById('sincerelyInput').value;
-                            const physicianName = document.getElementById('physicianNameInput').value;
+        function saveEdits() {
+            const date = document.getElementById('DateInput').value;
+            const recipientName = document.getElementById('recipientInput').value;
+            const studentName = document.getElementById('studentNameInput').value;
+            const department = document.getElementById('departmentInput').value;
+            const absenceDate = document.getElementById('absenceDateInput').value;
+            const reason = document.getElementById('reasonInput').value;
+            const sincerely = document.getElementById('sincerelyInput').value;
+            const physicianName = document.getElementById('physicianNameInput').value;
 
-                            // Validate inputs
-                            let isValid = true;
+            // Validate inputs
+            let isValid = true;
 
-                            // Check if fields are filled
-                            if (!recipientName.trim()) {
-                                document.getElementById('nameError').classList.remove('hidden');
-                                isValid = false;
-                            } else {
-                                document.getElementById('nameError').classList.add('hidden');
-                            }
+            // Check if fields are filled
+            if (!recipientName.trim()) {
+                document.getElementById('nameError').classList.remove('hidden');
+                isValid = false;
+            } else {
+                document.getElementById('nameError').classList.add('hidden');
+            }
 
-                            if (!absenceDate) {
-                                document.getElementById('dateError').classList.remove('hidden');
-                                isValid = false;
-                            } else {
-                                document.getElementById('dateError').classList.add('hidden');
-                            }
+            if (!absenceDate) {
+                document.getElementById('dateError').classList.remove('hidden');
+                isValid = false;
+            } else {
+                document.getElementById('dateError').classList.add('hidden');
+            }
 
-                            if (!reason.trim()) {
-                                document.getElementById('reasonError').classList.remove('hidden');
-                                isValid = false;
-                            } else {
-                                document.getElementById('reasonError').classList.add('hidden');
-                            }
+            if (!reason.trim()) {
+                document.getElementById('reasonError').classList.remove('hidden');
+                isValid = false;
+            } else {
+                document.getElementById('reasonError').classList.add('hidden');
+            }
 
-                            if (!physicianName.trim()) {
-                                document.getElementById('licenseNoError').classList.remove('hidden');
-                                isValid = false;
-                            } else {
-                                document.getElementById('licenseNoError').classList.add('hidden');
-                            }
+            if (!physicianName.trim()) {
+                document.getElementById('licenseNoError').classList.remove('hidden');
+                isValid = false;
+            } else {
+                document.getElementById('licenseNoError').classList.add('hidden');
+            }
 
-                            if (!sincerely.trim()) {
-                                document.getElementById('sincerelyError').classList.remove('hidden');
-                                isValid = false;
-                            } else {
-                                document.getElementById('sincerelyError').classList.add('hidden');
-                            }
+            if (!sincerely.trim()) {
+                document.getElementById('sincerelyError').classList.remove('hidden');
+                isValid = false;
+            } else {
+                document.getElementById('sincerelyError').classList.add('hidden');
+            }
 
-                            // Debugging: Check if form is valid
-                            console.log("Form valid: ", isValid);
+            // Debugging: Check if form is valid
+            console.log("Form valid: ", isValid);
 
-                            // If all fields are valid, update the placeholders in the letter
-                            if (isValid) {
-                                // Update placeholders with underline styling
-                                updateWithUnderline('letterDate', date);
-                                updateWithUnderline('recipientName', recipientName);
-                                updateWithUnderline('studentName', studentName);
-                                updateWithUnderline('department', department);
-                                updateWithUnderline('absenceDate', absenceDate);
-                                updateWithUnderline('reasons', reason);
-                                updateWithUnderline('studentSignature', sincerely);
-                                updateWithUnderline('physicianSignature', physicianName);
+            // If all fields are valid, update the placeholders in the letter
+            if (isValid) {
+                // Update placeholders with underline styling
+                updateWithUnderline('letterDate', date);
+                updateWithUnderline('recipientName', recipientName);
+                updateWithUnderline('studentName', studentName);
+                updateWithUnderline('department', department);
+                updateWithUnderline('absenceDate', absenceDate);
+                updateWithUnderline('reasons', reason);
+                updateWithUnderline('studentSignature', sincerely);
+                updateWithUnderline('physicianSignature', physicianName);
 
-                                // Show success message
-                                const successMessage = document.getElementById("successMessage");
-                                successMessage.classList.remove("hidden"); // Make the success message visible
-                                console.log("Success message is visible.");
+                // Show success message
+                const successMessage = document.getElementById("successMessage");
+                successMessage.classList.remove("hidden"); // Make the success message visible
+                console.log("Success message is visible.");
 
-                                // Hide the success message after a short delay, close the modal, and trigger print preview
-                                setTimeout(() => {
-                                    successMessage.classList.add("hidden"); // Hide success message after 2 seconds
-                                    closeEditForm(); // Close the modal/form
+                // Hide the success message after a short delay, close the modal, and trigger print preview
+                setTimeout(() => {
+                    successMessage.classList.add("hidden"); // Hide success message after 2 seconds
+                    closeEditForm(); // Close the modal/form
 
-                                    // Trigger print preview
-                                    window.print();
-                                }, 2000); // Adjust this time if needed
-                            } else {
-                                console.log("Form validation failed.");
-                            }
-                        }
-                    </script>
-
-</body>
-
-</html>
+                    // Trigger print preview
+                    window.print();
+                }, 2000); // Adjust this time if needed
+            } else {
+                console.log("Form validation failed.");
+            }
+        }
+    </script>
+@endsection

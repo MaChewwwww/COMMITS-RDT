@@ -19,6 +19,11 @@
                 <x-input-textfield id="email" name="email" class="block mt-1 border-2"
                     placeholder="Enter your email" />
                 <div class="mt-2 ml-1 text-xs text-red-500 error"></div> <!-- Error div for email -->
+
+                {{-- Error message for invalid credentials --}}
+                @error('email')
+                    <p class="text-sm text-red-500">{{ $message }}</p>
+                @enderror
             </div>
 
             {{-- Password --}}
@@ -40,6 +45,10 @@
                     </span>
                 </div>
                 <div id="password-error" class="block mt-2 ml-1 text-xs text-red-500 w-80"></div>
+
+                @error('password')
+                    <p class="text-sm text-red-500">{{ $message }}</p>
+                @enderror
             </div>
 
             {{-- Forgot Password --}}
@@ -47,6 +56,11 @@
                 <a class="text-xs font-normal text-gray-700 underline hover:text-yellow-600" href="#">Forgot
                     password?</a>
             </div>
+
+            {{-- Error message for invalid credentials --}}
+            @error('failed')
+                <p class="text-sm text-red-500">{{ $message }}</p>
+            @enderror
 
             {{-- Submit Button --}}
             <button type="submit"

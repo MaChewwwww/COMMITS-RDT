@@ -9,7 +9,18 @@ use App\Models\User;
 
 class UserController extends Controller
 {
-    // Handle user login
+    /**
+     *  Display login form
+     */
+    public function showLogin()
+    {
+        return view('authentication.login');
+    }
+
+
+    /**
+     *  Handle user login
+     */
     public function login(Request $request)
     {
         $request->validate([
@@ -22,20 +33,30 @@ class UserController extends Controller
         if (Auth::attempt($credentials)) {
             // Authentication successful
             $user = Auth::user(); // Get authenticated user
-            return response()->json([
-                'message' => 'Login successful',
-                'user' => $user,
-            ], 200);
+
+            if ($user->role === 'standard')
+            {
+                // Check user role and redirect accordingly
+                return $user->role === 'admin'
+                    ? redirect()->route('patients') // if admin
+                    : redirect()->route('patients');
+            }
         }
 
         // Authentication failed
         return response()->json(['message' => 'Invalid credentials'], 401);
     }
 
-    // Handle user logout
+    /**
+     *  Handle user logout
+     */
     public function logout(Request $request)
     {
         Auth::logout();
-        return redirect()->route('login.show')->with('success', 'Logout successful');
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        // redirect to login page
+        return redirect()->route('login');
     }
 }

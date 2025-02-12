@@ -1,13 +1,13 @@
-@extends('layouts.frontend')
+@extends('layouts.app-layout')
 
 @section('content')
 <div class="container">
     <h5 class="text-4xl font-bold">Reports</h5>
-    
+
     <div class="flex justify-between items-center mb-4 w-full gap-x-px">
     <!-- Add Button -->
     <button class="bg-green-500 text-white px-3 py-2 rounded-md hover:bg-green-600 ml-auto h-13" data-bs-toggle="modal" data-bs-target="#addReportModal">Add Report</button>
-    
+
     <!-- Filter Dropdown -->
     <div class="dropdown h-13 m-3 ml-2">
         <button class="bg-yellow-500 text-white px-3 py-2 rounded-md hover:bg-yellow-600 dropdown-toggle h-full" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
@@ -34,11 +34,11 @@
                         <h5 class="text-lg font-semibold">{{ $report->title }}</h5>
                         <p class="text-sm text-gray-500">{{ $report->created_at->format('m/d/Y h:i A') }}</p>
                     </div>
-                    
+
                     <!-- Container for View and Delete buttons -->
                     <div class="flex gap-x-2">
                         <a href="{{ route('report.show', $report->id) }}" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 flex items-center justify-center h-12">View</a>
-                                                
+
                         <form action="{{ route('report.destroy', $report->id) }}" method="POST">
                             @csrf
                             @method('DELETE')
