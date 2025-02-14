@@ -13,6 +13,7 @@ class DMDCConsentForm extends Model
     protected $fillable = [
         'document_id',
         'eventName',
+        'document_type',
     ];
 
     public function document()

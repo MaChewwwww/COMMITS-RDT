@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <title>Create | Excuse Letter</title>
+    <title>Waiver Form</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
@@ -63,8 +63,8 @@
         </button>
 
         <div>
-            <button class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 mr-2" onclick="openAddForm()"
-                aria-label="Add a new document">
+            <button class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 mr-2" onclick="openEditForm()"
+                aria-label="Edit Form">
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="20" viewBox="0 0 18 20"
                     fill="none">
                     <path
@@ -93,7 +93,6 @@
                         <img src="{{ asset('Logo_image/logopup.png') }}" alt="University logo" class="w-28 mb-5">
                     </div>
                     <div class="text-center" style="font-family: 'Times New Roman', serif;">
-
                         <h1 class="text-sm font-normal">Republic of the Philippines</h1>
                         <h1 class="text-base font-normal">POLYTECHNIC UNIVERSITY OF THE PHILIPPINES</h1>
                         <p class="text-sm mb-5">Quezon City</p>
@@ -105,7 +104,7 @@
                 <!-- Body Content -->
                 <div id="letterOutput" class="md:px-10" style="font-size: 14px">
                     <div class="mb-10 text-right">
-                        <input class="font-medium"></input>
+                        <span class="font-medium"></span>
                         <span id="letterDate">Date_____________________</span>
                     </div>
                     <div class="space-y-4">
@@ -113,7 +112,7 @@
                             Dear <span id="recipientName">__________________</span>,
                         </p>
                         <p class="text-lg">
-                            I, <span id="studentName"></span>, a student of the
+                            I, <span id="studentName">________________________________________</span>, a student of the
                             <span id="department">_________________________________________</span> Department, would
                             like to inform you that I was unable to attend class on <span
                                 id="absenceDate">______________________</span> due to <span
@@ -140,11 +139,7 @@
                         <p class="text-center font-medium">Clinic Physician</p>
                     </div>
                 </div>
-            </div>
-        </div>   
-        <div class="container mx-auto bg-white md:py-20 md:px-20 w-[90%] md:w-[70%] lg:w-[70%]">
-        <div class="page">
-                
+
                 <!-- Success Notification -->
                 <div class="container mx-auto bg-white md:py-20 md:px-20 w-[90%] md:w-[70%] lg:w-[70%]">
                     <!-- Success Notification -->
@@ -166,75 +161,91 @@
                     </div>
 
                     <!-- Modal -->
-                    <div id="addFormModal"
+                    <div id="editFormModal"
                         class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 hidden">
                         <div class="modal-content bg-white rounded-lg shadow-lg p-6 w-full max-w-lg relative"
                             style="max-height: 80%; overflow-y: auto;">
                             <!-- Close Button in Top-Right -->
                             <span
                                 class="close absolute top-2.5 right-2.5 text-red-500 text-2xl cursor-pointer hover:text-red-700"
-                                onclick="closeAddForm()">&times;</span>
+                                onclick="closeEditForm()">&times;</span>
 
                             <!-- Modal Title -->
-                            <h3 class="text-xl font-semibold mb-4 text-gray-700">Add Excuse Letter</h3>
+                            <h3 class="text-xl font-semibold mb-4 text-gray-700">Edit Excuse Letter</h3>
 
                             <!-- Form Container -->
-
                             <div id="formContainer" class="space-y-4">
-                                <form action="{{ route('documents.excuse_letter.store') }}" method="POST">
-
-                                     @csrf
-                                    <input type="hidden" name="document_type" value="{{ request('document_type') }}">
-                                    <div class="form-group">
-                                        <label class="block text-gray-600 font-medium mb-1">Date:</label>
-                                        <input type="date" id="date" name="date" class="w-full border rounded-md px-3 py-2" required>
-                                        <div id="dateError1" class="hidden text-red-500">Please enter the date of absence. </div>
+                                <div class="form-group">
+                                    <label class="block text-gray-600 font-medium mb-1">Date:</label>
+                                    <input type="date" id="DateInput" class="w-full border rounded-md px-3 py-2"
+                                        required>
+                                    <div id="dateError" class="hidden text-red-500">Please enter the date of absence.
                                     </div>
+                                </div>
 
-                                    <div class="form-group">
-                                        <label class="block text-gray-600 font-medium mb-1">Dear (Recipient):</label>
-                                        <input type="text" id="recipient" name="recipient" class="w-full border rounded-md px-3 py-2" required>
-                                        <div id="nameError" class="hidden text-red-500">Please enter the recipient's name. </div>
+                                <div class="form-group">
+                                    <label class="block text-gray-600 font-medium mb-1">Dear (Recipient):</label>
+                                    <input type="text" id="recipientInput"
+                                        class="w-full border rounded-md px-3 py-2"
+                                        placeholder="Enter recipient's name" required>
+                                    <div id="nameError" class="hidden text-red-500">Please enter the recipient's name.
                                     </div>
+                                </div>
 
-                                    <div class="form-group">
-                                        <label class="block text-gray-600 font-medium mb-1">Student Name:</label>
-                                        <input type="text" id="patient_name" name="patient_name" class="w-full border rounded-md px-3 py-2" required>
-                                    </div>
+                                <div class="form-group">
+                                    <label class="block text-gray-600 font-medium mb-1">Student Name:</label>
+                                    <input type="text" id="studentNameInput"
+                                        class="w-full border rounded-md px-3 py-2" placeholder="Enter student name"
+                                        required>
+                                </div>
 
-                                    <div class="form-group">
-                                        <label class="block text-gray-600 font-medium mb-1">Department:</label>
-                                        <input type="text" id="department" name="department" class="w-full border rounded-md px-3 py-2" placeholder="Enter department" required>
-                                    </div>
+                                <div class="form-group">
+                                    <label class="block text-gray-600 font-medium mb-1">Department:</label>
+                                    <input type="text" id="departmentInput"
+                                        class="w-full border rounded-md px-3 py-2" placeholder="Enter department"
+                                        required>
+                                </div>
 
-                                    <div class="form-group">
-                                        <label class="block text-gray-600 font-medium mb-1">Date of Absence:</label>
-                                        <input type="date" id="excuse_for" name="excuse_for" class="w-full border rounded-md px-3 py-2" required>
-                                        <div id="dateError2" class="hidden text-red-500">Please enter the date of absence.
-                                        </div>
+                                <div class="form-group">
+                                    <label class="block text-gray-600 font-medium mb-1">Date of Absence:</label>
+                                    <input type="date" id="absenceDateInput"
+                                        class="w-full border rounded-md px-3 py-2" required>
+                                    <div id="dateError" class="hidden text-red-500">Please enter the date of absence.
                                     </div>
+                                </div>
 
-                                    <div class="form-group">
-                                        <label class="block text-gray-600 font-medium mb-1">Reason for Absence:</label>
-                                        <input type="text" id="cause" name="cause" class="w-full border rounded-md px-3 py-2" required>
-                                        <div id="reasonError" class="hidden text-red-500">Please enter the reason for
-                                            absence.
-                                        </div>
+                                <div class="form-group">
+                                    <label class="block text-gray-600 font-medium mb-1">Reason for Absence:</label>
+                                    <input type="text" id="reasonInput" class="w-full border rounded-md px-3 py-2"
+                                        placeholder="Enter reason for absence" required>
+                                    <div id="reasonError" class="hidden text-red-500">Please enter the reason for
+                                        absence.
                                     </div>
+                                </div>
 
-                                    <div class="form-group">
-                                        <label class="block text-gray-600 font-medium mb-1">Physician's Name:</label>
-                                        <input type="text" id="doctorName" name="doctorName" class="w-full border rounded-md px-3 py-2" required>
-                                        <div id="licenseNoError" class="hidden text-red-500">Please enter the physician's
-                                            name.
-                                        </div>
-                                    </div>
+                                <div class="form-group">
+                                    <label class="block text-gray-600 font-medium mb-1">Sincerely:</label>
+                                    <input type="text" id="sincerelyInput"
+                                        class="w-full border rounded-md px-3 py-2" placeholder="Enter your name"
+                                        required>
+                                    <div id="sincerelyError" class="hidden text-red-500">Please enter your name.</div>
+                                </div>
 
-                                    <!-- Save Button -->
-                                    <div class="flex justify-center space-x-4 mt-6">
-                                        <button  onclick="saveAdded()" class="bg-[#3CAA38] hover:bg-[#2B8E2F] text-white font-medium py-2 px-20 rounded-md">Submit</button>
+                                <div class="form-group">
+                                    <label class="block text-gray-600 font-medium mb-1">Physician's Name:</label>
+                                    <input type="text" id="physicianNameInput"
+                                        class="w-full border rounded-md px-3 py-2"
+                                        placeholder="Enter physician's name" required>
+                                    <div id="licenseNoError" class="hidden text-red-500">Please enter the physician's
+                                        name.
                                     </div>
-                                </form>
+                                </div>
+
+                                <!-- Save Button -->
+                                <div class="flex justify-center space-x-4 mt-6">
+                                    <button onclick="saveEdits()"
+                                        class="bg-[#3CAA38] hover:bg-[#2B8E2F] text-white font-medium py-2 px-20 rounded-md">Save</button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -243,35 +254,46 @@
 
                     <!-- Modal Scripts -->
                     <script>
-                        function goBack() {
-                            window.location.href = "{{ route('documents.adocument_file') }}";
+                        function updateWithUnderline(placeholderId, text) {
+                            const placeholder = document.getElementById(placeholderId);
+                            if (placeholder) {
+                                placeholder.style.textDecoration = "underline";
+                                placeholder.style.textUnderlineOffset = "4px"; // Adjust the offset for styling
+                                placeholder.innerText = text || "_____"; // Fallback to empty placeholder if no value
+                            }
                         }
 
+                        function goBack() {
+                            window.history.back();
+                        }
 
                         function printWaiver() {
                             window.print();
                         }
                         // Function to open the modal
-                        function openAddForm() {
-                            document.getElementById('addFormModal').classList.remove('hidden');
+                        function openEditForm() {
+                            document.getElementById('editFormModal').classList.remove('hidden');
                         }
 
                         // Function to close the modal
-                        function closeAddForm() {
-                            document.getElementById('addFormModal').classList.add('hidden');
+                        function closeEditForm() {
+                            document.getElementById('editFormModal').classList.add('hidden');
                         }
 
-                        function saveAdded() {
-                            const date = document.getElementById('date').value;
-                            const recipientName = document.getElementById('recipient').value;
-                            const studentName = document.getElementById('patient_name').value;
-                            const department = document.getElementById('department').value;
-                            const absenceDate = document.getElementById('excuse_for').value;
-                            const reason = document.getElementById('cause').value;
-                            const physicianName = document.getElementById('doctorName').value;
+                        function saveEdits() {
+                            const date = document.getElementById('DateInput').value;
+                            const recipientName = document.getElementById('recipientInput').value;
+                            const studentName = document.getElementById('studentNameInput').value;
+                            const department = document.getElementById('departmentInput').value;
+                            const absenceDate = document.getElementById('absenceDateInput').value;
+                            const reason = document.getElementById('reasonInput').value;
+                            const sincerely = document.getElementById('sincerelyInput').value;
+                            const physicianName = document.getElementById('physicianNameInput').value;
 
+                            // Validate inputs
                             let isValid = true;
 
+                            // Check if fields are filled
                             if (!recipientName.trim()) {
                                 document.getElementById('nameError').classList.remove('hidden');
                                 isValid = false;
@@ -279,17 +301,11 @@
                                 document.getElementById('nameError').classList.add('hidden');
                             }
 
-                            if (!date) {
-                                document.getElementById('dateError1').classList.remove('hidden');
-                                isValid = false;
-                            } else {
-                                document.getElementById('dateError1').classList.add('hidden');
-                            }
                             if (!absenceDate) {
-                                document.getElementById('dateError2').classList.remove('hidden');
+                                document.getElementById('dateError').classList.remove('hidden');
                                 isValid = false;
                             } else {
-                                document.getElementById('dateError2').classList.add('hidden');
+                                document.getElementById('dateError').classList.add('hidden');
                             }
 
                             if (!reason.trim()) {
@@ -298,34 +314,55 @@
                             } else {
                                 document.getElementById('reasonError').classList.add('hidden');
                             }
+
                             if (!physicianName.trim()) {
-                                document.getElementById('licenseNoError').classList.remove('hidden'); // Ensure this ID matches your HTML
+                                document.getElementById('licenseNoError').classList.remove('hidden');
                                 isValid = false;
                             } else {
-                                document.getElementById('licenseNoError').classList.add('hidden'); // Ensure this ID matches your HTML
+                                document.getElementById('licenseNoError').classList.add('hidden');
                             }
 
-                                console.log("Form valid: ", isValid);
+                            if (!sincerely.trim()) {
+                                document.getElementById('sincerelyError').classList.remove('hidden');
+                                isValid = false;
+                            } else {
+                                document.getElementById('sincerelyError').classList.add('hidden');
+                            }
 
+                            // Debugging: Check if form is valid
+                            console.log("Form valid: ", isValid);
+
+                            // If all fields are valid, update the placeholders in the letter
                             if (isValid) {
+                                // Update placeholders with underline styling
+                                updateWithUnderline('letterDate', date);
+                                updateWithUnderline('recipientName', recipientName);
+                                updateWithUnderline('studentName', studentName);
+                                updateWithUnderline('department', department);
+                                updateWithUnderline('absenceDate', absenceDate);
+                                updateWithUnderline('reasons', reason);
+                                updateWithUnderline('studentSignature', sincerely);
+                                updateWithUnderline('physicianSignature', physicianName);
+
+                                // Show success message
                                 const successMessage = document.getElementById("successMessage");
                                 successMessage.classList.remove("hidden"); // Make the success message visible
                                 console.log("Success message is visible.");
 
                                 // Hide the success message after a short delay, close the modal, and trigger print preview
                                 setTimeout(() => {
-                                    successMessage.classList.add("hidden"); // Hide success message after 3.5 seconds
-                                    closeAddForm(); // Close the modal
-                                    document.querySelector('form').submit(); // This submits the form to Laravel
-                                }, 3500);
+                                    successMessage.classList.add("hidden"); // Hide success message after 2 seconds
+                                    closeEditForm(); // Close the modal/form
+
+                                    // Trigger print preview
+                                    window.print();
+                                }, 2000); // Adjust this time if needed
                             } else {
                                 console.log("Form validation failed.");
                             }
                         }
-
                     </script>
-                </div>
-    </div>            
+
 </body>
 
 </html>

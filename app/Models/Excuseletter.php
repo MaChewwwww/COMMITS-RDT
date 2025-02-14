@@ -11,15 +11,15 @@ class Excuseletter extends Model
     protected $table = 'excuseletter'; 
     
     protected $fillable = [
-        'phone_number',
-        'date',
-        'patient_name',
-        'excuse_for',
-        'cause',
+        'document_type',
+        'date', 
+        'recipient', 
+        'patient_name', 
+        'department', 
+        'excuse_for', 
+        'cause', 
         'doctorName',
         'document_id',
-        'address',
-        'date_today',
     ];
 
     public function document()

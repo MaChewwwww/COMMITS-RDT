@@ -55,13 +55,13 @@
                     </svg>
                 </button>
                 <div id="add-dropdown" class="dropdown-content absolute right-0 mt-2 w-64 bg-white border border-gray-200 rounded shadow-lg">
-                    <a href="{{ route('documents.medical-certificate.create') }}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Medical Certificate</a>
-                    <a href="{{ route('documents.medical-clearance.create') }}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Medical Clearance</a>
-                    <a href="{{ route('documents.annual-medical-clearance.create') }}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Annual Medical Clearance</a>
-                    <a href="{{ route('documents.excuse-letter.create') }}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Excuse Letter</a>
-                    <a href="{{ route('documents.waiver.create') }}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Waiver</a>
-                    <a href="{{ route('documents.waiver-for-pulmonary-case.create') }}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Waiver for Pulmonary Case</a>
-                    <a href="{{ route('documents.dmdc-consent-form.create') }}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">DMDC Consent Form</a>
+                    <a href="{{ route('documents.medical_certificate.create', ['document_type' => 'Medical Certificate']) }}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Medical Certificate</a>
+                    <a href="{{ route('documents.medical_clearance.create', ['document_type' => 'Medical Clearance']) }}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Medical Clearance</a>
+                    <a href="{{ route('documents.annual_medical_clearance.create', ['document_type' => 'Annual Medical Clearance']) }}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Annual Medical Clearance</a>
+                    <a href="{{ route('documents.excuse_letter.create', ['document_type' => 'Excuse Letter']) }}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Excuse Letter</a>
+                    <a href="{{ route('documents.waiver.create', ['document_type' => 'Waiver']) }}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Waiver</a>
+                    <a href="{{ route('documents.waiver_for_pulmonary_case.create', ['document_type' => 'Waiver for Pulmonary Case']) }}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Waiver for Pulmonary Case</a>
+                    <a href="{{ route('documents.dmdc_consent_form.create', ['document_type' => 'DMDC Consent Form']) }}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">DMDC Consent Form</a>
                 </div>
             </div>
         </div>
@@ -69,15 +69,16 @@
 
     <!-- Recents Section -->
     <div class="space-y-4">
-        @foreach($documents as $document)
+    @foreach($documents as $document)
+    <a href="{{ route('documents.' . strtolower(str_replace(' ', '_', $document->document_type)) . '.view', $document->id) }}">
         <div id="document-container" class="bg-white p-4 rounded-lg shadow flex justify-between items-center cursor-pointer transition-all">
             <div>
-                <p class="font-medium text-gray-800">{{ $document->document_type }}</p>
-                <p class="text-sm text-gray-400">Created on: {{ $document->created_at->format('Y-m-d') }}</p>
+                <p class="font-medium text-gray-800">[{{$document->id}}] {{ $document->document_type }}</p>
+                <p class="text-gray-500">{{ $document->updated_at->format('F j, Y') }}</p>
             </div>
             <div class="flex space-x-3">
                 <!-- Edit Icon -->
-                <a href="{{ route('documents.edit', $document->id) }}" class="hover:text-yellow-500">
+                <a href="{{ route('documents.' . strtolower(str_replace(' ', '_', $document->document_type)) . '.edit', $document->id) }}" class="hover:text-yellow-500">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 fill-current" viewBox="0 0 24 24">
                         <path d="M3 21H8L19.435 9.565L14.435 4.565L3 16V21ZM14.435 4.565L17.435 1.565L20.435 4.565L17.435 7.565L14.435 4.565Z"/>
                     </svg>
@@ -93,8 +94,10 @@
                 </button>
             </div>
         </div>
-        @endforeach
-    </div>
+    </a>
+    @endforeach
+</div>
+
 </div>
 
 <script>

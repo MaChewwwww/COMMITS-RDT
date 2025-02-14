@@ -20,6 +20,13 @@ class MedicalClearance extends Model
         'doctorName',
         'position',
         'license_number',
+        'document_type',
+        'additional_date',
+        'additional_patient_name',
+        'additional_vaccination_status',
+        'additional_remarks',
+        'additional_doctorName',
+        'additional_position',
     ];
 
     // Define the relationship with the Document model

@@ -13,7 +13,6 @@ class MedicalCertificate extends Model
 
     protected $fillable = [
         'document_id',
-        'clearance_type',
         'date',
         'patient_name',
         'sickness',
@@ -21,6 +20,14 @@ class MedicalCertificate extends Model
         'endDate',
         'reason',
         'doctorName',
+        'document_type',
+        'additional_date',
+        'additional_patient_name',
+        'additional_sickness',
+        'additional_startDate',
+        'additional_endDate',
+        'additional_reason',
+        'additional_doctorName',
     ];
 
     public function document()

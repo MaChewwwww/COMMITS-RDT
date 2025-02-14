@@ -4,18 +4,54 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PatientHistoryController;
 use App\Http\Controllers\DocumentController;
 
-// Existing route for the welcome page
+// Welcome Page
 Route::get('/', function () {
     return view('welcome');
 });
 
-// Route for patient history
+// Patient History
 Route::get('/history', [PatientHistoryController::class, 'index'])->name('HISTORY.all');
-// Route for document
-Route::get('/documents', [DocumentController::class, 'adocument_file'])->name('documents.adocument_file');
-Route::get('/documents/{id}/edit', [DocumentController::class, 'edit'])->name('documents.excuse_letter.edit');
-Route::get('/documents/{id}/view', [DocumentController::class, 'show'])->name('documents.view');
-Route::put('/documents/{id}', [DocumentController::class, 'update'])->name('documents.update');
-Route::get('/documents/create', [DocumentController::class, 'create'])->name('documents.excuse_letter.create');
-Route::post('/documents', [DocumentController::class, 'store'])->name('documents.excuse_letter.store');
 
+// Document Routes
+Route::prefix('documents')->group(function () {
+    Route::get('/', [DocumentController::class, 'adocument_file'])->name('documents.adocument_file');
+
+    // Routes for each document type
+    $documentTypes = [
+        'excuse_letter' => 'Excuse Letter',
+        'medical_clearance' => 'Medical Clearance',
+        'medical_certificate' => 'Medical Certificate',
+        'annual_medical_clearance' => 'Annual Medical Clearance',
+        'waiver' => 'Waiver',
+        'waiver_for_pulmonary_case' => 'Waiver for Pulmonary Case',
+        'dmdc_consent_form' => 'DMDC Consent Form',
+    ];
+
+foreach ($documentTypes as $slug => $type) {
+    // Create Document
+    Route::get("/create/{$slug}", [DocumentController::class, 'create'])
+        ->name("documents.{$slug}.create")
+        ->defaults('document_type', $type);
+
+    // Store Document
+    Route::post("/store/{$slug}", [DocumentController::class, 'store'])
+        ->name("documents.{$slug}.store")
+        ->defaults('document_type', $type);
+
+    // Edit Document
+    Route::get("/{id}/edit/{$slug}", [DocumentController::class, 'edit'])
+        ->name("documents.{$slug}.edit")
+        ->defaults('document_type', $type);
+
+    // Update Document
+    Route::put("/{id}/update/{$slug}", [DocumentController::class, 'update'])
+        ->name("documents.{$slug}.update")
+        ->defaults('document_type', $type);
+
+    // View Document (new route)
+    Route::get("/{id}/view/{$slug}", [DocumentController::class, 'view'])
+        ->name("documents.{$slug}.view")
+        ->defaults('document_type', $type);
+}
+
+});

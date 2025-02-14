@@ -11,10 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('documents', function (Blueprint $table) {
+        Schema::create('dmdc_consent_forms', function (Blueprint $table) {
             $table->id();
-            $table->string('document_type');
+            $table->unsignedBigInteger('document_id');
+            $table->string('event_name');
             $table->timestamps();
+            $table->string('document_type')->default('dmdc_consent_form');
+        
+            $table->foreign('document_id')->references('id')->on('documents')->onDelete('cascade');
         });
     }
 
@@ -23,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('documents');
+        Schema::dropIfExists('dmdc_consent_form');
     }
 };

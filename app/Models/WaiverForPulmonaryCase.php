@@ -15,6 +15,12 @@ class WaiverForPulmonaryCase extends Model
         'collegeName',
         'year',
         'followUpDate',
+        'document_id',
+        'document_type',
+        'additional_patient_name',
+        'additional_collegeName',
+        'additional_year',
+        'additional_followUpDate',
     ];
 
     public function document()

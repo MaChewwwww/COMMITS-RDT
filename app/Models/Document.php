@@ -12,6 +12,7 @@ class Document extends Model
 
     protected $fillable = [
         'user_id',
+        'document_type',
     ];
 
     private static function generateUniqueDocumentId()

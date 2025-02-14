@@ -18,6 +18,15 @@ class Waiver extends Model
         'diagnosedDate',
         'diagnosedIllness',
         'followUpDate',
+        'document_id',
+        'document_type',
+        'additional_date',
+        'additional_name',
+        'additional_collegeName',
+        'additional_department',
+        'additional_diagnosedDate',
+        'additional_diagnosedIllness',
+        'additional_followUpDate',
     ];
 
     public function document()

@@ -87,60 +87,63 @@
     <div class="container mx-auto bg-white md:py-20 md:px-20 w-[90%] md:w-[70%] lg:w-[70%]">
         <div class="page">
             <!-- Document Content -->
-            <div class="container">
-                <div class="flex items-center justify-center mb-10">
-                    <div class="mr-5">
-                        <img src="{{ asset('Logo_image/logopup.png') }}" alt="University logo" class="w-28 mb-5">
-                    </div>
-                    <div class="text-center" style="font-family: 'Times New Roman', serif;">
-
-                        <h1 class="text-sm font-normal">Republic of the Philippines</h1>
-                        <h1 class="text-base font-normal">POLYTECHNIC UNIVERSITY OF THE PHILIPPINES</h1>
-                        <p class="text-sm mb-5">Quezon City</p>
-                        <h2 class="text-xl font-semibold">EXCUSE LETTER</h2>
-                    </div>
+            <div class="container mx-auto bg-white md:py-20 md:px-20 w-[90%] md:w-[70%] lg:w-[70%]">
+    <div class="page">
+        <!-- Document Content -->
+        <div class="container">
+            <div class="flex items-center justify-center mb-10">
+                <div class="mr-5">
+                    <img src="{{ asset('Logo_image/logopup.png') }}" alt="University logo" class="w-28 mb-5">
                 </div>
-
-                <!-- Body Content -->
-                <!-- Body Content -->
-                <div id="letterOutput" class="md:px-10" style="font-size: 14px">
-                    <div class="mb-10 text-right">
-                        <span id="letterDate" class="font-medium">Date: {{ \Carbon\Carbon::parse($associatedDocument->date)->format('F j, Y') }} </span>
-                    </div>
-                    <div class="space-y-4">
-                        <p class="text-lg">
-                            Dear <span id="recipientName" class="underline">{{ $associatedDocument->recipient }}</span>,
-                        </p>
-                        <p class="text-lg">
-                            I, <span id="studentName" class="underline">{{ $associatedDocument->patient_name }}</span>, a student of the
-                            <span id="department" class="underline">{{ $associatedDocument->department }}</span> Department, would
-                            like to inform you that I was unable to attend class on <span
-                                id="absenceDate" class="underline">{{ \Carbon\Carbon::parse($associatedDocument->excuse_for)->format('F j, Y') }}</span> due to <span
-                                id="reasons" class="underline">{{ $associatedDocument->cause }}</span>.
-                        </p>
-                        <p class="text-lg">
-                            Thank you for your consideration.
-                        </p>
-                    </div>
-                </div>
-
-                <!-- Signature Section -->
-                <div class="flex justify-end mt-10">
-                    <div class="w-11/30 text-left">
-                        <p class="font-medium">Sincerely,</p>
-                        <p id="studentSignature" class="underline">{{ $associatedDocument->patient_name }}</p>
-                    </div>
-                </div>
-
-                <div class="flex justify-between items-center mt-10">
-                    <div class="text-left">
-                        <p id="physicianSignature" class="underline">{{ $associatedDocument->doctorName }}</p>
-                            M.D.</p>
-                        <p class="text-center font-medium">Clinic Physician</p>
-                    </div>
+                <div class="text-center" style="font-family: 'Times New Roman', serif;">
+                    <h1 class="text-sm font-normal">Republic of the Philippines</h1>
+                    <h1 class="text-base font-normal">POLYTECHNIC UNIVERSITY OF THE PHILIPPINES</h1>
+                    <p class="text-sm mb-5">Quezon City</p>
+                    <h2 class="text-xl font-semibold">EXCUSE LETTER</h2>
                 </div>
             </div>
-        </div>   
+
+            <!-- Body Content -->
+            <div id="letterOutput" class="md:px-10" style="font-size: 14px">
+                <div class="mb-10 text-right">
+                    <span class="font-medium"></span>
+                    <span id="letterDate">{{ \Carbon\Carbon::parse($document->date)->format('F j, Y') }}</span> <!-- Display date dynamically -->
+                </div>
+                <div class="space-y-4">
+                    <p class="text-lg">
+                        Dear <span id="recipientName">{{ $document->recipient }}</span>, <!-- Display recipient name -->
+                    </p>
+                    <p class="text-lg">
+                        I, <span id="studentName">{{ $document->patient_name }}</span>, a student of the
+                        <span id="department">{{ $document->department }}</span> Department, would
+                        like to inform you that I was unable to attend class on <span id="absenceDate">{{ \Carbon\Carbon::parse($document->date)->format('F j, Y') }}</span> due to <span
+                            id="reasons">{{ $document->cause }}</span>. <!-- Display cause of absence -->
+                    </p>
+                    <p class="text-lg">
+                        Thank you for your consideration.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Signature Section -->
+            <div class="flex justify-end mt-10">
+                <div class="w-11/30 text-left">
+                    <p class="font-medium">Sincerely,</p>
+                    <p id="studentSignature" class="font-bold text-lg">{{ $document->patient_name }}</p> <!-- Display student's name -->
+                </div>
+            </div>
+
+            <div class="flex justify-between items-center mt-10">
+                <div class="text-left">
+                    <p id="physicianSignature" class="font-bold text-lg">{{ $document->doctorName }} M.D.</p> <!-- Display doctor's name -->
+                    <p class="text-center font-medium">Clinic Physician</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
 
                 <!-- Success Notification -->
                 <div class="container mx-auto bg-white md:py-20 md:px-20 w-[90%] md:w-[70%] lg:w-[70%]">
@@ -177,78 +180,96 @@
 
                             <!-- Form Container -->
                             <div id="formContainer" class="space-y-4">
-                                <form action="{{ route('documents.excuse_letter.update', $associatedDocument->id) }}" method="POST">
-                                    @csrf
-                                    @method('PUT') <!-- This ensures the method is PUT for updating -->
-
-                                    <div class="form-group">
-                                        <label class="block text-gray-600 font-medium mb-1">Date:</label>
-                                        <input type="date" id="date" class="w-full border rounded-md px-3 py-2" name="date"
-                                            value="{{ old('date', $associatedDocument->date ?? '') }}" required>
-                                        <div id="dateError" class="hidden text-red-500">Please enter the date of absence.</div>
+                                <div class="form-group">
+                                    <label class="block text-gray-600 font-medium mb-1">Date:</label>
+                                    <input type="date" id="DateInput" class="w-full border rounded-md px-3 py-2"
+                                        required>
+                                    <div id="dateError" class="hidden text-red-500">Please enter the date of absence.
                                     </div>
+                                </div>
 
-                                    <div class="form-group">
-                                        <label class="block text-gray-600 font-medium mb-1">Dear (Recipient):</label>
-                                        <input type="text" id="recipient" name="recipient"
-                                            class="w-full border rounded-md px-3 py-2" placeholder="Enter recipient's name" 
-                                            value="{{ old('recipient', $associatedDocument->recipient ?? '') }}" required>
-                                        <div id="nameError" class="hidden text-red-500">Please enter the recipient's name.</div>
+                                <div class="form-group">
+                                    <label class="block text-gray-600 font-medium mb-1">Dear (Recipient):</label>
+                                    <input type="text" id="recipientInput"
+                                        class="w-full border rounded-md px-3 py-2"
+                                        placeholder="Enter recipient's name" required>
+                                    <div id="nameError" class="hidden text-red-500">Please enter the recipient's name.
                                     </div>
+                                </div>
 
-                                    <div class="form-group">
-                                        <label class="block text-gray-600 font-medium mb-1">Student Name:</label>
-                                        <input type="text" id="patient_name" name="patient_name"
-                                            class="w-full border rounded-md px-3 py-2" placeholder="Enter student name" 
-                                            value="{{ old('patient_name', $associatedDocument->patient_name ?? '') }}" required>
-                                    </div>
+                                <div class="form-group">
+                                    <label class="block text-gray-600 font-medium mb-1">Student Name:</label>
+                                    <input type="text" id="studentNameInput"
+                                        class="w-full border rounded-md px-3 py-2" placeholder="Enter student name"
+                                        required>
+                                </div>
 
-                                    <div class="form-group">
-                                        <label class="block text-gray-600 font-medium mb-1">Department:</label>
-                                        <input type="text" id="departmentInput" name="department"
-                                            class="w-full border rounded-md px-3 py-2" placeholder="Enter department"
-                                            value="{{ old('department', $associatedDocument->department ?? '') }}" required>
-                                    </div>
+                                <div class="form-group">
+                                    <label class="block text-gray-600 font-medium mb-1">Department:</label>
+                                    <input type="text" id="departmentInput"
+                                        class="w-full border rounded-md px-3 py-2" placeholder="Enter department"
+                                        required>
+                                </div>
 
-                                    <div class="form-group">
-                                        <label class="block text-gray-600 font-medium mb-1">Date of Absence:</label>
-                                        <input type="date" id="excuse_for" name="excuse_for"
-                                            class="w-full border rounded-md px-3 py-2" value="{{ old('excuse_for', $associatedDocument->excuse_for ?? '') }}" required>
-                                        <div id="dateError" class="hidden text-red-500">Please enter the date of absence.</div>
+                                <div class="form-group">
+                                    <label class="block text-gray-600 font-medium mb-1">Date of Absence:</label>
+                                    <input type="date" id="absenceDateInput"
+                                        class="w-full border rounded-md px-3 py-2" required>
+                                    <div id="dateError" class="hidden text-red-500">Please enter the date of absence.
                                     </div>
+                                </div>
 
-                                    <div class="form-group">
-                                        <label class="block text-gray-600 font-medium mb-1">Reason for Absence:</label>
-                                        <input type="text" id="cause" name="cause"
-                                            class="w-full border rounded-md px-3 py-2" placeholder="Enter reason for absence" 
-                                            value="{{ old('cause', $associatedDocument->cause ?? '') }}" required>
-                                        <div id="reasonError" class="hidden text-red-500">Please enter the reason for absence.</div>
+                                <div class="form-group">
+                                    <label class="block text-gray-600 font-medium mb-1">Reason for Absence:</label>
+                                    <input type="text" id="reasonInput" class="w-full border rounded-md px-3 py-2"
+                                        placeholder="Enter reason for absence" required>
+                                    <div id="reasonError" class="hidden text-red-500">Please enter the reason for
+                                        absence.
                                     </div>
+                                </div>
 
-                                    <div class="form-group">
-                                        <label class="block text-gray-600 font-medium mb-1">Physician's Name:</label>
-                                        <input type="text" id="doctorName" name="doctorName"
-                                            class="w-full border rounded-md px-3 py-2" placeholder="Enter physician's name"
-                                            value="{{ old('doctorName', $associatedDocument->doctorName ?? '') }}" required>
-                                        <div id="licenseNoError" class="hidden text-red-500">Please enter the physician's name.</div>
-                                    </div>
+                                <div class="form-group">
+                                    <label class="block text-gray-600 font-medium mb-1">Sincerely:</label>
+                                    <input type="text" id="sincerelyInput"
+                                        class="w-full border rounded-md px-3 py-2" placeholder="Enter your name"
+                                        required>
+                                    <div id="sincerelyError" class="hidden text-red-500">Please enter your name.</div>
+                                </div>
 
-                                    <!-- Save Button -->
-                                    <div class="flex justify-center space-x-4 mt-6">
-                                        <button onclick="saveEdits()" class="bg-[#3CAA38] hover:bg-[#2B8E2F] text-white font-medium py-2 px-20 rounded-md">Save</button>
+                                <div class="form-group">
+                                    <label class="block text-gray-600 font-medium mb-1">Physician's Name:</label>
+                                    <input type="text" id="physicianNameInput"
+                                        class="w-full border rounded-md px-3 py-2"
+                                        placeholder="Enter physician's name" required>
+                                    <div id="licenseNoError" class="hidden text-red-500">Please enter the physician's
+                                        name.
                                     </div>
-                                </form>
+                                </div>
+
+                                <!-- Save Button -->
+                                <div class="flex justify-center space-x-4 mt-6">
+                                    <button onclick="saveEdits()"
+                                        class="bg-[#3CAA38] hover:bg-[#2B8E2F] text-white font-medium py-2 px-20 rounded-md">Save</button>
+                                </div>
                             </div>
-                        </div>    
+                        </div>
                     </div>
-                    
+
 
 
                     <!-- Modal Scripts -->
                     <script>
-                        
+                        function updateWithUnderline(placeholderId, text) {
+                            const placeholder = document.getElementById(placeholderId);
+                            if (placeholder) {
+                                placeholder.style.textDecoration = "underline";
+                                placeholder.style.textUnderlineOffset = "4px"; // Adjust the offset for styling
+                                placeholder.innerText = text || "_____"; // Fallback to empty placeholder if no value
+                            }
+                        }
+
                         function goBack() {
-                            window.location.href = "{{ route('documents.adocument_file') }}";
+                            window.history.back();
                         }
 
                         function printWaiver() {
@@ -265,13 +286,14 @@
                         }
 
                         function saveEdits() {
-                            const date = document.getElementById('date').value;
-                            const recipientName = document.getElementById('recipient').value;
-                            const studentName = document.getElementById('patient_name').value;
+                            const date = document.getElementById('DateInput').value;
+                            const recipientName = document.getElementById('recipientInput').value;
+                            const studentName = document.getElementById('studentNameInput').value;
                             const department = document.getElementById('departmentInput').value;
-                            const absenceDate = document.getElementById('excuse_for').value;
-                            const reason = document.getElementById('cause').value;
-                            const physicianName = document.getElementById('doctorName').value;
+                            const absenceDate = document.getElementById('absenceDateInput').value;
+                            const reason = document.getElementById('reasonInput').value;
+                            const sincerely = document.getElementById('sincerelyInput').value;
+                            const physicianName = document.getElementById('physicianNameInput').value;
 
                             // Validate inputs
                             let isValid = true;
@@ -312,26 +334,40 @@
                                 document.getElementById('sincerelyError').classList.add('hidden');
                             }
 
+                            // Debugging: Check if form is valid
+                            console.log("Form valid: ", isValid);
+
                             // If all fields are valid, update the placeholders in the letter
-                             if (isValid) {
+                            if (isValid) {
+                                // Update placeholders with underline styling
+                                updateWithUnderline('letterDate', date);
+                                updateWithUnderline('recipientName', recipientName);
+                                updateWithUnderline('studentName', studentName);
+                                updateWithUnderline('department', department);
+                                updateWithUnderline('absenceDate', absenceDate);
+                                updateWithUnderline('reasons', reason);
+                                updateWithUnderline('studentSignature', sincerely);
+                                updateWithUnderline('physicianSignature', physicianName);
+
+                                // Show success message
                                 const successMessage = document.getElementById("successMessage");
                                 successMessage.classList.remove("hidden"); // Make the success message visible
                                 console.log("Success message is visible.");
 
                                 // Hide the success message after a short delay, close the modal, and trigger print preview
                                 setTimeout(() => {
-                                    console.log("Success message visible");
-                                    successMessage.classList.add("hidden"); // Hide success message after 3.5 seconds
-                                    closeEditForm(); // Close the modal
-                                    document.querySelector('form').submit(); // This submits the form to Laravel
-                                }, 3500);
+                                    successMessage.classList.add("hidden"); // Hide success message after 2 seconds
+                                    closeEditForm(); // Close the modal/form
+
+                                    // Trigger print preview
+                                    window.print();
+                                }, 2000); // Adjust this time if needed
                             } else {
                                 console.log("Form validation failed.");
                             }
                         }
                     </script>
-                </div>
-    </div>               
+
 </body>
 
 </html>
