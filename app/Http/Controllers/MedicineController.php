@@ -14,7 +14,8 @@ class MedicineController extends Controller
     {
         // Get all medicines with box relationship
         $users = User::all();
-        $medicines = Medicine::with('box')->get();
+        // $medicines = Medicine::with('box')->get();
+        $medicines = Medicine::query()->orderBy('expiration_date')->simplePaginate(8);
 
         // Calculate quantities
         $totalMedicine = $medicines->sum('remaining_quantity');
@@ -34,12 +35,12 @@ class MedicineController extends Controller
             return $medicine->box->isReturned == false;
         })->count();
 
-        return view('medicine.medicine_index', 
+        return view('inventory.medicines.index', 
             compact('medicines', 'totalMedicine', 'expiredMedicine', 'nearExpiredMedicine',
                     'returnedMedicines', 'notReturnedMedicines', 'users'));
     }
 
-    public function add(){
+    public function create(){
         $users = User::all();
         return view('medicine.add_medicine', compact('users'));
     }
@@ -52,7 +53,6 @@ class MedicineController extends Controller
                 'unit_of_measurement' => 'required|alpha',
                 'medicine_name' => 'required',
                 'initial_quantity' => 'required|numeric',
-                'supplier_name' => 'required',
                 'date_received' => 'required|date',
                 'user_id' => 'required',
                 'expiration_date' => 'required|date',
@@ -63,7 +63,6 @@ class MedicineController extends Controller
                 'date_received' => $data['date_received'],
                 'stock_number' => $data['stock_number'],
                 'isReturned' => False,
-                'supplier_name' => $data['supplier_name'] ?? 'PUP Sta. Mesa',
                 'user_id' => 1, // Assign user ID 1 for testing
             ]);
 
@@ -78,7 +77,7 @@ class MedicineController extends Controller
                 'expiration_date' => $data['expiration_date']
             ]);
 
-            return redirect()->route('medicine_dashboard')
+            return redirect()->route('inventory-medicines')
                 ->with('success', 'Medicine added successfully');
 
     }
@@ -91,7 +90,6 @@ class MedicineController extends Controller
             'stock_number' => 'required',
             'initial_quantity' => 'required|numeric|min:'.$medicine['consumed_quantity'].'|max:999999',
             'unit_of_measurement' => 'required|alpha',
-            'supplier_name' => 'required',
             'date_received' => 'required|date',
             'user_id' => 'required',
             'expiration_date' => 'required|date',
@@ -119,11 +117,10 @@ class MedicineController extends Controller
         $medicine->box->update([
             'stock_number' => $data['stock_number'],
             'date_received' => $data['date_received'],
-            'supplier_name' => $data['supplier_name'],
             'user_id' => $data['user_id']
         ]);
 
-        return redirect()->route('medicine_dashboard')
+        return redirect()->route('inventory-medicines')
             ->with('success', 'Medicine updated successfully');
     }
     
@@ -141,17 +138,16 @@ class MedicineController extends Controller
                    ($medicine->remaining_quantity - $data['quantity'] <= ($medicine->initial_quantity * 0.2) ? 'Low Stock' : 'In Stock'))
         ]);
 
-        return redirect()->route('medicine_dashboard')
+        return redirect()->route('inventory-medicines')
             ->with('success', 'Medicine quantity has been deducted');
     }
 
-    public function delete(Medicine $medicine)
+    public function destroy(Medicine $medicine)
     {
         $medicine->delete();
 
-        return redirect()->route('medicine_dashboard')
+        return redirect()->route('inventory-medicines')
             ->with('success', 'Medicine deleted successfully');
     }
 
 }
-

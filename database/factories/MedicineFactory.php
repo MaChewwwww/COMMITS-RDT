@@ -27,7 +27,7 @@ class MedicineFactory extends Factory
 
         return [
             'medicine_name' => $this->faker->words(3, true),
-            'unit' => $this->faker->randomElement(['tablets', 'ml', 'mg', 'capsules']),
+            'unit' => $this->faker->randomElement(['tablet','capsule']),
             'status' => $status,
             'initial_quantity' => $initialQuantity,
             'consumed_quantity' => $consumedQuantity,

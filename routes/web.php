@@ -5,6 +5,8 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PatientController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\MedicineController;
+use App\Http\Controllers\SupplyController;
+use App\Http\Controllers\EquipmentController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\PatientHistoryController;
 use App\Http\Controllers\DocumentController;
@@ -23,6 +25,9 @@ Route::middleware(['guest'])->group(function () {
 
 // Protected routes
 Route::middleware(['auth'])->group(function () {
+    // User Logout route
+    Route::post('/logout', [UserController::class, 'logout'])->name('logout');
+
 
     Route::prefix('patients')->group(function () {
 
@@ -47,20 +52,48 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('/destroy/{id}', [PatientController::class, 'destroy'])->name('patients.destroy');
     });
 
-    // Medicine routes
-    Route::prefix('medicine')->group(function () {
-        Route::get('/', [MedicineController::class, 'index'])->name('medicine_dashboard');
-        Route::get('/add', [MedicineController::class, 'add'])->name('add_medicine');
-        Route::post('/', [MedicineController::class, 'store'])->name('add_medicine_store');
-        Route::get('/{medicine}/edit', [MedicineController::class, 'edit'])->name('edit_medicine');
-        Route::put('/{medicine}/update', [MedicineController::class, 'update'])->name('update_medicine');
-        Route::put('/{medicine}/deduct', [MedicineController::class, 'deduct'])->name('deduct_medicine');
-        Route::delete('/medicines/{medicine}', [MedicineController::class, 'delete'])->name('delete_medicine');
-    });
 
-    // Logout route
-    Route::post('/logout', [UserController::class, 'logout'])->name('logout');
+    // INVENTORY
+    Route::prefix('inventory')->group(function () {
+        Route::get('/', function () {
+            return redirect()->route('inventory-medicines');
+        })->name('inventory');
+
+        // Medicines
+        Route::prefix('medicines')->group(function () {
+            Route::controller(MedicineController::class)->group(function () {
+                Route::get('/', 'index')->name('inventory-medicines');
+                Route::post('/', 'store')->name('add_medicine_store');
+                Route::put('/{medicine}/update', 'update')->name('update_medicine');
+                Route::put('/{medicine}/deduct', 'deduct')->name('deduct_medicine');
+                Route::delete('/medicines/{medicine}', 'destroy')->name('delete_medicine');
+            });           
+        });
+
+        // Supplies
+        Route::prefix('supplies')->group(function () {
+            Route::controller(SupplyController::class)->group(function () {
+                Route::get('/', 'index')->name('inventory-supplies');
+                Route::post('/', 'store')->name('add_supply_store');
+                Route::put('/{supply}/update', 'update')->name('update_supply');
+                // Route::put('/{supply}/deduct', 'deduct')->name('deduct_supply');
+                Route::delete('/supplies/{supply}', 'destroy')->name('delete_supply');
+            });   
+        });
+
+        // Equipment
+        Route::prefix('equipment')->group(function () {
+            Route::controller(EquipmentController::class)->group(function () {
+                Route::get('/', 'index')->name('inventory-equipment');
+                Route::post('/', 'store')->name('add_equipment_store');
+                Route::put('/{equipment}/update', 'update')->name('update_equipment');
+                // Route::put('/{equipment}/deduct', 'deduct')->name('deduct_equipment');
+                Route::delete('/equipment/{equipment}', 'destroy')->name('delete_equipment');
+            }); 
+        });
+    });
 });
+
 
 #Report -Camar
 Route::get('/reports', [ReportController::class, 'index'])->name('reports');

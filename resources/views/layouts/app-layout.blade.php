@@ -16,13 +16,12 @@
 
     <!-- Styles -->
     <link rel="stylesheet" href="{{ asset('src/css/styles.css') }}">
-
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-
+    <link href="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.css" rel="stylesheet" />
 </head>
 
 <body>
-    <div class="antialiased bg-gray-50">
+    <div class="antialiased bg-white">
 
         {{-- NAVBAR - HEADER --}}
         <x-navbar />
@@ -43,7 +42,7 @@
             </div>
         @endif
 
-        <main class="p-4 md:ml-64 h-auto pt-20">
+        <main class="p-4 md:ml-64 h-auto pt-24 sm:pt-20">
             @yield('content')
         </main>
     </div>
@@ -65,6 +64,7 @@
             }
         });
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
 </body>
 
 </html>
