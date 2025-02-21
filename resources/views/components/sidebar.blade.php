@@ -18,7 +18,7 @@
                     placeholder="Search" />
             </div>
         </form>
-        <ul class="space-y-2">
+        <ul class="space-y-4">
             <li>
                 <a href="{{ route('dashboard') }}"
                     class="flex items-center p-2 text-base font-medium text-gray-300 transition duration-75 rounded-lg hover:bg-gray-100 hover:text-red-900 group">
@@ -28,40 +28,19 @@
                 </a>
             </li>
             <li>
-                <a href="{{ route('patients') }}"
-                    class="flex items-center p-2 text-base font-medium text-gray-300 transition duration-75 rounded-lg hover:bg-gray-100 hover:text-red-900 group">
-                        <i class="w-6 h-6 text-white transition duration-75 fas fa-user-injured group-hover:text-red-800"></i>
-                    <span class="ml-3">Patients</span>
-                </a>
+                <x-sidebar-link :href="route('patients')" :active="request()->is('patients*') || request()->is('/')" :icon="'fas fa-user-injured'">Patients</x-sidebar-link>
             </li>
             <li>
-                <a href="history"
-                    class="flex items-center p-2 text-base font-medium text-gray-300 transition duration-75 rounded-lg hover:bg-gray-100 hover:text-red-900 group">
-                    <i class="w-6 h-6 text-white transition duration-75 fas fa-history group-hover:text-red-800"></i>
-                    <span class="ml-3">History</span>
-                </a>
+                <x-sidebar-link :href="'history'" :active="request()->is('history*')" :icon="'fas fa-history'">History</x-sidebar-link>
             </li>
             <li>
-                <a href="{{ route('medicine_dashboard') }}"
-                    class="flex items-center p-2 text-base font-medium text-gray-300 transition duration-75 rounded-lg hover:bg-gray-100 hover:text-red-900 group">
-                    <i class="w-6 h-6 text-white transition duration-75 fas fa-boxes group-hover:text-red-800"></i>
-                    <span class="ml-3">Inventory</span>
-                </a>
+                <x-sidebar-link :href="route('inventory')" :active="request()->is('inventory*')" :icon="'fas fa-boxes'">Inventory</x-sidebar-link>
             </li>
             <li>
-                <a href="{{ route('report.index') }}"
-                    class="flex items-center p-2 text-base font-medium text-gray-300 transition duration-75 rounded-lg hover:bg-gray-100 hover:text-red-900 group">
-                    <i class="w-6 h-6 text-white transition duration-75 fas fa-file-alt group-hover:text-red-800"></i>
-                    <span class="ml-3">Reports</span>
-                </a>
+                <x-sidebar-link :href="route('report.index')" :active="request()->is('reports*')" :icon="'fas fa-file-alt'">Reports</x-sidebar-link>
             </li>
             <li>
-                <a href="{{ route('documents.index') }}"
-                    class="flex items-center p-2 text-base font-medium text-gray-300 transition duration-75 rounded-lg hover:bg-gray-100 hover:text-red-900 group">
-                    <i
-                        class="w-6 h-6 text-white transition duration-75 fas fa-folder-open group-hover:text-red-800"></i>
-                    <span class="ml-3">Documents</span>
-                </a>
+                <x-sidebar-link :href="route('documents.index')" :active="request()->is('documents*')" :icon="'fas fa-folder-open'">Documents</x-sidebar-link>
             </li>
         </ul>
 </aside>
