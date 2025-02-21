@@ -8,14 +8,20 @@ class CreateReportsTable extends Migration
 {
     public function up()
     {
-        Schema::create('reports', function (Blueprint $table) {
+        Schema::create('reports', function (Blueprint $table): void {
             $table->id();
-            $table->string('title');
-            $table->text('contents');
+            $table->string('title'); // Ensure this field exists
+            $table->string('name');
+            $table->integer('age');
+            $table->string('sex');
+            $table->text('complaint');
+            $table->text('diagnosis');
+            $table->text('remarks')->nullable();
             $table->string('category');
             $table->timestamps();
         });
     }
+    
 
     public function down()
     {
