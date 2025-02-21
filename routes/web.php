@@ -69,9 +69,9 @@ Route::middleware(['auth'])->group(function () {
             Route::controller(MedicineController::class)->group(function () {
                 Route::get('/', 'index')->name('inventory-medicines');
                 Route::post('/', 'store')->name('add_medicine_store');
-                Route::put('/{medicine}/update', 'update')->name('update_medicine');
+                Route::put('/{medicine}', 'update')->name('update_medicine');
                 Route::put('/{medicine}/deduct', 'deduct')->name('deduct_medicine');
-                Route::delete('/medicines/{medicine}', 'destroy')->name('delete_medicine');
+                Route::delete('/{medicine}', 'destroy')->name('delete_medicine');
             });           
         });
 
