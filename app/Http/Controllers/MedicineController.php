@@ -63,7 +63,7 @@ class MedicineController extends Controller
                 'date_received' => $data['date_received'],
                 'stock_number' => $data['stock_number'],
                 'isReturned' => False,
-                'user_id' => 1, // Assign user ID 1 for testing
+                'user_id' => $data['user_id'], // Assign user ID 1 for testing
             ]);
 
             // Create medicine             

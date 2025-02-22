@@ -17,6 +17,9 @@
 
     <x-inventory.label for="{{ $name }}">
         {{ $label }}
+        @if ($required)
+            <span class="text-red-500">*</span>
+        @endif
     </x-inventory.label>
 
     <x-inventory.error name="{{ $name }}" />
