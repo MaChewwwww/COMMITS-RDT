@@ -3,7 +3,6 @@
     "type": "module",
     "scripts": {
         "build": "vite build",
-        "build-css": "tailwindcss -i resources/css/app.css -o public/css/app.css",
         "dev": "vite",
         "watch": "vite",
         "hot": "vite"

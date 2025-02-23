@@ -15,13 +15,14 @@
                     </svg>
                 </button>
                 <div class="absolute right-0 hidden w-48 mt-2 bg-white rounded-lg shadow-lg dropdown-content">
+                <div class="absolute right-0 hidden w-48 mt-2 bg-white rounded-lg shadow-lg dropdown-content">
                     <a href="/all" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">All</a>
                     <a href="/student" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Student</a>
                     <a href="/faculty" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Faculty</a>
                     <a href="/visitor" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Visitor</a>
                     <a href="/dependent" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Dependent</a>
                 </div>
-            </div> 
+            </div>
         </div>
     </header>
 

@@ -129,7 +129,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="flex gap-8 justify-space-between">
+                                    <div class="flex gap-8  justify-space-between">
                                         <div class="w-full max-w-sm min-w-[200px]">
                                             <label class="block mb-2 text-sm text-slate-600">
                                                 Unit
