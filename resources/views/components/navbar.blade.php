@@ -1,3 +1,8 @@
+@php
+    use Illuminate\Support\Facades\Auth;
+
+    $Data = Auth::user();
+@endphp
 
 <nav
     class="fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-200">
@@ -20,12 +25,17 @@
                 </svg>
                 <span class="sr-only">Toggle sidebar</span>
             </button>
-            <div class="flex items-center justify-center w-64 bg-[#560012] m-0 px-4 py-2.5">
-                <a href="#" class="flex items-center justify-between mr-4">
-                    <img src="{{asset('images/puplogo.png')}}" class="h-8 mr-3" alt="Logo" />
-                    <span class="self-center text-2xl font-semibold text-white whitespace-nowrap">PRMS</span>
-                </a>
-            </div>
+            {{-- to hide this navbar to profile page --}}
+            @if (Route::currentRouteName() != 'profile.accountSettings' &&
+                Route::currentRouteName() != 'profile.helpAndSupport')
+                <div class="flex items-center justify-center w-64 bg-[#560012] m-0 px-4 py-2.5">
+                    {{-- add dashboard route here --}}
+                    <a href="#" class="flex items-center justify-between mr-4">
+                        <img src="{{asset('images/puplogo.png')}}" class="h-8 mr-3" alt="Logo" />
+                        <span class="self-center text-2xl font-semibold text-white whitespace-nowrap">PRMS</span>
+                    </a>
+                </div>
+            @endif
             <form action="#" method="GET" class="hidden md:block md:pl-2">
                 <label for="topbar-search" class="sr-only">Search</label>
                 <div class="relative md:w-64 md:w-96">
@@ -371,18 +381,18 @@
                 id="user-menu-button" aria-expanded="false" data-dropdown-toggle="dropdown">
                 <span class="sr-only">Open user menu</span>
                 <img class="w-8 h-8 rounded-full"
-                    src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/michael-gough.png"
+                    src="{{ asset('uploads/users/'.$Data->profile_image) }}"
                     alt="user photo" />
             </button>
             <!-- Dropdown menu profile items-->
             <div class="absolute top-0 right-0 hidden w-64 mt-10 bg-white rounded-lg shadow-lg dropdown-menu-content">
-                <a href="#" class="flex items-center px-4 py-2 text-gray-800 hover:bg-gray-100">
+                <a href="{{ route('profile.accountSettings') }}" class="flex items-center px-4 py-2 text-gray-800 hover:bg-gray-100">
                     <svg class="inline w-4 h-4 mr-2 text-gray-500" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" fill="none" stroke-width="1.5" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
                     </svg>
                     <span>Profile</span>
                 </a>
-                <a href="#" class="flex items-center px-4 py-2 text-gray-800 hover:bg-gray-100">
+                <a href="{{ route('profile.helpAndSupport') }}" class="flex items-center px-4 py-2 text-gray-800 hover:bg-gray-100">
                     <svg class="inline w-4 h-4 mr-2 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75a4.5 4.5 0 0 1-4.884 4.484c-1.076-.091-2.264.071-2.95.904l-7.152 8.684a2.548 2.548 0 1 1-3.586-3.586l8.684-7.152c.833-.686.995-1.874.904-2.95a4.5 4.5 0 0 1 6.336-4.486l-3.276 3.276a3.004 3.004 0 0 0 2.25 2.25l3.276-3.276c.256.565.398 1.192.398 1.852Z" />
                         <path stroke-linecap="round" stroke-linejoin="round" d="M4.867 19.125h.008v.008h-.008v-.008Z" />

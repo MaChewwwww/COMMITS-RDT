@@ -7,8 +7,9 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\MedicineController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\PatientHistoryController;
+use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\DocumentController;
-
+use App\Http\Controllers\ProfileController;
 
 // Guest routes
 Route::middleware(['guest'])->group(function () {
@@ -19,9 +20,21 @@ Route::middleware(['guest'])->group(function () {
 
     Route::get('/login', [UserController::class, 'showLogin'])->name('login.show');
     Route::post('/login', [UserController::class, 'login'])->name('login');
+    
+    // Forgot password route
+    Route::view('/forgot-password', 'authentication.forgot-password')->name('password.request');
+
+    // Validate the email and send the password reset link to the corresponding email/user
+    Route::post('/forgot-password', [ForgotPasswordController::class, 'passwordEmail']);
+
+    // Reset password route
+    Route::get('/reset-password/{token}', [ForgotPasswordController::class, 'passwordReset'])->name('password.reset');
+
+    // Validate the password reset request and update the password
+    Route::post('/reset-password', [ForgotPasswordController::class, 'passwordUpdate'])->name('password.update');
 });
 
-    // Protected routes
+// Authenticated routes
 Route::middleware(['auth'])->group(function () {
     Route::prefix('patients')->group(function () {
         // Route::get('/', [PatientController::class, "index"])->name('patients');
@@ -114,4 +127,13 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/documents/{id}/edit', [DocumentController::class, 'edit'])->name('documents.edit');
     Route::get('/documents/{id}/view', [DocumentController::class, 'show'])->name('documents.view');
     Route::put('/documents/{id}', [DocumentController::class, 'update'])->name('documents.update');
+
+    // Profile routes
+    Route::prefix('profile')->group(function () {
+        Route::get('/accountSettings', [ProfileController::class, 'accountSettings'])->name('profile.accountSettings');
+        Route::get('/helpAndSupport', [ProfileController::class, 'helpAndSupport'])->name('profile.helpAndSupport');
+        Route::post('/accountSettings', [ProfileController::class, 'updateProfile'])->name('profile.updateProfile');
+        Route::post('/updatePassword', [ProfileController::class, 'updatePassword'])->name('profile.updatePassword');
+    });
+
 });
