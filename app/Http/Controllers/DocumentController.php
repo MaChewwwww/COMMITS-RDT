@@ -47,20 +47,21 @@ class DocumentController extends Controller
     
         // Validate common fields first
         $request->validate([
-            'document_type' => 'required|string',
+            'document_type' => 'required|string|max:255',
         ]);
     
         // Create the document record
         $document = Document::create([
             'document_type' => $document_type,
         ]);
+
+        //dd($request->all()); //debugging
         
-    
         // Validation and data insertion based on document type
         switch ($document_type) {
             case 'Excuse Letter':
                 $request->validate([
-                    'document_type' => 'required|string',
+                    'document_type' => 'required|string|max:255',
                     'date' => 'required|date',
                     'patient_name' => 'required|string|max:255',
                     'excuse_for' => 'required|string|max:255',
@@ -83,49 +84,52 @@ class DocumentController extends Controller
                 ]);
                 break;
     
-            case 'Medical Clearance':
-                $request->validate([
-                    'document_type' => 'required|string',
-                    'date' => 'required|date',
-                    'patient_name' => 'nullable|string|max:255',
-                    'vaccination_status' => 'required|in:Unvaccinated,Primary series incomplete,Primary dose / series completed,1st Booster,2nd Booster',
-                    'remarks' => 'required|string|max:255',
-                    'doctorName' => 'required|string|max:255',
-                    'position' => 'required|string|max:255',
-                    'license_number' => 'required|string|max:255',
-                    'additional_date' => 'nullable|date',
-                    'additional_patient_name' => 'nullable|string|max:255',
-                    'additional_vaccination_status' => 'nullable|in:Unvaccinated,Primary series incomplete,Primary dose / series completed,1st Booster,2nd Booster',
-                    'additional_remarks' => 'nullable|string|max:255',
-                    'additional_doctorName' => 'nullable|string|max:255',
-                    'additional_position' => 'nullable|string|max:255',
-                    'additional_license_number' => 'nullable|string|max:255',
+                case 'Medical Clearance':
+                    $request->validate([
+                        'document_type' => 'required|string|max:255',
+                        'date' => 'required|date',
+                        'patient_name' => 'nullable|string|max:255',
+                        'vaccination_status' => 'required|string|max:255',
+                        'excuse' => 'required|string|max:255',
+                        'doctorName' => 'required|string|max:255',
+                        'position' => 'required|string|max:255',
+                        'license_number' => 'required|string|max:255',
+                        'xray_result' => 'nullable|string|max:255',
+                        'additional_date' => 'nullable|date',
+                        'additional_patient_name' => 'nullable|string|max:255',
+                        'additional_vaccination_status' => 'nullable|string|max:255',
+                        'additional_excuse' => 'nullable|string|max:255',
+                        'additional_doctorName' => 'nullable|string|max:255',
+                        'additional_position' => 'nullable|string|max:255',
+                        'additional_license_number' => 'nullable|string|max:255',
                 ]);
-    
+
                 MedicalClearance::create([
                     'document_type' => $request->document_type,
                     'document_id' => $document->id, // link document_id
                     'date' => $request->date,
                     'patient_name' => $request->patient_name,
                     'vaccination_status' => $request->vaccination_status,
-                    'remarks' => $request->remarks,
+                    'excuse' => $request->excuse, 
                     'doctorName' => $request->doctorName,
                     'position' => $request->position,
                     'license_number' => $request->license_number,
+                    'xray_result' => $request->xray_result,
                     'additional_date' => $request->additional_date,
                     'additional_patient_name' => $request->additional_patient_name,
                     'additional_vaccination_status' => $request->additional_vaccination_status,
-                    'additional_remarks' => $request->additional_remarks,
+                    'additional_excuse' => $request->additional_excuse, 
                     'additional_doctorName' => $request->additional_doctorName,
                     'additional_position' => $request->additional_position,
                     'additional_license_number' => $request->additional_license_number,
                 ]);
+                
                 break;
     
             // Repeat for the other cases...
             case 'Medical Certificate':
                 $request->validate([
-                    'document_type' => 'required|string',
+                    'document_type' => 'required|string|max:255',
                     'date' => 'required|date',
                     'patient_name' => 'required|string|max:255',
                     'sickness' => 'required|string|max:255',
@@ -166,7 +170,7 @@ class DocumentController extends Controller
     
             case 'Annual Medical Clearance':
                 $request->validate([
-                    'document_type' => 'required|string',
+                    'document_type' => 'required|string|max:255',
                     'date' => 'required|date',
                     'patient_name' => 'required|string|max:255',
                     'excuseDate' => 'required|date',
@@ -197,46 +201,58 @@ class DocumentController extends Controller
 
             case 'Waiver':
                 $request->validate([
-                    'document_type' => 'required|string',
+                    'document_type' => 'required|string|max:255',
                     'date' => 'required|date',
-                    'patient_name' => 'required|string|max:255',
+                    'name' => 'required|string|max:255',
+                    'collegeName' => 'required|string|max:255',
+                    'department' => 'required|string|max:255',
+                    'diagnosedDate' => 'required|date',
+                    'diagnosedIllness' => 'required|string|max:255',
+                    'followUpDate' => 'required|date',
                     'doctorName' => 'required|string|max:255',
-                    'address' => 'required|string|max:255',
                     'additional_date' => 'nullable|date',
-                    'additional_patient_name' => 'nullable|string|max:255',
+                    'additional_name' => 'nullable|string|max:255',
+                    'additional_collegeName' => 'nullable|string|max:255',
+                    'additional_department' => 'nullable|string|max:255',
+                    'additional_diagnosedDate' => 'nullable|date',
+                    'additional_diagnosedIllness' => 'nullable|string|max:255',
+                    'additional_followUpDate' => 'nullable|date',
                     'additional_doctorName' => 'nullable|string|max:255',
-                    'additional_address' => 'nullable|string|max:255',
                 ]);
     
                 Waiver::create([
                     'document_type' => $request->document_type,
                     'document_id' => $document->id, // link document_id
                     'date' => $request->date,
-                    'patient_name' => $request->patient_name,
+                    'name' => $request->name,
+                    'collegeName' => $request->collegeName,
+                    'department' => $request->department,
+                    'diagnosedDate' => $request->diagnosedDate,
+                    'diagnosedIllness' => $request->diagnosedIllness,
+                    'followUpDate' => $request->followUpDate,
                     'doctorName' => $request->doctorName,
-                    'address' => $request->address,
                     'additional_date' => $request->additional_date,
-                    'additional_patient_name' => $request->additional_patient_name,
+                    'additional_name' => $request->additional_name,
+                    'additional_collegeName' => $request->additional_collegeName,
+                    'additional_department' => $request->additional_department,
+                    'additional_diagnosedDate' => $request->additional_diagnosedDate,
+                    'additional_diagnosedIllness' => $request->additional_diagnosedIllness,
+                    'additional_followUpDate' => $request->additional_followUpDate,
                     'additional_doctorName' => $request->additional_doctorName,
-                    'additional_address' => $request->additional_address,
                 ]);
                 break;
             
             case 'Waiver for Pulmonary Case':
                 $request->validate([
-                    'document_type' => 'required|string',
+                    'document_type' => 'required|string|max:255',
                     'patient_name' => 'required|string|max:255',
                     'collegeName' => 'required|string|max:255',
-                    'department' => 'required|string|max:255',
-                    'diagnosedDate' => 'required|date',
-                    'diagnosedIllness' => 'required|string|max:255',
                     'year' => 'required|string|max:255',
                     'followUpDate' => 'required|date',
+                    'date' => 'required|date',
+                    'additional_date' => 'nullable|date',
                     'additional_patient_name' => 'nullable|string|max:255',
                     'additional_collegeName' => 'nullable|string|max:255',
-                    'additional_department' => 'nullable|string|max:255',
-                    'additional_diagnosedDate' => 'nullable|date',
-                    'additional_diagnosedIllness' => 'nullable|string|max:255',
                     'additional_year' => 'nullable|string|max:255',
                     'additional_followUpDate' => 'nullable|date',
                 ]);
@@ -247,16 +263,14 @@ class DocumentController extends Controller
                     'patient_name' => $request->patient_name,
                     'collegeName' => $request->collegeName,
                     'department' => $request->department,
-                    'diagnosedDate' => $request->diagnosedDate,
-                    'diagnosedIllness' => $request->diagnosedIllness,
                     'year' => $request->year,
                     'followUpDate' => $request->followUpDate,
+                    'date' => $request->date,
                     'additional_patient_name' => $request->additional_patient_name,
                     'additional_collegeName' => $request->additional_collegeName,
                     'additional_department' => $request->additional_department,
-                    'additional_diagnosedDate' => $request->additional_diagnosedDate,
-                    'additional_diagnosedIllness' => $request->additional_diagnosedIllness,
                     'additional_year' => $request->additional_year,
+                    'additional_date' => $request->additional_date,
                     'additional_followUpDate' => $request->additional_followUpDate,
                 ]);
                 break;
@@ -273,6 +287,7 @@ class DocumentController extends Controller
                 ]);
                 break;
         }
+        
         
         $view = 'documents.' . strtolower(str_replace(' ', '_', $document_type)) . '.view';
         return redirect()->route($view, ['id' => $document->id])->with('success', 'Document created successfully!');
@@ -298,6 +313,7 @@ class DocumentController extends Controller
         ];
     
         $documentSlug = strtolower(str_replace(' ', '_', $document->document_type));
+
         $viewName = 'documents.' . $documentSlug . '.view';
     
         // Get the model based on document_type
@@ -321,7 +337,6 @@ class DocumentController extends Controller
         ]);
     }
     
-    // Show all documents
     public function adocument_file(Request $request)
     {
         $typeOptions = [
@@ -333,17 +348,46 @@ class DocumentController extends Controller
             'Waiver for Pulmonary Case',
             'DMDC Consent Form',
         ];
+    
+        $MonthOptions = [
+            'January', 'February', 'March', 'April', 'May', 'June',
+            'July', 'August', 'September', 'October', 'November', 'December'
+        ];
+    
+        $query = Document::with([
+            'excuseletter', 
+            'medicalCertificate', 
+            'medicalClearance', 
+            'annualMedicalClearance', 
+            'waiver', 
+            'waiverForPulmonaryCase', 
+            'dmdcConsentForm'
+        ]);
 
-        $query = Document::with(['excuseletter', 'medicalCertificate', 'medicalClearance', 'annualMedicalClearance', 'waiver', 'waiverForPulmonaryCase', 'dmdcConsentForm']); 
-
-        if ($request->has('document_type') && $request->input('document_type') !== null) {
-            $typeFilter = $request->input('document_type');
-            $query->where('document_type', $typeFilter);
+        $documents = Document::whereNull('deleted_at')->get();
+        
+    
+        // Filter by document type
+        if ($request->filled('document_type')) {
+            $query->where('document_type', $request->input('document_type'));
         }
-
+    
+        // Filter by month (ensure it's a valid number)
+        if ($request->filled('month') && is_numeric($request->input('month'))) {
+            $query->whereMonth('created_at', (int) $request->input('month'));
+        }
+    
+        // Filter by week if provided
+        if ($request->filled('week')) {
+            $query->whereRaw('WEEK(created_at, 1) = ?', [$request->input('week')]);
+        }
+    
         $documents = $query->get();
-        return view('documents.adocument_file', compact('documents', 'typeOptions'));
+        
+        return view('documents.adocument_file', compact('documents', 'typeOptions', 'MonthOptions'));
     }
+    
+    
 
     public function edit($id)
     {
@@ -394,6 +438,7 @@ public function update(Request $request, $id)
 {
     $document = Document::findOrFail($id);
 
+    //dd($request->all()); //debugging
     // Validate the request based on document type
     switch ($document->document_type) {
         case 'Excuse Letter':
@@ -414,15 +459,16 @@ public function update(Request $request, $id)
                 'document_type' => 'required|string|max:255',
                 'date' => 'required|date',
                 'patient_name' => 'nullable|string|max:255',
-                'vaccination_status' => 'required|in:Unvaccinated,Primary series incomplete,Primary dose / series completed,1st Booster,2nd Booster',
-                'remarks' => 'required|string|max:255',
+                'vaccination_status' => 'required|string|max:255',
+                'excuse' => 'required|string|max:255',
                 'doctorName' => 'required|string|max:255',
                 'position' => 'required|string|max:255',
                 'license_number' => 'required|string|max:255',
+                'xray_result' => 'nullable|string|max:255',
                 'additional_date' => 'nullable|date',
                 'additional_patient_name' => 'nullable|string|max:255',
-                'additional_vaccination_status' => 'nullable|in:Unvaccinated,Primary series incomplete,Primary dose / series completed,1st Booster,2nd Booster',
-                'additional_remarks' => 'nullable|string|max:255',
+                'additional_vaccination_status' => 'nullable|string|max:255',
+                'additional_excuse' => 'nullable|string|max:255',
                 'additional_doctorName' => 'nullable|string|max:255',
                 'additional_position' => 'nullable|string|max:255',
                 'additional_license_number' => 'nullable|string|max:255',
@@ -471,13 +517,21 @@ public function update(Request $request, $id)
             $request->validate([
                 'document_type' => 'required|string|max:255',
                 'date' => 'required|date',
-                'patient_name' => 'required|string|max:255',
+                'name' => 'required|string|max:255',
+                'collegeName' => 'required|string|max:255',
+                'department' => 'required|string|max:255',
+                'diagnosedDate' => 'required|date',
+                'diagnosedIllness' => 'required|string|max:255',
+                'followUpDate' => 'required|date',
                 'doctorName' => 'required|string|max:255',
-                'address' => 'required|string|max:255',
                 'additional_date' => 'nullable|date',
-                'additional_patient_name' => 'nullable|string|max:255',
+                'additional_name' => 'nullable|string|max:255',
+                'additional_collegeName' => 'nullable|string|max:255',
+                'additional_department' => 'nullable|string|max:255',
+                'additional_diagnosedDate' => 'nullable|date',
+                'additional_diagnosedIllness' => 'nullable|string|max:255',
+                'additional_followUpDate' => 'nullable|date',
                 'additional_doctorName' => 'nullable|string|max:255',
-                'additional_address' => 'nullable|string|max:255',
             ]);
             break;
         
@@ -486,19 +540,16 @@ public function update(Request $request, $id)
                 'document_type' => 'required|string|max:255',
                 'patient_name' => 'required|string|max:255',
                 'collegeName' => 'required|string|max:255',
-                'department' => 'required|string|max:255',
-                'diagnosedDate' => 'required|date',
-                'diagnosedIllness' => 'required|string|max:255',
                 'year' => 'required|string|max:255',
                 'followUpDate' => 'required|date',
+                'date' => 'required|date',
+                'additional_date' => 'nullable|date',
                 'additional_patient_name' => 'nullable|string|max:255',
                 'additional_collegeName' => 'nullable|string|max:255',
-                'additional_department' => 'nullable|string|max:255',
-                'additional_diagnosedDate' => 'nullable|date',
-                'additional_diagnosedIllness' => 'nullable|string|max:255',
                 'additional_year' => 'nullable|string|max:255',
                 'additional_followUpDate' => 'nullable|date',
             ]);
+
             break;
         
         case 'DMDC Consent Form':
@@ -545,5 +596,14 @@ public function update(Request $request, $id)
 
     return redirect()->route($view, ['id' => $document->id])->with('success', 'Document updated successfully!');
 }
+
+public function softDelete($id)
+{
+    $document = Document::findOrFail($id);
+    $document->delete();
+
+    return redirect()->route('documents.adocument_file')->with('success', 'Post soft deleted successfully.');
+}
+
 
 }

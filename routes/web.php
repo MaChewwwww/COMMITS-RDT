@@ -10,7 +10,7 @@ Route::get('/', function () {
 });
 
 // Patient History
-Route::get('/history', [PatientHistoryController::class, 'index'])->name('HISTORY.all');
+Route::get('/history', [PatientHistoryController::class, 'index'])->name('History.all');
 
 // Document Routes
 Route::prefix('documents')->group(function () {
@@ -52,6 +52,11 @@ foreach ($documentTypes as $slug => $type) {
     Route::get("/{id}/view/{$slug}", [DocumentController::class, 'view'])
         ->name("documents.{$slug}.view")
         ->defaults('document_type', $type);
+
+    Route::delete("/{id}/delete/{$slug}", [DocumentController::class, 'softDelete'])
+        ->name("documents.{$slug}.delete")
+        ->defaults('document_type', $type);
+    
 }
 
 });

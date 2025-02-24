@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class AnnualMedicalClearance extends Model
 {
-    use HasFactory; // Enables model factories (optional, remove if not needed)
+    use HasFactory, SoftDeletes; // Enables model factories (optional, remove if not needed)
     protected $table = 'annual_medical_clearances';
 
     protected $fillable = [

@@ -27,13 +27,14 @@
                 width: 100% !important;
                 margin: 10 auto !important;
                 padding: 10;
+                page-break-inside: avoid;
             }
 
             .page {
                 margin-top: 10;
                 /* Move the form up */
                 position: relative;
-                padding-top: 40px;
+                padding-top: 20px;
                 /* padding-left: 10px; */
                 padding-right: 10px;
                 /* Adjust to move the form higher */
@@ -84,7 +85,7 @@
         </div>
     </div>
 
-    <div class="container mx-auto bg-white md:py-20 md:px-20 w-[90%] md:w-[70%] lg:w-[70%]">
+    <div class="container mx-auto bg-white md:py-10 md:px-20 w-[90%] md:w-[70%] lg:w-[70%]">
         <div class="page">
             <!-- Document Content -->
             <div class="container">
@@ -103,20 +104,21 @@
 
                 <!-- Body Content -->
                 <!-- Body Content -->
-                <div id="letterOutput" class="md:px-10" style="font-size: 14px">
+                <div id="letterOutput" class="md:px-10" style="font-size: 16px">
                     <div class="mb-10 text-right">
-                        <span id="letterDate" class="font-medium">Date: {{ \Carbon\Carbon::parse($associatedDocument->date)->format('F j, Y') }} </span>
+                        <label class="font-medium">Date: </label>
+                        <span id="letterDate" class="underline"> {{ \Carbon\Carbon::parse($associatedDocument->date)->format('F j, Y') : '__________'' }} </span>
                     </div>
                     <div class="space-y-4">
                         <p class="text-lg">
-                            Dear <span id="recipientName" class="underline">{{ $associatedDocument->recipient }}</span>,
+                            Dear <span id="recipientName" class="underline">{{ $associatedDocument->recipient ?? '__________' }}</span>,
                         </p>
                         <p class="text-lg">
-                            I, <span id="studentName" class="underline">{{ $associatedDocument->patient_name }}</span>, a student of the
-                            <span id="department" class="underline">{{ $associatedDocument->department }}</span> Department, would
+                            I, <span id="studentName" class="underline">{{ $associatedDocument->patient_name ?? '__________' }}</span>, a student of the
+                            <span id="department" class="underline">{{ $associatedDocument->department ?? '__________' }}</span> Department, would
                             like to inform you that I was unable to attend class on <span
-                                id="absenceDate" class="underline">{{ \Carbon\Carbon::parse($associatedDocument->excuse_for)->format('F j, Y') }}</span> due to <span
-                                id="reasons" class="underline">{{ $associatedDocument->cause }}</span>.
+                                id="absenceDate" class="underline">{{ \Carbon\Carbon::parse($associatedDocument->excuse_for)->format('F j, Y') : '__________' }}</span> due to <span
+                                id="reasons" class="underline">{{ $associatedDocument->cause ?? '__________' }}</span>.
                         </p>
                         <p class="text-lg">
                             Thank you for your consideration.
@@ -128,20 +130,20 @@
                 <div class="flex justify-end mt-10">
                     <div class="w-11/30 text-left">
                         <p class="font-medium">Sincerely,</p>
-                        <p id="studentSignature" class="underline">{{ $associatedDocument->patient_name }}</p>
+                        <p id="studentSignature" class="underline">{{ $associatedDocument->patient_name ?? '__________' }}</p>
                     </div>
                 </div>
 
                 <div class="flex justify-between items-center mt-10">
                     <div class="text-left">
-                        <p id="physicianSignature" class="underline">{{ $associatedDocument->doctorName }}</p>
-                            M.D.</p>
+                        <p id="physicianSignature" class="underline">{{ $associatedDocument->doctorName ?? '__________' }}
+                        <label class="font-medium">M.D. </label></p>
                         <p class="text-center font-medium">Clinic Physician</p>
                     </div>
                 </div>
             </div>
         </div>   
-
+    </div>    
                 <!-- Success Notification -->
                 <div class="container mx-auto bg-white md:py-20 md:px-20 w-[90%] md:w-[70%] lg:w-[70%]">
                     <!-- Success Notification -->
@@ -158,10 +160,10 @@
                                         clip-rule="evenodd" />
                                 </svg>
                             </div>
-                            <p class="text-lg font-semibold">Successfully Saved!</p>
+                            <p class="text-lg font-semibold">Successfully Edited!</p>
                         </div>
                     </div>
-
+                </div>
                     <!-- Modal -->
                     <div id="editFormModal"
                         class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 hidden">
@@ -177,10 +179,10 @@
 
                             <!-- Form Container -->
                             <div id="formContainer" class="space-y-4">
-                                <form action="{{ route('documents.excuse_letter.update', $associatedDocument->id) }}" method="POST">
+                                <form action="{{ route('documents.excuse_letter.update', $document->id) }}" method="POST">
                                     @csrf
                                     @method('PUT') <!-- This ensures the method is PUT for updating -->
-
+                                    <input type="hidden" name="document_type" value="{{ $document->document_type }}">
                                     <div class="form-group">
                                         <label class="block text-gray-600 font-medium mb-1">Date:</label>
                                         <input type="date" id="date" class="w-full border rounded-md px-3 py-2" name="date"
@@ -275,7 +277,7 @@
 
                             // Validate inputs
                             let isValid = true;
-
+    
                             // Check if fields are filled
                             if (!recipientName.trim()) {
                                 document.getElementById('nameError').classList.remove('hidden');
@@ -304,23 +306,16 @@
                             } else {
                                 document.getElementById('licenseNoError').classList.add('hidden');
                             }
-
-                            if (!sincerely.trim()) {
-                                document.getElementById('sincerelyError').classList.remove('hidden');
-                                isValid = false;
-                            } else {
-                                document.getElementById('sincerelyError').classList.add('hidden');
-                            }
+                            
+                            console.log(isValid);
 
                             // If all fields are valid, update the placeholders in the letter
                              if (isValid) {
                                 const successMessage = document.getElementById("successMessage");
                                 successMessage.classList.remove("hidden"); // Make the success message visible
                                 console.log("Success message is visible.");
-
                                 // Hide the success message after a short delay, close the modal, and trigger print preview
                                 setTimeout(() => {
-                                    console.log("Success message visible");
                                     successMessage.classList.add("hidden"); // Hide success message after 3.5 seconds
                                     closeEditForm(); // Close the modal
                                     document.querySelector('form').submit(); // This submits the form to Laravel
@@ -330,7 +325,6 @@
                             }
                         }
                     </script>
-                </div>
     </div>               
 </body>
 

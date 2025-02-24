@@ -51,7 +51,7 @@ class PatientHistoryController extends Controller
         ];
         
         // Return the view with filtered records and month options for the dropdown
-        return view('HISTORY.all', [
+        return view('History.all', [
             'records' => $records,
             'identityFilter' => $identityFilter,
             'months' => $months,

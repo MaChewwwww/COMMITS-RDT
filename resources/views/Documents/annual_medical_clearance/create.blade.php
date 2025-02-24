@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <title>Waiver Form</title>
+    <title>Annual Medical Clearance</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
@@ -214,16 +214,16 @@
         <div id="addFormModal" class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 hidden">
             <div class="modal-content1 bg-white rounded-lg shadow-lg p-6 w-full max-w-lg relative">
                 <!-- Close Button in Top-Right -->
-                <span class="close absolute top-2.5 right-2.5 text-red-500 text-2xl cursor-pointer hover:text-red-700"
+                <span class="close absolute top-2.5 right-2.5 text-red-500 text-3xl cursor-pointer hover:text-red-700"
                     onclick="closeaddForm()">&times;</span>
 
                 <!-- Modal Title -->
-                <h3 class="text-xl font-semibold mb-4 text-gray-700">Add Annual Medical CLearance Form</h3>
+                <h3 class="text-xl font-bold mb-4 text-gray-700">Add Annual Medical Clearance Form</h3>
 
                 <!-- Form Container -->
                 <div id="formContainer" class="space-y-4">
-                    <form action="{{ route('documents.annual_medical_clearance.store') }}" method="POST">
-                    <h2 class="text-xl font-medium mb-4 text-gray-700">Form 1</h2>
+                <form action="{{ route('documents.annual_medical_clearance.store') }}" method="POST">
+                    <h2 class="text-xl font-medium mb-4 mt-6 text-gray-700 text-center">Form 1</h2>
                         @csrf
                         <!-- Date Field -->
                         <div class="form-group">
@@ -246,7 +246,7 @@
 
                         <!-- Date examination -->
                         <div class="form-group">
-                            <label class="block text-gray-600 font-medium mb-1">Date Examination: </label>
+                            <label class="block text-gray-600 font-medium mb-1">Examination Date: </label>
                             <input type="date" id="addExcuse" name="excuseDate"
                                 class="addExcuse w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 required>
@@ -267,10 +267,9 @@
                             <span id="licError" class="text-red-500 text-sm hidden">License number is required.</span>
                          </div>
 
-
-
-                    <div class="space-y-4"> <!-- Added space-y-4 here -->
-                        <h2 class="text-xl font-medium mb-4 text-gray-700">Form 2</h2>
+                <div class="hidden" id="formContainer1">
+                    <div class="space-y-1">
+                    <h1 class="text-xl font-medium mb-4 mt-6 text-gray-700 text-center">Form 2</h2>
                         <input type="hidden" name="document_type" value="{{ request('document_type') }}">
                         <label class="block text-gray-600 font-medium mb-1">Date:</label>
                         <input type="date" id="addDate${formCount}" name="additional_date"
@@ -294,17 +293,21 @@
                         <input type="text" id="licNo${formCount}" name="additional_license_number"
                             class="w-full border rounded-md px-3 py-2" placeholder="License number">
                     </div> <!-- End of space-y-4 -->
-                </div>
-                        
+                    </div>        
 
                         <div class="flex justify-end space-x-4 mt-6">
-                            <button onclick="saveAdd()"
+                            <button onclick="addForm()" type="button"
+                                class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-medium py-2 px-4 rounded-md">
+                                    Add Form
+                            </button>
+                            <button onclick="saveEdits()" type="submit"
                                 class="bg-[#3CAA38] hover:bg-[#2B8E2F] text-white font-medium py-2 px-4 rounded-md">
                                     Submit
                             </button>
                         </div>
-                    </form>
+                </form>
         </div>
+    </div>
     </div>
 
         <!-- Success Notification -->
@@ -332,7 +335,7 @@
             }
 
             function goBack() {
-                window.history.back();
+                window.location.href = "{{ route('documents.adocument_file') }}";
             }
 
             function openaddForm() {
@@ -341,6 +344,16 @@
 
             function closeaddForm() {
                 document.getElementById("addFormModal").classList.add("hidden");
+            }
+
+            let formCount = 1;
+            function addForm() {
+                formCount++;
+                const formContainer1 = document.getElementById("formContainer1");
+                formContainer1.classList.remove("hidden");
+                if (formCount === 2) {
+                        document.querySelector("button[onclick='addForm()']").style.display = 'none';
+                }
             }
 
             function saveAdd() {

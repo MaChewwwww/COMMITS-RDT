@@ -30,7 +30,7 @@ return new class extends Migration
             $table->date('additional_endDate')->nullable();
             $table->string('additional_reason')->nullable();
             $table->string('additional_doctorName')->nullable();
-
+            $table->softDeletes();
 
             $table->foreign('document_id')->references('id')->on('documents')->onDelete('cascade');
         });

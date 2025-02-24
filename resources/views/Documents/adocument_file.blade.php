@@ -29,20 +29,33 @@
         <div class="flex space-x-4">
             <!-- Filter Dropdown -->
             <div class="relative inline-block text-left">
-                <button onclick="toggleDropdown('filter-dropdown')" class="bg-yellow-400 text-white px-2 py-2 rounded-md hover:bg-yellow-500 flex">
-                    <p class="px-2">Filter</p> 
-                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="25" viewBox="0 0 32 25" fill="none">
-                        <path d="M15.5993 15.4256L10.1191 11.2891L11.9458 9.91016L15.5993 12.6679L19.2526 9.91016L21.0793 11.2891L15.5993 15.4256Z" fill="#FFFFFF"/>
-                    </svg>
-                </button>
-                <div id="filter-dropdown" class="dropdown-content absolute right-0 mt-2 w-40 bg-white border border-gray-200 rounded shadow-lg">
-                    <a href="{{ route('documents.adocument_file') }}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">All</a>
-                    @foreach($typeOptions as $type)
-                        <a href="{{ route('documents.adocument_file', ['document_type' => $type]) }}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">{{ $type }}</a>
-                    @endforeach
-                </div>
-            </div>
+    <button onclick="toggleDropdown('document-type-dropdown')" class="bg-blue-400 text-white px-2 py-2 rounded-md hover:bg-blue-500 flex">
+        <p class="px-2">Document Type</p> 
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="25" viewBox="0 0 32 25" fill="none">
+            <path d="M15.5993 15.4256L10.1191 11.2891L11.9458 9.91016L15.5993 12.6679L19.2526 9.91016L21.0793 11.2891L15.5993 15.4256Z" fill="#FFFFFF"/>
+        </svg>
+    </button>
+    <div id="document-type-dropdown" class="dropdown-content absolute right-0 mt-2 w-40 bg-white border border-gray-200 rounded shadow-lg hidden">
+        <a href="{{ route('documents.adocument_file') }}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">All</a>
+        @foreach($typeOptions as $type)
+            <a href="{{ route('documents.adocument_file', ['document_type' => $type]) }}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">{{ $type }}</a>
+        @endforeach
+    </div>
+</div>
 
+<div class="relative inline-block text-left">
+    <button onclick="toggleDropdown('date-dropdown')" class="bg-yellow-400 text-white px-2 py-2 rounded-md hover:bg-yellow-500 flex">
+        <p class="px-2">Month</p> 
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="25" viewBox="0 0 32 25" fill="none">
+            <path d="M15.5993 15.4256L10.1191 11.2891L11.9458 9.91016L15.5993 12.6679L19.2526 9.91016L21.0793 11.2891L15.5993 15.4256Z" fill="#FFFFFF"/>
+        </svg>
+    </button>
+    <div id="date-dropdown" class="dropdown-content absolute left-0 mt-2 w-40 bg-white border border-gray-200 rounded shadow-lg hidden">
+        @foreach($MonthOptions as $index => $month)
+            <a href="{{ route('documents.adocument_file', ['month' => $index + 1]) }}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">{{ $month }}</a>
+        @endforeach
+    </div>
+</div>
             <!-- Add Dropdown -->
             <div class="relative inline-block text-left">
                 <button onclick="toggleDropdown('add-dropdown')" class="bg-green-500 text-white px-2 py-2 rounded-md hover:bg-green-600 flex items-center justify-center">
@@ -69,12 +82,17 @@
 
     <!-- Recents Section -->
     <div class="space-y-4">
+@if($documents->isEmpty() || $documents->where('deleted_at', '!=', null)->count() === $documents->count())
+        <div class="text-center text-gray-500 font-medium p-4">
+            <p>No Documents Found.</p>
+        </div>
+@else
     @foreach($documents as $document)
     <a href="{{ route('documents.' . strtolower(str_replace(' ', '_', $document->document_type)) . '.view', $document->id) }}">
         <div id="document-container" class="bg-white p-4 rounded-lg shadow flex justify-between items-center cursor-pointer transition-all">
             <div>
-                <p class="font-medium text-gray-800">[{{$document->id}}] {{ $document->document_type }}</p>
-                <p class="text-gray-500">{{ $document->updated_at->format('F j, Y') }}</p>
+                <p class="font-medium text-gray-800">{{ $document->document_type }}</p>
+                <p class="text-gray-600 text-sm">{{ $document->created_at->format('F j, Y') }}</p>
             </div>
             <div class="flex space-x-3">
                 <!-- Edit Icon -->
@@ -96,10 +114,30 @@
         </div>
     </a>
     @endforeach
+    @endif
 </div>
 
 </div>
 
+@if (!empty($document))
+    <!-- Confirmation Modal -->
+    <div id="confirmation-modal" class="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center z-50 hidden">
+        <div class="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full">
+            <h3 class="text-lg font-bold mb-4 text-gray-700 text-center">Confirm Deletion</h3>
+            <p class="mb-6 text-gray-600 text-sm text-center">Are you sure you want to delete the Document?</p>
+            <div class="flex justify-between">
+                <button id="cancel-delete" onclick="closeModal()" class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400">Cancel</button>
+                <form action="{{ route('documents.' . strtolower(str_replace(' ', '_', $document->document_type)) . '.delete', $document->id) }}" method="POST" style="display: inline;">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" id="confirm-delete" class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+@endif
+
+    
 <script>
     function toggleDropdown(dropdownId) {
         document.querySelectorAll('.dropdown-content').forEach(dropdown => {
@@ -116,11 +154,12 @@
     };
 
     function openModal() {
-        document.getElementById('deleteModal').classList.remove('hidden');
+        document.getElementById('confirmation-modal').classList.remove('hidden');
+        
     }
 
     function closeModal() {
-        document.getElementById('deleteModal').classList.add('hidden');
+        document.getElementById('confirmation-modal').classList.add('hidden');
     }
 </script>
 

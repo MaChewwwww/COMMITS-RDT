@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('event_name');
             $table->timestamps();
             $table->string('document_type')->default('dmdc_consent_form');
+            $table->softDeletes();
         
             $table->foreign('document_id')->references('id')->on('documents')->onDelete('cascade');
         });

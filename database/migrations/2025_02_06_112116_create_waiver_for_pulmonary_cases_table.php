@@ -18,11 +18,14 @@ return new class extends Migration
             $table->string('collegeName');
             $table->string('year');
             $table->date('followUpDate');
+            $table->date('date');
             $table->timestamps();
             $table->string('document_type')->default('waiver_for_pulmonary_cases');
             $table->string('additional_patient_name')->nullable();
             $table->string('additional_collegeName')->nullable();
+            $table->date('additional_date')->nullable();
             $table->string('additional_year')->nullable();
+            $table->softDeletes();
             $table->date('additional_followUpDate')->nullable();
         
             $table->foreign('document_id')->references('id')->on('documents')->onDelete('cascade');

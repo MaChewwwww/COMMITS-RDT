@@ -172,7 +172,7 @@
                             style="max-height: 80%; overflow-y: auto;">
                             <!-- Close Button in Top-Right -->
                             <span
-                                class="close absolute top-2.5 right-2.5 text-red-500 text-2xl cursor-pointer hover:text-red-700"
+                                class="close absolute top-2.5 right-2.5 text-red-500 text-3xl cursor-pointer hover:text-red-700"
                                 onclick="closeAddForm()">&times;</span>
 
                             <!-- Modal Title -->

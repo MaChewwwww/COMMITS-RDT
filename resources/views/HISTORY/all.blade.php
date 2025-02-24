@@ -12,7 +12,7 @@
         <div class="flex justify-between items-center">
             <h1 class="text-2xl font-bold mb-2">History</h1>
             <div class="relative">
-                <form method="GET" action="{{ route('HISTORY.all') }}">
+                <form method="GET" action="{{ route('History.all') }}">
                     <button
                         type="button"
                         class="dropdown-button bg-yellow-400 text-white px-4 py-2 rounded-md hover:bg-yellow-500 flex items-center"

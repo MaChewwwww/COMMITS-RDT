@@ -24,7 +24,7 @@ return new class extends Migration
             $table->string('doctorName');
             $table->string('document_type');
             $table->timestamps(); // created_at and updated_at columns
-            
+            $table->softDeletes();
             $table->foreign('document_id')->references('id')->on('documents')->onDelete('cascade');
         });
     }

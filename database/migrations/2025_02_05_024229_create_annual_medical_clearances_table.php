@@ -27,6 +27,7 @@ return new class extends Migration
             $table->string('additional_doctorName')->nullable(); // Additional doctor name
             $table->string('additional_license_number')->nullable(); // Additional doctor's license number
             // Foreign key constraint
+            $table->softDeletes();
             $table->foreign('document_id')->references('id')->on('documents')->onDelete('cascade');
         });
     }

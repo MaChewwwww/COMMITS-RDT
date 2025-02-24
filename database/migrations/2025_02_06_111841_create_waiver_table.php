@@ -21,7 +21,9 @@ return new class extends Migration
             $table->date('diagnosedDate');
             $table->string('diagnosedIllness');
             $table->date('followUpDate');
+            $table->string('doctorName');
             $table->timestamps();
+            $table->softDeletes();
             $table->string('document_type')->default('waiver');
             $table->date('additional_date')->nullable();
             $table->string('additional_name')->nullable();
@@ -30,7 +32,7 @@ return new class extends Migration
             $table->date('additional_diagnosedDate')->nullable();
             $table->string('additional_diagnosedIllness')->nullable();
             $table->date('additional_followUpDate')->nullable();
-
+            $table->string('additional_doctorName')->nullable();
             $table->foreign('document_id')->references('id')->on('documents')->onDelete('cascade');
         });
     }

@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Waiver extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
     protected $table = 'waiver'; 
     
     protected $fillable = [
@@ -18,6 +19,7 @@ class Waiver extends Model
         'diagnosedDate',
         'diagnosedIllness',
         'followUpDate',
+        'doctorName',
         'document_id',
         'document_type',
         'additional_date',
@@ -27,6 +29,7 @@ class Waiver extends Model
         'additional_diagnosedDate',
         'additional_diagnosedIllness',
         'additional_followUpDate',
+        'additional_doctorName',
     ];
 
     public function document()

@@ -153,11 +153,11 @@
                         <p><span class="checkbox" id="status-boosters">_____</span> 1st / second Boosters</p>
                     </div>
                     <div class="w-11/30 text-left">
-                        <p><br>Melissa Sarapuddin M.D.</p>
-                        <p>Quezon City Campus Physician</p>
-                        <p>Lic No. <span id="lic_no-placeholder"
-                                class="underline-underoffset-4">____________________</span></p>
-                    </div>
+                    <p><span id="x-ray-placeholder2" class="underline-offset-4">____________________</span> M.D.</p>
+                    <p><span id="x-ray-placeholder2" class="underline-offset-4">____________________</span> </p>
+                    <p>Lic No. <span id="lic_no-placeholder2" class="underline-underoffset-4">
+                            ____________________</span></p>
+                </div>
                 </div>
             </div>
         </div>
@@ -216,9 +216,10 @@
                     <p><span class="checkbox" id="status-boosters2">_____</span> 1st / second Boosters</p>
                 </div>
                 <div class="w-11/30 text-left">
-                    <p>Melissa Sarapuddin M.D.</p>
-                    <p>Quezon City Campus Physician</p>
-                    <p>Lic No. <span id="lic_no-placeholder2" class="underline-underoffset-4"> ____________________</span></p>
+                    <p><span id="x-ray-placeholder2" class="underline-offset-4">____________________</span> M.D.</p>
+                    <p><span id="x-ray-placeholder2" class="underline-offset-4">____________________</span> </p>
+                    <p>Lic No. <span id="lic_no-placeholder2" class="underline-underoffset-4">
+                            ____________________</span></p>
                 </div>
             </div>
         </div>
@@ -231,15 +232,20 @@
                     onclick="closeEditForm()">&times;</span>
 
                 <!-- Modal Title -->
-                <h3 class="text-xl font-semibold mb-4 text-gray-700">Edit Medical Clearance Form</h3>
+                <h3 class="text-xl font-bold mb-4 text-gray-700">Add Medical Clearance Form</h3>
 
                 <!-- Form Container -->
-                <div id="formContainer" class="space-y-4">
+                
+            <form action="{{ route('documents.medical_clearance.store') }}" method="POST">
+                    <h2 class="text-xl font-medium mb-4 mt-6 text-gray-700 text-center">Form 1</h2>
+                @csrf
                     <!-- Date Field -->
+                <div id="formContainer" class="space-y-4">
                     <div class="form-group">
+                        <input type="hidden" name="document_type" value="{{ request('document_type') }}">
                         <label class="block text-gray-600 font-medium mb-1">Date:</label>
                         <input type="date" id="editDate"
-                            class="editDate w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            class="editDate w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" name="date"
                             required>
                         <span id="dateError" class="text-red-500 text-sm hidden">Date is required.</span>
                     </div>
@@ -247,7 +253,7 @@
                     <!-- Patient Name Field -->
                     <div class="form-group">
                         <label class="block text-gray-600 font-medium mb-1">Patient's Name:</label>
-                        <input type="text" id="editPatientName"
+                        <input type="text" id="editPatientName" name="patient_name"
                             class="editPatientName w-full border rounded-md px-3 py-2"
                             placeholder="Enter patient's name" required>
                         <span id="nameError" class="text-red-500 text-sm hidden">Name is required.</span>
@@ -256,7 +262,7 @@
                     <!-- Excuse Field -->
                     <div class="form-group">
                         <label class="block text-gray-600 font-medium mb-1">Excuse for:</label>
-                        <input type="text" id="editExcuse" class="editExcuse w-full border rounded-md px-3 py-2"
+                        <input type="text" id="editExcuse" class="editExcuse w-full border rounded-md px-3 py-2" name="excuse"
                             placeholder="Reason for excuse">
                     </div>
 
@@ -265,46 +271,122 @@
                         <label class="block text-gray-600 font-medium mb-2">COVID-19 Vaccination Status:</label>
                         <div class="space-y-2">
                             <label class="inline-flex items-center">
-                                <input type="radio" name="vaccination" value="Unvaccinated" class="text-blue-500">
+                                <input type="radio" name="vaccination_status" value="Unvaccinated" class="text-blue-500">
                                 <span class="ml-2 text-gray-700">Unvaccinated</span>
                             </label><br>
                             <label class="inline-flex items-center">
-                                <input type="radio" name="vaccination" value="Primary series incomplete"
+                                <input type="radio" name="vaccination_status" value="Primary Incomplete"
                                     class="text-blue-500">
                                 <span class="ml-2 text-gray-700">Primary series incomplete</span>
                             </label><br>
                             <label class="inline-flex items-center">
-                                <input type="radio" name="vaccination" value="Primary dose completed"
+                                <input type="radio" name="vaccination_status" value="Primary Complete"
                                     class="text-blue-500">
                                 <span class="ml-2 text-gray-700">Primary dose / series completed</span>
                             </label><br>
                             <label class="inline-flex items-center">
-                                <input type="radio" name="vaccination" value="Boosters" class="text-blue-500">
+                                <input type="radio" name="vaccination_status" value="Boosters" class="text-blue-500">
                                 <span class="ml-2 text-gray-700">1st / second Boosters</span>
                             </label>
                         </div>
                     </div>
 
+                    <div class="form-group">
+                        <label class="block text-gray-600 font-medium mb-1">Physician Name:</label>
+                        <input type="text" id="lic_no" class="Licno w-full border rounded-md px-3 py-2" name="doctorName"
+                            placeholder="Physician Name" required>
+                        <span id="PhcError" class="text-red-500 text-sm hidden">Physician is required.</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="block text-gray-600 font-medium mb-1">Physician's Position:</label>
+                        <input type="text" id="lic_no" class="Licno w-full border rounded-md px-3 py-2" name="position"
+                            placeholder="Position" required>
+                        <span id="PstError" class="text-red-500 text-sm hidden">Position is required.</span>
+                    </div>
                     <!-- License Number -->
                     <div class="form-group">
                         <label class="block text-gray-600 font-medium mb-1">Lic No:</label>
-                        <input type="text" id="lic_no" class="Licno w-full border rounded-md px-3 py-2"
+                        <input type="text" id="lic_no" class="Licno w-full border rounded-md px-3 py-2" name="license_number"
                             placeholder="License number" required>
                         <span id="licError" class="text-red-500 text-sm hidden">License number is required.</span>
                     </div>
                 </div>
 
+            <div class="hidden" id="formContainer1">
+                <h2 class="text-xl text-center font-semibold mb-7 text-gray-700 mt-4">Form 2</h2>
+
+                <div class="space-y-4"> <!-- Added space-y-4 here -->
+                    <label class="block text-gray-600 font-medium mb-1">Date:</label>
+                    <input type="date" id="editDate${formCount}" name="additional_date"
+                        class="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+
+                    <label class="block text-gray-600 font-medium mb-1">Patient's Name:</label>
+                    <input type="text" id="editPatientName${formCount}" name="additional_patient_name"
+                        class="w-full border rounded-md px-3 py-2" placeholder="Enter patient's name">
+
+                    <label class="block text-gray-600 font-medium mb-1">Excuse for:</label>
+                    <input type="text" id="editExcuse${formCount}" name="additional_excuse"
+                        class="w-full border rounded-md px-3 py-2" placeholder="Reason for excuse">
+
+                    <label class="block text-gray-600 font-medium mb-1">X-ray result:</label>
+                    <input type="text" id="editXray${formCount}" name="xray_result"
+                        class="w-full border rounded-md px-3 py-2" placeholder="X-ray result">
+
+                    <label class="block text-gray-600 font-medium mb-2">COVID-19 Vaccination Status:</label>
+                    <div class="space-y-2">
+                        <label class="inline-flex items-center">
+                            <input type="radio" name="additional_vaccination_status" value="Unvaccinated" class="text-blue-500">
+                            <span class="ml-2 text-gray-700">Unvaccinated</span>
+                        </label><br>
+                        <label class="inline-flex items-center">
+                             <input type="radio" name="additional_vaccination_status" value="Primary Incomplete" class="text-blue-500">
+                             <span class="ml-2 text-gray-700">Primary series incomplete</span>
+                        </label><br>
+                         <label class="inline-flex items-center">
+                         <input type="radio" name="additional_vaccination_status" value="Primary Complete" class="text-blue-500">
+                         <span class="ml-2 text-gray-700">Primary dose / series completed</span>
+                         </label><br>
+                         <label class="inline-flex items-center">
+                             <input type="radio" name="additional_vaccination_status" value="Boosters" class="text-blue-500">
+                             <span class="ml-2 text-gray-700">1st / second Boosters</span>
+                         </label>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="block text-gray-600 font-medium mb-1">Physician Name:</label>
+                        <input type="text" id="lic_no" class="Licno w-full border rounded-md px-3 py-2" name="additional_doctorName"
+                            placeholder="Physician Name">
+                        <span id="PhcError" class="text-red-500 text-sm hidden">Physician is required.</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="block text-gray-600 font-medium mb-1">Physician's Position:</label>
+                        <input type="text" id="lic_no" class="Licno w-full border rounded-md px-3 py-2" name="additional_position"
+                            placeholder="Position">
+                        <span id="PstError" class="text-red-500 text-sm hidden">Position is required.</span>
+                    </div>
+                    <!-- License Number -->
+                    <div class="form-group">
+                        <label class="block text-gray-600 font-medium mb-1">Lic No:</label>
+                        <input type="text" id="lic_no" class="Licno w-full border rounded-md px-3 py-2" name="additional_license_number"
+                            placeholder="License number">
+                        <span id="licError" class="text-red-500 text-sm hidden">License number is required.</span>
+                    </div>
+                </div>
+             </div>
 
                 <div class="flex justify-end space-x-4 mt-6">
-                    <button onclick="addForm()"
+                    <button onclick="addForm()" type="button"
                         class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-medium py-2 px-4 rounded-md">
                         Add Form
                     </button>
-                    <button onclick="saveEdits()"
+                    <button onclick="saveEdits()" type="submit"
                         class="bg-[#3CAA38] hover:bg-[#2B8E2F] text-white font-medium py-2 px-4 rounded-md">
-                        Save
+                        Submit
                     </button>
                 </div>
+                </form>
             </div>
         </div>
         <!-- Success Notification -->
@@ -328,7 +410,7 @@
             }
 
             function goBack() {
-                window.history.back();
+                window.location.href = "{{ route('documents.adocument_file') }}";
             }
 
             function openEditForm() {
@@ -338,77 +420,14 @@
             function closeEditForm() {
                 document.getElementById("editFormModal").classList.add("hidden");
             }
-
-            let formCount = 1; // To keep track of form count
-
+            
+            let formCount = 1;
             function addForm() {
-                if (formCount < 2) {
-                    console.log("Add Form button clicked");
-                    // Select the container where new forms will be added
-                    const formContainer = document.getElementById('formContainer');
-
-                    // Create a new form group
-                    const newFormGroup = document.createElement('div');
-                    newFormGroup.classList.add('form-group', 'mt-8'); // Add spacing for clarity
-
-                    // Set the HTML structure of the new form
-                    newFormGroup.innerHTML = `
-            <h2 class="text-xl font-semibold mb-4 text-gray-700">Form ${formCount + 1}</h2>
-    <div class="space-y-4"> <!-- Added space-y-4 here -->
-        <label class="block text-gray-600 font-medium mb-1">Date:</label>
-        <input type="date" id="editDate${formCount}"
-            class="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
-
-        <label class="block text-gray-600 font-medium mb-1">Patient's Name:</label>
-        <input type="text" id="editPatientName${formCount}"
-            class="w-full border rounded-md px-3 py-2" placeholder="Enter patient's name">
-
-        <label class="block text-gray-600 font-medium mb-1">Excuse for:</label>
-        <input type="text" id="editExcuse${formCount}"
-            class="w-full border rounded-md px-3 py-2" placeholder="Reason for excuse">
-
-        <label class="block text-gray-600 font-medium mb-1">X-ray result:</label>
-        <input type="text" id="editXray${formCount}"
-            class="w-full border rounded-md px-3 py-2" placeholder="X-ray result">
-
-        <label class="block text-gray-600 font-medium mb-2">COVID-19 Vaccination Status:</label>
-        <div class="space-y-2">
-            <label class="inline-flex items-center">
-                <input type="radio" name="vaccination${formCount}" value="Unvaccinated" class="text-blue-500">
-                <span class="ml-2 text-gray-700">Unvaccinated</span>
-            </label><br>
-            <label class="inline-flex items-center">
-                <input type="radio" name="vaccination${formCount}" value="Primary series incomplete" class="text-blue-500">
-                <span class="ml-2 text-gray-700">Primary series incomplete</span>
-            </label><br>
-            <label class="inline-flex items-center">
-                <input type="radio" name="vaccination${formCount}" value="Primary dose completed" class="text-blue-500">
-                <span class="ml-2 text-gray-700">Primary dose / series completed</span>
-            </label><br>
-            <label class="inline-flex items-center">
-                <input type="radio" name="vaccination${formCount}" value="Boosters" class="text-blue-500">
-                <span class="ml-2 text-gray-700">1st / second Boosters</span>
-            </label>
-        </div>
-
-        <label class="block text-gray-600 font-medium mb-1">Lic No:</label>
-        <input type="text" id="licNo${formCount}"
-            class="w-full border rounded-md px-3 py-2" placeholder="License number">
-    </div> <!-- End of space-y-4 -->
-        `;
-
-                    // Append the new form group to the container
-                    formContainer.appendChild(newFormGroup);
-
-                    // Increment formCount
-                    formCount++;
-
-                    // Hide the "Add Form" button after adding the second form
-                    if (formCount === 2) {
+                formCount++;
+                const formContainer1 = document.getElementById("formContainer1");
+                formContainer1.classList.remove("hidden");
+                if (formCount === 2) {
                         document.querySelector("button[onclick='addForm()']").style.display = 'none';
-                    }
-                } else {
-                    alert("You can only add 2 forms.");
                 }
             }
 
@@ -426,64 +445,6 @@
                 // const xrayResult2 = document.getElementById("editXray1")?.value || "";
                 const licNoValue2 = document.getElementById("licNo1")?.value || "";
                 const xrayResult2 = document.getElementById("editXray1")?.value || "";
-
-
-
-                // Function to update placeholders with underline styling
-                function updateWithUnderline(elementId, value) {
-                    const element = document.getElementById(elementId);
-                    if (element) {
-                        element.style.textDecoration = "underline";
-                        element.style.textUnderlineOffset = "4px"; // Adjust the offset for styling
-                        element.innerText = value || "_____"; // Fallback to empty placeholder if no value
-                    }
-                }
-
-
-
-
-                // Handle vaccination status updates for both forms
-                const selectedVaccination1 = document.querySelector('input[name="vaccination"]:checked');
-                const selectedVaccination2 = document.querySelector('input[name="vaccination1"]:checked');
-
-                if (selectedVaccination1) {
-                    document.querySelectorAll('.checkbox').forEach(el => (el.textContent = '_____ ')); // Reset all checkboxes
-                    switch (selectedVaccination1.value) {
-                        case 'Unvaccinated':
-                            document.getElementById('status-unvaccinated').textContent = '__✔__';
-                            break;
-                        case 'Primary series incomplete':
-                            document.getElementById('status-incomplete').textContent = '__✔__';
-                            break;
-                        case 'Primary dose completed':
-                            document.getElementById('status-completed').textContent = '__✔__';
-                            break;
-                        case 'Boosters':
-                            document.getElementById('status-boosters').textContent = '__✔__';
-                            break;
-                    }
-                }
-
-                if (selectedVaccination2) {
-                    switch (selectedVaccination2.value) {
-                        case 'Unvaccinated':
-                            const unvaccinated2 = document.getElementById('status-unvaccinated2');
-                            unvaccinated2.textContent = '__✔__';  // Add underscores here
-                            break;
-                        case 'Primary series incomplete':
-                            const incomplete2 = document.getElementById('status-incomplete2');
-                            incomplete2.textContent = '__✔__';  // Add underscores here
-                            break;
-                        case 'Primary dose completed':
-                            const completed2 = document.getElementById('status-completed2');
-                            completed2.textContent = '__✔__';  // Add underscores here
-                            break;
-                        case 'Boosters':
-                            const boosters2 = document.getElementById('status-boosters2');
-                            boosters2.textContent = '__✔__';  // Add underscores here
-                            break;
-                    }
-                }
 
                 // Validation logic for Form 1
                 let isValid = true;
@@ -533,33 +494,19 @@
                     }
                 }
 
-                // If validation passes
                 if (isValid) {
-                    // Update placeholders for Form 1
-                    updateWithUnderline("date-placeholder", waiverDate1);
-                    updateWithUnderline("name-placeholder", patientName1);
-                    updateWithUnderline("excuse-placeholder", excuse1);
-                    updateWithUnderline("lic_no-placeholder", licNoValue1);
-
-                    // Update placeholders for Form 2 (if it exists)
-                    if (waiverDate2 || patientName2 || excuse2 || licNoValue2 || xrayResult2) {
-                        updateWithUnderline("date-placeholder2", waiverDate2);
-                        updateWithUnderline("name-placeholder2", patientName2);
-                        updateWithUnderline("excuse-placeholder2", excuse2);
-                        updateWithUnderline("lic_no-placeholder2", licNoValue2);
-                        updateWithUnderline("x-ray-placeholder2", xrayResult2);
-
-                    }
-                    // Show success message
                     const successMessage = document.getElementById("successMessage");
-                    successMessage.classList.remove("hidden");
+                    successMessage.classList.remove("hidden"); // Make the success message visible
+                    console.log("Success message is visible.");
 
-                    // Hide success message and trigger print after a delay
+                                // Hide the success message after a short delay, close the modal, and trigger print preview
                     setTimeout(() => {
-                        successMessage.classList.add("hidden");
-                        closeEditForm();
-                        window.print();
-                    }, 2000);
+                        successMessage.classList.add("hidden"); // Hide success message after 3.5 seconds
+                        closeAddForm(); // Close the modal
+                        document.querySelector('form').submit(); // This submits the form to Laravel
+                        }, 3500);
+                } else {
+                    console.log("Form validation failed.");
                 }
             }
 

@@ -95,8 +95,9 @@
                 <!-- Body Content -->
                 <!-- Body Content -->
                 <div id="letterOutput" class="md:px-10" style="font-size: 14px">
-                    <div class="mb-10 text-right">
-                        <span id="letterDate" class="font-medium">Date: {{ \Carbon\Carbon::parse($specificDocument->date)->format('F j, Y') }} </span>
+                    <div class="mb-10 text-right text-base">
+                        <label class="font-medium">Date: </label>
+                        <span id="letterDate" class="underline">{{ \Carbon\Carbon::parse($specificDocument->date)->format('F j, Y') }} </span>
                     </div>
                     <div class="space-y-4">
                         <p class="text-lg">
@@ -125,8 +126,9 @@
 
                 <div class="flex justify-between items-center mt-10">
                     <div class="text-left">
-                        <p id="physicianSignature" class="underline">{{ $specificDocument->doctorName }}</p>
-                            M.D.</p>
+                        <p id="physicianSignature" class="underline">{{ $specificDocument->doctorName }} <label class="font-medium">M.D. </label>
+                        </p>
+                        
                         <p class="text-center font-medium">Clinic Physician</p>
                     </div>
                 </div>
