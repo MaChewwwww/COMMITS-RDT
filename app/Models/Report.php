@@ -9,11 +9,6 @@ class Report extends Model
     protected $table = 'reports';
 
     protected $fillable = [
-        'date',
-        'title',
-        'type',
-        'identifier',
-        'copy',
-        'contents',
+        'title', 'name', 'age', 'sex', 'complaint', 'diagnosis', 'remarks', 'category'
     ];
 }

@@ -2,131 +2,105 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Http\Requests\MedicineRequest; // We'll create this
 use App\Models\Boxes;
 use App\Models\Medicine;
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\ValidationException;
 
 class MedicineController extends Controller
 {
     public function index()
     {
-        // Get all medicines with box relationship
         $users = User::all();
-        $medicines = Medicine::with('box')->get();
+        
+        $medicines = Medicine::join('boxes', 'medicines.box_id', '=', 'boxes.id')
+            ->where('boxes.isReturned', false)
+            ->with('box.user')
+            ->orderBy('medicines.expiration_date')
+            ->select('medicines.*')
+            ->simplePaginate(8);
 
-        // Calculate quantities
-        $totalMedicine = $medicines->sum('remaining_quantity');
-        $expiredMedicine = Medicine::where('expiration_date', '<', Carbon::now()->addDay())
-            ->sum('remaining_quantity');
-        $nearExpiredMedicine = Medicine::whereBetween('expiration_date', [
-            Carbon::now(),
-            Carbon::now()->addMonth()
-        ])->sum('remaining_quantity');
-
-        // Count returned and not returned medicines
-        $returnedMedicines = $medicines->filter(function($medicine) {
-            return $medicine->box->isReturned == true;
-        })->count();
-
-        $notReturnedMedicines = $medicines->filter(function($medicine) {
-            return $medicine->box->isReturned == false;
-        })->count();
-
-        return view('medicine.medicine_index', 
-            compact('medicines', 'totalMedicine', 'expiredMedicine', 'nearExpiredMedicine',
-                    'returnedMedicines', 'notReturnedMedicines', 'users'));
+        return view('inventory.medicines.index', 
+            compact('medicines', 'users'));
     }
 
-    public function add(){
+    public function create(){
         $users = User::all();
         return view('medicine.add_medicine', compact('users'));
     }
 
-    public function store(Request $request)
+    public function store(MedicineRequest $request)
     {
-            // Validate medicine data
-            $data = $request->validate([
-                'stock_number' => 'required',
-                'unit_of_measurement' => 'required|alpha',
-                'medicine_name' => 'required',
-                'initial_quantity' => 'required|numeric',
-                'supplier_name' => 'required',
-                'date_received' => 'required|date',
-                'user_id' => 'required',
-                'expiration_date' => 'required|date',
-            ]);
+        $validated = $request->validated();
 
-            // Create box 
-            $box = Boxes::create([
-                'date_received' => $data['date_received'],
-                'stock_number' => $data['stock_number'],
-                'isReturned' => False,
-                'supplier_name' => $data['supplier_name'] ?? 'PUP Sta. Mesa',
-                'user_id' => 1, // Assign user ID 1 for testing
-            ]);
-
-            // Create medicine             
-            // Try using relationship instead of direct creation
-            $medicine = $box->medicine()->create([
-                'medicine_name' => $data['medicine_name'],
-                'initial_quantity' => $data['initial_quantity'],
-                'remaining_quantity' => $data['initial_quantity'], 
-                'unit' => $data['unit_of_measurement'],
-                'status' => 'Full', 
-                'expiration_date' => $data['expiration_date']
-            ]);
-
-            return redirect()->route('medicine_dashboard')
-                ->with('success', 'Medicine added successfully');
-
-    }
-
-    public function update(Request $request, Medicine $medicine)
-    {
-        // Validate medicine data
-        $data = $request->validate([
-            'medicine_name' => 'required',
-            'stock_number' => 'required',
-            'initial_quantity' => 'required|numeric|min:'.$medicine['consumed_quantity'].'|max:999999',
-            'unit_of_measurement' => 'required|alpha',
-            'supplier_name' => 'required',
-            'date_received' => 'required|date',
-            'user_id' => 'required',
-            'expiration_date' => 'required|date',
+        // Create box
+        $box = Boxes::create([
+            'date_received' => $validated['date_received'],
+            'stock_number' => $validated['stock_number'],
+            'isReturned' => false,
+            'user_id' => $validated['user_id']
         ]);
 
-        // Update medicine
-        $remainingQty = $data['initial_quantity'] - $medicine['consumed_quantity'];
-        if ($remainingQty < 1) {
-            $remainingQty = 0;
-        }
+        // Create medicine with relationship
+        $medicine = $box->medicine()->create([
+            'medicine_name' => $validated['medicine_name'],
+            'unit' => $validated['unit_of_measurement'],
+            'initial_quantity' => $validated['initial_quantity'],
+            'remaining_quantity' => $validated['initial_quantity'],
+            'consumed_quantity' => 0,
+            'expiration_date' => $validated['expiration_date'],
+            'status' => 'Full',
+            'user_id' => $validated['user_id']
+        ]);
 
+        return redirect()->route('inventory-medicines')
+            ->with('success', 'Medicine added successfully');
+    }
+
+    public function update(MedicineRequest $request, Medicine $medicine)
+    {
+        $data = $request->validated();
+        
+        // Calculate remaining quantity
+        $remainingQty = $data['initial_quantity'] - $medicine->consumed_quantity;
+        $remainingQty = max(0, $remainingQty);
+
+        // Calculate status
+        $status = $this->calculateMedicineStatus($remainingQty, $data['initial_quantity']);
+
+        // Update medicine
         $medicine->update([
             'medicine_name' => $data['medicine_name'],
             'initial_quantity' => $data['initial_quantity'],
-            'consumed_quantity' => $medicine['consumed_quantity'],
             'remaining_quantity' => $remainingQty,
             'unit' => $data['unit_of_measurement'],
             'expiration_date' => $data['expiration_date'],
-            'status' => $remainingQty == $data['initial_quantity'] ? 'Full' :
-                   ($remainingQty == 0 ? 'Out of Stock' :
-                   ($remainingQty <= ($data['initial_quantity'] * 0.2) ? 'Low Stock' : 'In Stock'))
+            'status' => $status
         ]);
 
-        // Update associated box
+        // Update box
         $medicine->box->update([
             'stock_number' => $data['stock_number'],
             'date_received' => $data['date_received'],
-            'supplier_name' => $data['supplier_name'],
             'user_id' => $data['user_id']
         ]);
 
-        return redirect()->route('medicine_dashboard')
+        return redirect()->route('inventory-medicines')
             ->with('success', 'Medicine updated successfully');
     }
-    
+
+    private function calculateMedicineStatus($remaining, $initial)
+    {
+        if ($remaining == $initial) return 'Full';
+        if ($remaining == 0) return 'Out of Stock';
+        if ($remaining <= ($initial * 0.2)) return 'Low Stock';
+        return 'In Stock';
+    }
+
     public function deduct(Request $request, Medicine $medicine)
     {
         $data = $request->validate([
@@ -141,17 +115,47 @@ class MedicineController extends Controller
                    ($medicine->remaining_quantity - $data['quantity'] <= ($medicine->initial_quantity * 0.2) ? 'Low Stock' : 'In Stock'))
         ]);
 
-        return redirect()->route('medicine_dashboard')
+        return redirect()->route('inventory-medicines')
             ->with('success', 'Medicine quantity has been deducted');
     }
 
-    public function delete(Medicine $medicine)
+    public function destroy(Request $request, Medicine $medicine)
     {
-        $medicine->delete();
+        try {
+            $request->validate([
+                'password' => 'required',
+            ]);
 
-        return redirect()->route('medicine_dashboard')
-            ->with('success', 'Medicine deleted successfully');
+            if (!Hash::check($request->password, auth()->user()->password)) {
+                throw ValidationException::withMessages([
+                    'password' => ['The provided password is incorrect.']
+                ]);
+            }
+
+            $medicine->delete();
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'Medicine deleted successfully'
+            ]);
+
+        } catch (ValidationException $e) {
+            return response()->json([
+                'error' => $e->errors()['password'][0]
+            ], 422);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => 'An error occurred while deleting the medicine.'
+            ], 500);
+        }
+    }
+
+    public function return(Medicine $medicine)
+    {
+        $medicine->box->update(['isReturned' => true]);
+        
+        return redirect()->route('inventory-medicines')
+            ->with('success', 'Medicine marked as returned successfully');
     }
 
 }
-

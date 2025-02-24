@@ -4,7 +4,7 @@
     <div class="container px-4 mx-auto">
         <div class="flex justify-center">
             <div class="w-full">
-                <h1 class="my-6 text-3xl font-bold text-left">Dashboard</h1>
+                <h1 class="mb-6 text-3xl font-bold text-left mt-14">Dashboard</h1>
             </div>
         </div>
         <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -93,12 +93,12 @@
                     <!-- Patient Distribution Column -->
                     <div class="p-4 bg-white border rounded-lg shadow-lg md:p-6">
                         <h2 class="mb-4 text-xl font-bold text-gray-800">Patient Distribution</h2>
-                        <div class="flex flex-col space-y-3"> <!-- Changed to flex-col for one per line -->
+                        <div class="flex flex-col space-y-3">
                             <!-- Students -->
-                            <div class="p-4 transition-all duration-300 border rounded-lg bg-gradient-to-r from-blue-50 to-white hover:shadow-md hover:border-blue-500">
+                            <div class="p-4 transition-all duration-300 border rounded-lg bg-blue-50 bg-gradient-to-r from-blue-50 to-white hover:shadow-md hover:border-blue-500">
                                 <div class="flex items-center justify-between">
                                     <div class="flex items-center">
-                                        <div class="p-3 bg-blue-100 rounded-full">
+                                        <div class="p-3 bg-blue-200 rounded-full">
                                             <svg class="w-8 h-8 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
                                                 <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z"/>
                                             </svg>
@@ -113,10 +113,10 @@
                             </div>
 
                             <!-- Faculty -->
-                            <div class="p-4 transition-all duration-300 border rounded-lg bg-gradient-to-r from-green-50 to-white hover:shadow-md hover:border-green-500">
+                            <div class="p-4 transition-all duration-300 border rounded-lg bg-gradient-to-r bg-green-50 from-green-50 to-white hover:shadow-md hover:border-green-500">
                                 <div class="flex items-center justify-between">
                                     <div class="flex items-center">
-                                        <div class="p-3 bg-green-100 rounded-full">
+                                        <div class="p-3 bg-green-200 rounded-full">
                                             <svg class="w-8 h-8 text-green-500" fill="currentColor" viewBox="0 0 20 20">
                                                 <path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762z"/>
                                             </svg>
@@ -131,10 +131,10 @@
                             </div>
 
                             <!-- Dependents -->
-                            <div class="p-4 transition-all duration-300 border rounded-lg bg-gradient-to-r from-red-50 to-white hover:shadow-md hover:border-red-500">
+                            <div class="p-4 transition-all duration-300 border rounded-lg bg-red-50 bg-gradient-to-r from-red-0 to-white hover:shadow-md hover:border-red-500">
                                 <div class="flex items-center justify-between">
                                     <div class="flex items-center">
-                                        <div class="p-3 bg-red-100 rounded-full">
+                                        <div class="p-3 bg-red-200 rounded-full">
                                             <svg class="w-8 h-8 text-red-500" fill="currentColor" viewBox="0 0 20 20">
                                                 <path d="M9 6a3 3 0 11-6 0 3 3 0 006 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"/>
                                             </svg>
@@ -149,10 +149,10 @@
                             </div>
 
                             <!-- Staff -->
-                            <div class="p-4 transition-all duration-300 border rounded-lg bg-gradient-to-r from-yellow-50 to-white hover:shadow-md hover:border-yellow-500">
+                            <div class="p-4 transition-all duration-300 border rounded-lg bg-yellow-50 bg-gradient-to-r from-yellow-50 to-white hover:shadow-md hover:border-yellow-500">
                                 <div class="flex items-center justify-between">
                                     <div class="flex items-center">
-                                        <div class="p-3 bg-yellow-100 rounded-full">
+                                        <div class="p-3 bg-yellow-200 rounded-full">
                                             <svg class="w-8 h-8 text-yellow-500" fill="currentColor" viewBox="0 0 20 20">
                                                 <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/>
                                                 <path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5z" clip-rule="evenodd"/>
@@ -168,10 +168,10 @@
                             </div>
 
                             <!-- Visitors -->
-                            <div class="p-4 transition-all duration-300 border rounded-lg bg-gradient-to-r from-purple-50 to-white hover:shadow-md hover:border-purple-500">
+                            <div class="p-4 transition-all duration-300 border rounded-lg bg-purple-50 bg-gradient-to-r from-purple-50 to-white hover:shadow-md hover:border-purple-500">
                                 <div class="flex items-center justify-between">
                                     <div class="flex items-center">
-                                        <div class="p-3 bg-purple-100 rounded-full">
+                                        <div class="p-3 bg-purple-200 rounded-full">
                                             <svg class="w-8 h-8 text-purple-500" fill="currentColor" viewBox="0 0 20 20">
                                                 <path d="M8 9a3 3 0 100-6 3 3 0 000 6zM8 11a6 6 0 016 6H2a6 6 0 016-6zM16 7a1 1 0 10-2 0v1h-1a1 1 0 100 2h1v1a1 1 0 102 0v-1h1a1 1 0 100-2h-1V7z"/>
                                             </svg>

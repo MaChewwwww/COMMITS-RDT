@@ -25,7 +25,7 @@ class UserController extends Controller
     {
         $request->validate([
             'email' => 'required|email',
-            'password' => 'required|min:6',
+            'password' => 'required|min:8',
         ]);
 
         $credentials = $request->only('email', 'password');
@@ -38,13 +38,13 @@ class UserController extends Controller
             {
                 // Check user role and redirect accordingly
                 return $user->role === 'admin'
-                    ? redirect()->route('patients') // if admin
+                    ? redirect()->route('dashboard') // if admin
                     : redirect()->route('patients');
             }
         }
 
         // Authentication failed
-        return response()->json(['message' => 'Invalid credentials'], 401);
+        return redirect()->back()->withErrors(['password' => 'Invalid credentials']);
     }
 
     /**

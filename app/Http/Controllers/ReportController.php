@@ -14,30 +14,17 @@ class ReportController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Report::query(); 
+        $query = Report::query();
+
+        // Filter by category if provided
+        if ($request->has('category')) {
+            $category = $request->input('category');
+            $query->where('category', $category);
+        }
+
+        // Use paginate instead of get()
+        $reports = $query->orderBy('created_at', 'desc')->paginate(10);
         
-        if ($request->has('type')) { 
-            switch ($request->type) { 
-                # Filter reports based on this week e.g Monday to Friday
-                case 'weekly': 
-                    $query->whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()]); 
-                    break; 
-                # Filter reports based on this month e.g December
-                case 'monthly': 
-                    $query->whereMonth('created_at', now()->month)
-                          ->whereYear('created_at', now()->year); 
-                    break;
-                # Filter reports based on this year e.g 2024 
-                case 'yearly': 
-                    $query->whereYear('created_at', now()->year); 
-                    break; 
-                default: 
-                    break; 
-            } 
-        } 
-
-        $reports = $query->orderBy('created_at', 'desc')->get();
-
         return view('report.index', compact('reports'));
     }
 
@@ -56,45 +43,32 @@ class ReportController extends Controller
     {
         $request->validate([
             'title' => 'required',
+            'contents' => 'required',
+            'category' => 'required',
         ]);
 
+        // Create a new report
         Report::create([
-            'date' => now(),
             'title' => $request->title,
+            'contents' => $request->contents,
+            'category' => $request->category,
         ]);
 
-        return redirect()->route('report.index')->with('success', 'Report created successfully.');
+        return redirect()->route('report.index')->with('success', 'Report added successfully.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Report $report)
+    // Show a single report
+    public function show($id)
     {
-        return view('report.show');
+        $report = Report::findOrFail($id);
+
+        return view('reports.show', compact('report'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Report $report)
+    // Delete a report
+    public function destroy($id)
     {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Report $report)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Report $report)
-    {
+        $report = Report::findOrFail($id);
         $report->delete();
         return redirect()->route('report.index')->with('success', 'Report deleted successfully.');
     }

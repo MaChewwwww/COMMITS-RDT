@@ -2,19 +2,19 @@
 
 @section('content')
 <div class="max-w-6xl mx-auto mt-10">
-    <h1 class="text-2xl font-bold mb-2">Document's</h1>
+    <h1 class="mb-2 text-2xl font-bold">Document's</h1>
     <!-- Header -->
-    <div class="flex justify-between items-center mb-3">
+    <div class="flex items-center justify-between mb-3">
         <h2 class="text-gray-500">Recents</h2>
         <div class="flex space-x-4">
             <!-- Filter Dropdown -->
             <div class="relative inline-block text-left">
-                <button onclick="toggleDropdown('filter-dropdown')" class="bg-yellow-400 text-white px-2 py-2 rounded-md hover:bg-yellow-500 flex">
+                <button onclick="toggleDropdown('filter-dropdown')" class="flex px-2 py-2 text-white bg-yellow-400 rounded-md hover:bg-yellow-500">
                     <p class="px-2">Filter</p> <svg xmlns="http://www.w3.org/2000/svg" width="32" height="25" viewBox="0 0 32 25" fill="none">
                         <path d="M15.5993 15.4256L10.1191 11.2891L11.9458 9.91016L15.5993 12.6679L19.2526 9.91016L21.0793 11.2891L15.5993 15.4256Z" fill="#FFFFFF"/>
                         </svg>
                 </button>
-                <div id="filter-dropdown" class="dropdown-content absolute right-0 mt-2 w-40 bg-white border border-gray-200 rounded shadow-lg">
+                <div id="filter-dropdown" class="absolute right-0 w-40 mt-2 bg-white border border-gray-200 rounded shadow-lg dropdown-content">
                     <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">All</a>
                     <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Week</a>
                     <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Month</a>
@@ -24,7 +24,7 @@
 
             <!-- Add Dropdown -->
             <div class="relative inline-block text-left">
-                <button onclick="toggleDropdown('add-dropdown')" class="bg-green-500 text-white px-2 py-2 rounded-md hover:bg-green-600 flex items-center justify-center">
+                <button onclick="toggleDropdown('add-dropdown')" class="flex items-center justify-center px-2 py-2 text-white bg-green-500 rounded-md hover:bg-green-600">
                     <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 17 17" fill="none">
                         <path d="M7.35714 9.64286H0.5V7.35714H7.35714V0.5H9.64286V7.35714H16.5V9.64286H9.64286V16.5H7.35714V9.64286Z" fill="white"/>
                     </svg>
@@ -33,7 +33,7 @@
                         <path d="M15.5993 15.4256L10.1191 11.2891L11.9458 9.91016L15.5993 12.6679L19.2526 9.91016L21.0793 11.2891L15.5993 15.4256Z" fill="#FFFFFF"/>
                     </svg>
                 </button>
-                <div id="add-dropdown" class="dropdown-content absolute right-0 mt-2 w-64 bg-white border border-gray-200 rounded shadow-lg">
+                <div id="add-dropdown" class="absolute right-0 w-64 mt-2 bg-white border border-gray-200 rounded shadow-lg dropdown-content">
                     <a href="/med_certif" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Medical Certificate</a>
                     <a href="/med_clear" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Medical Clearance</a>
                     <a href="/annual_med_clear" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Annual Medical Clearance</a>
@@ -49,7 +49,7 @@
     <!-- Recents Section -->
     <div class="space-y-4">
         <!-- Example Document -->
-        <div id="document-container" class="bg-white p-4 rounded-lg shadow flex justify-between items-center cursor-pointer transition-all">
+        <div id="document-container" class="flex items-center justify-between p-4 transition-all bg-white rounded-lg shadow cursor-pointer">
             <div>
                 <p class="font-medium text-gray-800">Document Name - Name</p>
                 <p class="text-sm text-gray-400">Created on: 2024-12-24</p>
@@ -63,7 +63,7 @@
                 </button>
                 <!-- Delete Icon -->
                 <button onclick="openModal()" class="hover:text-red-500">
-                    <div class="group w-6 h-6">
+                    <div class="w-6 h-6 group">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="19" viewBox="0 0 24 19" fill="none" class="w-6 h-6 stroke-gray-700 group-hover:stroke-red-500">
                             <path d="M21 4.59962C17.67 4.34578 14.32 4.21501 10.98 4.21501C9 4.21501 7.02 4.29193 5.04 4.44578L3 4.59962M8.5 3.8227L8.72 2.81501C8.88 2.08424 9 1.53809 10.69 1.53809H13.31C15 1.53809 15.13 2.11501 15.28 2.8227L15.5 3.8227M18.85 7.03039L18.2 14.7765C18.09 15.9842 18 16.9227 15.21 16.9227H8.79C6 16.9227 5.91 15.9842 5.8 14.7765L5.15 7.03039M10.33 12.6919H13.66M9.5 9.61501H14.5"
                                 stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
@@ -75,14 +75,14 @@
     </div>
 
     <!-- Delete Confirmation Modal -->
-    <div id="deleteModal" class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 hidden">
+    <div id="deleteModal" class="fixed inset-0 flex items-center justify-center hidden bg-gray-900 bg-opacity-50">
         <div class="bg-white rounded-lg shadow-lg p-6 w-[90%] max-w-sm text-center">
             <h2 class="text-lg font-semibold text-gray-700">Are you sure you want to delete?</h2>
             <div class="flex justify-center gap-4 mt-6">
-                <button onclick="closeModal()" class="px-4 py-2 border border-gray-400 rounded-full text-gray-700 hover:bg-gray-100">
+                <button onclick="closeModal()" class="px-4 py-2 text-gray-700 border border-gray-400 rounded-full hover:bg-gray-100">
                     Cancel
                 </button>
-                <button class="px-4 py-2 bg-red-600 text-white rounded-full hover:bg-red-700">
+                <button class="px-4 py-2 text-white bg-red-600 rounded-full hover:bg-red-700">
                     Delete
                 </button>
             </div>

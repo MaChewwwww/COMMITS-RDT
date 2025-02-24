@@ -19,56 +19,80 @@ class PatientController extends Controller
 
     public function store(Request $request)
     {
-        // Validate input
-        $validated = $request->validate([
-            'fullname' => 'required|string|max:255',
-            'sex' => 'required|in:Male,Female',
-            'year_course_dept' => 'nullable|string|max:255',
-            'contactDetails' => 'required|string|max:255',
-            'patient_status' => 'required|string|max:255',
-            'patientType' => 'required|in:Student,Faculty,Admin,Visitor,Dependent',
-            'user_id' => 'nullable|exists:users,id',
-            'student_number' => 'nullable|string|max:255',
-        ]);
+        try {
+            // Validate input
+            $validated = $request->validate([
+                'fullname' => 'required|string|max:255',
+                'sex' => 'required|in:Male,Female',
+                'year_course_dept' => 'nullable|string|max:255',
+                'contactDetails' => 'required|string|max:255',
+                'patient_status' => 'required|string|max:255',
+                'patientType' => 'required|in:Student,Faculty,Admin,Visitor,Dependent',
+                'user_id' => 'nullable|exists:users,id',
+                'student_number' => 'nullable|string|max:255',
+            ]);
 
-        // Create a new patient
-        $patient = Patient::create($validated);
+            // Create a new patient
+            $patient = Patient::create($validated);
 
-        // Redirect back or to another page
-        return redirect()->route('patients')->with('success', 'Patient added successfully!');
+            if ($request->ajax()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Patient added successfully!'
+                ]);
+            }
+
+            return redirect()->route('patients')->with('success', 'Patient added successfully!');
+
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            if ($request->ajax()) {
+                return response()->json([
+                    'success' => false,
+                    'errors' => $e->errors()
+                ], 422);
+            }
+
+            throw $e;
+        }
     }
 
     public function update(Request $request, $id)
     {
-        // Find patient by ID
         $patient = Patient::findOrFail($id);
-        //dd($request->all());
-        //Validate input
-        $validated = $request->validate([
-            'fullname' => 'required|string|max:255',
-            'sex' => 'required|in:Male,Female',
-            'year_course_dept' => 'nullable|string|max:255',
-            'contactDetails' => 'required|string|max:255',
-            'patient_status' => 'required|string|max:255',
-            'patientType' => 'required|in:Student,Faculty,Admin,Visitor,Dependent',
-            'student_number' => 'nullable|string|max:255',
-            'user_id' => 'nullable|exists:users,id',
-        ]);
 
-        $patient->update([
-                'fullname'  => $request->input('fullname'),
-                'sex' => $request->input('sex'),
-                'year_course_dept' => $request->input('year_course_dept'),
-                'contactDetails' => $request->input('contactDetails'),
-                'patient_status' => $request->input('patient_status'),
-                'patientType' => $request->input('patientType'),
-                'student_number'  => $request->input('student_number'),
-                'user_id' => $request->input('user_id'),
+        try {
+            $validated = $request->validate([
+                'fullname' => 'required|string|max:255',
+                'sex' => 'required|string|max:255',
+                'year_course_dept' => 'nullable|string|max:255',
+                'contactDetails' => 'required|string|max:255',
+                'patient_status' => 'required|string|max:255',
+                'patientType' => 'required|in:Student,Faculty,Admin,Visitor,Dependent',
+                'user_id' => 'nullable|exists:users,id',
+                'student_number' => 'nullable|string|max:255',
             ]);
 
-        //dd($patient->update());
-        // // Redirect back or to another page
-        return redirect()->route('patients')->with('success', 'Patient updated successfully!');
+            $patient->update($validated);
+
+            if ($request->ajax()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Patient updated successfully!'
+                ]);
+            }
+
+            return redirect()->route('patients')->with('success', 'Patient updated successfully!');
+
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            if ($request->ajax()) {
+                return response()->json([
+                    'success' => false,
+                    'errors' => $e->errors()
+                ], 422);
+            }
+
+            throw $e;
+        }
     }
 
     public function destroy($id)

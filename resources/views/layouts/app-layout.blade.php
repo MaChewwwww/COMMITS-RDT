@@ -16,34 +16,43 @@
 
     <!-- Styles -->
     <link rel="stylesheet" href="{{ asset('src/css/styles.css') }}">
-
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.min.css" rel="stylesheet">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-
+    <link href="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.css" rel="stylesheet" />
 </head>
 
 <body>
     <div class="antialiased bg-gray-50">
 
+        @php
+            $currentRoute = Route::currentRouteName(); // Get the current route name
+        @endphp
+
         {{-- NAVBAR - HEADER --}}
         <x-navbar />
 
         {{-- SIDEBAR --}}
-        <x-sidebar />
+        {{-- to use different sidebar for profile page --}}
+        @if (!in_array($currentRoute, ['profile.accountSettings', 'profile.helpAndSupport']))
+            <x-sidebar />
+        @endif
 
         <!-- Notification Messages -->
         @if (session('success'))
-            <div id="session-alert" class="tw-p-4 tw-mb-4 tw-text-green-800 tw-bg-green-200 tw-rounded-lg"
+            <div id="session-alert" class="fixed z-50 tw-p-4 tw-mb-4 tw-text-green-800 tw-bg-green-200 tw-rounded-lg"
                 style="transition: opacity 0.5s;">
                 {{ session('success') }}
             </div>
         @elseif (session('error'))
-            <div id="session-alert" class="tw-p-4 tw-mb-4 tw-text-red-800 tw-bg-red-200 tw-rounded-lg"
+            <div id="session-alert" class="fixed z-50 tw-p-4 tw-mb-4 tw-text-red-800 tw-bg-red-200 tw-rounded-lg"
                 style="transition: opacity 0.5s;">
                 {{ session('error') }}
             </div>
         @endif
-
-        <main class="p-4 md:ml-64 h-auto pt-20">
+        
+        {{-- check if the route is profile page if not it will add margin left --}}
+        <main class="h-auto p-4 pt-20 {{ in_array($currentRoute, ['profile.accountSettings', 'profile.helpAndSupport']) ? '' : 'md:ml-64' }}">
             @yield('content')
         </main>
     </div>
@@ -65,6 +74,12 @@
             }
         });
     </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.all.min.js"></script>
+    @yield('scripts')
+
+    <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
 </body>
 
 </html>
