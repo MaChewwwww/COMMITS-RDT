@@ -1,12 +1,83 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\PatientController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\MedicineController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\PatientHistoryController;
 use App\Http\Controllers\DocumentController;
 
-// Welcome Page
-Route::get('/', function () {
-    return view('welcome');
+
+// Guest routes
+Route::middleware(['guest'])->group(function () {
+    // Default landing
+    Route::get('/', function () {
+        return redirect()->route('login.show');
+    });
+
+    Route::get('/login', [UserController::class, 'showLogin'])->name('login.show');
+    Route::post('/login', [UserController::class, 'login'])->name('login');
+});
+
+// Protected routes
+Route::middleware(['auth'])->group(function () {
+
+    Route::prefix('patients')->group(function () {
+
+        // Route::get('/', [PatientController::class, "index"])->name('patients');
+
+        // Show all patients (index page)
+        Route::get('/', [PatientController::class, 'index'])->name('patients');
+
+        // Show form to add a new patient
+        Route::get('/new', [PatientController::class, 'add'])->name('patients.add');
+
+        // Store a new patient
+        Route::post('/store', [PatientController::class, 'store'])->name('patients.store');
+
+        // Show the edit form for a specific patient
+        Route::get('/edit/{id}', [PatientController::class, 'edit'])->name('patients.edit');
+
+        // Update a patient record
+        Route::put('/update/{id}', [PatientController::class, 'update'])->name('patients.update');
+
+        // Delete a patient record
+        Route::delete('/destroy/{id}', [PatientController::class, 'destroy'])->name('patients.destroy');
+    });
+
+    // Medicine routes
+    Route::prefix('medicine')->group(function () {
+        Route::get('/', [MedicineController::class, 'index'])->name('medicine_dashboard');
+        Route::get('/add', [MedicineController::class, 'add'])->name('add_medicine');
+        Route::post('/', [MedicineController::class, 'store'])->name('add_medicine_store');
+        Route::get('/{medicine}/edit', [MedicineController::class, 'edit'])->name('edit_medicine');
+        Route::put('/{medicine}/update', [MedicineController::class, 'update'])->name('update_medicine');
+        Route::put('/{medicine}/deduct', [MedicineController::class, 'deduct'])->name('deduct_medicine');
+        Route::delete('/medicines/{medicine}', [MedicineController::class, 'delete'])->name('delete_medicine');
+    });
+
+    // Logout route
+    Route::post('/logout', [UserController::class, 'logout'])->name('logout');
+});
+
+#Report -Camar
+Route::get('/reports', [ReportController::class, 'index'])->name('reports');
+
+Route::prefix('reports')->group(function () {
+
+    // Display a list of reports, allowing filters
+    Route::get('/', [ReportController::class, 'index'])->name('report.index');
+
+    // Show a single report
+    Route::get('/{id}', [ReportController::class, 'show'])->name('report.show');
+
+    // Store a new report
+    Route::post('/', [ReportController::class, 'store'])->name('report.store');
+
+    // Delete a report
+    Route::delete('/{id}', [ReportController::class, 'destroy'])->name('report.destroy');
 });
 
 // Patient History

@@ -3,6 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<<<<<<<<< Temporary merge branch 1
+    <title>Welcome</title>
+</head>
+<body>
+    <h1>Welcome</h1>
+</body>
+</html>
     <title>Patient Record Management</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
@@ -34,6 +41,20 @@
                     <a href="Visitor.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Visitor</a>
                     <a href="Dependent.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Dependent</a>
                 </div>
+    <!-- Styles -->
+    <link href="{{ mix('css/app.css') }}" rel="stylesheet">
+</head>
+<body class="font-sans antialiased dark:bg-black dark:text-white/50">
+    <!-- Your content here -->
+    <nav class="p-4 bg-gray-800">
+        <div class="container flex items-center justify-between mx-auto">
+            <div class="text-lg font-bold text-white">
+                <a href="{{ url('/') }}">MyApp</a>
+            </div>
+            <div class="space-x-4">
+                <a href="{{ url('/') }}" class="text-gray-300 hover:text-white">Home</a>
+                <a href="{{ url('/about') }}" class="text-gray-300 hover:text-white">About</a>
+                <a href="{{ url('/contact') }}" class="text-gray-300 hover:text-white">Contact</a>
             </div>
         </div>
 

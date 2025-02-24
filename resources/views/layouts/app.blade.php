@@ -1,49 +1,56 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ config('app.name', 'Laravel') }}</title>
 
-    <!-- Add your CSS links here (e.g., Bootstrap or your custom styles) -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- You can add custom styles as well -->
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.bunny.net">
+    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+
+    <!-- Styles -->
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body>
+    <div id="app">
+        <div class="tw-page">
+            <div class="tw-page-wrapper">
+                @include('layouts.navigation') <!-- Includes: views/layouts/navigation.blade.php -->
 
-    <!-- Header / Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container">
-            <a class="navbar-brand" href="{{ url('/') }}">{{ config('app.name', 'Laravel') }}</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('documents.index') }}">Documents</a>
-                    </li>
-                </ul>
+                <!-- Notification Messages -->
+                @if (session('success'))
+                    <div id="session-alert" class="tw-p-4 tw-mb-4 tw-text-green-800 tw-bg-green-200 tw-rounded-lg" style="transition: opacity 0.5s;">
+                        {{ session('success') }}
+                    </div>
+                @elseif (session('error'))
+                    <div id="session-alert" class="tw-p-4 tw-mb-4 tw-text-red-800 tw-bg-red-200 tw-rounded-lg" style="transition: opacity 0.5s;">
+                        {{ session('error') }}
+                    </div>
+                @endif
+
+                <div class="tw-page-body">
+                    @yield('content') <!-- every page's section "content" goes here -->
+                </div>
             </div>
         </div>
-    </nav>
-
-    <div class="container mt-4">
-        <!-- Main content injected here -->
-        @yield('content')
     </div>
 
-    <!-- Footer (Optional) -->
-    <footer class="bg-light py-4 mt-5">
-        <div class="container text-center">
-            <p>&copy; {{ date('Y') }} {{ config('app.name', 'Laravel') }}. All Rights Reserved.</p>
-        </div>
-    </footer>
+    <script src="https://unpkg.com/@material-tailwind/html@latest/scripts/dialog.js"></script>
 
-    <!-- JavaScript (Bootstrap) -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- You can add custom JS here -->
-    <script src="{{ asset('js/app.js') }}"></script>
+    <!-- Add this script to hide the alert after 5 seconds -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const alert = document.getElementById('session-alert');
+            if (alert) {
+                setTimeout(() => {
+                    alert.style.opacity = '0';
+                    // Optionally, remove the element from the DOM after the fade-out
+                    setTimeout(() => { alert.remove(); }, 500); // 500ms matches the CSS transition duration
+                }, 5000); // 5000 milliseconds = 5 seconds
+            }
+        });
+    </script>
 </body>
 </html>
