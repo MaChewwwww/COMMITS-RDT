@@ -2,105 +2,65 @@
 
 @section('inventory-add')
 <x-inventory.modal target="create-inventory-equipment" >
-    <x-inventory.form method="POST" action="{{ route('add_equipment_store') }}">
-
-        <!-- general_desc-->
-            <!-- 
-                - Hospital bed with mattress
-                - Bedsheets and pillow cases
-                - Wheelchair
-                - Computer
-                - Printer
-                - Air Purifier
-                - Office Chairs
-            -->
-        <div class="col-span-2">
-            <x-inventory.input
-                label="General Description" 
-                name="equipment_name" 
-                placeholder="Stretcher, folding"
-                required
-            />
-        </div>
-
-        <!-- initial_quantity -->
-        <x-inventory.quantity
-            label="Quantity"
-            name="initial_quantity"
-            :min=0
-            placeholder="5"
+    <x-inventory.form method="POST" action="{{ route('equipment.store') }}">
+        @csrf
+        <x-inventory.input
+            label="General Description" 
+            name="general_description" 
+            placeholder="Enter description"
             required
         />
 
-        <!-- request_quantity -->
-        <x-inventory.quantity
-            label="Quantity of Request"
-            name="request_quantity"
-            :min=0
-            placeholder="3"
+        <x-inventory.select
+            label="MOR" 
+            name="user_id" 
+            :options="$users->pluck('full_name', 'id')->toArray()"
+            required
         />
 
-        <!-- check if the ff: -->
-        <x-inventory.equipment-checklist>
-            <x-inventory.equipment-list
-                label="Serviceable"
-                name="serviceable"
-            />
-            
-            <x-inventory.equipment-list
-                label="For Repair"
-                name="for_repair"
-            />
-            <x-inventory.equipment-list
-                label="For Condemn"
-                name="for_condemn"
-            />
+        <x-inventory.quantity
+            label="Quantity"
+            name="quantity"
+            :min="0"
+            placeholder="1"
+            required
+        />
 
-            <x-inventory.equipment-list
-                label="Need Replacement"
-                name="need_replacement"
+        <x-inventory.quantity
+            label="Quantity of Request"
+            name="quantity_of_request"
+            :min="0"
+            placeholder="1"
+            required
+        />
+
+        <x-inventory.equipment-checklist>
+            <x-inventory.equipment-checkbox
+                name="serviceable"
+                label="Serviceable"
             />
-            
-            <x-inventory.equipment-list
-                label="Additional"
+            <x-inventory.equipment-checkbox
+                name="for_repair"
+                label="For Repair"
+            />
+            <x-inventory.equipment-checkbox
+                name="for_condemn"
+                label="For Condemn"
+            />
+            <x-inventory.equipment-checkbox
+                name="need_replacement"
+                label="Need Replacement"
+            />
+            <x-inventory.equipment-checkbox
                 name="additional"
+                label="Additional"
             />
         </x-inventory.equipment-checklist>
-
-        <!-- user_id / memorandum_receipt -->
-        {{-- <x-inventory.select
-                label="MOR" 
-                name="user_id" 
-                :options="$users->pluck('first_name', 'id')->toArray()"
-                required
-        /> --}}
-    
     </x-inventory.form>
 </x-inventory.modal>
 @endsection
 
 @section('inventory-table')
-    <!-- 
-        HEADERS 
-        - General Description (Name)
-        - Quality (Initial)
-        
-        - Serviceable (?)
-        - Nonserviceable (?)
-            - For Repair (?)
-            - For Condemn (?)
-        - Need Replacement (?)
-        - Additional (?)
-
-        - Quanitity of Request
-
-        ROW ACTIONS
-        - Info (Mobile screen, View Toggle)
-        - Edit (Modal Form, Confirm Dialog before Update)
-        - Delete (Soft)
-        - Deduct (?)
-    -->
-
     <x-inventory.table>
         <!-- HEADER  -->
         <x-inventory.table-head
@@ -118,117 +78,130 @@
             ]" 
         />
 
-        
-        <!-- CHECK MARK DRAFT-->
-        {{-- <tr class="bg-white border-b  hover:bg-gray-100"">
-            <td class="px-6 py-4 flex items-center justify-center">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-6">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
-                </svg>
-            </td>
-        </tr> --}}
-
         <!-- CONTENT -->
-        {{-- <x-inventory.table-body :data="$equipments" :users="$users">
-            @foreach ($equipments as $equipment)
+        <x-inventory.table-body :data="$equipment" :users="$users">
+            @foreach ($equipment as $item)
                 <x-inventory.table-row>
-                    <x-inventory.table-cell>{{ $equipment->equipment_name }}</x-inventory.table-cell>
-                    <x-inventory.table-cell>{{ $equipment->initial_quantity }}</x-inventory.table-cell>
-                    <x-inventory.table-cell>{{ if $equipment->serviceable return check mark }}</x-inventory.table-cell>
-                    <x-inventory.table-cell>{{ if $equipment->for_repair return check mark}}</x-inventory.table-cell>
-                    <x-inventory.table-cell>{{ if $equipment->for_condemn return check mark}}</x-inventory.table-cell>
-                    <x-inventory.table-cell>{{ if $equipment->need_replacement return check mark}}</x-inventory.table-cell>
-                    <x-inventory.table-cell>{{ if $equipment->additional return check mark}}</x-inventory.table-cell>
-                    <x-inventory.table-cell>{{ $equipment->request_quantity }}</x-inventory.table-cell>
-                    <x-inventory.table-cell>{{ $equipment->box->user->first_name }}</x-inventory.table-cell>
+                    <x-inventory.table-cell>{{ $item->general_description }}</x-inventory.table-cell>
+                    <x-inventory.table-cell>{{ number_format($item->quantity) }}</x-inventory.table-cell>
+                    <x-inventory.table-cell class="text-center">
+                        @if($item->serviceable)
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="mx-auto size-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+                            </svg>
+                        @endif
+                    </x-inventory.table-cell>
+                    <x-inventory.table-cell class="text-center">
+                        @if($item->for_repair)
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="mx-auto size-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+                            </svg>
+                        @endif
+                    </x-inventory.table-cell>
+                    <x-inventory.table-cell class="text-center">
+                        @if($item->for_condemn)
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="mx-auto size-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+                            </svg>
+                        @endif
+                    </x-inventory.table-cell>
+                    <x-inventory.table-cell class="text-center">
+                        @if($item->need_replacement)
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="mx-auto size-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+                            </svg>
+                        @endif
+                    </x-inventory.table-cell>
+                    <x-inventory.table-cell class="text-center">
+                        @if($item->additional)
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="mx-auto size-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+                            </svg>
+                        @endif
+                    </x-inventory.table-cell>
+                    <x-inventory.table-cell>{{ number_format($item->quantity_of_request) }}</x-inventory.table-cell>
+                    <x-inventory.table-cell>{{ $item->user->full_name }}</x-inventory.table-cell>
                     <x-inventory.table-cell>
                         <div class="flex justify-center gap-2">
-                            <!-- Edit Button -->
-                            <x-inventory.btn-edit-modal heading="Edit a Record" target="{{ 'edit-'.$equipment->id }}" >  
-                                <x-inventory.form method="POST" action="{{ route('update_equipment', $equipment->id) }}">
+                            <x-inventory.btn-edit-modal heading="Edit a Record" target="{{ 'edit-'.$item->id }}">
+                                <x-inventory.form method="POST" action="{{ route('update_equipment', $item->id) }}">
                                     @method('PUT')
+                                    @csrf
                                     
-                                    <!-- general_desc-->
-                                    <div class="col-span-2">
-                                        <x-inventory.input
-                                            label="General Description" 
-                                            name="equipment_name" 
-                                            value={{ old("equipment_name", $equipment->equipment_name) }}
-                                            placeholder="Stretcher, folding"
-                                            required
-                                        />
-                                    </div>
-                            
-                                    <!-- initial_quantity -->
-                                    <x-inventory.quantity
-                                        label="Quantity"
-                                        name="initial_quantity"
-                                        value={{ old("initial_quantity", $equipment->initial_quantity) }}
-                                        :min=0
-                                        placeholder="5"
+                                    <x-inventory.input
+                                        label="General Description" 
+                                        name="general_description" 
+                                        value="{{ old('general_description', $item->general_description) }}"
+                                        placeholder="Enter description"
                                         required
                                     />
-                            
-                                    <!-- request_quantity -->
-                                    <x-inventory.quantity
-                                        label="Quantity of Request"
-                                        name="request_quantity"
-                                        value={{ old("request_quantity", $equipment->request_quantity) }}
-                                        :min=0
-                                        placeholder="3"
-                                    />
-                            
-                                    <!-- check if the ff: -->
-                                    <x-inventory.equipment-checklist>
-                                        <x-inventory.equipment-list
-                                            label="Serviceable"
-                                            name="serviceable"
-                                            :value="$equipment->serviceable"
-                                        />
-                                        
-                                        <x-inventory.equipment-list
-                                            label="For Repair"
-                                            name="for_repair"
-                                            :value="$equipment->for_repair"
-                                        />
-                                        <x-inventory.equipment-list
-                                            label="For Condemn"
-                                            name="for_condemn"
-                                            :value="$equipment->for_condemn"
-                                        />
-                            
-                                        <x-inventory.equipment-list
-                                            label="Need Replacement"
-                                            name="need_replacement"
-                                            :value="$equipment->need_replacement"
-                                        />
-                                        
-                                        <x-inventory.equipment-list
-                                            label="Additional"
-                                            name="additional"
-                                            :value="$equipment->additional"
-                                        />
-                
-                                    <!-- user_id / memorandum_receipt -->
+
                                     <x-inventory.select
                                         label="MOR" 
                                         name="user_id" 
-                                        :selected="$supply->box->user_id"
-                                        :options="$users->pluck('first_name', 'id')->toArray()"
+                                        :options="$users->pluck('full_name', 'id')->toArray()"
+                                        :selected="$item->user_id"
                                         required
                                     />
+
+                                    <x-inventory.quantity
+                                        label="Quantity"
+                                        name="quantity"
+                                        value="{{ old('quantity', $item->quantity) }}"
+                                        :min="0"
+                                        placeholder="1"
+                                        required
+                                    />
+
+                                    <x-inventory.quantity
+                                        label="Quantity of Request"
+                                        name="quantity_of_request"
+                                        value="{{ old('quantity_of_request', $item->quantity_of_request) }}"
+                                        :min="0"
+                                        placeholder="1"
+                                        required
+                                    />
+
+                                    <x-inventory.equipment-checklist>
+                                        <x-inventory.equipment-checkbox
+                                            name="serviceable"
+                                            label="Serviceable"
+                                            :checked="old('serviceable', $item->serviceable)"
+                                        />
+                                        <x-inventory.equipment-checkbox
+                                            name="for_repair"
+                                            label="For Repair"
+                                            :checked="old('for_repair', $item->for_repair)"
+                                        />
+                                        <x-inventory.equipment-checkbox
+                                            name="for_condemn"
+                                            label="For Condemn"
+                                            :checked="old('for_condemn', $item->for_condemn)"
+                                        />
+                                        <x-inventory.equipment-checkbox
+                                            name="need_replacement"
+                                            label="Need Replacement"
+                                            :checked="old('need_replacement', $item->need_replacement)"
+                                        />
+                                        <x-inventory.equipment-checkbox
+                                            name="additional"
+                                            label="Additional"
+                                            :checked="old('additional', $item->additional)"
+                                        />
+                                    </x-inventory.equipment-checklist>
                                 </x-inventory.form>
-                            </x-inventory.btn-edit-modal> 
-                
-                            <!-- Delete Button -->
-                            <x-inventory.btn-delete target="{{'delete-'.$equipment->id}}" />
-                            <x-inventory.confirm-deletion target="{{'delete-'.$equipment->id}}" action="{{ route('delete_equipment', $equipment->id) }}"/>
+                            </x-inventory.btn-edit-modal>
+                            <x-inventory.btn-delete target="{{ 'delete-'.$item->id }}" />
+                            <x-inventory.confirm-deletion 
+                                target="{{ 'delete-'.$item->id }}" 
+                                action="{{ route('delete_equipment', $item->id) }}"
+                            />
                         </div>
                     </x-inventory.table-cell>
                 </x-inventory.table-row>
             @endforeach
-        </x-inventory.table-body> --}}
+        </x-inventory.table-body>
     </x-inventory.table>
 
-    {{-- {{ $equipments->links() }} --}}
+    {{ $equipment->links() }}
 @endsection

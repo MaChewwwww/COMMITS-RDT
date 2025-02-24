@@ -106,8 +106,14 @@
                         <div class="flex justify-center gap-2">
                             <!-- Return Button -->
                             <x-inventory.btn-return target="{{ 'return-'.$medicine->id }}"/>
-                            <x-inventory.confirm-return target="{{'return-'.$medicine->id}}" action="" />
-
+                            <x-inventory.confirm-return 
+                                target="{{'return-'.$medicine->id}}" 
+                                action="{{ route('return_medicine', $medicine->id) }}" 
+                            />
+                            <x-inventory.confirm-return 
+                                target="{{ 'return-'.$medicine->id }}"
+                                action="{{ route('return_medicine', $medicine->id) }}"
+                            />
                             <!-- Edit Button -->
                             <x-inventory.btn-edit-modal heading="Edit a Record" target="{{ 'edit-'.$medicine->id }}" >  
                                 <x-inventory.form method="POST" action="{{ route('update_medicine', $medicine->id) }}">
@@ -173,7 +179,7 @@
                                         label="MOR" 
                                         name="user_id" 
                                         :selected="$medicine->box->user_id"
-                                        :options="$users->pluck('first_name', 'id')->toArray()"
+                                        :options="$users->pluck('full_name', 'id')->toArray()"
                                         required
                                     />
                                 </x-inventory.form>

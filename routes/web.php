@@ -77,6 +77,7 @@ Route::middleware(['auth'])->group(function () {
                 Route::post('/', 'store')->name('add_medicine_store');
                 Route::put('/{medicine}', 'update')->name('update_medicine');
                 Route::put('/{medicine}/deduct', 'deduct')->name('deduct_medicine');
+                Route::put('/{medicine}/return', 'return')->name('return_medicine');
                 Route::delete('/{medicine}', 'destroy')->name('delete_medicine');
             });           
         });
@@ -85,10 +86,12 @@ Route::middleware(['auth'])->group(function () {
         Route::prefix('supplies')->group(function () {
             Route::controller(SupplyController::class)->group(function () {
                 Route::get('/', 'index')->name('inventory-supplies');
-                Route::post('/', 'store')->name('add_supply_store');
-                Route::put('/{supply}/update', 'update')->name('update_supply');
-                // Route::put('/{supply}/deduct', 'deduct')->name('deduct_supply');
-                Route::delete('/supplies/{supply}', 'destroy')->name('delete_supply');
+                Route::post('/', 'store')->name('supplies.store');
+                Route::get('/{supply}/edit', 'edit')->name('edit_supply');
+                Route::put('/{supply}', 'update')->name('update_supply');
+                Route::put('/{supply}/deduct', 'deduct')->name('deduct_supply');
+                Route::put('/{supply}/return', 'return')->name('return_supply');
+                Route::delete('/{supply}', 'destroy')->name('delete_supply');
             });   
         });
 
@@ -96,18 +99,16 @@ Route::middleware(['auth'])->group(function () {
         Route::prefix('equipment')->group(function () {
             Route::controller(EquipmentController::class)->group(function () {
                 Route::get('/', 'index')->name('inventory-equipment');
-                Route::post('/', 'store')->name('add_equipment_store');
+                Route::post('/', 'store')->name('equipment.store');
                 Route::put('/{equipment}/update', 'update')->name('update_equipment');
                 // Route::put('/{equipment}/deduct', 'deduct')->name('deduct_equipment');
-                Route::delete('/equipment/{equipment}', 'destroy')->name('delete_equipment');
+                Route::delete('/{equipment}', 'destroy')->name('delete_equipment');
             }); 
         });
     });
 });
 
 
-#Report -Camar
-Route::get('/reports', [ReportController::class, 'index'])->name('reports');
 
 Route::prefix('reports')->group(function () {
 

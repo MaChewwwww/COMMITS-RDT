@@ -22,10 +22,10 @@ class ReportController extends Controller
             $query->where('category', $category);
         }
 
-        // Get all reports
-        $reports = $query->get();
+        // Use paginate instead of get()
+        $reports = $query->orderBy('created_at', 'desc')->paginate(10);
         
-        return view('reports.index', compact('reports'));
+        return view('report.index', compact('reports'));
     }
 
     /**

@@ -8,33 +8,21 @@ use App\Models\Medicine;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\ValidationException;
 
 class MedicineController extends Controller
 {
     public function index()
     {
-        // Get all medicines with box relationship
         $users = User::all();
-        // $medicines = Medicine::with('box')->get();
-        $medicines = Medicine::query()->orderBy('expiration_date')->simplePaginate(8);
-
-        // Calculate quantities
-        $totalMedicine = $medicines->sum('remaining_quantity');
-        $expiredMedicine = Medicine::where('expiration_date', '<', Carbon::now()->addDay())
-            ->sum('remaining_quantity');
-        $nearExpiredMedicine = Medicine::whereBetween('expiration_date', [
-            Carbon::now(),
-            Carbon::now()->addMonth()
-        ])->sum('remaining_quantity');
-
-        // Count returned and not returned medicines
-        $returnedMedicines = $medicines->filter(function($medicine) {
-            return $medicine->box->isReturned == true;
-        })->count();
-
-        $notReturnedMedicines = $medicines->filter(function($medicine) {
-            return $medicine->box->isReturned == false;
-        })->count();
+        
+        $medicines = Medicine::join('boxes', 'medicines.box_id', '=', 'boxes.id')
+            ->where('boxes.isReturned', false)
+            ->with('box.user')
+            ->orderBy('medicines.expiration_date')
+            ->select('medicines.*')
+            ->simplePaginate(8);
 
         return view('inventory.medicines.index', 
             compact('medicines', 'users'));
@@ -131,12 +119,43 @@ class MedicineController extends Controller
             ->with('success', 'Medicine quantity has been deducted');
     }
 
-    public function destroy(Medicine $medicine)
+    public function destroy(Request $request, Medicine $medicine)
     {
-        $medicine->delete();
+        try {
+            $request->validate([
+                'password' => 'required',
+            ]);
 
+            if (!Hash::check($request->password, auth()->user()->password)) {
+                throw ValidationException::withMessages([
+                    'password' => ['The provided password is incorrect.']
+                ]);
+            }
+
+            $medicine->delete();
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'Medicine deleted successfully'
+            ]);
+
+        } catch (ValidationException $e) {
+            return response()->json([
+                'error' => $e->errors()['password'][0]
+            ], 422);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => 'An error occurred while deleting the medicine.'
+            ], 500);
+        }
+    }
+
+    public function return(Medicine $medicine)
+    {
+        $medicine->box->update(['isReturned' => true]);
+        
         return redirect()->route('inventory-medicines')
-            ->with('success', 'Medicine deleted successfully');
+            ->with('success', 'Medicine marked as returned successfully');
     }
 
 }

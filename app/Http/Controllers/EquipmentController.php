@@ -3,7 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Equipment;
+use App\Models\User;
+use App\Http\Requests\EquipmentRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\ValidationException;
 
 class EquipmentController extends Controller
 {
@@ -12,39 +16,66 @@ class EquipmentController extends Controller
      */
     public function index()
     {
-        return view('inventory.equipment.index');
-    }
+        $users = User::all();
+        $equipment = Equipment::with('user')
+            ->orderBy('created_at', 'desc')
+            ->simplePaginate(8);
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        return view('inventory.equipment.index', 
+            compact('equipment', 'users'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(EquipmentRequest $request)
     {
-        //
+        $validated = $request->validated();
+
+        // Set checkbox values (1 if checked, 0 if unchecked)
+        $booleanFields = [
+            'serviceable',
+            'for_repair',
+            'for_condemn',
+            'need_replacement',
+            'additional'
+        ];
+
+        foreach ($booleanFields as $field) {
+            $validated[$field] = $request->has($field) ? 1 : 0;
+        }
+        
+        Equipment::create($validated);
+
+        return redirect()->route('inventory-equipment')
+            ->with('success', 'Equipment added successfully');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Equipment $equipment)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Equipment $equipment)
+    public function update(EquipmentRequest $request, Equipment $equipment)
     {
-        //
+        $validated = $request->validated();
+
+        // Set checkbox values (1 if checked, 0 if unchecked)
+        $booleanFields = [
+            'serviceable',
+            'for_repair',
+            'for_condemn',
+            'need_replacement',
+            'additional'
+        ];
+
+        foreach ($booleanFields as $field) {
+            $validated[$field] = $request->has($field) ? 1 : 0;
+        }
+        
+        $equipment->update($validated);
+
+        return redirect()->route('inventory-equipment')
+            ->with('success', 'Equipment updated successfully');
     }
 
     public function deduct(Request $request, Equipment $medicine)
@@ -55,8 +86,34 @@ class EquipmentController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Equipment $equipment)
+    public function destroy(Request $request, Equipment $equipment)
     {
-        //
+        try {
+            $request->validate([
+                'password' => 'required',
+            ]);
+
+            if (!Hash::check($request->password, auth()->user()->password)) {
+                throw ValidationException::withMessages([
+                    'password' => ['The provided password is incorrect.']
+                ]);
+            }
+
+            $equipment->delete();
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'Equipment deleted successfully'
+            ]);
+
+        } catch (ValidationException $e) {
+            return response()->json([
+                'error' => $e->errors()['password'][0]
+            ], 422);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => 'An error occurred while deleting the equipment.'
+            ], 500);
+        }
     }
 }

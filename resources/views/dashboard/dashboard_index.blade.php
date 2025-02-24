@@ -4,7 +4,7 @@
     <div class="container px-4 mx-auto">
         <div class="flex justify-center">
             <div class="w-full">
-                <h1 class="my-6 text-3xl font-bold text-left">Dashboard</h1>
+                <h1 class="mb-6 text-3xl font-bold text-left mt-14">Dashboard</h1>
             </div>
         </div>
         <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">

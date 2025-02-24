@@ -1,7 +1,11 @@
 @php
     use Illuminate\Support\Facades\Auth;
 
-    $Data = Auth::user();
+    $user = Auth::user();
+    $defaultImage = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0iI2NjYyI+PHBhdGggZD0iTTEyIDJDNi40OCAyIDIgNi40OCAyIDEyczQuNDggMTAgMTAgMTAgMTAtNC40OCAxMC0xMFMxNy41MiAyIDEyIDJ6bTAgM2MxLjY2IDAgMyAxLjM0IDMgM3MtMS4zNCAzLTMgMy0zLTEuMzQtMy0zIDEuMzQtMyAzLTN6bTAgMTQuMmMtMi41IDAtNC43MS0xLjI4LTYtMy4yMi4wMy0xLjk5IDQtMy4wOCA2LTMuMDggMS45OSAwIDUuOTcgMS4wOSA2IDMuMDgtMS4yOSAxLjk0LTMuNSAzLjIyLTYgMy4yMnoiLz48L3N2Zz4=';
+    $profileImage = $user && $user->profile_image 
+        ? asset('uploads/users/' . $user->profile_image)
+        : $defaultImage;
 @endphp
 
 <nav
@@ -380,7 +384,7 @@
                 id="user-menu-button" aria-expanded="false" data-dropdown-toggle="dropdown">
                 <span class="sr-only">Open user menu</span>
                 <img class="w-8 h-8 rounded-full"
-                    src="{{ asset('uploads/users/'.$Data->profile_image) }}"
+                    src="{{ $profileImage }}"
                     alt="user photo" />
             </button>
             <!-- Dropdown menu profile items-->

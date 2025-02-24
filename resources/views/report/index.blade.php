@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container px-4 mx-auto">
-    <h5 class="text-4xl font-bold">Reports</h5>
+    <h5 class="text-4xl font-bold mt-14">Reports</h5>
 
     <div class="flex flex-wrap items-center justify-end w-full gap-4 mb-5">
         <!-- Add Button -->
