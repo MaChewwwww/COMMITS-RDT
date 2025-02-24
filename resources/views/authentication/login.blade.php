@@ -1,6 +1,7 @@
 @extends('layouts.guest-layout')
 
 @section('guest_content')
+    
     <div class="bg-[#D9D9D9] bg-opacity-80 p-8 flex flex-col rounded-3xl items-center justify-center w-[423px] h-[490px]">
         <div class="flex flex-col items-center mt-5">
             <img class="w-[60px] h-[60px]" src="{{ asset('src/images/logo.png') }}" alt="logo">
@@ -53,7 +54,7 @@
 
             {{-- Forgot Password --}}
             <div class="flex justify-end w-full mt-2">
-                <a class="text-xs font-normal text-gray-700 underline hover:text-yellow-600" href="#">Forgot
+                <a class="text-xs font-normal text-gray-700 underline hover:text-yellow-600" href="{{ route('password.request') }}">Forgot
                     password?</a>
             </div>
 

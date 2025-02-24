@@ -21,28 +21,36 @@
 </head>
 
 <body>
-    <div class="antialiased bg-white">
+    <div class="antialiased bg-gray-50">
+
+        @php
+            $currentRoute = Route::currentRouteName(); // Get the current route name
+        @endphp
 
         {{-- NAVBAR - HEADER --}}
         <x-navbar />
 
         {{-- SIDEBAR --}}
-        <x-sidebar />
+        {{-- to use different sidebar for profile page --}}
+        @if (!in_array($currentRoute, ['profile.accountSettings', 'profile.helpAndSupport']))
+            <x-sidebar />
+        @endif
 
         <!-- Notification Messages -->
         @if (session('success'))
-            <div id="session-alert" class="tw-p-4 tw-mb-4 tw-text-green-800 tw-bg-green-200 tw-rounded-lg"
+            <div id="session-alert" class="fixed z-50 tw-p-4 tw-mb-4 tw-text-green-800 tw-bg-green-200 tw-rounded-lg"
                 style="transition: opacity 0.5s;">
                 {{ session('success') }}
             </div>
         @elseif (session('error'))
-            <div id="session-alert" class="tw-p-4 tw-mb-4 tw-text-red-800 tw-bg-red-200 tw-rounded-lg"
+            <div id="session-alert" class="fixed z-50 tw-p-4 tw-mb-4 tw-text-red-800 tw-bg-red-200 tw-rounded-lg"
                 style="transition: opacity 0.5s;">
                 {{ session('error') }}
             </div>
         @endif
-
-        <main class="p-4 md:ml-64 h-auto pt-24 sm:pt-20">
+        
+        {{-- check if the route is profile page if not it will add margin left --}}
+        <main class="h-auto p-4 pt-20 {{ in_array($currentRoute, ['profile.accountSettings', 'profile.helpAndSupport']) ? '' : 'md:ml-64' }}">
             @yield('content')
         </main>
     </div>
