@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Patient;
 use App\Models\User;
+use App\Models\Medicine;
+use App\Models\PrescriptionMedicine;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\DB;
 
@@ -13,9 +15,12 @@ class PatientController extends Controller
     public function index()
     {
         $patients = Patient::with('physician')->get();
-        $physicians = User::where('role', 'admin')->get(); // Only get admin users
+        $physicians = User::where('role', 'admin')->get(); // Only get admin users      
+        $medicines = Medicine::whereHas('box', function ($query) {
+            $query->where('isReturned', 0);
+        })->get(); // Query all medicines where box is not returned
         
-        return view('patient.patients', compact('patients', 'physicians'));
+        return view('patient.patients', compact('patients', 'physicians', 'medicines'));
     }
 
     public function add() {
@@ -125,5 +130,78 @@ class PatientController extends Controller
     {
         $physicians = User::where('role', 'admin')->get(); // Update edit method too
         return view('patient.edit', compact('patient', 'physicians'));
+    }
+
+
+
+    /**
+     * Store a new prescription
+     */
+    public function storePrescription(Request $request)
+    {
+        try {
+            $request->validate([
+                'patient_id' => 'required|exists:patients,id',
+                'medicine_id' => 'required|exists:medicines,id',
+                'quantity' => 'required|integer|min:1',
+                'instructions' => 'nullable|string'
+            ]);
+
+            DB::beginTransaction();
+
+            // Get the medicine
+            $medicine = Medicine::findOrFail($request->medicine_id);
+
+            // Check if enough quantity is available
+            if ($medicine->remaining_quantity < $request->quantity) {
+                return response()->json([
+                    'success' => false,
+                    'message' => "Insufficient quantity available for {$medicine->medicine_name}"
+                ], 422);
+            }
+
+            // Create the prescription
+            $prescription = PrescriptionMedicine::create([
+                'patient_id' => $request->patient_id,
+                'medicine_id' => $request->medicine_id,
+                'quantity' => $request->quantity
+            ]);
+
+            // Update medicine quantity
+            $medicine->remaining_quantity -= $request->quantity;
+            $medicine->consumed_quantity += $request->quantity;
+            $medicine->save();
+
+            DB::commit();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Prescription created successfully',
+                'prescription' => $prescription->load('medicine')
+            ]);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to create prescription: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Get prescriptions for a patient
+     */
+    public function getPrescriptions(Patient $patient)
+    {
+        $prescriptions = $patient->prescriptionMedicines()
+            ->with('medicine')
+            ->latest()
+            ->get();
+
+        return response()->json([
+            'success' => true,
+            'prescriptions' => $prescriptions
+        ]);
     }
 }

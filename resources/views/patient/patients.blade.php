@@ -156,6 +156,151 @@
                                         </div>
                                     </td>
                                 </tr>
+                                <!-- Prescription List Modal -->
+                                <div class="modal fade" id="prescriptionListModal-{{$patient->id}}" tabindex="-1">
+                                    <div class="modal-dialog modal-dialog-centered modal-lg">
+                                        <div class="overflow-hidden border-0 shadow-lg modal-content rounded-xl">
+                                            <!-- Modal Header with Close Button -->
+                                            <div class="relative p-6 border-b border-gray-200">
+                                                <div class="text-center">
+                                                    <h5 class="text-xl font-semibold text-gray-900">Prescription History</h5>
+                                                    <p class="text-sm text-gray-500">{{ $patient->fullname }}</p>
+                                                </div>
+                                                <button type="button" 
+                                                    class="absolute text-gray-400 top-4 right-4 hover:text-gray-500 focus:outline-none"
+                                                    data-bs-dismiss="modal">
+                                                    <i class="text-xl fas fa-times"></i>
+                                                </button>
+                                            </div>
+
+                                            <!-- Modal Body -->
+                                            <div class="p-6">
+                                                <!-- Prescriptions List -->
+                                                <div class="overflow-y-auto max-h-[400px]">
+                                                    @if($patient->prescriptionMedicines->count() > 0)
+                                                        @foreach($patient->prescriptionMedicines as $prescription)
+                                                            <div class="p-4 mb-4 bg-white border border-gray-200 rounded-lg hover:bg-gray-50">
+                                                                <div class="flex items-center justify-between mb-2">
+                                                                    <div class="flex items-center gap-x-2">
+                                                                        <span class="text-sm font-medium text-gray-900">
+                                                                            {{ $prescription->medicine->medicine_name }}
+                                                                        </span>
+                                                                        <span class="px-2 py-1 text-xs font-medium text-green-700 bg-green-100 rounded-full">
+                                                                            {{ $prescription->quantity }} units
+                                                                        </span>
+                                                                    </div>
+                                                                    <span class="text-xs text-gray-500">
+                                                                        {{ $prescription->created_at->format('M d, Y') }}
+                                                                    </span>
+                                                                </div>
+                                                                @if($prescription->medicine)
+                                                                    <p class="text-sm text-gray-600">
+                                                                        Available: {{ $prescription->medicine->remaining_quantity }} {{ $prescription->medicine->unit }}
+                                                                    </p>
+                                                                @endif
+                                                            </div>
+                                                        @endforeach
+                                                    @else
+                                                        <div class="py-8 text-center">
+                                                            <div class="mb-4 text-gray-400">
+                                                                <i class="text-4xl fas fa-prescription-bottle"></i>
+                                                            </div>
+                                                            <h3 class="text-lg font-medium text-gray-900">No prescriptions yet</h3>
+                                                            <p class="mt-1 text-sm text-gray-500">
+                                                                Create a new prescription using the button below.
+                                                            </p>
+                                                        </div>
+                                                    @endif
+                                                </div>
+
+                                                <!-- Create Prescription Button -->
+                                                <div class="flex justify-center pt-6 mt-6 border-t border-gray-200">
+                                                    <button type="button"
+                                                        class="inline-flex items-center px-6 py-3 text-sm font-semibold text-white transition-all bg-red-600 rounded-lg hover:bg-red-700 focus:ring focus:ring-red-200"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#prescriptionModal-{{$patient->id}}"
+                                                        onclick="$('#prescriptionListModal-{{$patient->id}}').modal('hide')">
+                                                        <i class="mr-2 fas fa-plus-circle"></i>
+                                                        Create New Prescription
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Add this after your existing modals -->
+                                <div class="modal fade" id="prescriptionModal-{{$patient->id}}" tabindex="-1">
+                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                        <div class="overflow-hidden border-0 shadow-lg modal-content rounded-xl">
+                                            <div class="p-6 modal-body">
+                                                <form action="{{ route('prescriptions.store') }}" method="POST">
+                                                    @csrf
+                                                    <input type="hidden" name="patient_id" value="{{ $patient->id }}">
+                                                    
+                                                    <!-- Modal Header -->
+                                                    <div class="relative pb-5 mb-6 border-b border-gray-200">
+                                                        <div class="text-center">
+                                                            <h5 class="text-xl font-semibold text-gray-900">Create New Prescription</h5>
+                                                            <p class="text-sm text-gray-500">For patient: {{ $patient->fullname }}</p>
+                                                        </div>
+                                                        <button type="button" 
+                                                            class="absolute top-0 right-0 text-gray-400 hover:text-gray-500 focus:outline-none"
+                                                            data-bs-dismiss="modal">
+                                                            <i class="text-xl fas fa-times"></i>
+                                                        </button>
+                                                    </div>
+
+                                                    <!-- Medicine Selection -->
+                                                    <div class="space-y-4">
+                                                        <div class="flex items-center gap-4">
+                                                            <div class="flex-1">
+                                                                <label for="medicine-select-{{$patient->id}}" class="block mb-1 text-sm font-medium text-gray-700">
+                                                                    Select Medicine
+                                                                </label>
+                                                                <select id="medicine-select-{{$patient->id}}" 
+                                                                    name="medicine_id"
+                                                                    class="w-full px-4 py-2.5 text-sm rounded-lg border border-gray-300 focus:border-red-500 focus:ring focus:ring-red-200 transition-all"
+                                                                    required>
+                                                                    <option value="">Select a medicine</option>
+                                                                    @foreach($medicines as $medicine)
+                                                                        <option value="{{ $medicine->id }}">
+                                                                            {{ $medicine->medicine_name }} (Available: {{ $medicine->remaining_quantity }} {{ $medicine->unit }})
+                                                                        </option>
+                                                                    @endforeach
+                                                                </select>
+                                                            </div>
+                                                            <div class="w-32">
+                                                                <label for="quantity-{{$patient->id}}" class="block mb-1 text-sm font-medium text-gray-700">
+                                                                    Quantity
+                                                                </label>
+                                                                <input type="number" 
+                                                                    id="quantity-{{$patient->id}}"
+                                                                    name="quantity"
+                                                                    class="w-full px-4 py-2.5 text-sm rounded-lg border border-gray-300 focus:border-red-500 focus:ring focus:ring-red-200 transition-all"
+                                                                    min="1"
+                                                                    placeholder="Qty"
+                                                                    required>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- Action Buttons -->
+                                                    <div class="flex justify-end gap-3 mt-6">
+                                                        <button type="button"
+                                                            class="px-6 py-2.5 bg-gray-100 text-gray-700 text-sm font-semibold rounded-lg hover:bg-gray-200 focus:ring focus:ring-gray-200 transition-all"
+                                                            data-bs-dismiss="modal">
+                                                            Cancel
+                                                        </button>
+                                                        <button type="submit"
+                                                            class="px-6 py-2.5 bg-red-600 text-white text-sm font-semibold rounded-lg hover:bg-red-700 focus:ring focus:ring-red-200 transition-all">
+                                                            Save Prescription
+                                                        </button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             @endforeach
                         </tbody>
                     </table>
