@@ -116,85 +116,12 @@
                                             {{ $patient->sex }}
                                         </span>
                                     </td>
-                                    <td class="px-6 py-4 text-sm text-gray-500 cursor-pointer" data-bs-toggle="modal" data-bs-target="#prescriptionModal-{{$patient->id}}">
+                                    <td class="px-6 py-4 text-sm text-gray-500 cursor-pointer" data-bs-toggle="modal" data-bs-target="prescriptionListModal-{{$patient->id}}">
                                         {{ $patient->prescription ?? 'No prescription' }}
                                     </td>
-                                    <td class="px-6 py-4 text-sm text-gray-500 cursor-pointer" data-bs-toggle="modal" data-bs-target="#prescriptionModal-{{$patient->id}}">
+                                    <td class="px-6 py-4 text-sm text-gray-500 cursor-pointer" data-bs-toggle="modal" data-bs-target="prescriptionListModal-{{$patient->id}}">
                                         {{ $patient->quantity ?? '0' }}
                                     </td>
-
-                                    <!-- Prescription Modal -->
-                                    <div class="modal fade" id="prescriptionModal-{{$patient->id}}" tabindex="-1">
-                                        <div class="modal-dialog modal-dialog-centered" role="document">
-                                            <div class="overflow-hidden border-0 shadow-lg modal-content rounded-xl">
-                                                <div class="p-3 modal-body">
-                                                    <form action="{{-- route('patients.update-prescription', $patient->id) --}}" method="POST" class="p-6">
-                                                        @csrf
-                                                        @method('PUT')
-
-                                                        <!-- Form Title -->
-                                                        <div class="mb-6 text-center">
-                                                            <h5 class="text-xl font-semibold text-gray-900">Update Prescription</h5>
-                                                            <p class="text-sm text-gray-500">Update prescription details for {{ $patient->fullname }}</p>
-                                                        </div>
-
-                                                        <!-- Add alert for validation errors -->
-                                                        <div class="mb-4 alert alert-danger d-none" id="prescriptionErrorAlert-{{$patient->id}}"></div>
-
-                                                        <div class="space-y-4">
-                                                            <!-- Status Badge -->
-                                                            <div class="flex justify-center">
-                                                                <span class="inline-flex rounded-full px-3 py-1 text-xs font-semibold
-                                                                    {{ $patient->patient_status == 'Active' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800' }}">
-                                                                    {{ $patient->patient_status }}
-                                                                </span>
-                                                            </div>
-
-                                                            <!-- Prescription Fields -->
-                                                            <div class="grid grid-cols-1 gap-4">
-                                                                <!-- Prescription Input -->
-                                                                <div>
-                                                                    <label class="block text-sm font-medium text-gray-700 mb-1.5">Prescription Details *</label>
-                                                                    <input type="text" name="prescription"
-                                                                        class="w-full px-4 py-2.5 text-sm rounded-lg border border-gray-300 focus:border-red-500 focus:ring focus:ring-red-200 transition-all"
-                                                                        placeholder="Enter prescription details"
-                                                                        value="{{ $patient->prescription }}"
-                                                                        required>
-                                                                </div>
-
-                                                                <!-- Quantity Input -->
-                                                                <div>
-                                                                    <label class="block text-sm font-medium text-gray-700 mb-1.5">Quantity *</label>
-                                                                    <input type="number" name="quantity"
-                                                                        class="w-full px-4 py-2.5 text-sm rounded-lg border border-gray-300 focus:border-red-500 focus:ring focus:ring-red-200 transition-all"
-                                                                        placeholder="Enter quantity"
-                                                                        min="1"
-                                                                        value="{{ $patient->quantity }}"
-                                                                        required>
-                                                                </div>
-                                                            </div>
-
-                                                            <!-- Action Buttons -->
-                                                            <div class="flex gap-3 pt-4">
-                                                                <button type="submit"
-                                                                    class="flex-1 px-6 py-2.5 bg-red-700 text-white text-sm font-semibold rounded-lg
-                                                                    hover:bg-red-800 focus:ring focus:ring-red-200 transition-all">
-                                                                    <span class="spinner-border spinner-border-sm d-none me-2" role="status"></span>
-                                                                    Save Changes
-                                                                </button>
-                                                                <button type="button"
-                                                                    class="px-6 py-2.5 bg-gray-100 text-gray-700 text-sm font-semibold rounded-lg
-                                                                    hover:bg-gray-200 focus:ring focus:ring-gray-200 transition-all"
-                                                                    data-bs-dismiss="modal">
-                                                                    Cancel
-                                                                </button>
-                                                            </div>
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
                                     <td class="px-6 py-4 text-sm text-gray-500">{{ $patient->user_id }}</td>
                                     <td class="px-6 py-4">
                                         <span class="inline-flex px-2 text-xs font-semibold leading-5 text-green-800 bg-green-100 rounded-full">
@@ -210,6 +137,13 @@
                                                 data-patient-id="{{ $patient->id }}"
                                                 title="View">
                                                 <i class="fas fa-eye"></i>
+                                            </button>
+                                            <button class="px-3 py-2 text-white transition-colors duration-200 bg-green-600 rounded-lg hover:bg-green-900"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#prescriptionListModal-{{$patient->id}}"
+                                                data-patient-id="{{ $patient->id }}"
+                                                title="View">
+                                                <i class="fas fa-prescription"></i>
                                             </button>
                                             <form action="{{ route('patients.destroy', $patient->id) }}" method="POST" class="inline-block"
                                                 onsubmit="return false;">

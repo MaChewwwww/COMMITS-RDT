@@ -18,12 +18,29 @@ class Patient extends Model
         'patientType',
         'student_number',
         'physician_id',
-        // make sure all fields you're updating are listed here
     ];
 
     // Add relationship method for physician
     public function physician()
     {
         return $this->belongsTo(User::class, 'physician_id');
+    }
+
+    /**
+     * Get all prescriptions for the patient.
+     */
+    public function prescriptionMedicines()
+    {
+        return $this->hasMany(PrescriptionMedicine::class);
+    }
+
+    /**
+     * Get all medicines prescribed to the patient.
+     */
+    public function medicines()
+    {
+        return $this->belongsToMany(Medicine::class, 'prescription_medicine')
+            ->withPivot('quantity')
+            ->withTimestamps();
     }
 }
