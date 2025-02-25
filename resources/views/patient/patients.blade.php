@@ -73,12 +73,17 @@
                                 </th>
                                 <th class="px-6 py-3 text-left group">
                                     <div class="flex items-center gap-x-2">
-                                        <span class="text-xs font-bold tracking-wide text-gray-600 uppercase">Prescription</span>
+                                        <span class="text-xs font-bold tracking-wide text-gray-600 uppercase">Patient Type</span>
                                     </div>
                                 </th>
                                 <th class="px-6 py-3 text-left group">
                                     <div class="flex items-center gap-x-2">
-                                        <span class="text-xs font-bold tracking-wide text-gray-600 uppercase">Qty</span>
+                                        <span class="text-xs font-bold tracking-wide text-gray-600 uppercase">Year & Course</span>
+                                    </div>
+                                </th>
+                                <th class="px-6 py-3 text-left group">
+                                    <div class="flex items-center gap-x-2">
+                                        <span class="text-xs font-bold tracking-wide text-gray-600 uppercase">Contact Number</span>
                                     </div>
                                 </th>
                                 <th class="px-6 py-3 text-left group">
@@ -89,11 +94,6 @@
                                 <th class="px-6 py-3 text-left group">
                                     <div class="flex items-center gap-x-2">
                                         <span class="text-xs font-bold tracking-wide text-gray-600 uppercase">Patient Status</span>
-                                    </div>
-                                </th>
-                                <th class="px-6 py-3 text-left group">
-                                    <div class="flex items-center gap-x-2">
-                                        <span class="text-xs font-bold tracking-wide text-gray-600 uppercase">Disease Severity</span>
                                     </div>
                                 </th>
                                 <th class="px-6 py-3 text-left group">
@@ -116,19 +116,23 @@
                                             {{ $patient->sex }}
                                         </span>
                                     </td>
-                                    <td class="px-6 py-4 text-sm text-gray-500 cursor-pointer" data-bs-toggle="modal" data-bs-target="prescriptionListModal-{{$patient->id}}">
-                                        {{ $patient->prescription ?? 'No prescription' }}
+                                    <td class="px-6 py-4 text-sm text-gray-500">
+                                        {{ $patient->patientType }}
                                     </td>
-                                    <td class="px-6 py-4 text-sm text-gray-500 cursor-pointer" data-bs-toggle="modal" data-bs-target="prescriptionListModal-{{$patient->id}}">
-                                        {{ $patient->quantity ?? '0' }}
+                                    <td class="px-6 py-4 text-sm text-gray-500">
+                                        {{ $patient->year_course_dept }}
                                     </td>
-                                    <td class="px-6 py-4 text-sm text-gray-500">{{ $patient->user_id }}</td>
-                                    <td class="px-6 py-4">
-                                        <span class="inline-flex px-2 text-xs font-semibold leading-5 text-green-800 bg-green-100 rounded-full">
-                                            {{ $patient->patient_status }}
-                                        </span>
+                                    <td class="px-6 py-4 text-sm text-gray-500">
+                                        {{ $patient->contactDetails }}
                                     </td>
-                                    <td class="px-6 py-4 text-sm text-gray-500">Status</td>
+                                    <!-- Update the physician cell in your table -->
+                                    <td class="px-6 py-4 text-sm text-gray-500"> Dr. 
+                                        @if($patient->physician)
+                                            {{ $patient->physician->first_name }} {{ $patient->physician->last_name }}
+                                        @else
+                                            <span class="text-gray-400">Not assigned</span>
+                                        @endif
+                                    <td class="px-6 py-4 text-sm text-gray-500"> {{ $patient->patient_status }}</td>
                                     <td class="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">
                                         <div class="flex items-center gap-x-4">
                                             <button class="px-3 py-2 text-white transition-colors duration-200 bg-blue-600 rounded-lg hover:bg-blue-900"
