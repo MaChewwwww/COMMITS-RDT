@@ -886,10 +886,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Helper function for prescription submission
 async function handlePrescriptionSubmit(form) {
-    const formData = new FormData(form);
-    const patientId = formData.get('patient_id');
-
     try {
+        const formData = new FormData(form);
         const response = await fetch(form.action, {
             method: 'POST',
             body: formData,
@@ -901,25 +899,33 @@ async function handlePrescriptionSubmit(form) {
         const data = await response.json();
 
         if (data.success) {
-            // Close the prescription modal
+            // Update medicine quantities in dropdowns
+            if (data.medicine) {
+                updateMedicineQuantities(
+                    data.medicine.id,
+                    data.medicine.remaining_quantity,
+                    data.medicine.unit
+                );
+            }
+
+            // Close modal and show success message
+            const patientId = formData.get('patient_id');
             bootstrap.Modal.getInstance(document.querySelector(`#prescriptionModal-${patientId}`)).hide();
 
-            // Show success message
             Swal.fire({
                 title: 'Success!',
                 text: data.message,
                 icon: 'success',
                 confirmButtonColor: '#dc2626'
             }).then(() => {
-                // Refresh the prescriptions list
+                // Update prescriptions list if needed
                 const prescriptionsList = document.querySelector(`#prescriptionListModal-${patientId} .overflow-y-auto`);
                 if (prescriptionsList) {
-                    // Add the new prescription to the list
                     const newPrescription = createPrescriptionElement(data.prescription);
                     prescriptionsList.insertAdjacentHTML('afterbegin', newPrescription);
                 }
-
-                // Reset the form
+                
+                // Reset form
                 form.reset();
             });
         } else {
@@ -939,6 +945,34 @@ async function handlePrescriptionSubmit(form) {
             confirmButtonColor: '#dc2626'
         });
     }
+}
+
+// Function to update medicine quantities in all dropdowns
+function updateMedicineQuantities(medicineId, newQuantity, unit) {
+    // Get all medicine select elements
+    const medicineSelects = document.querySelectorAll('select[id^="medicine-select-"]');
+    
+    medicineSelects.forEach(select => {
+        // Find the option with the matching medicine ID
+        const option = select.querySelector(`option[value="${medicineId}"]`);
+        if (option) {
+            const medicineName = option.textContent.split('(')[0].trim();
+            option.textContent = `${medicineName} (Available: ${newQuantity} ${unit})`;
+            
+            // If this option is currently selected, update the quantity input max value
+            if (option.selected) {
+                const patientId = select.id.split('-').pop();
+                const quantityInput = document.getElementById(`quantity-${patientId}`);
+                if (quantityInput) {
+                    quantityInput.max = newQuantity;
+                    // If current value is greater than new max, update it
+                    if (parseInt(quantityInput.value) > newQuantity) {
+                        quantityInput.value = newQuantity;
+                    }
+                }
+            }
+        }
+    });
 }
 
 // Helper function for medicine selection
@@ -965,26 +999,30 @@ function handleMedicineSelection(select) {
 function createPrescriptionElement(prescription) {
     return `
         <div class="p-4 mb-4 bg-white border border-gray-200 rounded-lg hover:bg-gray-50">
-            <div class="flex items-center justify-between mb-2">
-                <div class="flex items-center gap-x-2">
-                    <span class="text-sm font-medium text-gray-900">
-                        ${prescription.medicine.medicine_name}
-                    </span>
-                    <span class="px-2 py-1 text-xs font-medium text-green-700 bg-green-100 rounded-full">
-                        ${prescription.quantity} units
+            <div class="flex flex-col space-y-2">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-x-2">
+                        <span class="text-sm font-medium text-gray-900">
+                            ${prescription.medicine.medicine_name}
+                        </span>
+                        <span class="px-2 py-1 text-xs font-medium text-green-700 bg-green-100 rounded-full">
+                            ${prescription.quantity} units
+                        </span>
+                    </div>
+                    <span class="text-xs text-gray-500">
+                        ${new Date(prescription.created_at).toLocaleDateString('en-US', {
+                            month: 'short',
+                            day: 'numeric',
+                            year: 'numeric'
+                        })}
                     </span>
                 </div>
-                <span class="text-xs text-gray-500">
-                    ${new Date(prescription.created_at).toLocaleDateString('en-US', {
-                        month: 'short',
-                        day: 'numeric',
-                        year: 'numeric'
-                    })}
-                </span>
+                <div class="pt-2 border-t border-gray-100">
+                    <p class="text-sm text-gray-600">
+                        Available: ${prescription.medicine.remaining_quantity} ${prescription.medicine.unit}
+                    </p>
+                </div>
             </div>
-            <p class="text-sm text-gray-600">
-                Available: ${prescription.medicine.remaining_quantity} ${prescription.medicine.unit}
-            </p>
         </div>
     `;
 }

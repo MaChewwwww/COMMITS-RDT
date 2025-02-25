@@ -43,7 +43,7 @@ class PatientController extends Controller
                 'contactDetails' => 'required|string|max:255',
                 'patient_status' => 'required|string',
                 'patientType' => 'required|in:Student,Faculty,Admin,Visitor,Dependent',
-                'student_number' => 'nullable|required_if:patientType,Student|string|max:255',
+                'student_number' => 'nullable|string|max:255', 
                 'physician_id' => 'required|exists:users,id,role,admin'
             ]);
 
@@ -165,20 +165,26 @@ class PatientController extends Controller
                 'instructions' => $request->instructions
             ]);
 
+            // Update medicine quantities
             $medicine->remaining_quantity -= $request->quantity;
             $medicine->consumed_quantity += $request->quantity;
             $medicine->save();
 
             DB::commit();
 
-            // Load the prescription with its relationships for the response
+            // Load relationships and return response with medicine details
             $prescription->load(['medicine', 'patient']);
 
             return response()->json([
                 'success' => true,
-                'message' => 'Prescription created successfully',
+                'message' => "Remaining {$medicine->medicine_name}: {$medicine->remaining_quantity} {$medicine->unit}",
                 'prescription' => $prescription,
-                'remaining_quantity' => $medicine->remaining_quantity
+                'medicine' => [
+                    'id' => $medicine->id,
+                    'name' => $medicine->medicine_name,
+                    'remaining_quantity' => $medicine->remaining_quantity,
+                    'unit' => $medicine->unit
+                ]
             ]);
 
         } catch (\Exception $e) {
