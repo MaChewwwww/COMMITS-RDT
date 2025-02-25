@@ -263,7 +263,9 @@
                                                                     required>
                                                                     <option value="">Select a medicine</option>
                                                                     @foreach($medicines as $medicine)
-                                                                        <option value="{{ $medicine->id }}">
+                                                                        <option value="{{ $medicine->id }}" 
+                                                                            data-remaining="{{ $medicine->remaining_quantity }}"
+                                                                            data-unit="{{ $medicine->unit }}">
                                                                             {{ $medicine->medicine_name }} (Available: {{ $medicine->remaining_quantity }} {{ $medicine->unit }})
                                                                         </option>
                                                                     @endforeach
@@ -279,7 +281,10 @@
                                                                     class="w-full px-4 py-2.5 text-sm rounded-lg border border-gray-300 focus:border-red-500 focus:ring focus:ring-red-200 transition-all"
                                                                     min="1"
                                                                     placeholder="Qty"
-                                                                    required>
+                                                                    disabled
+                                                                    required
+                                                                    oninput="this.value = this.value > this.max ? this.max : Math.abs(this.value)">
+                                                                <span class="text-xs text-gray-500" id="quantity-help-{{$patient->id}}"></span>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -570,152 +575,55 @@
 
 @section('scripts')
 <script>
-    function toggleEdit(patientID) {
-        const patientForm = document.getElementById('patientForm-' + patientID);
-        const patientInputs = patientForm.querySelectorAll('input:not([type="hidden"]), select, textarea');
-        const editButton = patientForm.querySelector('button[onClick*="toggleEdit"]');
-        const submitBtn = patientForm.querySelector('button[type="submit"]');
-        const errorAlert = document.getElementById('errorAlert-' + patientID);
+// Existing patient form functionality
+function toggleEdit(patientID) {
+    const patientForm = document.getElementById('patientForm-' + patientID);
+    const patientInputs = patientForm.querySelectorAll('input:not([type="hidden"]), select, textarea');
+    const editButton = patientForm.querySelector('button[onClick*="toggleEdit"]');
+    const submitBtn = patientForm.querySelector('button[type="submit"]');
+    const errorAlert = document.getElementById('errorAlert-' + patientID);
 
-        patientInputs.forEach(input => {
-            input.disabled = !input.disabled;
-            if (!input.disabled) {
-                input.classList.remove('is-invalid');
-            }
-        });
-
-        // Reset error alert
-        errorAlert.classList.add('d-none');
-        errorAlert.textContent = '';
-
-        // Toggle button text and styles
-        const buttonIcon = editButton.querySelector('i');
-        const buttonText = editButton.querySelector('span');
-
-        if (buttonText.textContent === 'Edit') {
-            buttonText.textContent = 'Cancel';
-            buttonIcon.classList.remove('fa-edit');
-            buttonIcon.classList.add('fa-times');
-            editButton.classList.remove('bg-yellow-100', 'text-yellow-700');
-            editButton.classList.add('bg-gray-100', 'text-gray-700');
-            submitBtn.disabled = false; // Enable submit button
-        } else {
-            buttonText.textContent = 'Edit';
-            buttonIcon.classList.remove('fa-times');
-            buttonIcon.classList.add('fa-edit');
-            editButton.classList.remove('bg-gray-100', 'text-gray-700');
-            editButton.classList.add('bg-yellow-100', 'text-yellow-700');
-            submitBtn.disabled = true; // Disable submit button
-            patientForm.reset(); // Reset form to original values
+    patientInputs.forEach(input => {
+        input.disabled = !input.disabled;
+        if (!input.disabled) {
+            input.classList.remove('is-invalid');
         }
-    }
-
-    // Updated form submission handling
-    document.querySelectorAll('[id^="patientForm-"]').forEach(form => {
-        form.addEventListener('submit', async function(e) {
-            e.preventDefault();
-
-            const submitBtn = this.querySelector('button[type="submit"]');
-            const spinner = submitBtn.querySelector('.spinner-border');
-            const errorAlert = document.getElementById('errorAlert-' + this.id.split('-')[1]);
-            const modal = this.closest('.modal');
-
-            // Show loading state
-            submitBtn.disabled = true;
-            spinner.classList.remove('d-none');
-
-            try {
-                const formData = new FormData(this);
-
-                // Log form data for debugging
-                for (let [key, value] of formData.entries()) {
-                    console.log(`${key}: ${value}`);
-                }
-
-                const response = await fetch(this.action, {
-                    method: 'POST',
-                    body: formData,
-                    headers: {
-                        'X-Requested-With': 'XMLHttpRequest',
-                        'Accept': 'application/json'
-                    }
-                });
-
-                const contentType = response.headers.get('content-type');
-                if (contentType && contentType.includes('application/json')) {
-                    const data = await response.json();
-                    console.log('Response data:', data); // Log response data for debugging
-
-                    if (data.success) {
-                        // Hide modal
-                        bootstrap.Modal.getInstance(modal).hide();
-
-                        // Show success message
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Success!',
-                            text: data.message,
-                            showConfirmButton: false,
-                            timer: 1500
-                        }).then(() => {
-                            window.location.reload();
-                        });
-                    } else {
-                        // Show validation errors
-                        errorAlert.classList.remove('d-none');
-                        errorAlert.textContent = 'Please correct the following errors:';
-
-                        const errorList = document.createElement('ul');
-                        Object.entries(data.errors).forEach(([field, errors]) => {
-                            const input = this.querySelector(`[name="${field}"]`);
-                            if (input) {
-                                input.classList.add('is-invalid');
-                                input.nextElementSibling.textContent = errors[0];
-                            }
-
-                            const li = document.createElement('li');
-                            li.textContent = errors[0];
-                            errorList.appendChild(li);
-                        });
-                        errorAlert.appendChild(errorList);
-
-                        // Show error toast
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Validation Error',
-                            text: 'Please check the form for errors.',
-                            toast: true,
-                            position: 'top-end',
-                            showConfirmButton: false,
-                            timer: 3000
-                        });
-                    }
-                } else {
-                    window.location.reload();
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: 'An error occurred while saving changes.',
-                    confirmButtonColor: '#9F1239'
-                });
-            } finally {
-                // Reset loading state
-                submitBtn.disabled = false;
-                spinner.classList.add('d-none');
-            }
-        });
     });
 
-    // Add form submission handler for new patient
-    document.getElementById('addPatientForm').addEventListener('submit', async function(e) {
+    // Reset error alert
+    errorAlert.classList.add('d-none');
+    errorAlert.textContent = '';
+
+    // Toggle button text and styles
+    const buttonIcon = editButton.querySelector('i');
+    const buttonText = editButton.querySelector('span');
+
+    if (buttonText.textContent === 'Edit') {
+        buttonText.textContent = 'Cancel';
+        buttonIcon.classList.remove('fa-edit');
+        buttonIcon.classList.add('fa-times');
+        editButton.classList.remove('bg-yellow-100', 'text-yellow-700');
+        editButton.classList.add('bg-gray-100', 'text-gray-700');
+        submitBtn.disabled = false; // Enable submit button
+    } else {
+        buttonText.textContent = 'Edit';
+        buttonIcon.classList.remove('fa-times');
+        buttonIcon.classList.add('fa-edit');
+        editButton.classList.remove('bg-gray-100', 'text-gray-700');
+        editButton.classList.add('bg-yellow-100', 'text-yellow-700');
+        submitBtn.disabled = true; // Disable submit button
+        patientForm.reset(); // Reset form to original values
+    }
+}
+
+// Form submission handlers
+document.querySelectorAll('[id^="patientForm-"]').forEach(form => {
+    form.addEventListener('submit', async function(e) {
         e.preventDefault();
 
         const submitBtn = this.querySelector('button[type="submit"]');
         const spinner = submitBtn.querySelector('.spinner-border');
-        const errorAlert = document.getElementById('addErrorAlert');
+        const errorAlert = document.getElementById('errorAlert-' + this.id.split('-')[1]);
         const modal = this.closest('.modal');
 
         // Show loading state
@@ -723,56 +631,80 @@
         spinner.classList.remove('d-none');
 
         try {
+            const formData = new FormData(this);
+
+            // Log form data for debugging
+            for (let [key, value] of formData.entries()) {
+                console.log(`${key}: ${value}`);
+            }
+
             const response = await fetch(this.action, {
                 method: 'POST',
-                body: new FormData(this),
+                body: formData,
                 headers: {
                     'X-Requested-With': 'XMLHttpRequest',
                     'Accept': 'application/json'
                 }
             });
 
-            const data = await response.json();
+            const contentType = response.headers.get('content-type');
+            if (contentType && contentType.includes('application/json')) {
+                const data = await response.json();
+                console.log('Response data:', data); // Log response data for debugging
 
-            if (data.success) {
-                // Hide modal
-                bootstrap.Modal.getInstance(modal).hide();
+                if (data.success) {
+                    // Hide modal
+                    bootstrap.Modal.getInstance(modal).hide();
 
-                // Show success message
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Success!',
-                    text: 'Patient added successfully!',
-                    showConfirmButton: false,
-                    timer: 1500
-                }).then(() => {
-                    window.location.reload();
-                });
+                    // Show success message
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success!',
+                        text: data.message,
+                        showConfirmButton: false,
+                        timer: 1500
+                    }).then(() => {
+                        window.location.reload();
+                    });
+                } else {
+                    // Show validation errors
+                    errorAlert.classList.remove('d-none');
+                    errorAlert.textContent = 'Please correct the following errors:';
+
+                    const errorList = document.createElement('ul');
+                    Object.entries(data.errors).forEach(([field, errors]) => {
+                        const input = this.querySelector(`[name="${field}"]`);
+                        if (input) {
+                            input.classList.add('is-invalid');
+                            input.nextElementSibling.textContent = errors[0];
+                        }
+
+                        const li = document.createElement('li');
+                        li.textContent = errors[0];
+                        errorList.appendChild(li);
+                    });
+                    errorAlert.appendChild(errorList);
+
+                    // Show error toast
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Validation Error',
+                        text: 'Please check the form for errors.',
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 3000
+                    });
+                }
             } else {
-                // Show validation errors
-                errorAlert.classList.remove('d-none');
-                errorAlert.textContent = 'Please correct the following errors:';
-
-                const errorList = document.createElement('ul');
-                Object.entries(data.errors).forEach(([field, errors]) => {
-                    const input = this.querySelector(`[name="${field}"]`);
-                    if (input) {
-                        input.classList.add('is-invalid');
-                        input.nextElementSibling.textContent = errors[0];
-                    }
-
-                    const li = document.createElement('li');
-                    li.textContent = errors[0];
-                    errorList.appendChild(li);
-                });
-                errorAlert.appendChild(errorList);
+                window.location.reload();
             }
         } catch (error) {
             console.error('Error:', error);
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
-                text: 'An error occurred while adding the patient.',
+                text: 'An error occurred while saving changes.',
                 confirmButtonColor: '#9F1239'
             });
         } finally {
@@ -781,22 +713,94 @@
             spinner.classList.add('d-none');
         }
     });
+});
 
-    // Add these new functions
-    function toggleStudentNumberField(selectElement, formType) {
+// Add patient form handler
+document.getElementById('addPatientForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    const submitBtn = this.querySelector('button[type="submit"]');
+    const spinner = submitBtn.querySelector('.spinner-border');
+    const errorAlert = document.getElementById('addErrorAlert');
+    const modal = this.closest('.modal');
+
+    // Show loading state
+    submitBtn.disabled = true;
+    spinner.classList.remove('d-none');
+
+    try {
+        const response = await fetch(this.action, {
+            method: 'POST',
+            body: new FormData(this),
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'Accept': 'application/json'
+            }
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            // Hide modal
+            bootstrap.Modal.getInstance(modal).hide();
+
+            // Show success message
+            Swal.fire({
+                icon: 'success',
+                title: 'Success!',
+                text: 'Patient added successfully!',
+                showConfirmButton: false,
+                timer: 1500
+            }).then(() => {
+                window.location.reload();
+            });
+        } else {
+            // Show validation errors
+            errorAlert.classList.remove('d-none');
+            errorAlert.textContent = 'Please correct the following errors:';
+
+            const errorList = document.createElement('ul');
+            Object.entries(data.errors).forEach(([field, errors]) => {
+                const input = this.querySelector(`[name="${field}"]`);
+                if (input) {
+                    input.classList.add('is-invalid');
+                    input.nextElementSibling.textContent = errors[0];
+                }
+
+                const li = document.createElement('li');
+                li.textContent = errors[0];
+                errorList.appendChild(li);
+            });
+            errorAlert.appendChild(errorList);
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'An error occurred while adding the patient.',
+            confirmButtonColor: '#9F1239'
+        });
+    } finally {
+        // Reset loading state
+        submitBtn.disabled = false;
+        spinner.classList.add('d-none');
+    }
+});
+
+// Student number field toggle functionality
+function toggleStudentNumberField(selectElement, formType) {
     const formId = formType === 'add' ? 'addPatientForm' : selectElement.closest('form').id;
     const studentNumberInput = document.querySelector(`#${formId} [name="student_number"]`);
-    const studentNumberDiv = studentNumberInput.closest('.col-12');
+    const studentNumberDiv = studentNumberInput.closest('.col-span-2');
 
     if (selectElement.value === 'Student') {
         studentNumberDiv.classList.remove('d-none');
         studentNumberInput.required = true;
-        // Restore previously saved value, if available
         if (studentNumberInput.dataset.tempValue) {
             studentNumberInput.value = studentNumberInput.dataset.tempValue;
         }
     } else {
-        // Save current value to the element's dataset
         studentNumberInput.dataset.tempValue = studentNumberInput.value;
         studentNumberDiv.classList.add('d-none');
         studentNumberInput.required = false;
@@ -804,144 +808,160 @@
     }
 }
 
+// Delete confirmation
+function confirmDelete(form) {
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#9F1239',
+        cancelButtonColor: '#6B7280',
+        confirmButtonText: 'Yes, delete it!',
+        cancelButtonText: 'Cancel'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            form.submit();
+        }
+    });
+}
 
-    // Initialize student number visibility for add form
-    document.querySelector('#addPatientForm [name="patientType"]').addEventListener('change', function() {
+// Initialize all functionality when DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+    // Tab filtering
+    const tabButtons = document.querySelectorAll('.tab-btn');
+    const patientRows = document.querySelectorAll('tr[data-patient-type]');
+
+    function filterPatients(filterValue) {
+        patientRows.forEach(row => {
+            if (filterValue === 'all' || row.dataset.patientType === filterValue) {
+                row.classList.remove('hidden');
+            } else {
+                row.classList.add('hidden');
+            }
+        });
+    }
+
+    // Tab button handlers
+    tabButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            tabButtons.forEach(btn => {
+                btn.classList.remove('border-red-700', 'text-red-700');
+                btn.classList.add('border-transparent', 'text-gray-500');
+            });
+            button.classList.remove('border-transparent', 'text-gray-500');
+            button.classList.add('border-red-700', 'text-red-700');
+            filterPatients(button.dataset.filter);
+        });
+    });
+
+    // Prescription form handlers
+    const prescriptionForms = document.querySelectorAll('form[action*="prescriptions"]');
+    prescriptionForms.forEach(form => {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            handlePrescriptionSubmit(form);
+        });
+    });
+
+    // Medicine selection handlers
+    const medicineSelects = document.querySelectorAll('select[id^="medicine-select-"]');
+    medicineSelects.forEach(select => {
+        select.addEventListener('change', function() {
+            handleMedicineSelection(this);
+        });
+    });
+
+    // Initialize student number fields
+    document.querySelector('#addPatientForm [name="patientType"]')?.addEventListener('change', function() {
         toggleStudentNumberField(this, 'add');
     });
 
-    // Initialize student number visibility for edit forms
     document.querySelectorAll('[id^="patientForm-"] [name="patientType"]').forEach(select => {
         select.addEventListener('change', function() {
             toggleStudentNumberField(this, 'edit');
         });
     });
-
-    // Initialize visibility on page load
-    window.addEventListener('load', function() {
-        // For add form
-        const addPatientType = document.querySelector('#addPatientForm [name="patientType"]');
-        addPatientType.value && toggleStudentNumberField(addPatientType, 'add');
-
-        // For edit forms
-        document.querySelectorAll('[id^="patientForm-"] [name="patientType"]').forEach(select => {
-            toggleStudentNumberField(select, 'edit');
-        });
-    });
-
-    function confirmDelete(form) {
-        Swal.fire({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#9F1239',
-            cancelButtonColor: '#6B7280',
-            confirmButtonText: 'Yes, delete it!',
-            cancelButtonText: 'Cancel'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                form.submit();
-            }
-        });
-    }
-
-    // ...existing script code...
-
-    // Add this new script for tab filtering
-    document.addEventListener('DOMContentLoaded', function() {
-        const tabButtons = document.querySelectorAll('.tab-btn');
-        const patientRows = document.querySelectorAll('tr[data-patient-type]');
-
-        function filterPatients(filterValue) {
-            patientRows.forEach(row => {
-                if (filterValue === 'all' || row.dataset.patientType === filterValue) {
-                    row.classList.remove('hidden');
-                } else {
-                    row.classList.add('hidden');
-                }
-            });
-        }
-
-        tabButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                // Update active tab styling
-                tabButtons.forEach(btn => {
-                    btn.classList.remove('border-red-700', 'text-red-700');
-                    btn.classList.add('border-transparent', 'text-gray-500');
-                });
-                button.classList.remove('border-transparent', 'text-gray-500');
-                button.classList.add('border-red-700', 'text-red-700');
-
-                // Filter the patients
-                filterPatients(button.dataset.filter);
-            });
-        });
-    });
-
-    document.addEventListener('DOMContentLoaded', function() {
-    const prescriptionForms = document.querySelectorAll('form[action*="prescriptions"]');
-    
-    prescriptionForms.forEach(form => {
-        form.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const formData = new FormData(this);
-            const patientId = formData.get('patient_id');
-            
-            fetch(this.action, {
-                method: 'POST',
-                body: formData,
-                headers: {
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    // Close the prescription modal
-                    bootstrap.Modal.getInstance(document.querySelector(`#prescriptionModal-${patientId}`)).hide();
-                    
-                    // Show success message
-                    Swal.fire({
-                        title: 'Success!',
-                        text: data.message,
-                        icon: 'success',
-                        confirmButtonColor: '#dc2626'
-                    }).then(() => {
-                        // Refresh the prescriptions list
-                        const prescriptionsList = document.querySelector(`#prescriptionListModal-${patientId} .overflow-y-auto`);
-                        if (prescriptionsList) {
-                            // Add the new prescription to the list
-                            const newPrescription = createPrescriptionElement(data.prescription);
-                            prescriptionsList.insertAdjacentHTML('afterbegin', newPrescription);
-                        }
-                        
-                        // Reset the form
-                        form.reset();
-                    });
-                } else {
-                    Swal.fire({
-                        title: 'Error!',
-                        text: data.message,
-                        icon: 'error',
-                        confirmButtonColor: '#dc2626'
-                    });
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                Swal.fire({
-                    title: 'Error!',
-                    text: 'An error occurred while creating the prescription.',
-                    icon: 'error',
-                    confirmButtonColor: '#dc2626'
-                });
-            });
-        });
-    });
 });
 
+// Helper function for prescription submission
+async function handlePrescriptionSubmit(form) {
+    const formData = new FormData(form);
+    const patientId = formData.get('patient_id');
+
+    try {
+        const response = await fetch(form.action, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+            }
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            // Close the prescription modal
+            bootstrap.Modal.getInstance(document.querySelector(`#prescriptionModal-${patientId}`)).hide();
+
+            // Show success message
+            Swal.fire({
+                title: 'Success!',
+                text: data.message,
+                icon: 'success',
+                confirmButtonColor: '#dc2626'
+            }).then(() => {
+                // Refresh the prescriptions list
+                const prescriptionsList = document.querySelector(`#prescriptionListModal-${patientId} .overflow-y-auto`);
+                if (prescriptionsList) {
+                    // Add the new prescription to the list
+                    const newPrescription = createPrescriptionElement(data.prescription);
+                    prescriptionsList.insertAdjacentHTML('afterbegin', newPrescription);
+                }
+
+                // Reset the form
+                form.reset();
+            });
+        } else {
+            Swal.fire({
+                title: 'Error!',
+                text: data.message,
+                icon: 'error',
+                confirmButtonColor: '#dc2626'
+            });
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        Swal.fire({
+            title: 'Error!',
+            text: 'An error occurred while creating the prescription.',
+            icon: 'error',
+            confirmButtonColor: '#dc2626'
+        });
+    }
+}
+
+// Helper function for medicine selection
+function handleMedicineSelection(select) {
+    const patientId = select.id.split('-').pop();
+    const quantityInput = document.getElementById(`quantity-${patientId}`);
+    const selectedOption = select.options[select.selectedIndex];
+    
+    if (selectedOption.value) {
+        const availableQty = selectedOption.text.match(/Available: (\d+)/);
+        if (availableQty && availableQty[1]) {
+            quantityInput.max = availableQty[1];
+            quantityInput.value = '';
+            quantityInput.disabled = false;
+        }
+    } else {
+        quantityInput.disabled = true;
+        quantityInput.value = '';
+        quantityInput.removeAttribute('max');
+    }
+}
+
+// Prescription element creator
 function createPrescriptionElement(prescription) {
     return `
         <div class="p-4 mb-4 bg-white border border-gray-200 rounded-lg hover:bg-gray-50">
