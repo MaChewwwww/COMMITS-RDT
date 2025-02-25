@@ -1,53 +1,53 @@
 @extends('layouts.app-layout')
 
 @section('content')
-<div class="content-wrapper mt-4">
+<div class="mt-4 content-wrapper">
     <div class="p-4"> <!-- Single padding container -->
         <div class="bg-white rounded-lg shadow">
             <!-- Header Section -->
-            <div class="flex flex-col md:flex-row justify-between items-center p-4 border-b border-gray-200">
-                <h2 class="text-2xl md:text-3xl font-semibold text-gray-900">Patients Record</h2>
+            <div class="flex flex-col items-center justify-between p-4 border-b border-gray-200 md:flex-row">
+                <h2 class="text-2xl font-semibold text-gray-900 md:text-3xl">Patients Record</h2>
                 <button type="button"
                     class="inline-flex items-center gap-2 px-6 py-2.5 text-white bg-red-700 hover:bg-red-800 rounded-lg
                     transition-all duration-200 shadow-md hover:shadow-lg active:shadow-sm transform hover:-translate-y-0.5 active:translate-y-0"
                     data-bs-toggle="modal"
                     data-bs-target="#addPatientModal">
-                    <i class="fas fa-plus-circle text-lg"></i>
+                    <i class="text-lg fas fa-plus-circle"></i>
                     <span class="font-medium">Add Patient</span>
                 </button>
             </div>
 
             <!-- Tab Navigation -->
             <div class="px-4 border-b border-gray-200">
-                <nav class="-mb-px flex space-x-4 overflow-x-auto" aria-label="Tabs">
+                <nav class="flex -mb-px space-x-4 overflow-x-auto" aria-label="Tabs">
                     <!-- Tab buttons for filtering patients -->
                     <button type="button"
-                        class="tab-btn whitespace-nowrap px-4 py-2 font-medium text-sm border-b-2 border-red-700 text-red-700 active"
+                        class="px-4 py-2 text-sm font-medium text-red-700 border-b-2 border-red-700 tab-btn whitespace-nowrap active"
                         data-filter="all">
                         All Patients
                     </button>
                     <button type="button"
-                        class="tab-btn whitespace-nowrap px-4 py-2 font-medium text-sm border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                        class="px-4 py-2 text-sm font-medium text-gray-500 border-b-2 border-transparent tab-btn whitespace-nowrap hover:text-gray-700 hover:border-gray-300"
                         data-filter="Student">
                         Students
                     </button>
                     <button type="button"
-                        class="tab-btn whitespace-nowrap px-4 py-2 font-medium text-sm border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                        class="px-4 py-2 text-sm font-medium text-gray-500 border-b-2 border-transparent tab-btn whitespace-nowrap hover:text-gray-700 hover:border-gray-300"
                         data-filter="Faculty">
                         Faculty
                     </button>
                     <button type="button"
-                        class="tab-btn whitespace-nowrap px-4 py-2 font-medium text-sm border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                        class="px-4 py-2 text-sm font-medium text-gray-500 border-b-2 border-transparent tab-btn whitespace-nowrap hover:text-gray-700 hover:border-gray-300"
                         data-filter="Admin">
                         Administrative
                     </button>
                     <button type="button"
-                        class="tab-btn whitespace-nowrap px-4 py-2 font-medium text-sm border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                        class="px-4 py-2 text-sm font-medium text-gray-500 border-b-2 border-transparent tab-btn whitespace-nowrap hover:text-gray-700 hover:border-gray-300"
                         data-filter="Visitor">
                         Visitors
                     </button>
                     <button type="button"
-                        class="tab-btn whitespace-nowrap px-4 py-2 font-medium text-sm border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                        class="px-4 py-2 text-sm font-medium text-gray-500 border-b-2 border-transparent tab-btn whitespace-nowrap hover:text-gray-700 hover:border-gray-300"
                         data-filter="Dependent">
                         Dependents
                     </button>
@@ -59,44 +59,44 @@
                 <div class="overflow-x-auto rounded-lg">
                     <table class="min-w-full mt-4 bg-white">
                         <thead>
-                            <tr class="bg-gray-50 border-b border-gray-200">
+                            <tr class="border-b border-gray-200 bg-gray-50">
                                 <!-- Table headers -->
-                                <th class="group px-6 py-3 text-left">
+                                <th class="px-6 py-3 text-left group">
                                     <div class="flex items-center gap-x-2">
                                         <span class="text-xs font-bold tracking-wide text-gray-600 uppercase">Printed Name</span>
                                     </div>
                                 </th>
-                                <th class="group px-6 py-3 text-left">
+                                <th class="px-6 py-3 text-left group">
                                     <div class="flex items-center gap-x-2">
                                         <span class="text-xs font-bold tracking-wide text-gray-600 uppercase">Sex</span>
                                     </div>
                                 </th>
-                                <th class="group px-6 py-3 text-left">
+                                <th class="px-6 py-3 text-left group">
                                     <div class="flex items-center gap-x-2">
                                         <span class="text-xs font-bold tracking-wide text-gray-600 uppercase">Prescription</span>
                                     </div>
                                 </th>
-                                <th class="group px-6 py-3 text-left">
+                                <th class="px-6 py-3 text-left group">
                                     <div class="flex items-center gap-x-2">
                                         <span class="text-xs font-bold tracking-wide text-gray-600 uppercase">Qty</span>
                                     </div>
                                 </th>
-                                <th class="group px-6 py-3 text-left">
+                                <th class="px-6 py-3 text-left group">
                                     <div class="flex items-center gap-x-2">
                                         <span class="text-xs font-bold tracking-wide text-gray-600 uppercase">Physician</span>
                                     </div>
                                 </th>
-                                <th class="group px-6 py-3 text-left">
+                                <th class="px-6 py-3 text-left group">
                                     <div class="flex items-center gap-x-2">
                                         <span class="text-xs font-bold tracking-wide text-gray-600 uppercase">Patient Status</span>
                                     </div>
                                 </th>
-                                <th class="group px-6 py-3 text-left">
+                                <th class="px-6 py-3 text-left group">
                                     <div class="flex items-center gap-x-2">
                                         <span class="text-xs font-bold tracking-wide text-gray-600 uppercase">Disease Severity</span>
                                     </div>
                                 </th>
-                                <th class="group px-6 py-3 text-left">
+                                <th class="px-6 py-3 text-left group">
                                     <div class="flex items-center gap-x-2">
                                         <span class="text-xs font-bold tracking-wide text-gray-600 uppercase">Actions</span>
                                     </div>
@@ -105,7 +105,7 @@
                         </thead>
                         <tbody class="divide-y divide-gray-200">
                             @foreach ($patients as $patient)
-                                <tr class="hover:bg-gray-50 transition-colors duration-200" data-patient-type="{{ $patient->patientType }}">
+                                <tr class="transition-colors duration-200 hover:bg-gray-50" data-patient-type="{{ $patient->patientType }}">
                                     <!-- Patient details -->
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div class="text-sm font-medium text-gray-900">{{ $patient->fullname }}</div>
@@ -126,20 +126,20 @@
                                     <!-- Prescription Modal -->
                                     <div class="modal fade" id="prescriptionModal-{{$patient->id}}" tabindex="-1">
                                         <div class="modal-dialog modal-dialog-centered" role="document">
-                                            <div class="modal-content border-0 shadow-lg rounded-xl overflow-hidden">
-                                                <div class="modal-body p-3">
+                                            <div class="overflow-hidden border-0 shadow-lg modal-content rounded-xl">
+                                                <div class="p-3 modal-body">
                                                     <form action="{{-- route('patients.update-prescription', $patient->id) --}}" method="POST" class="p-6">
                                                         @csrf
                                                         @method('PUT')
 
                                                         <!-- Form Title -->
-                                                        <div class="text-center mb-6">
+                                                        <div class="mb-6 text-center">
                                                             <h5 class="text-xl font-semibold text-gray-900">Update Prescription</h5>
                                                             <p class="text-sm text-gray-500">Update prescription details for {{ $patient->fullname }}</p>
                                                         </div>
 
                                                         <!-- Add alert for validation errors -->
-                                                        <div class="alert alert-danger d-none mb-4" id="prescriptionErrorAlert-{{$patient->id}}"></div>
+                                                        <div class="mb-4 alert alert-danger d-none" id="prescriptionErrorAlert-{{$patient->id}}"></div>
 
                                                         <div class="space-y-4">
                                                             <!-- Status Badge -->
@@ -197,14 +197,14 @@
                                     </div>
                                     <td class="px-6 py-4 text-sm text-gray-500">{{ $patient->user_id }}</td>
                                     <td class="px-6 py-4">
-                                        <span class="inline-flex rounded-full px-2 text-xs font-semibold leading-5 bg-green-100 text-green-800">
+                                        <span class="inline-flex px-2 text-xs font-semibold leading-5 text-green-800 bg-green-100 rounded-full">
                                             {{ $patient->patient_status }}
                                         </span>
                                     </td>
                                     <td class="px-6 py-4 text-sm text-gray-500">Status</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    <td class="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">
                                         <div class="flex items-center gap-x-4">
-                                            <button class="px-3 py-2 rounded-lg bg-blue-600 hover:bg-blue-900 text-white transition-colors duration-200"
+                                            <button class="px-3 py-2 text-white transition-colors duration-200 bg-blue-600 rounded-lg hover:bg-blue-900"
                                                 data-bs-toggle="modal"
                                                 data-bs-target="#viewPatient-{{$patient->id}}"
                                                 data-patient-id="{{ $patient->id }}"
@@ -215,7 +215,7 @@
                                                 onsubmit="return false;">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="button" onclick="confirmDelete(this.form)" class="px-3 py-2 rounded-lg bg-red-600 hover:bg-red-900 text-white transition-colors duration-200">
+                                                <button type="button" onclick="confirmDelete(this.form)" class="px-3 py-2 text-white transition-colors duration-200 bg-red-600 rounded-lg hover:bg-red-900">
                                                     <i class="fas fa-trash"></i>
                                                 </button>
                                             </form>
@@ -234,15 +234,15 @@
 <!-- Add Patient Modal -->
 <div class="modal fade" id="addPatientModal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content border-0 shadow-lg rounded-xl overflow-hidden">
-            <div class="modal-body p-0">
+        <div class="overflow-hidden border-0 shadow-lg modal-content rounded-xl">
+            <div class="p-0 modal-body">
                 <form id="addPatientForm" action="{{ route('patients.store') }}" method="POST" class="p-6">
                     @csrf
                     <!-- Add alert for validation errors -->
-                    <div class="alert alert-danger d-none mb-4" id="addErrorAlert"></div>
+                    <div class="mb-4 alert alert-danger d-none" id="addErrorAlert"></div>
 
                     <!-- Form Title -->
-                    <div class="text-center mb-6">
+                    <div class="mb-6 text-center">
                         <h5 class="text-xl font-semibold text-gray-900">New Patient</h5>
                         <p class="text-sm text-gray-500">Enter patient information below</p>
                     </div>
@@ -260,7 +260,6 @@
                                 <select name="sex"
                                     class="w-full px-4 py-2.5 text-sm rounded-lg border border-gray-300 focus:border-red-500 focus:ring focus:ring-red-200 transition-all"
                                     required>
-                                    <option value="">Gender *</option>
                                     <option value="Male">Male</option>
                                     <option value="Female">Female</option>
                                 </select>
@@ -281,7 +280,6 @@
                                 <select name="patientType"
                                     class="w-full px-4 py-2.5 text-sm rounded-lg border border-gray-300 focus:border-red-500 focus:ring focus:ring-red-200 transition-all"
                                     required>
-                                    <option value="">Patient Type *</option>
                                     <option value="Student">Student</option>
                                     <option value="Faculty">Faculty</option>
                                     <option value="Admin">Administrative</option>
@@ -304,21 +302,19 @@
                         <!-- Medical Info -->
                         <div class="grid grid-cols-2 gap-4">
                             <div>
-                                <select name="patient_status"
+                                <input type="text" name="patient_status"
                                     class="w-full px-4 py-2.5 text-sm rounded-lg border border-gray-300 focus:border-red-500 focus:ring focus:ring-red-200 transition-all"
+                                    placeholder="Patient Status *"
                                     required>
-                                    <option value="">Status *</option>
-                                    <option value="Active">Active</option>
-                                    <option value="Inactive">Inactive</option>
-                                    <option value="Under Observation">Under Observation</option>
-                                </select>
                             </div>
                             <div>
-                                <select name="user_id"
-                                    class="w-full px-4 py-2.5 text-sm rounded-lg border border-gray-300 focus:border-red-500 focus:ring focus:ring-red-200 transition-all">
-                                    <option value="">Select Physician</option>
+                                <select name="physician_id"
+                                    class="w-full px-4 py-2.5 text-sm rounded-lg border border-gray-300 focus:border-red-500 focus:ring focus:ring-red-200 transition-all"
+                                    required>
                                     @foreach($physicians ?? [] as $physician)
-                                        <option value="{{ $physician->id }}">Dr. {{ $physician->name }}</option>
+                                        <option value="{{ $physician->id }}">
+                                            {{ $physician->first_name }} {{ $physician->last_name }}
+                                        </option>
                                     @endforeach
                                 </select>
                             </div>
@@ -349,14 +345,14 @@
 @foreach ($patients as $patient)
     <div class="modal fade" id="viewPatient-{{$patient->id}}" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content border-0 shadow-lg rounded-xl overflow-hidden">
-                <div class="modal-body p-0">
+            <div class="overflow-hidden border-0 shadow-lg modal-content rounded-xl">
+                <div class="p-0 modal-body">
                     <form id="patientForm-{{$patient->id}}" action="{{ route('patients.update', $patient->id)}}" method="POST" class="p-6">
                         @csrf
                         @method('PUT')
 
                         <!-- Form Title -->
-                        <div class="flex justify-between items-center mb-6">
+                        <div class="flex items-center justify-between mb-6">
                             <div>
                                 <h5 class="text-xl font-semibold text-gray-900">Patient Information</h5>
                                 <p class="text-sm text-gray-500">View or modify patient details</p>
@@ -371,7 +367,7 @@
                         </div>
 
                         <!-- Add alert for validation errors -->
-                        <div class="alert alert-danger d-none mb-4" id="errorAlert-{{$patient->id}}"></div>
+                        <div class="mb-4 alert alert-danger d-none" id="errorAlert-{{$patient->id}}"></div>
 
                         <div class="space-y-4">
                             <!-- Personal Info -->
@@ -432,22 +428,19 @@
                             <!-- Medical Info -->
                             <div class="grid grid-cols-2 gap-4">
                                 <div>
-                                    <select name="patient_status"
+                                    <input type="text" name="patient_status"
                                         class="w-full px-4 py-2.5 text-sm rounded-lg border border-gray-300 focus:border-red-500 focus:ring focus:ring-red-200 transition-all"
+                                        placeholder="Patient Status *"
+                                        value="{{ $patient->patient_status }}"
                                         disabled required>
-                                        <option value="Active" {{ $patient->patient_status == 'Active' ? 'selected' : '' }}>Active</option>
-                                        <option value="Inactive" {{ $patient->patient_status == 'Inactive' ? 'selected' : '' }}>Inactive</option>
-                                        <option value="Under Observation" {{ $patient->patient_status == 'Under Observation' ? 'selected' : '' }}>Under Observation</option>
-                                    </select>
                                 </div>
                                 <div>
-                                    <select name="user_id"
+                                    <select name="physician_id"
                                         class="w-full px-4 py-2.5 text-sm rounded-lg border border-gray-300 focus:border-red-500 focus:ring focus:ring-red-200 transition-all"
                                         disabled>
-                                        <option value="">Select Physician</option>
                                         @foreach($physicians ?? [] as $physician)
-                                            <option value="{{ $physician->id }}" {{ $patient->user_id == $physician->id ? 'selected' : '' }}>
-                                                Dr. {{ $physician->name }}
+                                            <option value="{{ $physician->id }}" {{ $patient->physician_id == $physician->id ? 'selected' : '' }}>
+                                                {{ $physician->first_name }} {{ $physician->last_name }}
                                             </option>
                                         @endforeach
                                     </select>
@@ -500,7 +493,7 @@
 <script>
     function toggleEdit(patientID) {
         const patientForm = document.getElementById('patientForm-' + patientID);
-        const patientInputs = patientForm.querySelectorAll('input:not([type="hidden"]), select');
+        const patientInputs = patientForm.querySelectorAll('input:not([type="hidden"]), select, textarea');
         const editButton = patientForm.querySelector('button[onClick*="toggleEdit"]');
         const submitBtn = patientForm.querySelector('button[type="submit"]');
         const errorAlert = document.getElementById('errorAlert-' + patientID);
@@ -521,26 +514,20 @@
         const buttonText = editButton.querySelector('span');
 
         if (buttonText.textContent === 'Edit') {
-            buttonText.textContent = 'View';
+            buttonText.textContent = 'Cancel';
             buttonIcon.classList.remove('fa-edit');
-            buttonIcon.classList.add('fa-eye');
-            editButton.classList.remove('bg-yellow-100', 'text-yellow-700', 'hover:bg-yellow-200');
-            editButton.classList.add('bg-blue-100', 'text-blue-700', 'hover:bg-blue-200');
+            buttonIcon.classList.add('fa-times');
+            editButton.classList.remove('bg-yellow-100', 'text-yellow-700');
+            editButton.classList.add('bg-gray-100', 'text-gray-700');
+            submitBtn.disabled = false; // Enable submit button
         } else {
             buttonText.textContent = 'Edit';
-            buttonIcon.classList.remove('fa-eye');
+            buttonIcon.classList.remove('fa-times');
             buttonIcon.classList.add('fa-edit');
-            editButton.classList.remove('bg-blue-100', 'text-blue-700', 'hover:bg-blue-200');
-            editButton.classList.add('bg-yellow-100', 'text-yellow-700', 'hover:bg-yellow-200');
-        }
-
-        // Toggle submit button
-        submitBtn.disabled = !submitBtn.disabled;
-
-        // After enabling/disabling inputs, check patient type
-        const patientTypeSelect = patientForm.querySelector('[name="patientType"]');
-        if (!patientTypeSelect.disabled) {
-            toggleStudentNumberField(patientTypeSelect, 'edit');
+            editButton.classList.remove('bg-gray-100', 'text-gray-700');
+            editButton.classList.add('bg-yellow-100', 'text-yellow-700');
+            submitBtn.disabled = true; // Disable submit button
+            patientForm.reset(); // Reset form to original values
         }
     }
 
@@ -559,9 +546,16 @@
             spinner.classList.remove('d-none');
 
             try {
+                const formData = new FormData(this);
+
+                // Log form data for debugging
+                for (let [key, value] of formData.entries()) {
+                    console.log(`${key}: ${value}`);
+                }
+
                 const response = await fetch(this.action, {
                     method: 'POST',
-                    body: new FormData(this),
+                    body: formData,
                     headers: {
                         'X-Requested-With': 'XMLHttpRequest',
                         'Accept': 'application/json'
@@ -571,6 +565,7 @@
                 const contentType = response.headers.get('content-type');
                 if (contentType && contentType.includes('application/json')) {
                     const data = await response.json();
+                    console.log('Response data:', data); // Log response data for debugging
 
                     if (data.success) {
                         // Hide modal

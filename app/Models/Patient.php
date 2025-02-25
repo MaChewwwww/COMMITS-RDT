@@ -16,7 +16,14 @@ class Patient extends Model
         'contactDetails',
         'patient_status',
         'patientType',
-        'user_id',
         'student_number',
+        'physician_id',
+        // make sure all fields you're updating are listed here
     ];
+
+    // Add relationship method for physician
+    public function physician()
+    {
+        return $this->belongsTo(User::class, 'physician_id');
+    }
 }

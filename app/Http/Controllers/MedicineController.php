@@ -16,7 +16,7 @@ class MedicineController extends Controller
     public function index()
     {
         $users = User::all();
-        
+
         $medicines = Medicine::join('boxes', 'medicines.box_id', '=', 'boxes.id')
             ->where('boxes.isReturned', false)
             ->with('box.user')
@@ -64,7 +64,7 @@ class MedicineController extends Controller
     public function update(MedicineRequest $request, Medicine $medicine)
     {
         $data = $request->validated();
-        
+
         // Calculate remaining quantity
         $remainingQty = $data['initial_quantity'] - $medicine->consumed_quantity;
         $remainingQty = max(0, $remainingQty);
@@ -111,8 +111,8 @@ class MedicineController extends Controller
             'consumed_quantity' => $medicine->consumed_quantity + $data['quantity'],
             'remaining_quantity' => $medicine->remaining_quantity - $data['quantity'],
             'status' => $medicine->remaining_quantity - $data['quantity'] == $medicine->initial_quantity ? 'Full' :
-                   ($medicine->remaining_quantity - $data['quantity'] == 0 ? 'Out of Stock' :
-                   ($medicine->remaining_quantity - $data['quantity'] <= ($medicine->initial_quantity * 0.2) ? 'Low Stock' : 'In Stock'))
+                    ($medicine->remaining_quantity - $data['quantity'] == 0 ? 'Out of Stock' :
+                    ($medicine->remaining_quantity - $data['quantity'] <= ($medicine->initial_quantity * 0.2) ? 'Low Stock' : 'In Stock'))
         ]);
 
         return redirect()->route('inventory-medicines')
@@ -133,7 +133,7 @@ class MedicineController extends Controller
             }
 
             $medicine->delete();
-            
+
             return response()->json([
                 'success' => true,
                 'message' => 'Medicine deleted successfully'
@@ -153,9 +153,8 @@ class MedicineController extends Controller
     public function return(Medicine $medicine)
     {
         $medicine->box->update(['isReturned' => true]);
-        
+
         return redirect()->route('inventory-medicines')
             ->with('success', 'Medicine marked as returned successfully');
     }
-
 }

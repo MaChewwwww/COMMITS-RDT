@@ -153,14 +153,11 @@
                                     />
                 
                                     <!-- unit_of_measurement-->
-                                    <x-inventory.select
-                                        label="Unit" 
+                                    <x-inventory.input
+                                        label="Unit of Measurement" 
                                         name="unit_of_measurement" 
-                                        :selected="$medicine->unit"
-                                        :options="[
-                                            'tablet' => 'Tablet',
-                                            'capsule' => 'Capsule'
-                                        ]"
+                                        value="{{ old('unit_of_measurement', $medicine->unit) }}"
+                                        placeholder="Capsule"
                                         required
                                     />
                 
