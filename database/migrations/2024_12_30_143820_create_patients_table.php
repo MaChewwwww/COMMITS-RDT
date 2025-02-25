@@ -15,11 +15,12 @@ return new class extends Migration
             $table->id();
             $table->string('fullname');
             $table->enum('sex', ['Male', 'Female']);
-            $table->string('year_course_dept');
+            $table->string('year_course_dept')->nullable();
             $table->string('contactDetails');
             $table->string('patient_status');
             $table->enum('patientType', ['Student', 'Faculty', 'Admin', 'Visitor', 'Dependent']);
-            $table->unsignedBigInteger('user_id')->nullable();
+            $table->string('student_number')->nullable();
+            $table->foreignId('physician_id')->constrained('users')->onDelete('restrict');
             $table->timestamps();
         });
     }

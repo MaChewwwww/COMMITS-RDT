@@ -42,4 +42,22 @@ class Medicine extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    /**
+     * Get all prescriptions for this medicine.
+     */
+    public function prescriptionMedicines()
+    {
+        return $this->hasMany(PrescriptionMedicine::class);
+    }
+
+    /**
+     * Get all patients who have been prescribed this medicine.
+     */
+    public function patients()
+    {
+        return $this->belongsToMany(Patient::class, 'prescription_medicine')
+            ->withPivot('quantity')
+            ->withTimestamps();
+    }
 }
