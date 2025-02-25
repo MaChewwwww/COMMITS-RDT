@@ -878,5 +878,95 @@
             });
         });
     });
+
+    document.addEventListener('DOMContentLoaded', function() {
+    const prescriptionForms = document.querySelectorAll('form[action*="prescriptions"]');
+    
+    prescriptionForms.forEach(form => {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const patientId = formData.get('patient_id');
+            
+            fetch(this.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Close the prescription modal
+                    bootstrap.Modal.getInstance(document.querySelector(`#prescriptionModal-${patientId}`)).hide();
+                    
+                    // Show success message
+                    Swal.fire({
+                        title: 'Success!',
+                        text: data.message,
+                        icon: 'success',
+                        confirmButtonColor: '#dc2626'
+                    }).then(() => {
+                        // Refresh the prescriptions list
+                        const prescriptionsList = document.querySelector(`#prescriptionListModal-${patientId} .overflow-y-auto`);
+                        if (prescriptionsList) {
+                            // Add the new prescription to the list
+                            const newPrescription = createPrescriptionElement(data.prescription);
+                            prescriptionsList.insertAdjacentHTML('afterbegin', newPrescription);
+                        }
+                        
+                        // Reset the form
+                        form.reset();
+                    });
+                } else {
+                    Swal.fire({
+                        title: 'Error!',
+                        text: data.message,
+                        icon: 'error',
+                        confirmButtonColor: '#dc2626'
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'An error occurred while creating the prescription.',
+                    icon: 'error',
+                    confirmButtonColor: '#dc2626'
+                });
+            });
+        });
+    });
+});
+
+function createPrescriptionElement(prescription) {
+    return `
+        <div class="p-4 mb-4 bg-white border border-gray-200 rounded-lg hover:bg-gray-50">
+            <div class="flex items-center justify-between mb-2">
+                <div class="flex items-center gap-x-2">
+                    <span class="text-sm font-medium text-gray-900">
+                        ${prescription.medicine.medicine_name}
+                    </span>
+                    <span class="px-2 py-1 text-xs font-medium text-green-700 bg-green-100 rounded-full">
+                        ${prescription.quantity} units
+                    </span>
+                </div>
+                <span class="text-xs text-gray-500">
+                    ${new Date(prescription.created_at).toLocaleDateString('en-US', {
+                        month: 'short',
+                        day: 'numeric',
+                        year: 'numeric'
+                    })}
+                </span>
+            </div>
+            <p class="text-sm text-gray-600">
+                Available: ${prescription.medicine.remaining_quantity} ${prescription.medicine.unit}
+            </p>
+        </div>
+    `;
+}
 </script>
 @endsection

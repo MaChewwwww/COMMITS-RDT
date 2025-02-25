@@ -149,10 +149,8 @@ class PatientController extends Controller
 
             DB::beginTransaction();
 
-            // Get the medicine
             $medicine = Medicine::findOrFail($request->medicine_id);
 
-            // Check if enough quantity is available
             if ($medicine->remaining_quantity < $request->quantity) {
                 return response()->json([
                     'success' => false,
@@ -160,24 +158,27 @@ class PatientController extends Controller
                 ], 422);
             }
 
-            // Create the prescription
             $prescription = PrescriptionMedicine::create([
                 'patient_id' => $request->patient_id,
                 'medicine_id' => $request->medicine_id,
-                'quantity' => $request->quantity
+                'quantity' => $request->quantity,
+                'instructions' => $request->instructions
             ]);
 
-            // Update medicine quantity
             $medicine->remaining_quantity -= $request->quantity;
             $medicine->consumed_quantity += $request->quantity;
             $medicine->save();
 
             DB::commit();
 
+            // Load the prescription with its relationships for the response
+            $prescription->load(['medicine', 'patient']);
+
             return response()->json([
                 'success' => true,
                 'message' => 'Prescription created successfully',
-                'prescription' => $prescription->load('medicine')
+                'prescription' => $prescription,
+                'remaining_quantity' => $medicine->remaining_quantity
             ]);
 
         } catch (\Exception $e) {
