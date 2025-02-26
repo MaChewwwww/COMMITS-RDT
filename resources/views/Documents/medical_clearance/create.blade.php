@@ -1,3 +1,6 @@
+@extends('layouts.app-layout')
+
+@section('content')
 <!DOCTYPE html>
 <html lang="en">
 
@@ -25,7 +28,7 @@
                 margin-top: 0;
                 /* Move the form up */
                 position: relative;
-                top: -40px;
+                top: -90px;
                 /* Adjust to move the form higher */
                 margin-top: 0;
             }
@@ -43,6 +46,8 @@
             .container,
             .container * {
                 visibility: visible;
+                padding-top: 0;
+                margin-top: 0;
             }
 
             .page {
@@ -103,7 +108,7 @@
         </div>
     </div>
 
-    <div class="container mx-auto bg-white md:py-20 md:px-20 w-[90%] md:w-[70%] lg:w-[70%]">
+    <div class="container mx-auto bg-white md:py-0 md:px-20 w-[90%] md:w-[70%] lg:w-[70%]">
         <div class="page">
             <!-- Document 2 (duplicate the structure as needed) -->
             <div class="container">
@@ -162,9 +167,8 @@
             </div>
         </div>
 
-
         <!-- Document 2 (duplicate the structure as needed) -->
-        <div class="container2 mt-15">
+        <div class="container2 mt-10">
             <div class="flex items-center justify-center mb-5">
                 <div class="mr-5">
                     <img src="{{ asset('Logo_image/logopup.png') }}" alt="Logo" class="w-28 mb-5">
@@ -223,7 +227,7 @@
                 </div>
             </div>
         </div>
-
+    </div>
         <!-- Modal -->
         <div id="editFormModal" class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 hidden">
             <div class="modal-content1 bg-white rounded-lg shadow-lg p-6 w-full max-w-lg relative">
@@ -410,7 +414,7 @@
             }
 
             function goBack() {
-                window.location.href = "{{ route('documents.adocument_file') }}";
+                window.location.href = "{{ route('documents.index') }}";
             }
 
             function openEditForm() {
@@ -515,3 +519,4 @@
 </body>
 
 </html>
+@endsection

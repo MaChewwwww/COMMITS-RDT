@@ -1,3 +1,6 @@
+@extends('layouts.app-layout')
+
+@section('content')
 <!DOCTYPE html>
 <html lang="en">
 
@@ -25,6 +28,7 @@
                 margin-top: 0;
                 /* Move the form up */
                 position: relative;
+                padding-top: 0;
                 top: -40px;
                 padding-left: 20px;
                 padding-right: 20px;
@@ -45,6 +49,7 @@
             .container,
             .container * {
                 visibility: visible;
+                margin-top: 0;
             }
 
             .page {
@@ -325,7 +330,7 @@
                         class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-medium py-2 px-4 rounded-md">
                         Add Form
                     </button>
-                    <button onclick="saveEdits()" type="submit"
+                    <button onclick="saveAdd()" type="submit"
                         class="bg-[#3CAA38] hover:bg-[#2B8E2F] text-white font-medium py-2 px-4 rounded-md">
                         Submit
                     </button>
@@ -358,7 +363,7 @@
         }
 
         function goBack() {
-            window.location.href = "{{ route('documents.adocument_file') }}";
+            window.location.href = "{{ route('documents.index') }}";
         }
 
         function openAddForm() {
@@ -453,3 +458,4 @@
 </body>
 
 </html>
+@endsection

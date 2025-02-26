@@ -1,3 +1,6 @@
+@extends('layouts.app-layout')
+
+@section('content')
 <!DOCTYPE html>
 <html lang="en">
 
@@ -44,6 +47,7 @@
 
     .page {
         margin-top: 0;
+        padding-top: 0;
         position: relative;
         top: -70px;
         padding-right: 10px;
@@ -250,7 +254,7 @@
 
         // Function to go back to the previous page
         function goBack() {
-            window.location.href = "{{ route('documents.adocument_file') }}";
+            window.location.href = "{{ route('documents.index') }}";
         }
 
         // Function to open the add modal
@@ -303,3 +307,4 @@
 </body>
 
 </html>
+@endsection

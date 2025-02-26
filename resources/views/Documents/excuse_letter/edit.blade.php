@@ -1,3 +1,6 @@
+@extends('layouts.app-layout')
+
+@section('content')
 <!DOCTYPE html>
 <html lang="en">
 
@@ -5,7 +8,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <title>Waiver Form</title>
+    <title>Edit | Excuse Letter</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
@@ -250,7 +253,7 @@
                     <script>
                         
                         function goBack() {
-                            window.location.href = "{{ route('documents.adocument_file') }}";
+                            window.location.href = "{{ route('documents.index') }}";
                         }
 
                         function printWaiver() {
@@ -329,3 +332,4 @@
 </body>
 
 </html>
+@endsection

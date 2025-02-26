@@ -1,3 +1,6 @@
+@extends('layouts.app-layout')
+
+@section('content')
 <!DOCTYPE html>
 <html lang="en">
 
@@ -218,13 +221,14 @@
 
             // Function to go back to the previous page
             function goBack() {
-                window.location.href = "{{ route('documents.adocument_file') }}";
+                window.location.href = "{{ route('documents.index') }}";
             }
             function printWaiver() {
-                            window.print();
+                window.print();
             }
         </script>
 
 </body>
 
 </html>
+@endsection

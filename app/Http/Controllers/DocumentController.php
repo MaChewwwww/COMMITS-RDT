@@ -32,7 +32,7 @@ class DocumentController extends Controller
     
         // Check if the document type exists in the view mapping
         if (!array_key_exists($documentType, $views)) {
-            return redirect()->route('documents.adocument_file')->with('error', 'Invalid document type.');
+            return redirect()->route('documents.index')->with('error', 'Invalid document type.');
         }
     
         // Render the corresponding create view
@@ -298,7 +298,7 @@ class DocumentController extends Controller
         $document = Document::find($id);
     
         if (!$document) {
-            return redirect()->route('documents.adocument_file')->with('error', 'Document not found!');
+            return redirect()->route('documents.index')->with('error', 'Document not found!');
         }
     
         // Mapping of document types to models
@@ -323,10 +323,10 @@ class DocumentController extends Controller
             $specificDocument = $modelClass::where('document_id', $id)->first();
     
             if (!$specificDocument) {
-                return redirect()->route('documents.adocument_file')->with('error', 'Specific document not found!');
+                return redirect()->route('documents.index')->with('error', 'Specific document not found!');
             }
         } else {
-            return redirect()->route('documents.adocument_file')->with('error', 'Invalid document type!');
+            return redirect()->route('documents.index')->with('error', 'Invalid document type!');
         }
     
         // Pass the specific document ID along with data
@@ -337,7 +337,7 @@ class DocumentController extends Controller
         ]);
     }
     
-    public function adocument_file(Request $request)
+    public function index(Request $request)
     {
         $typeOptions = [
             'Medical Certificate',
@@ -384,7 +384,7 @@ class DocumentController extends Controller
     
         $documents = $query->get();
         
-        return view('documents.adocument_file', compact('documents', 'typeOptions', 'MonthOptions'));
+        return view('documents.index', compact('documents', 'typeOptions', 'MonthOptions'));
     }
     
     
@@ -602,7 +602,7 @@ public function softDelete($id)
     $document = Document::findOrFail($id);
     $document->delete();
 
-    return redirect()->route('documents.adocument_file')->with('success', 'Post soft deleted successfully.');
+    return redirect()->route('documents.index')->with('success', 'Post soft deleted successfully.');
 }
 
 

@@ -85,7 +85,7 @@ Route::get('/history', [PatientHistoryController::class, 'index'])->name('Histor
 
 // Document Routes
 Route::prefix('documents')->group(function () {
-    Route::get('/', [DocumentController::class, 'adocument_file'])->name('documents.adocument_file');
+    Route::get('/', [DocumentController::class, 'index'])->name('documents.index');
 
     // Routes for each document type
     $documentTypes = [

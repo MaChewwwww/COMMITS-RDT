@@ -1,3 +1,6 @@
+@extends('layouts.app-layout')
+
+@section('content')
 <!DOCTYPE html>
 <html lang="en">
 
@@ -25,6 +28,7 @@
                 margin-top: 0;
                 /* Move the form up */
                 position: relative;
+                padding-top: 0;
                 top: -40px;
                 padding-left: 20px;
                 padding-right: 20px;
@@ -48,6 +52,7 @@
             }
 
             .page {
+                padding-top: 0;
                 display: block;
                 height: 100%;
 
@@ -344,8 +349,7 @@
             </div>
         </div>
         <!-- Success Notification -->
-        <div id="successMessage"
-            class="hidden fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
+        <div id="successMessage"class="hidden fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
             <div class="bg-white rounded-lg shadow-lg p-6 w-96 text-center">
                 <div class="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
                     <!-- Green Checkmark Icon -->
@@ -361,12 +365,16 @@
         </div>
 
         <script>
+                    // Function to print the document
+            function printWaiver() {
+                window.print();
+            }
             // Variable to track the current form being edited
             let currentFormId = null;
 
             // Function to go back to the previous page
             function goBack() {
-                window.location.href = "{{ route('documents.adocument_file') }}";
+                window.location.href = "{{ route('documents.index') }}";
             }
 
             // Function to open the edit form modal
@@ -391,6 +399,55 @@
             }
 
             function saveEdits() {
+                const dateInput = document.getElementById("dateInput");
+                const patientNameInput = document.getElementById("patientNameInput");  
+                const reasonInput = document.getElementById("reasonInput");
+                const startDateInput = document.getElementById("startDateInput");
+                const endDateInput = document.getElementById("endDateInput");
+                const purposeInput = document.getElementById("purposeInput");
+
+                if (!dateInput.value) {
+                    document.getElementById("dateError").classList.remove("hidden");
+                    isValid = false;
+                } else {
+                    document.getElementById("dateError").classList.add("hidden");
+                }
+
+                if (!patientNameInput.value) {
+                    document.getElementById("nameError").classList.remove("hidden");
+                    isValid = false;
+                } else {
+                    document.getElementById("nameError").classList.add("hidden");
+                }
+
+                if (!reasonInput.value) {
+                    document.getElementById("reasonError").classList.remove("hidden");
+                    isValid = false;
+                } else {
+                    document.getElementById("reasonError").classList.add("hidden");
+                }
+
+                if (!startDateInput.value) {
+                    document.getElementById("startDateError").classList.remove("hidden");
+                    isValid = false;
+                } else {
+                    document.getElementById("startDateError").classList.add("hidden");
+                }
+
+                if (!endDateInput.value) {
+                    document.getElementById("endDateError").classList.remove("hidden");
+                    isValid = false;
+                } else {
+                    document.getElementById("endDateError").classList.add("hidden");
+                }
+
+                if (!purposeInput.value) {
+                    document.getElementById("purposeError").classList.remove("hidden");
+                    isValid = false;
+                } else {
+                    document.getElementById("purposeError").classList.add("hidden");
+                }
+
                 let isValid = true;
 
                 if (isValid) {
@@ -414,3 +471,4 @@
 </body>
 
 </html>
+@endsection

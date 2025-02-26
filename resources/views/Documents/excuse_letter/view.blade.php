@@ -1,3 +1,6 @@
+@extends('layouts.app-layout')
+
+@section('content')
 <!DOCTYPE html>
 <html lang="en">
 
@@ -140,7 +143,7 @@
                     <!-- Modal Script -->
                     <script>
                         function goBack() {
-                            window.location.href = "{{ route('documents.adocument_file') }}";
+                            window.location.href = "{{ route('documents.index') }}";
                         }
 
                         function printWaiver() {
@@ -153,3 +156,4 @@
 </body>
 
 </html>
+@endsection

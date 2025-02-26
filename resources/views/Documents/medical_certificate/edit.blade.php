@@ -1,3 +1,6 @@
+@extends('layouts.app-layout')
+
+@section('content')
 <!DOCTYPE html>
 <html lang="en">
 
@@ -48,6 +51,7 @@
             }
 
             .page {
+                padding-top: 0;
                 display: block;
                 height: 100%;
 
@@ -369,12 +373,16 @@
         </div>
 
         <script>
+            // Function to print the document
+            function printWaiver() {
+                window.print();
+            }
             // Variable to track the current form being edited
             let currentFormId = null;
 
             // Function to go back to the previous page
             function goBack() {
-                window.location.href = "{{ route('documents.adocument_file') }}";
+                window.location.href = "{{ route('documents.index') }}";
             }
 
             function openEditForm() {
@@ -437,3 +445,4 @@
 </body>
 
 </html>
+@endsection

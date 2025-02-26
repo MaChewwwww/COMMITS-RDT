@@ -1,3 +1,6 @@
+@extends('layouts.app-layout')
+
+@section('content')
 <!DOCTYPE html>
 <html lang="en">
 
@@ -45,6 +48,7 @@
             .container,
             .container * {
                 visibility: visible;
+                padding-top: 0;
             }
 
             .page {
@@ -159,7 +163,7 @@
 
 
         <!-- Document 2 (duplicate the structure as needed) -->
-        <div class="container mt-20">
+        <div class="container mt-5">
                 <div class="flex items-center justify-center mb-5">
                     <div class="mr-5">
                         <img src="{{ asset('Logo_image/logopup.png') }}" alt="Logo" class="w-28 mb-5">
@@ -335,7 +339,7 @@
             }
 
             function goBack() {
-                window.location.href = "{{ route('documents.adocument_file') }}";
+                window.location.href = "{{ route('documents.index') }}";
             }
 
             function openaddForm() {
@@ -425,3 +429,4 @@
 </body>
 
 </html>
+@endsection

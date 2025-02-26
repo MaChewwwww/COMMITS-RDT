@@ -1,3 +1,6 @@
+@extends('layouts.app-layout')
+
+@section('content')
 <!DOCTYPE html>
 <html lang="en">
 
@@ -117,7 +120,7 @@
                             <span id="department">_________________________________________</span> Department, would
                             like to inform you that I was unable to attend class on <span
                                 id="absenceDate">______________________</span> due to <span
-                                id="reasons">_______________________________________________________________________________________</span>.
+                                id="reasons">_________________________________________</span>.
                         </p>
                         <p class="text-lg">
                             Thank you for your consideration.
@@ -129,13 +132,13 @@
                 <div class="flex justify-end mt-10">
                     <div class="w-11/30 text-left">
                         <p class="font-medium">Sincerely,</p>
-                        <p id="studentSignature" class="font-bold text-lg">_________________________________________</p>
+                        <p id="studentSignature" class="font-bold text-lg">____________</p>
                     </div>
                 </div>
 
                 <div class="flex justify-between items-center mt-10">
                     <div class="text-left">
-                        <p id="physicianSignature" class="font-bold text-lg">_________________________________________
+                        <p id="physicianSignature" class="font-bold text-lg">___________
                             M.D.</p>
                         <p class="text-center font-medium">Clinic Physician</p>
                     </div>
@@ -244,7 +247,7 @@
                     <!-- Modal Scripts -->
                     <script>
                         function goBack() {
-                            window.location.href = "{{ route('documents.adocument_file') }}";
+                            window.location.href = "{{ route('documents.index') }}";
                         }
 
 
@@ -329,3 +332,4 @@
 </body>
 
 </html>
+@endsection

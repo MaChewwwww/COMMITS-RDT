@@ -1,3 +1,6 @@
+@extends('layouts.app-layout')
+
+@section('content')
 <!DOCTYPE html>
 <html lang="en">
 
@@ -25,7 +28,7 @@
                 margin-top: 0;
                 /* Move the form up */
                 position: relative;
-                top: -40px;
+                padding-top: 0;
                 padding-left: 20px;
                 padding-right: 20px;
                 /* Adjust to move the form higher */
@@ -45,6 +48,7 @@
             .container,
             .container * {
                 visibility: visible;
+                padding-top: 0;
             }
 
             .page {
@@ -105,7 +109,7 @@
         </div>
     </div>
 
-    <div class="container mx-auto bg-white md:py-20 md:px-20 w-[90%] md:w-[70%] lg:w-[70%]">
+    <div class="container mx-auto bg-white md:py-10 md:px-10 w-[90%] md:w-[70%] lg:w-[70%]">
         <div class="page">
             <!-- Document 2 (duplicate the structure as needed) -->
             <div class="container">
@@ -161,7 +165,7 @@
 
 
         <!-- Document 2 (duplicate the structure as needed) -->
-        <div class="container2 mt-20">
+        <div class="container2 mt-5">
             <div class="flex items-center justify-center mb-5">
                 <div class="mr-5">
                     <img src="{{ asset('Logo_image/logopup.png') }}" alt="Logo" class="w-28 mb-5">
@@ -335,7 +339,7 @@
             }
 
             function goBack() {
-                window.location.href = "{{ route('documents.adocument_file') }}";
+                window.location.href = "{{ route('documents.index') }}";
             }
 
             function openaddForm() {
@@ -438,3 +442,4 @@
 </body>
 
 </html>
+@endsection

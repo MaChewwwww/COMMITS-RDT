@@ -1,3 +1,6 @@
+@extends('layouts.app-layout')
+
+@section('content')
 <!DOCTYPE html>
 <html lang="en">
 
@@ -25,7 +28,8 @@
                 margin-top: 0;
                 /* Move the form up */
                 position: relative;
-                top: -40px;
+                padding-top: 0;
+                top: -90px;
                 padding-left: 20px;
                 padding-right: 20px;
                 /* Adjust to move the form higher */
@@ -45,6 +49,8 @@
             .container,
             .container * {
                 visibility: visible;
+                margin-top: 0;
+                padding-top: 0;
             }
 
             .page {
@@ -215,7 +221,7 @@
         }
 
         function goBack() {
-            window.location.href = "{{ route('documents.adocument_file') }}";
+            window.location.href = "{{ route('documents.index') }}";
         }
 
     </script>
@@ -223,3 +229,4 @@
 </body>
 
 </html>
+@endsection
