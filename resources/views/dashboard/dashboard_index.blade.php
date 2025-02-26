@@ -35,8 +35,8 @@
                 </div>
                 <div class="h-12 mx-4 border-l-2 border-gray-300"></div>
                 <div class="flex-1">
-                    <h2 class="text-lg font-semibold">Total Transactions</h2>
-                    <p class="text-2xl font-bold">50</p>
+                    <h2 class="text-lg font-semibold">Total Documents</h2>
+                    <p class="text-2xl font-bold">{{ $totalDocuments }}</p>
                 </div>
             </div>
             <!-- Rectangle 3 -->
@@ -52,7 +52,7 @@
                 <div class="h-12 mx-4 border-l-2 border-gray-300"></div>
                 <div class="flex-1">
                     <h2 class="text-lg font-semibold">Total Reports</h2>
-                    <p class="text-2xl font-bold">30</p>
+                    <p class="text-2xl font-bold">{{ $totalReports }}</p>
                 </div>
             </div>
             <!-- Rectangle 4 -->
