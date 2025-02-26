@@ -14,7 +14,7 @@ class PatientController extends Controller
 {
     public function index()
     {
-        $patients = Patient::with('physician')->get();
+        $patients = Patient::with(['physician', 'prescriptionMedicines.medicine'])->get();
         $physicians = User::where('role', 'admin')->get(); // Only get admin users      
         $medicines = Medicine::whereHas('box', function ($query) {
             $query->where('isReturned', 0);

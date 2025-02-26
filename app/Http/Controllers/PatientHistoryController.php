@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -11,51 +10,58 @@ class PatientHistoryController extends Controller
     public function index(Request $request)
     {
         $query = PatientRecord::query();
-        
-        // Filter by healed status (required)
-        $query->where('status', 'healed');
-        
-        // Filter by identity if selected
-        $identityFilter = $request->input('identity');
-        if ($identityFilter) {
-            $query->where('identity', $identityFilter);
-        }
-        
-        // Filter by month name if selected
-        if ($request->has('month') && $request->input('month') !== null) {
+
+        // Check if a month is selected
+        if ($request->filled('month')) {
             $monthFilter = $request->input('month');
-            
-            // Validate the month filter
+
+            // Validate month input
             $request->validate([
                 'month' => 'nullable|string|in:January,February,March,April,May,June,July,August,September,October,November,December',
             ]);
-            
-            // Convert the month name to a month number (e.g., "January" => "01")
-            $monthNumber = Carbon::parse($monthFilter)->format('m');
-            
-            // Filter records by month part of the discharge_date using whereMonth()
+
+            // Convert month name to number
+            $monthNumber = Carbon::createFromFormat('F', $monthFilter)->month;
             $query->whereMonth('discharge_date', $monthNumber);
+
+            // If a week is also selected, apply week filter within the selected month
+            if ($request->filled('week')) {
+                $weekFilter = $request->input('week');
+
+                // Validate week input
+                $request->validate([
+                    'week' => 'nullable|integer|min:1|max:5',
+                ]);
+
+                // Apply filtering to get only the records for the specific week in the selected month
+                $query->whereRaw("
+                    WEEK(discharge_date, 1) - WEEK(DATE_SUB(discharge_date, INTERVAL DAYOFMONTH(discharge_date)-1 DAY), 1) + 1 = ?
+                ", [$weekFilter]);
+            }
         }
-        
-        // Retrieve records and format the start_date and discharge_date
-        $records = $query->get()->map(function($record) {
-            $record->formatted_start_date = Carbon::parse($record->start_date)->format('F j, Y'); // Format start_date as 'Month Day, Year'
-            $record->formatted_discharge_date = Carbon::parse($record->discharge_date)->format('F j, Y'); // Format discharge_date as 'Month Day, Year'
+
+        // Sort records by discharge_date (newest first)
+        $records = $query->orderBy('discharge_date', 'desc')->get()->map(function ($record) {
+            $record->formatted_start_date = Carbon::parse($record->start_date)->format('F j, Y');
+            $record->formatted_discharge_date = Carbon::parse($record->discharge_date)->format('F j, Y');
             return $record;
         });
-        
-        // Generate month options for the dropdown
+
+        // Generate month options
         $months = [
             'January', 'February', 'March', 'April', 'May', 'June',
             'July', 'August', 'September', 'October', 'November', 'December'
         ];
-        
-        // Return the view with filtered records and month options for the dropdown
-        return view('patient_history.index', [
+
+        // Generate week options dynamically (1-5)
+        $weeks = range(1, 5);
+
+        return view('History.all', [
             'records' => $records,
-            'identityFilter' => $identityFilter,
             'months' => $months,
+            'weeks' => $weeks,
             'selectedMonth' => $request->input('month'),
+            'selectedWeek' => $request->input('week'),
         ]);
     }
 }

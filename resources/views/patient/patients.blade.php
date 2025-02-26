@@ -187,7 +187,11 @@
                                                                 <div class="flex items-center justify-between mb-2">
                                                                     <div class="flex items-center gap-x-2">
                                                                         <span class="text-sm font-medium text-gray-900">
-                                                                            {{ $prescription->medicine->medicine_name }}
+                                                                            @if($prescription->medicine)
+                                                                                {{ $prescription->medicine->medicine_name }}
+                                                                            @else
+                                                                                <span class="text-gray-400">Medicine unavailable</span>
+                                                                            @endif
                                                                         </span>
                                                                         <span class="px-2 py-1 text-xs font-medium text-green-700 bg-green-100 rounded-full">
                                                                             {{ $prescription->quantity }} units
