@@ -7,6 +7,8 @@ use App\Models\Patient;
 use App\Models\Medicine;
 use App\Models\Supply;
 use App\Models\Equipment;
+use App\Models\Document;  
+use App\Models\Report;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
@@ -84,6 +86,11 @@ class DashboardController extends Controller
             'need_replacement' => Equipment::where('need_replacement', 1)->sum('quantity')
         ];
 
+        // Get total documents count (excluding soft deleted)
+        $totalDocuments = Document::count();  // This automatically excludes soft deleted records
+
+        $totalReports = Report::count();
+
         return view('dashboard.dashboard_index', compact(
             'totalPatients', 
             'patientCounts', 
@@ -94,7 +101,9 @@ class DashboardController extends Controller
             'medicineQuantities',
             'medicineUnits',
             'suppliesStatus',
-            'equipmentStatus'
+            'equipmentStatus',
+            'totalDocuments',
+            'totalReports'
         ));
     }
 }

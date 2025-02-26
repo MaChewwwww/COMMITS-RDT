@@ -42,6 +42,16 @@ Route::middleware(['auth'])->group(function () {
     // User Logout route
     Route::post('/logout', [UserController::class, 'logout'])->name('logout');
 
+    Route::get('/profile/settings', [ProfileController::class, 'accountSettings'])
+        ->name('profile.accountSettings');
+
+    // Add these profile routes
+    Route::prefix('profile')->group(function () {
+        Route::get('/settings', [ProfileController::class, 'accountSettings'])->name('profile.accountSettings');
+        Route::get('/help-support', [ProfileController::class, 'helpAndSupport'])->name('profile.helpAndSupport');
+        Route::post('/update', [ProfileController::class, 'updateProfile'])->name('profile.updateProfile');
+        Route::post('/update-password', [ProfileController::class, 'updatePassword'])->name('profile.updatePassword');
+    });
 
     Route::prefix('dashboard')->group(function () {
         Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
@@ -110,29 +120,8 @@ Route::middleware(['auth'])->group(function () {
             }); 
         });
     });
-});
 
-
-
-Route::prefix('reports')->group(function () {
-
-    // Display a list of reports, allowing filters
-    Route::get('/', [ReportController::class, 'index'])->name('report.index');
-
-    // Show a single report
-    Route::get('/{id}', [ReportController::class, 'show'])->name('report.show');
-
-    // Store a new report
-    Route::post('/', [ReportController::class, 'store'])->name('report.store');
-
-    // Delete a report
-    Route::delete('/{id}', [ReportController::class, 'destroy'])->name('report.destroy');
-});
-
-// Patient History
-Route::get('/history', [PatientHistoryController::class, 'index'])->name('History.all');
-
-// Document Routes
+    // Document Routes
 Route::prefix('documents')->group(function () {
     Route::get('/', [DocumentController::class, 'index'])->name('documents.index');
 
@@ -178,5 +167,27 @@ foreach ($documentTypes as $slug => $type) {
         ->defaults('document_type', $type);
     
 }
+});
+
+
+
+Route::prefix('reports')->group(function () {
+
+    // Display a list of reports, allowing filters
+    Route::get('/', [ReportController::class, 'index'])->name('report.index');
+
+    // Show a single report
+    Route::get('/{id}', [ReportController::class, 'show'])->name('report.show');
+
+    // Store a new report
+    Route::post('/', [ReportController::class, 'store'])->name('report.store');
+
+    // Delete a report
+    Route::delete('/{id}', [ReportController::class, 'destroy'])->name('report.destroy');
+});
+
+// Patient History
+Route::get('/history', [PatientHistoryController::class, 'index'])->name('History.all');
+
 
 });
