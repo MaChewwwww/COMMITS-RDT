@@ -5,6 +5,12 @@
 {{-- JQuery CDN for real time change profile --}}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
+{{-- Add this PHP block at the top --}}
+@php
+    $defaultImage = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0iI2NjYyI+PHBhdGggZD0iTTEyIDJDNi40OCAyIDIgNi40OCAyIDEyczQuNDggMTAgMTAgMTAgMTAtNC40OCAxMC0xMFMxNy41MiAyIDEyIDJ6bTAgM2MxLjY2IDAgMyAxLjM0IDMgM3MtMS4zNCAzLTMgMy0zLTEuMzQtMy0zIDEuMzQtMyAzLTN6bTAgMTQuMmMtMi41IDAtNC43MS0xLjI4LTYtMy4yMi4wMy0xLjk5IDQtMy4wOCA2LTMuMDggMS45OSAwIDUuOTcgMS4wOSA2IDMuMDgtMS4yOSAxLjk0LTMuNSAzLjIyLTYgMy4yMnoiLz48L3N2Zz4=';
+    $profileImage = $Data->profile_image ? asset('uploads/users/'.$Data->profile_image) : $defaultImage;
+@endphp
+
 <div class="flex flex-col p-6 bg-white md:container md:mx-auto">
     <div class ="flex flex-row gap-3 pb-6">
         <a href="{{ route('patients') }}"> {{-- change this to route of dashboard and also make a validation where it will
@@ -31,8 +37,8 @@
             <form method="POST" action="{{ route('profile.updateProfile') }}" enctype="multipart/form-data">
                 @csrf
                 <div class="flex flex-row item-center gap-x-5">
-                    <img id="profileImage" src="{{ asset('uploads/users/'.$Data->profile_image) }}"
-                    alt="profile picture" height="100" width="100">
+                    <img id="profileImage" src="{{ $profileImage }}"
+                    alt="profile picture" height="100" width="100" class="object-cover rounded-full">
                     <button id="uploadBtn" class="self-center px-6 py-1 text-white bg-green-600 rounded-full">Choose photo</button>
                     <input type="file" name="profile_image" id="imageInput" class="hidden">
                 </div>
@@ -189,14 +195,17 @@
 {{-- Real time change profile --}}
 <script type="text/javascript">
 $(document).ready(function(){
-        $('#imageInput').change(function(e){
-            var reader = new FileReader();
-            reader.onload = function(e) { 
-                $('#profileImage').attr('src',e.target.result); 
-            }
-            reader.readAsDataURL(e.target.files['0']); 
-        });
+    $('#imageInput').change(function(e){
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            $('#profileImage').attr('src', e.target.result);
+            $('#modalImage').attr('src', e.target.result); // Update modal image as well
+        }
+        if (e.target.files[0]) {
+            reader.readAsDataURL(e.target.files[0]);
+        }
     });
+});
 </script>
 
 @endsection
