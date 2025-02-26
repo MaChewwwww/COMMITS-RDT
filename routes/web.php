@@ -129,86 +129,54 @@ Route::prefix('reports')->group(function () {
     Route::delete('/{id}', [ReportController::class, 'destroy'])->name('report.destroy');
 });
 
-// Route for patient history
-Route::get('/history', [PatientHistoryController::class, 'index'])->name('patient_history.index');
+// Patient History
+Route::get('/history', [PatientHistoryController::class, 'index'])->name('History.all');
 
-// Route for document
-Route::get('/documents', [DocumentController::class, 'index'])->name('documents.index');
-Route::get('/documents/{id}/edit', [DocumentController::class, 'edit'])->name('documents.edit');
-Route::get('/documents/{id}/view', [DocumentController::class, 'show'])->name('documents.view');
-Route::put('/documents/{id}', [DocumentController::class, 'update'])->name('documents.update');
+// Document Routes
+Route::prefix('documents')->group(function () {
+    Route::get('/', [DocumentController::class, 'index'])->name('documents.index');
 
+    // Routes for each document type
+    $documentTypes = [
+        'excuse_letter' => 'Excuse Letter',
+        'medical_clearance' => 'Medical Clearance',
+        'medical_certificate' => 'Medical Certificate',
+        'annual_medical_clearance' => 'Annual Medical Clearance',
+        'waiver' => 'Waiver',
+        'waiver_for_pulmonary_case' => 'Waiver for Pulmonary Case',
+        'dmdc_consent_form' => 'DMDC Consent Form',
+    ];
 
+foreach ($documentTypes as $slug => $type) {
+    // Create Document
+    Route::get("/create/{$slug}", [DocumentController::class, 'create'])
+        ->name("documents.{$slug}.create")
+        ->defaults('document_type', $type);
 
-//History
-Route::prefix('history')->group(function () {
+    // Store Document
+    Route::post("/store/{$slug}", [DocumentController::class, 'store'])
+        ->name("documents.{$slug}.store")
+        ->defaults('document_type', $type);
 
-    Route::get('/', function () {
-        return view('HISTORY.all');
-    })->name('history.show');
+    // Edit Document
+    Route::get("/{id}/edit/{$slug}", [DocumentController::class, 'edit'])
+        ->name("documents.{$slug}.edit")
+        ->defaults('document_type', $type);
 
-    Route::get('/student', function () {
-        return view('HISTORY.student');
-    });
+    // Update Document
+    Route::put("/{id}/update/{$slug}", [DocumentController::class, 'update'])
+        ->name("documents.{$slug}.update")
+        ->defaults('document_type', $type);
 
-    //History routes
-    Route::get('/history', [PatientHistoryController::class, 'index'])->name('patient_history.index');
-    Route::prefix('history')->group(function () {
-        Route::get('/', function () {
-            return view('HISTORY.all');
-        })->name('history.show');
-        Route::get('/student', function () {
-            return view('HISTORY.student');
-        });
-        Route::get('/faculty', function () {
-            return view('HISTORY.faculty');
-        });
-        Route::get('/visitor', function () {
-            return view('HISTORY.visitor');
-        });
-        Route::get('/dependent', function () {
-            return view('HISTORY.dependent');
-        });
-        //Documents
-        Route::get('/', function () {
-            return view('Documents.adocument_file');
-        });
-        // Specific document views
-        Route::get('/med_certif', function () {
-            return view('Documents.med_certif');
-        });
-        Route::get('/med_clear', function () {
-            return view('Documents.med_clear');
-        });
-        Route::get('/annual_med_clear', function () {
-            return view('Documents.annual_med_clear');
-        });
-        Route::get('/excuse_letter', function () {
-            return view('Documents.excuse_letter');
-        });
-        Route::get('/waiver', function () {
-            return view('Documents.waiver');
-        });
-        Route::get('/waiver_for_pulm', function () {
-            return view('Documents.waiver_for_pulm');
-        });
-        Route::get('/dmdc_consent_form', function () {
-            return view('Documents.dmdc_consent_form');
-        });
-    });
+    // View Document (new route)
+    Route::get("/{id}/view/{$slug}", [DocumentController::class, 'view'])
+        ->name("documents.{$slug}.view")
+        ->defaults('document_type', $type);
 
-    // Document routes
-    Route::get('/documents', [DocumentController::class, 'index'])->name('documents.index');
-    Route::get('/documents/{id}/edit', [DocumentController::class, 'edit'])->name('documents.edit');
-    Route::get('/documents/{id}/view', [DocumentController::class, 'show'])->name('documents.view');
-    Route::put('/documents/{id}', [DocumentController::class, 'update'])->name('documents.update');
-
-    // Profile routes
-    Route::prefix('profile')->group(function () {
-        Route::get('/accountSettings', [ProfileController::class, 'accountSettings'])->name('profile.accountSettings');
-        Route::get('/helpAndSupport', [ProfileController::class, 'helpAndSupport'])->name('profile.helpAndSupport');
-        Route::post('/accountSettings', [ProfileController::class, 'updateProfile'])->name('profile.updateProfile');
-        Route::post('/updatePassword', [ProfileController::class, 'updatePassword'])->name('profile.updatePassword');
-    });
+    Route::delete("/{id}/delete/{$slug}", [DocumentController::class, 'softDelete'])
+        ->name("documents.{$slug}.delete")
+        ->defaults('document_type', $type);
+    
+}
 
 });

@@ -16,10 +16,12 @@ class CreatePatientRecordsTable extends Migration
         Schema::create('patient_records', function (Blueprint $table) {
             $table->id();
             $table->string('patient_name');
-            $table->enum('status', ['healed', 'ongoing', 'critical']); // Adjust based on your data
-            $table->string('identity'); // Corrected case for consistency
+            $table->enum('status', ['Healed', 'Ongoing', 'Critical']); // Adjust based on your data
+            $table->enum('identity', ['Student', 'Dependent', 'Faculty', 'Visitor']); // Corrected case for consistency
             $table->date('start_date'); // Changed to DATE
             $table->date('discharge_date'); // Changed to DATE
+            $table->string('physician');
+            $table->string('sex');
             $table->timestamps();
         });
     }
