@@ -19,7 +19,10 @@ class Medicine extends Model
         'expiration_date',
         'box_id',
         'status',
-        'user_id'
+        'user_id',
+        'notified_monthly',
+        'notified_weekly',
+        'notified_today'
     ];
 
     protected $casts = [
@@ -27,7 +30,10 @@ class Medicine extends Model
         'initial_quantity' => 'double',
         'remaining_quantity' => 'double',
         'consumed_quantity' => 'double',
-        'deleted_at' => 'datetime'
+        'deleted_at' => 'datetime',
+        'notified_monthly' => 'boolean',
+        'notified_weekly' => 'boolean',
+        'notified_today' => 'boolean'
     ];
 
     protected $table = 'medicines';

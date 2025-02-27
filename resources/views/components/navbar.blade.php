@@ -84,163 +84,61 @@
             <!-- Dropdown menu -->
             <div class="z-50 hidden max-w-sm my-4 overflow-hidden text-base list-none bg-white divide-y divide-gray-100 rounded shadow-lg rounded-xl"
                 id="notification-dropdown">
-                <div
-                    class="block px-4 py-2 text-base font-medium text-center text-gray-700 bg-gray-50">
+                <div class="block px-4 py-2 text-base font-medium text-center text-gray-700 bg-gray-50">
                     Notifications
+                    @if($notifications->count() > 0)
+                        <span class="px-2 py-1 text-xs font-semibold text-white bg-blue-500 rounded-full notification-badge">
+                            {{ $notifications->count() }}
+                        </span>
+                    @endif
                 </div>
-                <div>
-                    <a href="#"
-                        class="flex px-4 py-3 border-b hover:bg-gray-100 ">
-                        <div class="flex-shrink-0">
-                            <img class="rounded-full w-11 h-11"
-                                src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/bonnie-green.png"
-                                alt="Bonnie Green avatar" />
-                            <div
-                                class="absolute flex items-center justify-center w-5 h-5 ml-6 -mt-5 border border-white rounded-full bg-primary-700">
-                                <svg aria-hidden="true" class="w-3 h-3 text-white" fill="currentColor"
-                                    viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                    <path
-                                        d="M8.707 7.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l2-2a1 1 0 00-1.414-1.414L11 7.586V3a1 1 0 10-2 0v4.586l-.293-.293z">
-                                    </path>
-                                    <path
-                                        d="M3 5a2 2 0 012-2h1a1 1 0 010 2H5v7h2l1 2h4l1-2h2V5h-1a1 1 0 110-2h1a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V5z">
-                                    </path>
+                <div class="overflow-y-auto divide-y divide-gray-100 max-h-96">
+                    @if($notifications->count() > 0)
+                        @foreach($notifications as $notification)
+                            <div class="flex p-4 transition-colors duration-200 notification-item 
+                                {{ 
+                                    $notification->viewed_by && in_array(Auth::id(), json_decode($notification->viewed_by, true)) || $notification->read_at 
+                                        ? 'bg-gray-50' 
+                                        : 'bg-blue-50' 
+                                }}" 
+                                data-id="{{ $notification->id }}">
+                                <div class="flex-shrink-0">
+                                    <div class="flex items-center justify-center w-10 h-10 rounded-full
+                                        @if($notification->type === 'warning') bg-yellow-100 text-yellow-600
+                                        @elseif($notification->type === 'danger') bg-red-100 text-red-600
+                                        @else bg-blue-100 text-blue-600 @endif">
+                                        <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div class="flex-1 ml-4">
+                                    <p class="text-sm font-medium text-gray-900">{{ $notification->title }}</p>
+                                    <p class="mt-1 text-sm text-gray-500">{{ $notification->message }}</p>
+                                    <p class="mt-1 text-xs text-gray-400">{{ $notification->created_at->diffForHumans() }}</p>
+                                </div>
+                            </div>
+                        @endforeach
+
+                        @if($notifications->count() > 5)
+                            <button onclick="openNotificationsModal()" class="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-blue-600 bg-gray-50 hover:bg-gray-100">
+                                <span>View all notifications</span>
+                                <svg class="w-4 h-4 ml-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
                                 </svg>
-                            </div>
-                        </div>
-                        <div class="w-full pl-3">
-                            <div class="text-gray-500 font-normal text-sm mb-1.5">
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                            </div>
-                            <div class="text-xs font-medium text-primary-600 ">
-                                a few moments ago
-                            </div>
-                        </div>
-                    </a>
-                    <a href="#"
-                        class="flex px-4 py-3 border-b hover:bg-gray-100">
-                        <div class="flex-shrink-0">
-                            <img class="rounded-full w-11 h-11"
-                                src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/jese-leos.png"
-                                alt="Jese Leos avatar" />
-                            <div
-                                class="absolute flex items-center justify-center w-5 h-5 ml-6 -mt-5 bg-gray-900 border border-white rounded-full">
-                                <svg aria-hidden="true" class="w-3 h-3 text-white" fill="currentColor"
-                                    viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                    <path
-                                        d="M8 9a3 3 0 100-6 3 3 0 000 6zM8 11a6 6 0 016 6H2a6 6 0 016-6zM16 7a1 1 0 10-2 0v1h-1a1 1 0 100 2h1v1a1 1 0 102 0v-1h1a1 1 0 100-2h-1V7z">
-                                    </path>
+                            </button>
+                        @endif
+                    @else
+                        <div class="flex items-center justify-center p-8">
+                            <div class="text-center">
+                                <svg class="w-12 h-12 mx-auto text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
                                 </svg>
+                                <p class="mt-4 text-sm text-gray-500">No new notifications</p>
                             </div>
                         </div>
-                        <div class="w-full pl-3">
-                            <div class="text-gray-500 font-normal text-sm mb-1.5">
-                                <span class="font-semibold text-gray-900">Jese leos</span>
-                                and
-                                <span class="font-medium text-gray-900">5 others</span>
-                                started following you.
-                            </div>
-                            <div class="text-xs font-medium text-primary-600">
-                                10 minutes ago
-                            </div>
-                        </div>
-                    </a>
-                    <a href="#"
-                        class="flex px-4 py-3 border-b hover:bg-gray-100">
-                        <div class="flex-shrink-0">
-                            <img class="rounded-full w-11 h-11"
-                                src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/joseph-mcfall.png"
-                                alt="Joseph McFall avatar" />
-                            <div
-                                class="absolute flex items-center justify-center w-5 h-5 ml-6 -mt-5 bg-red-600 border border-white rounded-full">
-                                <svg aria-hidden="true" class="w-3 h-3 text-white" fill="currentColor"
-                                    viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                    <path fill-rule="evenodd"
-                                        d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
-                                        clip-rule="evenodd"></path>
-                                </svg>
-                            </div>
-                        </div>
-                        <div class="w-full pl-3">
-                            <div class="text-gray-500 font-normal text-sm mb-1.5">
-                                <span class="font-semibold text-gray-900">Joseph Mcfall</span>
-                                and
-                                <span class="font-medium text-gray-900">141 others</span>
-                                love your story. See it and view more stories.
-                            </div>
-                            <div class="text-xs font-medium text-primary-600">
-                                44 minutes ago
-                            </div>
-                        </div>
-                    </a>
-                    <a href="#"
-                        class="flex px-4 py-3 border-b hover:bg-gray-100">
-                        <div class="flex-shrink-0">
-                            <img class="rounded-full w-11 h-11"
-                                src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/roberta-casas.png"
-                                alt="Roberta Casas image" />
-                            <div
-                                class="absolute flex items-center justify-center w-5 h-5 ml-6 -mt-5 bg-green-400 border border-white rounded-full ">
-                                <svg aria-hidden="true" class="w-3 h-3 text-white" fill="currentColor"
-                                    viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                    <path fill-rule="evenodd"
-                                        d="M18 13V5a2 2 0 00-2-2H4a2 2 0 00-2 2v8a2 2 0 002 2h3l3 3 3-3h3a2 2 0 002-2zM5 7a1 1 0 011-1h8a1 1 0 110 2H6a1 1 0 01-1-1zm1 3a1 1 0 100 2h3a1 1 0 100-2H6z"
-                                        clip-rule="evenodd"></path>
-                                </svg>
-                            </div>
-                        </div>
-                        <div class="w-full pl-3">
-                            <div class="text-gray-500 font-normal text-sm mb-1.5 ">
-                                <span class="font-semibold text-gray-900 ">Leslie Livingston</span>
-                                mentioned you in a comment:
-                                <span class="font-medium text-primary-600 ">@bonnie.green</span>
-                                what do you say?
-                            </div>
-                            <div class="text-xs font-medium text-primary-600 ">
-                                1 hour ago
-                            </div>
-                        </div>
-                    </a>
-                    <a href="#" class="flex px-4 py-3 hover:bg-gray-100 ">
-                        <div class="flex-shrink-0">
-                            <img class="rounded-full w-11 h-11"
-                                src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/robert-brown.png"
-                                alt="Robert image" />
-                            <div
-                                class="absolute flex items-center justify-center w-5 h-5 ml-6 -mt-5 bg-purple-500 border border-white rounded-full ">
-                                <svg aria-hidden="true" class="w-3 h-3 text-white" fill="currentColor"
-                                    viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                    <path
-                                        d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z">
-                                    </path>
-                                </svg>
-                            </div>
-                        </div>
-                        <div class="w-full pl-3">
-                            <div class="text-gray-500 font-normal text-sm mb-1.5">
-                                <span class="font-semibold text-gray-900">Robert Brown</span>
-                                posted a new video: Glassmorphism - learn how to implement
-                                the new design trend.
-                            </div>
-                            <div class="text-xs font-medium text-primary-600">
-                                3 hours ago
-                            </div>
-                        </div>
-                    </a>
+                    @endif
                 </div>
-                <a href="#"
-                    class="block py-2 font-medium text-center text-gray-900 text-md bg-gray-50 hover:bg-gray-100">
-                    <div class="inline-flex items-center">
-                        <svg aria-hidden="true" class="w-4 h-4 mr-2 text-gray-500"
-                            fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"></path>
-                            <path fill-rule="evenodd"
-                                d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
-                                clip-rule="evenodd"></path>
-                        </svg>
-                        View all
-                    </div>
-                </a>
             </div>
             <!-- Apps -->
             <button type="button" data-dropdown-toggle="apps-dropdown"
@@ -443,38 +341,153 @@
 </style>
 
 <script>
-    document.getElementById('user-menu-button').addEventListener('click', function() {
+    document.addEventListener('DOMContentLoaded', function() {
+        // User menu dropdown functionality
+        document.getElementById('user-menu-button').addEventListener('click', function() {
             document.querySelector('.dropdown-menu-content').classList.toggle('hidden');
         });
+        
+        // Close dropdown when clicking outside the area of dropdown menu or its button
+        document.addEventListener('click', function(event) {
+            const dropdown = document.querySelector('.dropdown-menu-content');
+            const button = document.getElementById('user-menu-button');
+            if (!dropdown.classList.contains('hidden') && !dropdown.contains(event.target) && !button.contains(event.target)) {
+                dropdown.classList.add('hidden');
+            }
+        });
     
-    // Close dropdown when clicking outside the area of dropdown menu or its button
-    document.addEventListener('click', function(event) {
-        const dropdown = document.querySelector('.dropdown-menu-content');
-        const button = document.getElementById('user-menu-button');
-        if (!dropdown.classList.contains('hidden') && !dropdown.contains(event.target) && !button.contains(event.target)) {
-            dropdown.classList.add('hidden');
-        }
-    });
-
-    // Get the modal and buttons
-    const logoutModal = document.getElementById('logoutModal');
-    const logoutButton = document.getElementById('logout-button');
-    const cancelButton = document.getElementById('cancelButton');
-
-    // Show the modal when the logout button is clicked
-    logoutButton.addEventListener('click', function() {
-        logoutModal.classList.remove('hidden');
-    });
-
-    // Hide the modal when the cancel button is clicked
-    cancelButton.addEventListener('click', function() {
-        logoutModal.classList.add('hidden');
-    });
-
-    // Hide the modal when clicking outside of it
-    window.addEventListener('click', function(event) {
-        if (event.target === logoutModal) {
+        // Logout modal functionality
+        const logoutModal = document.getElementById('logoutModal');
+        const logoutButton = document.getElementById('logout-button');
+        const cancelButton = document.getElementById('cancelButton');
+    
+        // Show the modal when the logout button is clicked
+        logoutButton.addEventListener('click', function() {
+            logoutModal.classList.remove('hidden');
+        });
+    
+        // Hide the modal when the cancel button is clicked
+        cancelButton.addEventListener('click', function() {
             logoutModal.classList.add('hidden');
-        }
+        });
+    
+        // Hide the modal when clicking outside of it
+        window.addEventListener('click', function(event) {
+            if (event.target === logoutModal) {
+                logoutModal.classList.add('hidden');
+            }
+        });
+    
+        // Notifications functionality
+        const notificationButton = document.querySelector('[data-dropdown-toggle="notification-dropdown"]');
+        const notificationDropdown = document.getElementById('notification-dropdown');
+        let notificationDropdownIsOpen = false;
+        
+        // Get current user ID from the page
+        const currentUserId = {{ Auth::id() }};
+        
+        // Track when notification dropdown is opened
+        notificationButton.addEventListener('click', function() {
+            notificationDropdownIsOpen = !notificationDropdownIsOpen;
+        });
+        
+        // Mark individual notification as read when clicked
+        document.querySelectorAll('.notification-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const notificationId = this.dataset.id;
+                
+                fetch(`/notifications/${notificationId}/mark-as-read`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Update the UI to show notification was read
+                        this.classList.remove('bg-blue-50');
+                        this.classList.add('bg-gray-50');
+                        
+                        // Update notification count
+                        const badge = document.querySelector('.notification-badge');
+                        if (badge) {
+                            const count = parseInt(badge.textContent) - 1;
+                            if (count <= 0) {
+                                badge.remove();
+                            } else {
+                                badge.textContent = count;
+                            }
+                        }
+                    }
+                });
+            });
+        });
+        
+        // Mark notifications as viewed when closing the dropdown
+        document.addEventListener('click', function(event) {
+            // If notification dropdown was open and we're clicking outside of it
+            if (notificationDropdownIsOpen && 
+                !notificationDropdown.contains(event.target) && 
+                !notificationButton.contains(event.target)) {
+                
+                // Mark only unread notifications (with bg-blue-50 class) as viewed
+                const unreadNotifications = document.querySelectorAll('.notification-item.bg-blue-50');
+                if (unreadNotifications.length > 0) {
+                    // Get all unread notification IDs
+                    const notificationIds = Array.from(unreadNotifications).map(item => item.dataset.id);
+                    
+                    // Mark all notifications as viewed by current user
+                    fetch('/notifications/mark-viewed-by-user', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                        },
+                        body: JSON.stringify({ 
+                            notification_ids: notificationIds,
+                            user_id: currentUserId 
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            console.log('Marked notifications as viewed after closing dropdown');
+                            
+                            // Update background color to show they're viewed
+                            unreadNotifications.forEach(item => {
+                                item.classList.remove('bg-blue-50');
+                                item.classList.add('bg-gray-50');
+                            });
+                            
+                            // Update notification count
+                            const badge = document.querySelector('.notification-badge');
+                            if (badge) {
+                                const newCount = parseInt(badge.textContent) - unreadNotifications.length;
+                                if (newCount <= 0) {
+                                    badge.remove();
+                                } else {
+                                    badge.textContent = newCount;
+                                }
+                            }
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error marking notifications as viewed:', error);
+                    });
+                }
+                
+                // Reset dropdown state
+                notificationDropdownIsOpen = false;
+            }
+        });
     });
+
+    // Function to open all notifications modal
+    function openNotificationsModal() {
+        // Implement this if you want to show all notifications in a modal
+        console.log('Show all notifications');
+        // You could redirect to a notifications page or show a modal
+    }
 </script>

@@ -13,6 +13,9 @@ use App\Http\Controllers\PatientHistoryController;
 use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\NotificationController;
+use Illuminate\Support\Facades\Auth;
+
 
 // Guest routes
 Route::middleware(['guest'])->group(function () {
@@ -189,5 +192,57 @@ Route::prefix('reports')->group(function () {
 // Patient History
 Route::get('/history', [PatientHistoryController::class, 'index'])->name('History.all');
 
+// Mark notification as read
+Route::post('/notifications/{notification}/mark-as-read', function(App\Models\Notification $notification) {
+    if (Auth::check()) {
+        $userId = Auth::id();
+        
+        // Get current viewed_by array
+        $viewedBy = json_decode($notification->viewed_by ?: '[]', true);
+        
+        // Add current user if not already in the array
+        if (!in_array($userId, $viewedBy)) {
+            $viewedBy[] = $userId;
+            $notification->viewed_by = json_encode($viewedBy);
+            $notification->save();
+        }
+        
+        return response()->json(['success' => true]);
+    }
+    
+    return response()->json(['success' => false], 403);
+})->name('notifications.markAsRead')->middleware('web');
+
+// Mark multiple notifications as read at once
+Route::post('/notifications/mark-all-as-read', function(Illuminate\Http\Request $request) {
+    if (Auth::check()) {
+        $userId = Auth::id();
+        $notificationIds = $request->input('notification_ids', []);
+        
+        if (!empty($notificationIds)) {
+            $notifications = App\Models\Notification::whereIn('id', $notificationIds)->get();
+            
+            foreach ($notifications as $notification) {
+                // Get current viewed_by array
+                $viewedBy = json_decode($notification->viewed_by ?: '[]', true);
+                
+                // Add current user if not already in the array
+                if (!in_array($userId, $viewedBy)) {
+                    $viewedBy[] = $userId;
+                    $notification->viewed_by = json_encode($viewedBy);
+                    $notification->save();
+                }
+            }
+            
+            return response()->json(['success' => true, 'count' => count($notifications)]);
+        }
+    }
+    
+    return response()->json(['success' => false], 403);
+})->name('notifications.markAllAsRead')->middleware('web');
+
+// Add this with your other notification routes
+Route::post('/notifications/mark-viewed-by-user', [NotificationController::class, 'markViewedByUser'])
+    ->name('notifications.markViewedByUser');
 
 });
