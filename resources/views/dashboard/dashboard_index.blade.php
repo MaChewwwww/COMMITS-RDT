@@ -88,7 +88,7 @@
                     <!-- Pie Chart Column -->
                     <div class="p-3 bg-white border rounded-lg shadow-lg md:p-4">
                         <h2 class="mb-2 text-lg font-bold text-gray-800">Types of Patient</h2>
-                        <div class="relative h-[200px] sm:h-[220px] md:h-[240px] lg:h-[260px]">
+                        <div class="relative h-[220px] sm:h-[240px] md:h-[260px] lg:h-[280px] xl:h-[320px]">
                             @if(array_sum($patientCounts) === 0)
                                 <div class="flex flex-col items-center justify-center h-full">
                                     <svg class="w-20 h-20 mb-4 text-yellow-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -718,201 +718,241 @@ if (!hasMedicineData) {
     });
 
     // Supplies Pie Chart
-var suppliesCtx = document.getElementById('suppliesChart').getContext('2d');
-var suppliesChart = new Chart(suppliesCtx, {
-    type: 'pie',
-    data: {
-        labels: ['Available', 'Consumed'],
-        datasets: [{
-            data: [
-                {{ $suppliesStatus['initial'] }},
-                {{ $suppliesStatus['consumed'] }}
-            ],
-            backgroundColor: [
-                'rgba(34, 197, 94, 0.8)',  // green for initial
-                'rgba(239, 68, 68, 0.8)'   // red for consumed
-            ],
-            borderColor: [
-                'rgba(34, 197, 94, 1)',
-                'rgba(239, 68, 68, 1)'
-            ],
-            borderWidth: 2,
-            hoverOffset: 15,
-            weight: function(context) {
-                return context.raw === 0 ? 0.1 : 1; // Make zero segments very small
-            }
-        }]
-    },
-    options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-            legend: {
-                position: 'bottom',
-                labels: {
-                    padding: 8,
-                    boxWidth: 10,
-                    font: {
-                        size: 10
-                    },
-                    filter: function(legendItem, data) {
-                        return data.datasets[0].data[legendItem.index] > 0;
+    var suppliesCtx = document.getElementById('suppliesChart').getContext('2d');
+    var suppliesChart = new Chart(suppliesCtx, {
+        type: 'pie',
+        data: {
+            labels: ['Available', 'Consumed'],
+            datasets: [{
+                data: [
+                    {{ $suppliesStatus['initial'] }},
+                    {{ $suppliesStatus['consumed'] }}
+                ],
+                backgroundColor: [
+                    'rgba(34, 197, 94, 0.8)',  // green for initial
+                    'rgba(239, 68, 68, 0.8)'   // red for consumed
+                ],
+                borderColor: [
+                    'rgba(34, 197, 94, 1)',
+                    'rgba(239, 68, 68, 1)'
+                ],
+                borderWidth: 2,
+                hoverOffset: 15
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        padding: 8,
+                        boxWidth: 10,
+                        font: {
+                            size: 10
+                        }
                     }
-                }
-            },
-            tooltip: {
-                enabled: function(context) {
-                    return context.raw > 0;
                 },
-                callbacks: {
-                    label: function(context) {
-                        if (context.raw === 0) return '';
-                        const label = context.label || '';
-                        const value = context.raw || 0;
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            const label = context.label || '';
+                            const value = context.raw || 0;
+                            const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                            const percentage = Math.round((value / total) * 100);
+                            return `${label}: ${value} (${percentage}%)`;
+                        }
+                    }
+                },
+                datalabels: {
+                    color: '#FFFFFF',
+                    font: {
+                        weight: 'bold',
+                        size: 12
+                    },
+                    formatter: function(value, context) {
                         const total = context.dataset.data.reduce((a, b) => a + b, 0);
                         const percentage = Math.round((value / total) * 100);
-                        return `${label}: ${value} units (${percentage}%)`;
+                        return percentage > 0 ? `${percentage}%` : '';  // Show only percentage
+                    },
+                    display: function(context) {
+                        return context.dataset.data[context.dataIndex] > 0;
                     }
-                }
-            },
-            datalabels: {
-                color: '#FFFFFF',
-                font: {
-                    weight: 'bold',
-                    size: 12
-                },
-                formatter: function(value, context) {
-                    if (value === 0) return '';
-                    const total = context.dataset.data.reduce((a, b) => a + b, 0);
-                    const percentage = Math.round((value / total) * 100);
-                    return percentage + '%';
-                },
-                display: function(context) {
-                    return context.dataset.data[context.dataIndex] > 0;
                 }
             }
         }
-    }
-});
+    });
 
     // Equipment Vertical Bar Chart
     var equipmentCtx = document.getElementById('equipmentChart').getContext('2d');
     var equipmentChart = new Chart(equipmentCtx, {
-    type: 'bar',
-    data: {
-        labels: ['Serviceable', 'For Repair', 'For Condemn', 'Need Replacement'],
-        datasets: [{
-            data: [
-                {{ $equipmentStatus['serviceable'] }},
-                {{ $equipmentStatus['for_repair'] }},
-                {{ $equipmentStatus['for_condemn'] }},
-                {{ $equipmentStatus['need_replacement'] }}
-            ],
-            backgroundColor: [
-                'rgba(34, 197, 94, 0.7)',   // Lighter green
-                'rgba(234, 179, 8, 0.7)',    // Lighter yellow
-                'rgba(239, 68, 68, 0.7)',    // Lighter red
-                'rgba(59, 130, 246, 0.7)'    // Lighter blue
-            ],
-            borderColor: [
-                'rgba(34, 197, 94, 1)',
-                'rgba(234, 179, 8, 1)',
-                'rgba(239, 68, 68, 1)',
-                'rgba(59, 130, 246, 1)'
-            ],
-            borderWidth: 1.5,
-            borderRadius: 8,
-            barPercentage: 0.6,    // Make bars thinner
-            categoryPercentage: 0.8,
-            minBarLength: 8
-        }]
-    },
-    options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-            legend: {
-                display: false
+        type: 'bar',
+        data: {
+            labels: ['Serviceable', 'For Repair', 'For Condemn', 'Need Replacement'],
+            datasets: [{
+                data: [
+                    {{ $equipmentStatus['serviceable'] }},
+                    {{ $equipmentStatus['for_repair'] }},
+                    {{ $equipmentStatus['for_condemn'] }},
+                    {{ $equipmentStatus['need_replacement'] }}
+                ],
+                backgroundColor: [
+                    'rgba(34, 197, 94, 0.7)',   // Lighter green
+                    'rgba(234, 179, 8, 0.7)',    // Lighter yellow
+                    'rgba(239, 68, 68, 0.7)',    // Lighter red
+                    'rgba(59, 130, 246, 0.7)'    // Lighter blue
+                ],
+                borderColor: [
+                    'rgba(34, 197, 94, 1)',
+                    'rgba(234, 179, 8, 1)',
+                    'rgba(239, 68, 68, 1)',
+                    'rgba(59, 130, 246, 1)'
+                ],
+                borderWidth: 1.5,
+                borderRadius: 8,
+                barPercentage: 0.6,    // Make bars thinner
+                categoryPercentage: 0.8,
+                minBarLength: 8
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                    titleColor: '#1F2937',
+                    bodyColor: '#1F2937',
+                    borderColor: '#E5E7EB',
+                    borderWidth: 1,
+                    padding: 12,
+                    displayColors: true,
+                    callbacks: {
+                        label: function(context) {
+                            return `Quantity: ${context.raw} units`;
+                        }
+                    }
+                },
+                datalabels: {
+                    anchor: 'end',
+                    align: 'top',
+                    offset: 4,
+                    color: '#4B5563',
+                    font: function(context) {
+                        const width = context.chart.width;
+                        // Responsive font sizes
+                        if (width < 512) {
+                            return {
+                                weight: '600',
+                                size: 9
+                            };
+                        } else if (width < 768) {
+                            return {
+                                weight: '600',
+                                size: 10
+                            };
+                        } else {
+                            return {
+                                weight: '600',
+                                size: 11
+                            };
+                        }
+                    },
+                    formatter: function(value) {
+                        if (value === 0) return 'Empty Data';
+                        return value + ' units';
+                    },
+                    textStrokeColor: 'white',
+                    textStrokeWidth: 2,
+                    textShadowBlur: 3,
+                    textShadowColor: 'white'
+                }
             },
-            tooltip: {
-                backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                titleColor: '#1F2937',
-                bodyColor: '#1F2937',
-                borderColor: '#E5E7EB',
-                borderWidth: 1,
-                padding: 12,
-                displayColors: true,
-                callbacks: {
-                    label: function(context) {
-                        return `Quantity: ${context.raw} units`;
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    grid: {
+                        display: true,
+                        drawBorder: false,
+                        color: 'rgba(107, 114, 128, 0.1)'
+                    },
+                    ticks: {
+                        font: {
+                            size: 11
+                        },
+                        color: '#6B7280'
+                    }
+                },
+                x: {
+                    grid: {
+                        display: false
+                    },
+                    ticks: {
+                        font: function(context) {
+                            const width = context.chart.width;
+                            // Responsive font sizes
+                            if (window.innerWidth < 912) {
+                                return {
+                                    size: 8,
+                                    weight: '500'
+                                };
+                            } else if (window.innerWidth < 1320) {
+                                return {
+                                    size: 10,
+                                    weight: '500'
+                                };
+                            } else {
+                                return {
+                                    size: 12,
+                                    weight: '500'
+                                };
+                            }
+                        },
+                        color: '#374151',
+                        callback: function(value, index) {
+                            const labels = ['Serviceable', 'For Repair', 'For Condemn', 'Need Replacement'];
+                            const shortLabels = ['Serviceable', 'Repair', 'Condemn', 'Replacement'];
+                            const noLabels = ['', '', '', ''];
+                            
+                            // Check screen width
+                            if (window.innerWidth < 412) { // 768px is typical md breakpoint
+                                return noLabels[index];
+                            }
+                            else if (window.innerWidth <= 1320) { 
+                                return shortLabels[index];
+                            }
+                            return labels[index];
+                        }
                     }
                 }
             },
-            datalabels: {
-                anchor: 'end',
-                align: 'top',
-                offset: 4,
-                color: '#4B5563',
-                font: {
-                    weight: '600',
-                    size: 11
-                },
-                formatter: function(value) {
-                    if (value === 0) return 'Empty Data';
-                    return value + ' units';
-                },
-                textStrokeColor: 'white',
-                textStrokeWidth: 2,
-                textShadowBlur: 3,
-                textShadowColor: 'white'
-            }
-        },
-        scales: {
-            y: {
-                beginAtZero: true,
-                grid: {
-                    display: true,
-                    drawBorder: false,
-                    color: 'rgba(107, 114, 128, 0.1)'
-                },
-                ticks: {
-                    font: {
-                        size: 11
-                    },
-                    color: '#6B7280'
+            animations: {
+                tension: {
+                    duration: 1000,
+                    easing: 'easeInOutQuad',
+                    from: 1,
+                    to: 0,
+                    loop: false
                 }
             },
-            x: {
-                grid: {
-                    display: false
-                },
-                ticks: {
-                    font: {
-                        size: 11,
-                        weight: '500'
-                    },
-                    color: '#374151'
+            layout: {
+                padding: {
+                    top: 20,
+                    right: 16,
+                    bottom: 8,
+                    left: 8
                 }
             }
-        },
-        animations: {
-            tension: {
-                duration: 1000,
-                easing: 'easeInOutQuad',
-                from: 1,
-                to: 0,
-                loop: false
-            }
-        },
-        layout: {
-            padding: {
-                top: 20,
-                right: 16,
-                bottom: 8,
-                left: 8
-            }
         }
-    }
+    });
+
+    // Add resize handler to update labels when screen size changes
+    window.addEventListener('resize', function() {
+        equipmentChart.update();
     });
 });
 </script>

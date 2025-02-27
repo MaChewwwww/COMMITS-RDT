@@ -153,7 +153,6 @@ class DashboardController extends Controller
             ]);
 
             $medicines = Medicine::whereNotNull('expiration_date')
-                ->whereDate('expiration_date', '>=', $today)
                 ->whereHas('box', function($query) {
                     $query->where('isReturned', 0);
                 })

@@ -217,5 +217,7 @@ Route::middleware(['auth'])->group(function () {
         ->name('notifications.markViewedByUser');
 
     Route::post('/notifications/mark-as-viewed', [NotificationController::class, 'markAsViewed']);
-    Route::post('/notifications/clear-all', [NotificationController::class, 'clearAll']);
+    Route::post('/notifications/clear-all', [NotificationController::class, 'clearAll'])
+        ->name('notifications.clearAll')
+        ->middleware('auth');
 });

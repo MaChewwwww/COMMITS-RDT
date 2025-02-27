@@ -141,7 +141,7 @@ class NotificationController extends Controller
         try {
             $user = Auth::user();
             
-            // Delete from pivot table
+            // Delete all entries from notification_user table for the current user
             DB::table('notification_user')
                 ->where('user_id', $user->id)
                 ->delete();

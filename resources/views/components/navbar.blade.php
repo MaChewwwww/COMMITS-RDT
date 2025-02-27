@@ -122,8 +122,9 @@
                                                         <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
                                                     </svg>
                                                 @elseif($notification->type === 'danger')
-                                                    <svg class="w-7 h-7" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 0 001.414-1.414L11.414 10l1.293-1.293a1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+                                                    <svg class="w-7 h-7" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                                        <line x1="18" y1="6" x2="6" y2="20"></line>
+                                                        <line x1="6" y1="6" x2="18" y2="20"></line>
                                                     </svg>
                                                 @elseif($notification->type === 'deleted')
                                                     <svg class="w-7 h-7" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
@@ -398,6 +399,34 @@
     </div>
 </div>
 
+<!-- Success Modal -->
+<div id="successModal" class="fixed inset-0 z-50 hidden overflow-y-auto">
+    <div class="flex items-center justify-center min-h-screen px-4">
+        <div class="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75"></div>
+        
+        <div class="relative w-full max-w-md p-6 bg-white rounded-lg shadow-xl">
+            <div class="flex items-center justify-center">
+                <div class="flex items-center justify-center w-12 h-12 mx-auto bg-green-100 rounded-full">
+                    <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                </div>
+            </div>
+            
+            <div class="mt-3 text-center">
+                <h3 class="text-lg font-medium text-gray-900">Success!</h3>
+                <p class="mt-2 text-sm text-gray-500">All notifications have been cleared successfully.</p>
+                
+                <div class="mt-4">
+                    <button id="successModalClose" class="px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <style>
     @media (max-width: 640px) {
         .dropdown-menu-content {
@@ -590,51 +619,131 @@
         const cancelClearNotificationsButton = document.getElementById('cancelClearNotifications');
         const confirmClearNotificationsButton = document.getElementById('confirmClearNotifications');
 
-        // Show the modal when the clear notifications button is clicked
-        clearNotificationsButton.addEventListener('click', function() {
-            clearNotificationsModal.classList.remove('hidden');
-        });
+        if (clearNotificationsButton) {
+            clearNotificationsButton.addEventListener('click', function() {
+                clearNotificationsModal.classList.remove('hidden');
+            });
+        }
 
-        // Hide the modal when the cancel button is clicked
-        cancelClearNotificationsButton.addEventListener('click', function() {
-            clearNotificationsModal.classList.add('hidden');
-        });
+        if (cancelClearNotificationsButton) {
+            cancelClearNotificationsButton.addEventListener('click', function() {
+                clearNotificationsModal.classList.add('hidden');
+            });
+        }
 
-        // Hide the modal when clicking outside of it
+        if (confirmClearNotificationsButton) {
+            confirmClearNotificationsButton.addEventListener('click', function() {
+                // Show loading state
+                this.disabled = true;
+                const originalText = this.innerHTML;
+                this.innerHTML = `
+                    <svg class="w-5 h-5 mr-3 -ml-1 text-white animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Clearing...
+                `;
+
+                fetch('/notifications/clear-all', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    }
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success) {
+                        // Update UI
+                        const notificationsList = document.querySelector('#notification-dropdown .overflow-y-auto');
+                        const notificationCount = document.querySelector('#notification-button .bg-red-500');
+                        
+                        // Clear notifications list
+                        if (notificationsList) {
+                            notificationsList.innerHTML = `
+                                <div class="flex items-center justify-center p-8">
+                                    <div class="text-center">
+                                        <svg class="w-16 h-16 mx-auto text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
+                                        </svg>
+                                        <p class="mt-4 text-sm text-gray-500">No new notifications</p>
+                                    </div>
+                                </div>
+                            `;
+                        }
+
+                        // Remove notification count indicator
+                        if (notificationCount) {
+                            notificationCount.remove();
+                        }
+
+                        // Remove clear button
+                        const clearButtonContainer = clearNotificationsButton.parentElement;
+                        if (clearButtonContainer) {
+                            clearButtonContainer.remove();
+                        }
+
+                        // Hide clear confirmation modal
+                        clearNotificationsModal.classList.add('hidden');
+                        notificationDropdown.classList.add('hidden');
+
+                        // Show success modal
+                        const successModal = document.getElementById('successModal');
+                        successModal.classList.remove('hidden');
+
+                        // Auto-hide success modal after 2 seconds
+                        setTimeout(() => {
+                            successModal.classList.add('hidden');
+                        }, 2000);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error clearing notifications. Please try again.');
+                })
+                .finally(() => {
+                    // Reset button state
+                    this.disabled = false;
+                    this.innerHTML = originalText;
+                });
+            });
+        }
+
+        // Close modal when clicking outside
         window.addEventListener('click', function(event) {
             if (event.target === clearNotificationsModal) {
                 clearNotificationsModal.classList.add('hidden');
             }
         });
 
-        // Clear all notifications when the confirm button is clicked
-        confirmClearNotificationsButton.addEventListener('click', function() {
-            fetch('/notifications/clear-all', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                },
-                body: JSON.stringify({ user_id: currentUserId })
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok: ' + response.statusText);
-                }
-                return response.json();
-            })
-            .then(data => {
-                if (data.success) {
-                    console.log('Successfully cleared all notifications');
-                    // Hide the modal
-                    clearNotificationsModal.classList.add('hidden');
-                    // Optionally, you can refresh the page or update the notification list
-                    location.reload();
-                }
-            })
-            .catch(error => {
-                console.error('Error clearing notifications:', error);
+        // Close success modal
+        const successModalCloseButton = document.getElementById('successModalClose');
+        if (successModalCloseButton) {
+            successModalCloseButton.addEventListener('click', function() {
+                const successModal = document.getElementById('successModal');
+                successModal.classList.add('hidden');
             });
+        }
+
+        // Add success modal close button handler
+        const successModalClose = document.getElementById('successModalClose');
+        if (successModalClose) {
+            successModalClose.addEventListener('click', function() {
+                document.getElementById('successModal').classList.add('hidden');
+            });
+        }
+
+        // Close success modal when clicking outside
+        window.addEventListener('click', function(event) {
+            const successModal = document.getElementById('successModal');
+            if (event.target === successModal) {
+                successModal.classList.add('hidden');
+            }
         });
     });
 </script>
