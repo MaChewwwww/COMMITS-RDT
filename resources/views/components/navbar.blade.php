@@ -8,6 +8,9 @@
         : $defaultImage;
 @endphp
 
+<!-- Add this in your <head> section -->
+<meta name="csrf-token" content="{{ csrf_token() }}">
+
 <nav
     class="fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-200">
     <div class="flex flex-wrap items-center justify-between">
@@ -70,76 +73,108 @@
             </button>
 
             <!-- Notifications -->
-            <button type="button" data-dropdown-toggle="notification-dropdown"
-                class="p-2 px-3 text-gray-500 rounded-lg hover:text-gray-900 hover:bg-gray-100 focus:ring-4 focus:ring-gray-300">
-                <span class="sr-only">View notifications</span>
-                <!-- Bell icon -->
-                <svg aria-hidden="true" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
-                    xmlns="http://www.w3.org/2000/svg">
-                    <path
-                        d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z">
-                    </path>
-                </svg>
-            </button>
-            <!-- Dropdown menu -->
-            <div class="z-50 hidden max-w-sm my-4 overflow-hidden text-base list-none bg-white divide-y divide-gray-100 rounded shadow-lg rounded-xl"
-                id="notification-dropdown">
-                <div class="block px-4 py-2 text-base font-medium text-center text-gray-700 bg-gray-50">
-                    Notifications
-                    @if($notifications->count() > 0)
-                        <span class="px-2 py-1 text-xs font-semibold text-white bg-blue-500 rounded-full notification-badge">
-                            {{ $notifications->count() }}
-                        </span>
+            <div class="relative">
+                <!-- Notification Button -->
+                <button type="button" id="notification-button"
+                    class="p-2 px-3 text-gray-500 rounded-lg hover:text-gray-900 hover:bg-gray-100 focus:ring-4 focus:ring-gray-300">
+                    <span class="sr-only">View notifications</span>
+                    <!-- Bell icon -->
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"></path>
+                    </svg>
+                    @if($notifications->where('viewed_by', 'not like', '%' . Auth::id() . '%')->count() > 0)
+                        <span class="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></span>
                     @endif
-                </div>
-                <div class="overflow-y-auto divide-y divide-gray-100 max-h-96">
-                    @if($notifications->count() > 0)
-                        @foreach($notifications as $notification)
-                            <div class="flex p-4 transition-colors duration-200 notification-item 
-                                {{ 
-                                    $notification->viewed_by && in_array(Auth::id(), json_decode($notification->viewed_by, true)) || $notification->read_at 
-                                        ? 'bg-gray-50' 
+                </button>
+                
+                <!-- Custom Notification Dropdown -->
+                <div id="notification-dropdown" class="fixed z-50 hidden overflow-hidden bg-white rounded-lg shadow-lg w-96 max-w-[95vw]" style="left: 50%; transform: translateX(-50%); top: 4rem">
+                    <!-- Header -->
+                    <div class="sticky top-0 z-10 px-4 py-3 text-gray-700 bg-red-800 border-b border-gray-400">
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-sm font-medium text-white">Notifications</h3>
+                            @if($notifications->count() > 0)
+                                <span class="px-2 py-1 text-xs font-semibold text-black bg-white rounded-full">
+                                    {{ $notifications->count() }}
+                                </span>
+                            @endif
+                        </div>
+                    </div>
+                    
+                    <!-- Notification List -->
+                    <div class="overflow-y-auto divide-y divide-gray-100" style="max-height: min(calc(100vh - 12rem), 500px)">
+                        @if($notifications->count() > 0)
+                            @foreach($notifications as $notification)
+                                <div class="notification-item p-4 transition-colors duration-200 hover:bg-gray-50 
+                                    {{ 
+                                        $notification->viewed_by && in_array(Auth::id(), json_decode($notification->viewed_by, true)) 
+                                        ? 'bg-white' 
                                         : 'bg-blue-50' 
-                                }}" 
-                                data-id="{{ $notification->id }}">
-                                <div class="flex-shrink-0">
-                                    <div class="flex items-center justify-center w-10 h-10 rounded-full
-                                        @if($notification->type === 'warning') bg-yellow-100 text-yellow-600
-                                        @elseif($notification->type === 'danger') bg-red-100 text-red-600
-                                        @else bg-blue-100 text-blue-600 @endif">
-                                        <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                            <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
-                                        </svg>
+                                    }}" 
+                                    data-id="{{ $notification->id }}">
+                                    <div class="flex">
+                                        <!-- Notification Icon -->
+                                        <div class="flex-shrink-0">
+                                            <div class="flex items-center justify-center w-11 h-11 rounded-full
+                                                @if($notification->type === 'warning') bg-yellow-300 text-yellow-900
+                                                @elseif($notification->type === 'danger') bg-red-300 text-red-900
+                                                @elseif($notification->type === 'deleted') bg-gray-300 text-gray-900
+                                                @else bg-blue-100 text-blue-600 @endif">
+                                                @if($notification->type === 'warning')
+                                                    <svg class="w-7 h-7" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                                        <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                                                    </svg>
+                                                @elseif($notification->type === 'danger')
+                                                    <svg class="w-7 h-7" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+                                                    </svg>
+                                                @elseif($notification->type === 'deleted')
+                                                    <svg class="w-7 h-7" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                                        <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                                                    </svg>
+                                                @else
+                                                    <svg class="w-7 h-7" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                                        <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"/>
+                                                    </svg>
+                                                @endif
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Notification Content -->
+                                        <div class="flex-1 ml-4">
+                                            <p class="text-sm font-medium text-gray-900">{{ $notification->title }}</p>
+                                            <p class="mt-1 text-sm text-gray-500">{{ $notification->message }}</p>
+                                            <p class="mt-1 text-xs text-gray-400">{{ $notification->created_at->diffForHumans() }}</p>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="flex-1 ml-4">
-                                    <p class="text-sm font-medium text-gray-900">{{ $notification->title }}</p>
-                                    <p class="mt-1 text-sm text-gray-500">{{ $notification->message }}</p>
-                                    <p class="mt-1 text-xs text-gray-400">{{ $notification->created_at->diffForHumans() }}</p>
+                            @endforeach
+                        @else
+                            <div class="flex items-center justify-center p-8">
+                                <div class="text-center">
+                                    <svg class="w-16 h-16 mx-auto text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
+                                    </svg>
+                                    <p class="mt-4 text-sm text-gray-500">No new notifications</p>
                                 </div>
                             </div>
-                        @endforeach
-
-                        @if($notifications->count() > 5)
-                            <button onclick="openNotificationsModal()" class="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-blue-600 bg-gray-50 hover:bg-gray-100">
+                        @endif
+                    </div>
+                    
+                    <!-- View all notifications button - Sticky at bottom -->
+                    @if($notifications->count() > 5)
+                        <div class="sticky bottom-0 left-0 right-0 bg-white border-t border-gray-400 shadow-md">
+                            <button id="view-all-notifications" class="flex items-center justify-center w-full px-4 py-3 text-sm font-medium text-blue-600 transition duration-200 hover:bg-gray-100">
                                 <span>View all notifications</span>
                                 <svg class="w-4 h-4 ml-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                                     <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
                                 </svg>
                             </button>
-                        @endif
-                    @else
-                        <div class="flex items-center justify-center p-8">
-                            <div class="text-center">
-                                <svg class="w-12 h-12 mx-auto text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
-                                </svg>
-                                <p class="mt-4 text-sm text-gray-500">No new notifications</p>
-                            </div>
                         </div>
                     @endif
                 </div>
             </div>
+
             <!-- Apps -->
             <button type="button" data-dropdown-toggle="apps-dropdown"
                 class="p-2 text-gray-500 rounded-lg hover:text-gray-900 hover:bg-gray-100 focus:ring-4 focus:ring-gray-300">
@@ -380,9 +415,8 @@
             }
         });
     
-        // CUSTOM NOTIFICATION FUNCTIONALITY
-        // Instead of using Flowbite's dropdown
-        const notificationButton = document.querySelector('[data-dropdown-toggle="notification-dropdown"]');
+        // CUSTOM NOTIFICATION FUNCTIONALITY - Fixed implementation
+        const notificationButton = document.getElementById('notification-button');
         const notificationDropdown = document.getElementById('notification-dropdown');
         let notificationViewTimer = null;
         
@@ -393,9 +427,14 @@
         function markNotificationsAsViewed() {
             // Mark only unread notifications (with bg-blue-50 class) as viewed
             const unreadNotifications = document.querySelectorAll('.notification-item.bg-blue-50');
+            
             if (unreadNotifications.length > 0) {
+                console.log('Found unread notifications:', unreadNotifications.length);
+                
                 // Get all unread notification IDs
                 const notificationIds = Array.from(unreadNotifications).map(item => item.dataset.id);
+                
+                console.log('Marking notifications as viewed:', notificationIds);
                 
                 // Mark all notifications as viewed by current user
                 fetch('/notifications/mark-viewed-by-user', {
@@ -409,87 +448,183 @@
                         user_id: currentUserId 
                     })
                 })
-                .then(response => response.json())
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok: ' + response.statusText);
+                    }
+                    return response.json();
+                })
                 .then(data => {
                     if (data.success) {
-                        console.log('Marked notifications as viewed');
+                        console.log('Successfully marked notifications as viewed');
                         
                         // Update background color to show they're viewed
                         unreadNotifications.forEach(item => {
                             item.classList.remove('bg-blue-50');
-                            item.classList.add('bg-gray-50');
+                            item.classList.add('bg-white');
                         });
+                        
+                        // Remove the red dot indicator if all notifications are read
+                        if (document.querySelectorAll('.notification-item.bg-blue-50').length === 0) {
+                            const indicator = notificationButton.querySelector('span.bg-red-500');
+                            if (indicator) {
+                                indicator.remove();
+                            }
+                        }
                     }
                 })
                 .catch(error => {
                     console.error('Error marking notifications as viewed:', error);
                 });
+            } else {
+                console.log('No unread notifications found');
             }
         }
         
-        // OVERRIDE FLOWBITE'S BEHAVIOR
-        // Custom notification toggle
+        // Toggle notification dropdown - Fixed implementation
         notificationButton.addEventListener('click', function(e) {
-            e.preventDefault(); // Prevent Flowbite's default behavior
-            e.stopPropagation(); // Stop event from bubbling
+            e.preventDefault(); // Prevent any default behavior
             
-            // Toggle notification dropdown
             const isHidden = notificationDropdown.classList.contains('hidden');
             
+            // Close any other open dropdowns first
+            document.querySelectorAll('.dropdown-menu-content, #apps-dropdown').forEach(dropdown => {
+                dropdown.classList.add('hidden');
+            });
+            
+            console.log('Notification button clicked, dropdown is hidden:', isHidden);
+            
             if (isHidden) {
-                // Show the dropdown
+                // Show dropdown
                 notificationDropdown.classList.remove('hidden');
+                console.log('Showing notification dropdown');
                 
-                // Start timer to mark notifications as viewed after 5 seconds
+                // Clear any existing timer first
+                if (notificationViewTimer) {
+                    clearTimeout(notificationViewTimer);
+                }
+                
+                // Set timer to mark as viewed after 5 seconds
+                console.log('Setting timer to mark notifications as viewed in 5 seconds');
                 notificationViewTimer = setTimeout(function() {
+                    console.log('Timer triggered - marking notifications as viewed');
                     markNotificationsAsViewed();
                 }, 5000);
             } else {
-                // Hide the dropdown
+                // Hide dropdown
                 notificationDropdown.classList.add('hidden');
+                console.log('Hiding notification dropdown');
                 
                 // Clear timer
                 if (notificationViewTimer) {
                     clearTimeout(notificationViewTimer);
                     notificationViewTimer = null;
+                    console.log('Timer cleared');
                 }
             }
         });
         
-        // Close notification dropdown when clicking outside
+        // Close notification dropdown when clicking outside - Fixed implementation
         document.addEventListener('click', function(event) {
-            // Only do this if dropdown is visible
-            if (!notificationDropdown.classList.contains('hidden') &&
-                !notificationDropdown.contains(event.target) && 
-                !notificationButton.contains(event.target)) {
-                
-                // Mark notifications as viewed
-                markNotificationsAsViewed();
-                
-                // Clear any existing timer
-                if (notificationViewTimer) {
-                    clearTimeout(notificationViewTimer);
-                    notificationViewTimer = null;
+            // Only process if the dropdown is visible
+            if (!notificationDropdown.classList.contains('hidden')) {
+                // And if the click was outside both the dropdown and the button
+                if (!notificationDropdown.contains(event.target) && 
+                    !notificationButton.contains(event.target)) {
+                    
+                    console.log('Clicked outside notification dropdown - marking as viewed and closing');
+                    
+                    // Mark notifications as viewed
+                    markNotificationsAsViewed();
+                    
+                    // Clear timer
+                    if (notificationViewTimer) {
+                        clearTimeout(notificationViewTimer);
+                        notificationViewTimer = null;
+                        console.log('Timer cleared');
+                    }
+                    
+                    // Hide dropdown
+                    notificationDropdown.classList.add('hidden');
                 }
-                
-                // Hide dropdown
-                notificationDropdown.classList.add('hidden');
             }
         });
         
-        // Individual notification click handling (for navigation only)
+        // Handle "View all notifications" button click
+        document.getElementById('view-all-notifications')?.addEventListener('click', function() {
+            // Implementation for viewing all notifications
+            // Could redirect to a notifications page or open a modal
+            console.log('View all notifications clicked');
+        });
+        
+        // Optional: Add click functionality to individual notifications
         document.querySelectorAll('.notification-item').forEach(item => {
             item.addEventListener('click', function() {
-                // You can add custom handling when a notification is clicked
-                // For example, navigate to a specific page or show details
+                // Handle notification click (e.g., navigate to related content)
                 console.log('Clicked notification:', this.dataset.id);
+                
+                // You could add navigation logic here
+                // window.location.href = '/notifications/' + this.dataset.id;
             });
         });
     });
-
-    // Function to open all notifications modal
-    function openNotificationsModal() {
-        // Implement this if you want to show all notifications
-        console.log('Show all notifications');
-    }
 </script>
+
+<style>
+    /* Improve scrollbar appearance */
+    #notification-dropdown .overflow-y-auto::-webkit-scrollbar {
+        width: 8px;
+    }
+    
+    #notification-dropdown .overflow-y-auto::-webkit-scrollbar-track {
+        background: #f1f1f1;
+    }
+    
+    #notification-dropdown .overflow-y-auto::-webkit-scrollbar-thumb {
+        background: #888;
+        border-radius: 8px;
+    }
+    
+    #notification-dropdown .overflow-y-auto::-webkit-scrollbar-thumb:hover {
+        background: #555;
+    }
+    
+    /* Better notification dropdown positioning */
+    #notification-dropdown {
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04) !important;
+        border: 1px solid rgba(229, 231, 235, 1) !important;
+        position: absolute;
+        top: calc(100% + 0.25rem) !important;
+        margin-top: 0 !important;
+        z-index: 50 !important;
+    }
+
+    @media (min-width: 640px) {
+        #notification-dropdown {
+            width: 24rem; /* w-96 */
+            right: -9rem; /* Center it better under the button */
+            left: auto !important;
+            transform: translateX(0) !important;
+        }
+    }
+
+    @media (max-width: 639px) {
+        #notification-dropdown {
+            width: 92vw;
+            max-width: 92vw;
+            position: fixed;
+            top: 5rem !important;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+    }
+    
+    /* Beautiful hover effect for notification items */
+    .notification-item {
+        transition: all 0.2s ease;
+    }
+    
+    .notification-item:hover {
+        transform: translateY(-1px);
+    }
+</style>

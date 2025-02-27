@@ -225,23 +225,22 @@ private function checkExpiringMedicines()
                     ]);
                 }
             }
-            
-            // Daily notification (0 day)
-            if ($daysRemaining == 0 && !$medicine->notified_today) {
+
+            // Daily Missed (< 0 day)
+            if ($daysRemaining < 0 && !$medicine->notified_today) {
                 Log::info('Creating daily notification', [
                     'medicine' => $medicine->medicine_name,
                     'days' => $daysRemaining
                 ]);
                 
-                $message = $daysRemaining == 0 
-                    ? "{$medicine->medicine_name} will expire today (" . $expiryDate->format('M d, Y') . ")"
-                    : "{$medicine->medicine_name} will expire tomorrow (" . $expiryDate->format('M d, Y') . ")";
+                $message = "{$medicine->medicine_name} has expired on " . $expiryDate->format('M d, Y') . 
+                    " and is not usable anymore. Please dispose of properly.";
                     
                 try {
                     $notification = new Notification();
-                    $notification->title = 'Medicine Expiring Today';
+                    $notification->title = 'Medicine Has Expired';
                     $notification->message = $message;
-                    $notification->type = 'danger';
+                    $notification->type = 'deleted';
                     $notification->users_id = json_encode($userIds);
                     $notification->viewed_by = json_encode([]);
                     $notification->reference_id = $medicine->id;
@@ -260,6 +259,43 @@ private function checkExpiringMedicines()
                     ]);
                 }
             }
+            
+            // Daily notification (0 day)
+            if ($daysRemaining == 0 && !$medicine->notified_today) {
+                Log::info('Creating daily notification', [
+                    'medicine' => $medicine->medicine_name,
+                    'days' => $daysRemaining
+                ]);
+                
+                $message = $daysRemaining == 0 
+                    ? "{$medicine->medicine_name} will expire today (" . $expiryDate->format('M d, Y') . ")"
+                    : "{$medicine->medicine_name} will expire tomorrow (" . $expiryDate->format('M d, Y') . ")";
+                    
+                try {
+                    $notification = new Notification();
+                    $notification->title = 'Medicine Expiring Today';
+                    $notification->message = $message;
+                    $notification->type = 'deleted';
+                    $notification->users_id = json_encode($userIds);
+                    $notification->viewed_by = json_encode([]);
+                    $notification->reference_id = $medicine->id;
+                    $notification->save();
+                    
+                    $medicine->notified_today = true;
+                    $medicine->save();
+                    
+                    Log::info('Successfully created daily notification', [
+                        'notification_id' => $notification->id
+                    ]);
+                } catch (\Exception $e) {
+                    Log::error('Error creating daily notification', [
+                        'error' => $e->getMessage(),
+                        'trace' => $e->getTraceAsString()
+                    ]);
+                }
+            }
+
+            
         }
         
         Log::info('Completed medicine expiry check');

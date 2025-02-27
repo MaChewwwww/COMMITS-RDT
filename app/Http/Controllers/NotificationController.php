@@ -59,33 +59,37 @@ class NotificationController extends Controller
      */
     public function markViewedByUser(Request $request)
     {
-        $user_id = $request->user_id;
-        $notification_ids = $request->notification_ids;
-        
-        // Find all the notifications
-        $notifications = Notification::whereIn('id', $notification_ids)->get();
-        
-        foreach ($notifications as $notification) {
-            // Add current user to viewed_by if not already there
-            if (is_null($notification->viewed_by)) {
-                $notification->viewed_by = json_encode([$user_id]);
-            } else {
-                $viewed_by = json_decode($notification->viewed_by, true) ?: [];
-                if (!in_array($user_id, $viewed_by)) {
-                    $viewed_by[] = $user_id;
-                    $notification->viewed_by = json_encode($viewed_by);
+        try {
+            $user_id = $request->input('user_id');
+            $notification_ids = $request->input('notification_ids', []);
+            
+            if (empty($notification_ids)) {
+                return response()->json(['success' => false, 'message' => 'No notification IDs provided'], 400);
+            }
+
+            // Find all the notifications
+            $notifications = \App\Models\Notification::whereIn('id', $notification_ids)->get();
+            
+            foreach ($notifications as $notification) {
+                // Get current viewed_by array or initialize an empty array
+                $viewedBy = json_decode($notification->viewed_by ?? '[]', true);
+                
+                // Add user if not already in the array
+                if (!in_array($user_id, $viewedBy)) {
+                    $viewedBy[] = $user_id;
+                    $notification->viewed_by = json_encode($viewedBy);
+                    $notification->save();
                 }
             }
             
-            // If this is the first time anyone has viewed it, set read_at
-            if (is_null($notification->read_at)) {
-                $notification->read_at = now();
-            }
+            return response()->json(['success' => true]);
+        } catch (\Exception $e) {
+            // Log the error for debugging
+            \Illuminate\Support\Facades\Log::error('Error marking notifications as viewed: ' . $e->getMessage());
+            \Illuminate\Support\Facades\Log::error($e->getTraceAsString());
             
-            $notification->save();
+            return response()->json(['success' => false, 'message' => 'Server error: ' . $e->getMessage()], 500);
         }
-        
-        return response()->json(['success' => true]);
     }
 
     /**

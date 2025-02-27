@@ -60,6 +60,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
     });
 
+    // PATIENTS
     Route::prefix('patients')->group(function () {
         // Route::get('/', [PatientController::class, "index"])->name('patients');
         // Show all patients (index page)
@@ -125,124 +126,93 @@ Route::middleware(['auth'])->group(function () {
     });
 
     // Document Routes
-Route::prefix('documents')->group(function () {
-    Route::get('/', [DocumentController::class, 'index'])->name('documents.index');
+    Route::prefix('documents')->group(function () {
+        Route::get('/', [DocumentController::class, 'index'])->name('documents.index');
 
-    // Routes for each document type
-    $documentTypes = [
-        'excuse_letter' => 'Excuse Letter',
-        'medical_clearance' => 'Medical Clearance',
-        'medical_certificate' => 'Medical Certificate',
-        'annual_medical_clearance' => 'Annual Medical Clearance',
-        'waiver' => 'Waiver',
-        'waiver_for_pulmonary_case' => 'Waiver for Pulmonary Case',
-        'dmdc_consent_form' => 'DMDC Consent Form',
-    ];
+        // Routes for each document type
+        $documentTypes = [
+            'excuse_letter' => 'Excuse Letter',
+            'medical_clearance' => 'Medical Clearance',
+            'medical_certificate' => 'Medical Certificate',
+            'annual_medical_clearance' => 'Annual Medical Clearance',
+            'waiver' => 'Waiver',
+            'waiver_for_pulmonary_case' => 'Waiver for Pulmonary Case',
+            'dmdc_consent_form' => 'DMDC Consent Form',
+        ];
 
-foreach ($documentTypes as $slug => $type) {
-    // Create Document
-    Route::get("/create/{$slug}", [DocumentController::class, 'create'])
-        ->name("documents.{$slug}.create")
-        ->defaults('document_type', $type);
+        foreach ($documentTypes as $slug => $type) {
+            // Create Document
+            Route::get("/create/{$slug}", [DocumentController::class, 'create'])
+                ->name("documents.{$slug}.create")
+                ->defaults('document_type', $type);
 
-    // Store Document
-    Route::post("/store/{$slug}", [DocumentController::class, 'store'])
-        ->name("documents.{$slug}.store")
-        ->defaults('document_type', $type);
+            // Store Document
+            Route::post("/store/{$slug}", [DocumentController::class, 'store'])
+                ->name("documents.{$slug}.store")
+                ->defaults('document_type', $type);
 
-    // Edit Document
-    Route::get("/{id}/edit/{$slug}", [DocumentController::class, 'edit'])
-        ->name("documents.{$slug}.edit")
-        ->defaults('document_type', $type);
+            // Edit Document
+            Route::get("/{id}/edit/{$slug}", [DocumentController::class, 'edit'])
+                ->name("documents.{$slug}.edit")
+                ->defaults('document_type', $type);
 
-    // Update Document
-    Route::put("/{id}/update/{$slug}", [DocumentController::class, 'update'])
-        ->name("documents.{$slug}.update")
-        ->defaults('document_type', $type);
+            // Update Document
+            Route::put("/{id}/update/{$slug}", [DocumentController::class, 'update'])
+                ->name("documents.{$slug}.update")
+                ->defaults('document_type', $type);
 
-    // View Document (new route)
-    Route::get("/{id}/view/{$slug}", [DocumentController::class, 'view'])
-        ->name("documents.{$slug}.view")
-        ->defaults('document_type', $type);
+            // View Document (new route)
+            Route::get("/{id}/view/{$slug}", [DocumentController::class, 'view'])
+                ->name("documents.{$slug}.view")
+                ->defaults('document_type', $type);
 
-    Route::delete("/{id}/delete/{$slug}", [DocumentController::class, 'softDelete'])
-        ->name("documents.{$slug}.delete")
-        ->defaults('document_type', $type);
-    
-}
-});
-
-
-
-Route::prefix('reports')->group(function () {
-
-    // Display a list of reports, allowing filters
-    Route::get('/', [ReportController::class, 'index'])->name('report.index');
-
-    // Show a single report
-    Route::get('/{id}', [ReportController::class, 'show'])->name('report.show');
-
-    // Store a new report
-    Route::post('/', [ReportController::class, 'store'])->name('report.store');
-
-    // Delete a report
-    Route::delete('/{id}', [ReportController::class, 'destroy'])->name('report.destroy');
-});
-
-// Patient History
-Route::get('/history', [PatientHistoryController::class, 'index'])->name('History.all');
-
-// Mark notification as read
-Route::post('/notifications/{notification}/mark-as-read', function(App\Models\Notification $notification) {
-    if (Auth::check()) {
-        $userId = Auth::id();
+            Route::delete("/{id}/delete/{$slug}", [DocumentController::class, 'softDelete'])
+                ->name("documents.{$slug}.delete")
+                ->defaults('document_type', $type);
         
-        // Get current viewed_by array
-        $viewedBy = json_decode($notification->viewed_by ?: '[]', true);
-        
-        // Add current user if not already in the array
-        if (!in_array($userId, $viewedBy)) {
-            $viewedBy[] = $userId;
-            $notification->viewed_by = json_encode($viewedBy);
-            $notification->save();
-        }
-        
-        return response()->json(['success' => true]);
-    }
-    
-    return response()->json(['success' => false], 403);
-})->name('notifications.markAsRead')->middleware('web');
+        }   
+    });
 
-// Mark multiple notifications as read at once
-Route::post('/notifications/mark-all-as-read', function(Illuminate\Http\Request $request) {
-    if (Auth::check()) {
-        $userId = Auth::id();
-        $notificationIds = $request->input('notification_ids', []);
-        
-        if (!empty($notificationIds)) {
-            $notifications = App\Models\Notification::whereIn('id', $notificationIds)->get();
+    Route::prefix('reports')->group(function () {
+
+        // Display a list of reports, allowing filters
+        Route::get('/', [ReportController::class, 'index'])->name('report.index');
+
+        // Show a single report
+        Route::get('/{id}', [ReportController::class, 'show'])->name('report.show');
+
+        // Store a new report
+        Route::post('/', [ReportController::class, 'store'])->name('report.store');
+
+        // Delete a report
+        Route::delete('/{id}', [ReportController::class, 'destroy'])->name('report.destroy');
+    });
+
+    // Patient History
+    Route::get('/history', [PatientHistoryController::class, 'index'])->name('History.all');
+
+    // Mark notification as read
+    Route::post('/notifications/{notification}/mark-as-read', function(App\Models\Notification $notification) {
+        if (Auth::check()) {
+            $userId = Auth::id();
             
-            foreach ($notifications as $notification) {
-                // Get current viewed_by array
-                $viewedBy = json_decode($notification->viewed_by ?: '[]', true);
-                
-                // Add current user if not already in the array
-                if (!in_array($userId, $viewedBy)) {
-                    $viewedBy[] = $userId;
-                    $notification->viewed_by = json_encode($viewedBy);
-                    $notification->save();
-                }
+            // Get current viewed_by array
+            $viewedBy = json_decode($notification->viewed_by ?: '[]', true);
+            
+            // Add current user if not already in the array
+            if (!in_array($userId, $viewedBy)) {
+                $viewedBy[] = $userId;
+                $notification->viewed_by = json_encode($viewedBy);
+                $notification->save();
             }
             
-            return response()->json(['success' => true, 'count' => count($notifications)]);
+            return response()->json(['success' => true]);
         }
-    }
-    
-    return response()->json(['success' => false], 403);
-})->name('notifications.markAllAsRead')->middleware('web');
+        
+        return response()->json(['success' => false], 403);
+    })->name('notifications.markAsRead')->middleware('web');
 
-// Add this with your other notification routes
-Route::post('/notifications/mark-viewed-by-user', [NotificationController::class, 'markViewedByUser'])
-    ->name('notifications.markViewedByUser');
-
+    // Add this with your other notification routes
+    Route::post('/notifications/mark-viewed-by-user', [NotificationController::class, 'markViewedByUser'])
+        ->name('notifications.markViewedByUser');
 });
