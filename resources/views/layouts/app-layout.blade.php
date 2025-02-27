@@ -31,6 +31,7 @@
         /* Error modal with improved animations */
         #date-error-modal-container {
             transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
         }
         
         /* Scale effects */
@@ -56,6 +57,16 @@
             display: inline-block;
             min-width: 1em;
             text-align: center;
+            transition: all 0.2s ease;
+        }
+        
+        /* Modern rounded corners */
+        #date-error-modal-container {
+            border-radius: 12px;
+        }
+        
+        /* Clean button style */
+        #date-error-modal button {
             transition: all 0.2s ease;
         }
     </style>

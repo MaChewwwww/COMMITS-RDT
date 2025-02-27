@@ -26,8 +26,8 @@ document.addEventListener('DOMContentLoaded', function() {
             clearInterval(countdownInterval);
         }
         
-        countdownEl.textContent = '3';
-        let seconds = 3;
+        countdownEl.textContent = '5';
+        let seconds = 5;
         
         countdownInterval = setInterval(() => {
             seconds--;
@@ -77,7 +77,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // Focus on the expiration date field after modal closes
             setTimeout(() => {
                 expirationDateEl.focus();
-            }, 3500);
+            }, 5000); // Adjusted for 5 second countdown
             
             return false;
         } else {
@@ -169,8 +169,8 @@ function validateDateSubmit(receivedDateId, expirationDateId) {
         // Clear the expiration date field
         expirationDateEl.value = '';
         
-        // Show the error modal
-        showErrorModal('Expiration date must be after the received date.');
+        // Show the error modal with slightly different message
+        showErrorModal('Please select an expiration date that is after the received date.');
         
         return false;
     }
