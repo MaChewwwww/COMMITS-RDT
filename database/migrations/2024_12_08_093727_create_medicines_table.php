@@ -23,6 +23,9 @@ return new class extends Migration
             $table->string('status', 50); // Corrected `Status`
             $table->softDeletes();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->boolean('notified_monthly')->default(false);
+            $table->boolean('notified_weekly')->default(false);
+            $table->boolean('notified_today')->default(false);
             $table->timestamps();
         });
     }

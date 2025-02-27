@@ -52,7 +52,7 @@
                 <div class="h-12 mx-4 border-l-2 border-gray-300"></div>
                 <div class="flex-1">
                     <h2 class="text-lg font-semibold">Total Reports</h2>
-                    <p class="text-2xl font-bold">{{ $totalReports}}</p>
+                    <p class="text-2xl font-bold">{{ $totalReports }}</p>
                 </div>
             </div>
             <!-- Rectangle 4 -->
@@ -718,71 +718,82 @@ if (!hasMedicineData) {
     });
 
     // Supplies Pie Chart
-    var suppliesCtx = document.getElementById('suppliesChart').getContext('2d');
-    var suppliesChart = new Chart(suppliesCtx, {
-        type: 'pie',
-        data: {
-            labels: ['Available', 'Consumed'],
-            datasets: [{
-                data: [
-                    {{ $suppliesStatus['initial'] }},
-                    {{ $suppliesStatus['consumed'] }}
-                ],
-                backgroundColor: [
-                    'rgba(34, 197, 94, 0.8)',  // green for initial
-                    'rgba(239, 68, 68, 0.8)'   // red for consumed
-                ],
-                borderColor: [
-                    'rgba(34, 197, 94, 1)',
-                    'rgba(239, 68, 68, 1)'
-                ],
-                borderWidth: 2,
-                hoverOffset: 15
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    position: 'bottom',
-                    labels: {
-                        padding: 8,
-                        boxWidth: 10,
-                        font: {
-                            size: 10
-                        }
-                    }
-                },
-                tooltip: {
-                    callbacks: {
-                        label: function(context) {
-                            const label = context.label || '';
-                            const value = context.raw || 0;
-                            const total = context.dataset.data.reduce((a, b) => a + b, 0);
-                            const percentage = Math.round((value / total) * 100);
-                            return `${label}: ${value} units (${percentage}%)`;
-                        }
-                    }
-                },
-                datalabels: {
-                    color: '#FFFFFF',
+var suppliesCtx = document.getElementById('suppliesChart').getContext('2d');
+var suppliesChart = new Chart(suppliesCtx, {
+    type: 'pie',
+    data: {
+        labels: ['Available', 'Consumed'],
+        datasets: [{
+            data: [
+                {{ $suppliesStatus['initial'] }},
+                {{ $suppliesStatus['consumed'] }}
+            ],
+            backgroundColor: [
+                'rgba(34, 197, 94, 0.8)',  // green for initial
+                'rgba(239, 68, 68, 0.8)'   // red for consumed
+            ],
+            borderColor: [
+                'rgba(34, 197, 94, 1)',
+                'rgba(239, 68, 68, 1)'
+            ],
+            borderWidth: 2,
+            hoverOffset: 15,
+            weight: function(context) {
+                return context.raw === 0 ? 0.1 : 1; // Make zero segments very small
+            }
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                position: 'bottom',
+                labels: {
+                    padding: 8,
+                    boxWidth: 10,
                     font: {
-                        weight: 'bold',
-                        size: 12
+                        size: 10
                     },
-                    formatter: function(value, context) {
+                    filter: function(legendItem, data) {
+                        return data.datasets[0].data[legendItem.index] > 0;
+                    }
+                }
+            },
+            tooltip: {
+                enabled: function(context) {
+                    return context.raw > 0;
+                },
+                callbacks: {
+                    label: function(context) {
+                        if (context.raw === 0) return '';
+                        const label = context.label || '';
+                        const value = context.raw || 0;
                         const total = context.dataset.data.reduce((a, b) => a + b, 0);
                         const percentage = Math.round((value / total) * 100);
-                        return percentage > 0 ? percentage + '%' : '';
-                    },
-                    display: function(context) {
-                        return context.dataset.data[context.dataIndex] > 0;
+                        return `${label}: ${value} units (${percentage}%)`;
                     }
+                }
+            },
+            datalabels: {
+                color: '#FFFFFF',
+                font: {
+                    weight: 'bold',
+                    size: 12
+                },
+                formatter: function(value, context) {
+                    if (value === 0) return '';
+                    const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                    const percentage = Math.round((value / total) * 100);
+                    return percentage + '%';
+                },
+                display: function(context) {
+                    return context.dataset.data[context.dataIndex] > 0;
                 }
             }
         }
-    });
+    }
+});
 
     // Equipment Vertical Bar Chart
     var equipmentCtx = document.getElementById('equipmentChart').getContext('2d');
