@@ -59,4 +59,14 @@ class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
     {
         return "{$this->first_name} {$this->last_name}";
     }
+
+    /**
+     * Get the notifications for the user.
+     */
+    public function notifications(): BelongsToMany
+    {
+        return $this->belongsToMany(Notification::class)
+            ->withPivot('viewed_at')
+            ->withTimestamps();
+    }
 }

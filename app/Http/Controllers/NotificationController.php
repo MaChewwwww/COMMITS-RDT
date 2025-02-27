@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Notification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class NotificationController extends Controller
 {
@@ -15,7 +17,11 @@ class NotificationController extends Controller
      */
     public function index()
     {
-        $notifications = Notification::orderBy('created_at', 'desc')->get();
+        $user = Auth::user();
+        $notifications = $user->notifications()
+            ->orderBy('notifications.created_at', 'desc')
+            ->get();
+            
         return view('notifications.index', compact('notifications'));
     }
 
@@ -67,26 +73,16 @@ class NotificationController extends Controller
                 return response()->json(['success' => false, 'message' => 'No notification IDs provided'], 400);
             }
 
-            // Find all the notifications
-            $notifications = \App\Models\Notification::whereIn('id', $notification_ids)->get();
-            
-            foreach ($notifications as $notification) {
-                // Get current viewed_by array or initialize an empty array
-                $viewedBy = json_decode($notification->viewed_by ?? '[]', true);
-                
-                // Add user if not already in the array
-                if (!in_array($user_id, $viewedBy)) {
-                    $viewedBy[] = $user_id;
-                    $notification->viewed_by = json_encode($viewedBy);
-                    $notification->save();
-                }
-            }
+            // Update the pivot table with viewed_at timestamp
+            Auth::user()->notifications()
+                ->whereIn('notifications.id', $notification_ids)
+                ->wherePivotNull('viewed_at')
+                ->update(['notification_user.viewed_at' => now()]);
             
             return response()->json(['success' => true]);
         } catch (\Exception $e) {
-            // Log the error for debugging
-            \Illuminate\Support\Facades\Log::error('Error marking notifications as viewed: ' . $e->getMessage());
-            \Illuminate\Support\Facades\Log::error($e->getTraceAsString());
+            \Log::error('Error marking notifications as viewed: ' . $e->getMessage());
+            \Log::error($e->getTraceAsString());
             
             return response()->json(['success' => false, 'message' => 'Server error: ' . $e->getMessage()], 500);
         }
@@ -103,15 +99,19 @@ class NotificationController extends Controller
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'message' => 'required|string',
-            'type' => 'nullable|string|in:info,warning,danger',
+            'type' => 'nullable|string|in:warning,danger,success,deleted',
         ]);
 
         $notification = Notification::create([
             'title' => $validated['title'],
             'message' => $validated['message'],
-            'type' => $validated['type'] ?? 'info',
-            'user_id' => Auth::id(), // Set the creator of the notification
+            'type' => $validated['type'] ?? 'success',
+            'reference_id' => $request->reference_id
         ]);
+
+        // Attach the notification to specified users or all users
+        $userIds = $request->input('user_ids', [Auth::id()]);
+        $notification->users()->attach($userIds);
 
         return redirect()->back()->with('success', 'Notification created successfully');
     }
@@ -128,5 +128,77 @@ class NotificationController extends Controller
         $notification->delete();
         
         return redirect()->back()->with('success', 'Notification deleted successfully');
+    }
+
+    /**
+     * Clear all notifications for the current user.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function clearAll(Request $request)
+    {
+        try {
+            $user = Auth::user();
+            
+            // Delete from pivot table
+            DB::table('notification_user')
+                ->where('user_id', $user->id)
+                ->delete();
+                
+            return response()->json([
+                'success' => true,
+                'message' => 'All notifications cleared successfully'
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error clearing notifications: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Error clearing notifications'
+            ], 500);
+        }
+    }
+
+    /**
+     * Get notifications for the current user.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getNotifications()
+    {
+        $user = Auth::user();
+        
+        // Get notifications with pivot data
+        $notifications = $user->notifications()
+            ->withPivot('viewed_at')
+            ->orderBy('notifications.created_at', 'desc')
+            ->get();
+        
+        return view('components.navbar', compact('notifications'));
+    }
+
+    public function markAsViewed(Request $request)
+    {
+        try {
+            $user = Auth::user();
+            $notificationIds = $request->input('notification_ids', []);
+
+            // Update through the pivot table
+            foreach ($notificationIds as $notificationId) {
+                DB::table('notification_user')
+                    ->where('user_id', $user->id)
+                    ->where('notification_id', $notificationId)
+                    ->whereNull('viewed_at')
+                    ->update(['viewed_at' => now()]);
+            }
+
+            return response()->json(['success' => true]);
+        } catch (\Exception $e) {
+            Log::error('Error marking notifications as viewed: ' . $e->getMessage());
+            return response()->json([
+                'success' => false, 
+                'message' => 'Error updating notifications'
+            ], 500);
+        }
     }
 }

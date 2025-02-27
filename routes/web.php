@@ -215,4 +215,7 @@ Route::middleware(['auth'])->group(function () {
     // Add this with your other notification routes
     Route::post('/notifications/mark-viewed-by-user', [NotificationController::class, 'markViewedByUser'])
         ->name('notifications.markViewedByUser');
+
+    Route::post('/notifications/mark-as-viewed', [NotificationController::class, 'markAsViewed']);
+    Route::post('/notifications/clear-all', [NotificationController::class, 'clearAll']);
 });

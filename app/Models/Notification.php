@@ -5,22 +5,23 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Notification extends Model
 {
-    use HasFactory, SoftDeletes;
+    use SoftDeletes;
 
     protected $fillable = [
         'title',
         'message',
         'type',
-        'users_id',
-        'viewed_by',
         'reference_id'
     ];
 
-    protected $casts = [
-        'users_id' => 'array',
-        'viewed_by' => 'array'
-    ];
+    public function users()
+    {
+        return $this->belongsToMany(User::class)
+            ->withPivot('viewed_at')
+            ->withTimestamps();
+    }
 }
