@@ -194,7 +194,7 @@ private function checkExpiringMedicines()
             }
             
             // Weekly notification (2-7 days)
-            if ($daysRemaining <= 7 && $daysRemaining > 1 && !$medicine->notified_weekly) {
+            if ($daysRemaining <= 7 && $daysRemaining >= 1 && !$medicine->notified_weekly) {
                 Log::info('Creating weekly notification', [
                     'medicine' => $medicine->medicine_name,
                     'days' => $daysRemaining
@@ -226,8 +226,8 @@ private function checkExpiringMedicines()
                 }
             }
             
-            // Daily notification (0-1 day)
-            if ($daysRemaining <= 1 && !$medicine->notified_today) {
+            // Daily notification (0 day)
+            if ($daysRemaining == 0 && !$medicine->notified_today) {
                 Log::info('Creating daily notification', [
                     'medicine' => $medicine->medicine_name,
                     'days' => $daysRemaining
@@ -239,7 +239,7 @@ private function checkExpiringMedicines()
                     
                 try {
                     $notification = new Notification();
-                    $notification->title = 'Medicine Expiring Soon';
+                    $notification->title = 'Medicine Expiring Today';
                     $notification->message = $message;
                     $notification->type = 'danger';
                     $notification->users_id = json_encode($userIds);

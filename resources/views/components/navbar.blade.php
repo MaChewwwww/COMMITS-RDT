@@ -342,7 +342,8 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // User menu dropdown functionality
+        // User menu dropdown functionality 
+        // (keeping this part as it's working fine)
         document.getElementById('user-menu-button').addEventListener('click', function() {
             document.querySelector('.dropdown-menu-content').classList.toggle('hidden');
         });
@@ -356,7 +357,8 @@
             }
         });
     
-        // Logout modal functionality
+        // Logout modal functionality 
+        // (keeping this part as it's working fine)
         const logoutModal = document.getElementById('logoutModal');
         const logoutButton = document.getElementById('logout-button');
         const cancelButton = document.getElementById('cancelButton');
@@ -378,116 +380,116 @@
             }
         });
     
-        // Notifications functionality
+        // CUSTOM NOTIFICATION FUNCTIONALITY
+        // Instead of using Flowbite's dropdown
         const notificationButton = document.querySelector('[data-dropdown-toggle="notification-dropdown"]');
         const notificationDropdown = document.getElementById('notification-dropdown');
-        let notificationDropdownIsOpen = false;
+        let notificationViewTimer = null;
         
-        // Get current user ID from the page
+        // Get current user ID
         const currentUserId = {{ Auth::id() }};
         
-        // Track when notification dropdown is opened
-        notificationButton.addEventListener('click', function() {
-            notificationDropdownIsOpen = !notificationDropdownIsOpen;
-        });
-        
-        // Mark individual notification as read when clicked
-        document.querySelectorAll('.notification-item').forEach(item => {
-            item.addEventListener('click', function() {
-                const notificationId = this.dataset.id;
+        // Function to mark notifications as viewed
+        function markNotificationsAsViewed() {
+            // Mark only unread notifications (with bg-blue-50 class) as viewed
+            const unreadNotifications = document.querySelectorAll('.notification-item.bg-blue-50');
+            if (unreadNotifications.length > 0) {
+                // Get all unread notification IDs
+                const notificationIds = Array.from(unreadNotifications).map(item => item.dataset.id);
                 
-                fetch(`/notifications/${notificationId}/mark-as-read`, {
+                // Mark all notifications as viewed by current user
+                fetch('/notifications/mark-viewed-by-user', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                    }
+                    },
+                    body: JSON.stringify({ 
+                        notification_ids: notificationIds,
+                        user_id: currentUserId 
+                    })
                 })
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        // Update the UI to show notification was read
-                        this.classList.remove('bg-blue-50');
-                        this.classList.add('bg-gray-50');
+                        console.log('Marked notifications as viewed');
                         
-                        // Update notification count
-                        const badge = document.querySelector('.notification-badge');
-                        if (badge) {
-                            const count = parseInt(badge.textContent) - 1;
-                            if (count <= 0) {
-                                badge.remove();
-                            } else {
-                                badge.textContent = count;
-                            }
-                        }
+                        // Update background color to show they're viewed
+                        unreadNotifications.forEach(item => {
+                            item.classList.remove('bg-blue-50');
+                            item.classList.add('bg-gray-50');
+                        });
                     }
+                })
+                .catch(error => {
+                    console.error('Error marking notifications as viewed:', error);
                 });
-            });
+            }
+        }
+        
+        // OVERRIDE FLOWBITE'S BEHAVIOR
+        // Custom notification toggle
+        notificationButton.addEventListener('click', function(e) {
+            e.preventDefault(); // Prevent Flowbite's default behavior
+            e.stopPropagation(); // Stop event from bubbling
+            
+            // Toggle notification dropdown
+            const isHidden = notificationDropdown.classList.contains('hidden');
+            
+            if (isHidden) {
+                // Show the dropdown
+                notificationDropdown.classList.remove('hidden');
+                
+                // Start timer to mark notifications as viewed after 5 seconds
+                notificationViewTimer = setTimeout(function() {
+                    markNotificationsAsViewed();
+                }, 5000);
+            } else {
+                // Hide the dropdown
+                notificationDropdown.classList.add('hidden');
+                
+                // Clear timer
+                if (notificationViewTimer) {
+                    clearTimeout(notificationViewTimer);
+                    notificationViewTimer = null;
+                }
+            }
         });
         
-        // Mark notifications as viewed when closing the dropdown
+        // Close notification dropdown when clicking outside
         document.addEventListener('click', function(event) {
-            // If notification dropdown was open and we're clicking outside of it
-            if (notificationDropdownIsOpen && 
+            // Only do this if dropdown is visible
+            if (!notificationDropdown.classList.contains('hidden') &&
                 !notificationDropdown.contains(event.target) && 
                 !notificationButton.contains(event.target)) {
                 
-                // Mark only unread notifications (with bg-blue-50 class) as viewed
-                const unreadNotifications = document.querySelectorAll('.notification-item.bg-blue-50');
-                if (unreadNotifications.length > 0) {
-                    // Get all unread notification IDs
-                    const notificationIds = Array.from(unreadNotifications).map(item => item.dataset.id);
-                    
-                    // Mark all notifications as viewed by current user
-                    fetch('/notifications/mark-viewed-by-user', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                        },
-                        body: JSON.stringify({ 
-                            notification_ids: notificationIds,
-                            user_id: currentUserId 
-                        })
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            console.log('Marked notifications as viewed after closing dropdown');
-                            
-                            // Update background color to show they're viewed
-                            unreadNotifications.forEach(item => {
-                                item.classList.remove('bg-blue-50');
-                                item.classList.add('bg-gray-50');
-                            });
-                            
-                            // Update notification count
-                            const badge = document.querySelector('.notification-badge');
-                            if (badge) {
-                                const newCount = parseInt(badge.textContent) - unreadNotifications.length;
-                                if (newCount <= 0) {
-                                    badge.remove();
-                                } else {
-                                    badge.textContent = newCount;
-                                }
-                            }
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error marking notifications as viewed:', error);
-                    });
+                // Mark notifications as viewed
+                markNotificationsAsViewed();
+                
+                // Clear any existing timer
+                if (notificationViewTimer) {
+                    clearTimeout(notificationViewTimer);
+                    notificationViewTimer = null;
                 }
                 
-                // Reset dropdown state
-                notificationDropdownIsOpen = false;
+                // Hide dropdown
+                notificationDropdown.classList.add('hidden');
             }
+        });
+        
+        // Individual notification click handling (for navigation only)
+        document.querySelectorAll('.notification-item').forEach(item => {
+            item.addEventListener('click', function() {
+                // You can add custom handling when a notification is clicked
+                // For example, navigate to a specific page or show details
+                console.log('Clicked notification:', this.dataset.id);
+            });
         });
     });
 
     // Function to open all notifications modal
     function openNotificationsModal() {
-        // Implement this if you want to show all notifications in a modal
+        // Implement this if you want to show all notifications
         console.log('Show all notifications');
-        // You could redirect to a notifications page or show a modal
     }
 </script>
