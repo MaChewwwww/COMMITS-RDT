@@ -113,198 +113,161 @@ class DashboardController extends Controller
         ));
     }
 
-   /**
- * Check for medicines that are about to expire and create notifications
- */
-private function checkExpiringMedicines()
-{
-    try {
-        // Get current date without time component
-        $today = Carbon::today('Asia/Manila');
-        
-        // Get all user IDs for notifications
-        $userIds = User::pluck('id')->toArray();
-        
-        Log::info('Starting medicine expiry check', [
-            'today' => $today->format('Y-m-d'),
-            'users' => count($userIds)
-        ]);
-
-        // Get active medicines with expiration dates
-        // Note: Using medicines table's expiration_date field directly
-        $medicines = Medicine::whereNotNull('expiration_date')
-            ->whereDate('expiration_date', '>=', $today)
-            ->whereHas('box', function($query) {
-                $query->where('isReturned', 0);
-            })
-            ->get();
-
-        Log::info('Found medicines to check', ['count' => $medicines->count()]);
-
-        foreach ($medicines as $medicine) {
-            // Parse expiration date properly
-            $expiryDate = Carbon::parse($medicine->expiration_date)->startOfDay();
-            
-            // Calculate days until expiration
-            $daysRemaining = $today->diffInDays($expiryDate);
-            
-            Log::info('Checking medicine', [
-                'id' => $medicine->id,
-                'name' => $medicine->medicine_name,
-                'expiry_date' => $expiryDate->format('Y-m-d'),
-                'days_remaining' => $daysRemaining,
-                'notification_status' => [
-                    'notified_monthly' => (bool)$medicine->notified_monthly,
-                    'notified_weekly' => (bool)$medicine->notified_weekly, 
-                    'notified_today' => (bool)$medicine->notified_today
-                ]
+    private function createNotification($title, $message, $type, $userIds, $medicineId)
+    {
+        try {
+            $notification = Notification::create([
+                'title' => $title,
+                'message' => $message,
+                'type' => $type,
+                'reference_id' => $medicineId
             ]);
 
-            // Monthly notification (8-30 days)
-            if ($daysRemaining <= 30 && $daysRemaining > 7 && !$medicine->notified_monthly) {
-                Log::info('Creating monthly notification', [
-                    'medicine' => $medicine->medicine_name,
-                    'days' => $daysRemaining
-                ]);
-                
-                try {
-                    $notification = new Notification();
-                    $notification->title = 'Medicine Expiring in a Month';
-                    $notification->message = "{$medicine->medicine_name} will expire in {$daysRemaining} " . 
-                                        ($daysRemaining == 1 ? 'day' : 'days') . " (on " . 
-                                        $expiryDate->format('M d, Y') . ")";
-                    $notification->type = 'warning';
-                    $notification->users_id = json_encode($userIds);
-                    $notification->viewed_by = json_encode([]);
-                    $notification->reference_id = $medicine->id;
-                    $notification->save();
-                    
-                    $medicine->notified_monthly = true;
-                    $medicine->save();
-                    
-                    Log::info('Successfully created monthly notification', [
-                        'notification_id' => $notification->id
-                    ]);
-                } catch (\Exception $e) {
-                    Log::error('Error creating monthly notification', [
-                        'error' => $e->getMessage(),
-                        'trace' => $e->getTraceAsString()
-                    ]);
-                }
-            }
-            
-            // Weekly notification (2-7 days)
-            if ($daysRemaining <= 7 && $daysRemaining >= 1 && !$medicine->notified_weekly) {
-                Log::info('Creating weekly notification', [
-                    'medicine' => $medicine->medicine_name,
-                    'days' => $daysRemaining
-                ]);
-                
-                try {
-                    $notification = new Notification();
-                    $notification->title = 'Medicine Expiring This Week';
-                    $notification->message = "{$medicine->medicine_name} will expire in {$daysRemaining} " . 
-                                        ($daysRemaining == 1 ? 'day' : 'days') . " (on " . 
-                                        $expiryDate->format('M d, Y') . ")";
-                    $notification->type = 'danger';
-                    $notification->users_id = json_encode($userIds);
-                    $notification->viewed_by = json_encode([]);
-                    $notification->reference_id = $medicine->id;
-                    $notification->save();
-                    
-                    $medicine->notified_weekly = true;
-                    $medicine->save();
-                    
-                    Log::info('Successfully created weekly notification', [
-                        'notification_id' => $notification->id
-                    ]);
-                } catch (\Exception $e) {
-                    Log::error('Error creating weekly notification', [
-                        'error' => $e->getMessage(),
-                        'trace' => $e->getTraceAsString()
-                    ]);
-                }
-            }
+            // Attach users to the notification using pivot table
+            $notification->users()->attach($userIds);
 
-            // Daily Missed (< 0 day)
-            if ($daysRemaining < 0 && !$medicine->notified_today) {
-                Log::info('Creating daily notification', [
-                    'medicine' => $medicine->medicine_name,
-                    'days' => $daysRemaining
-                ]);
-                
-                $message = "{$medicine->medicine_name} has expired on " . $expiryDate->format('M d, Y') . 
-                    " and is not usable anymore. Please dispose of properly.";
-                    
-                try {
-                    $notification = new Notification();
-                    $notification->title = 'Medicine Has Expired';
-                    $notification->message = $message;
-                    $notification->type = 'deleted';
-                    $notification->users_id = json_encode($userIds);
-                    $notification->viewed_by = json_encode([]);
-                    $notification->reference_id = $medicine->id;
-                    $notification->save();
-                    
-                    $medicine->notified_today = true;
-                    $medicine->save();
-                    
-                    Log::info('Successfully created daily notification', [
-                        'notification_id' => $notification->id
-                    ]);
-                } catch (\Exception $e) {
-                    Log::error('Error creating daily notification', [
-                        'error' => $e->getMessage(),
-                        'trace' => $e->getTraceAsString()
-                    ]);
-                }
-            }
-            
-            // Daily notification (0 day)
-            if ($daysRemaining == 0 && !$medicine->notified_today) {
-                Log::info('Creating daily notification', [
-                    'medicine' => $medicine->medicine_name,
-                    'days' => $daysRemaining
-                ]);
-                
-                $message = $daysRemaining == 0 
-                    ? "{$medicine->medicine_name} will expire today (" . $expiryDate->format('M d, Y') . ")"
-                    : "{$medicine->medicine_name} will expire tomorrow (" . $expiryDate->format('M d, Y') . ")";
-                    
-                try {
-                    $notification = new Notification();
-                    $notification->title = 'Medicine Expiring Today';
-                    $notification->message = $message;
-                    $notification->type = 'deleted';
-                    $notification->users_id = json_encode($userIds);
-                    $notification->viewed_by = json_encode([]);
-                    $notification->reference_id = $medicine->id;
-                    $notification->save();
-                    
-                    $medicine->notified_today = true;
-                    $medicine->save();
-                    
-                    Log::info('Successfully created daily notification', [
-                        'notification_id' => $notification->id
-                    ]);
-                } catch (\Exception $e) {
-                    Log::error('Error creating daily notification', [
-                        'error' => $e->getMessage(),
-                        'trace' => $e->getTraceAsString()
-                    ]);
-                }
-            }
+            Log::info('Successfully created notification', [
+                'notification_id' => $notification->id,
+                'type' => $type
+            ]);
 
-            
+            return $notification;
+        } catch (\Exception $e) {
+            Log::error("Error creating {$type} notification", [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            throw $e;
         }
-        
-        Log::info('Completed medicine expiry check');
-        
-    } catch (\Exception $e) {
-        Log::error('Error checking expiring medicines', [
-            'message' => $e->getMessage(),
-            'trace' => $e->getTraceAsString()
-        ]);
     }
-}
+
+    private function checkExpiringMedicines()
+    {
+        try {
+            $today = Carbon::today('Asia/Manila');
+            $userIds = User::pluck('id')->toArray();
+            
+            Log::info('Starting medicine expiry check', [
+                'today' => $today->format('Y-m-d'),
+                'users' => count($userIds)
+            ]);
+
+            $medicines = Medicine::whereNotNull('expiration_date')
+                ->whereHas('box', function($query) {
+                    $query->where('isReturned', 0);
+                })
+                ->get();
+
+            Log::info('Found medicines to check', ['count' => $medicines->count()]);
+
+            foreach ($medicines as $medicine) {
+                $expiryDate = Carbon::parse($medicine->expiration_date)->startOfDay();
+                $daysRemaining = $today->diffInDays($expiryDate);
+                
+                Log::info('Checking medicine', [
+                    'id' => $medicine->id,
+                    'name' => $medicine->medicine_name,
+                    'expiry_date' => $expiryDate->format('Y-m-d'),
+                    'days_remaining' => $daysRemaining
+                ]);
+
+                // Monthly notification (8-30 days)
+                if ($daysRemaining <= 30 && $daysRemaining > 7 && !$medicine->notified_monthly) {
+                    try {
+                        $this->createNotification(
+                            'Medicine Expiring in a Month',
+                            "{$medicine->medicine_name} will expire in {$daysRemaining} " . 
+                            ($daysRemaining == 1 ? 'day' : 'days') . " (on " . 
+                            $expiryDate->format('M d, Y') . ")",
+                            'warning',
+                            $userIds,
+                            $medicine->id
+                        );
+                        
+                        $medicine->notified_monthly = true;
+                        $medicine->save();
+                    } catch (\Exception $e) {
+                        Log::error('Error creating monthly notification', [
+                            'error' => $e->getMessage(),
+                            'trace' => $e->getTraceAsString()
+                        ]);
+                    }
+                }
+                
+                // Weekly notification (2-7 days)
+                if ($daysRemaining <= 7 && $daysRemaining >= 1 && !$medicine->notified_weekly) {
+                    try {
+                        $this->createNotification(
+                            'Medicine Expiring This Week',
+                            "{$medicine->medicine_name} will expire in {$daysRemaining} " . 
+                            ($daysRemaining == 1 ? 'day' : 'days') . " (on " . 
+                            $expiryDate->format('M d, Y') . ")",
+                            'danger',
+                            $userIds,
+                            $medicine->id
+                        );
+                        
+                        $medicine->notified_weekly = true;
+                        $medicine->save();
+                    } catch (\Exception $e) {
+                        Log::error('Error creating weekly notification', [
+                            'error' => $e->getMessage(),
+                            'trace' => $e->getTraceAsString()
+                        ]);
+                    }
+                }
+
+                // Daily Missed (< 0 day)
+                if ($daysRemaining < 0 && !$medicine->notified_today) {
+                    try {
+                        $this->createNotification(
+                            'Medicine Has Expired',
+                            "{$medicine->medicine_name} has expired on " . $expiryDate->format('M d, Y') . 
+                            " and is not usable anymore. Please dispose of properly.",
+                            'deleted',
+                            $userIds,
+                            $medicine->id
+                        );
+                        
+                        $medicine->notified_today = true;
+                        $medicine->save();
+                    } catch (\Exception $e) {
+                        Log::error('Error creating expired notification', [
+                            'error' => $e->getMessage(),
+                            'trace' => $e->getTraceAsString()
+                        ]);
+                    }
+                }
+                
+                // Daily notification (0 day)
+                if ($daysRemaining == 0 && !$medicine->notified_today) {
+                    try {
+                        $this->createNotification(
+                            'Medicine Expiring Today',
+                            "{$medicine->medicine_name} will expire today (" . $expiryDate->format('M d, Y') . ")",
+                            'deleted',
+                            $userIds,
+                            $medicine->id
+                        );
+                        
+                        $medicine->notified_today = true;
+                        $medicine->save();
+                    } catch (\Exception $e) {
+                        Log::error('Error creating daily notification', [
+                            'error' => $e->getMessage(),
+                            'trace' => $e->getTraceAsString()
+                        ]);
+                    }
+                }
+            }
+            
+            Log::info('Completed medicine expiry check');
+            
+        } catch (\Exception $e) {
+            Log::error('Error checking expiring medicines', [
+                'message' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+        }
+    }
 }

@@ -26,10 +26,15 @@ class AppServiceProvider extends ServiceProvider
             if (Auth::check()) {
                 $userId = Auth::id();
                 
-                // Get notifications that haven't been viewed by the current user
-                $notifications = Notification::whereRaw("NOT JSON_CONTAINS(COALESCE(viewed_by, '[]'), ?)", ['"' . $userId . '"'])
-                    ->orderBy('created_at', 'desc')
-                    ->get();
+                // Get notifications through pivot table
+                $notifications = Notification::whereHas('users', function($query) use ($userId) {
+                    $query->where('users.id', $userId);
+                })
+                ->with(['users' => function($query) use ($userId) {
+                    $query->where('users.id', $userId);
+                }])
+                ->orderBy('notifications.created_at', 'desc')
+                ->get();
                 
                 $view->with('notifications', $notifications);
             } else {

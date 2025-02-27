@@ -20,6 +20,56 @@
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.min.css" rel="stylesheet">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link href="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.css" rel="stylesheet" />
+
+    <!-- Custom styles for error modals -->
+    <style>
+        /* Transitions and animations */
+        .transform {
+            transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+        }
+        
+        /* Error modal with improved animations */
+        #date-error-modal-container {
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        /* Scale effects */
+        .scale-100 {
+            transform: scale(1);
+        }
+        
+        .scale-95 {
+            transform: scale(0.95);
+        }
+        
+        .scale-102 {
+            transform: scale(1.02);
+        }
+        
+        /* Fix message animation */
+        #error-fix-message {
+            transition: opacity 0.5s ease;
+        }
+        
+        /* Countdown animation */
+        #error-modal-countdown {
+            display: inline-block;
+            min-width: 1em;
+            text-align: center;
+            transition: all 0.2s ease;
+        }
+        
+        /* Modern rounded corners */
+        #date-error-modal-container {
+            border-radius: 12px;
+        }
+        
+        /* Clean button style */
+        #date-error-modal button {
+            transition: all 0.2s ease;
+        }
+    </style>
 </head>
 
 <body>
@@ -77,7 +127,9 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.all.min.js"></script>
+    <script src="{{ asset('js/date-validation.js') }}"></script>
     @yield('scripts')
+    @stack('scripts')
 
     <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
 </body>

@@ -82,7 +82,9 @@
                     <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                         <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"></path>
                     </svg>
-                    @if($notifications->where('viewed_by', 'not like', '%' . Auth::id() . '%')->count() > 0)
+                    @if($notifications->filter(function($notification) {
+                        return $notification->users->first() && is_null($notification->users->first()->pivot->viewed_at);
+                    })->count() > 0)
                         <span class="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></span>
                     @endif
                 </button>
@@ -105,12 +107,7 @@
                     <div class="overflow-y-auto divide-y divide-gray-100" style="max-height: min(calc(100vh - 12rem), 500px)">
                         @if($notifications->count() > 0)
                             @foreach($notifications as $notification)
-                                <div class="notification-item p-4 transition-colors duration-200 hover:bg-gray-50 
-                                    {{ 
-                                        $notification->viewed_by && in_array(Auth::id(), json_decode($notification->viewed_by, true)) 
-                                        ? 'bg-white' 
-                                        : 'bg-blue-50' 
-                                    }}" 
+                                <div class="notification-item p-4 {{ $notification->users->first() && is_null($notification->users->first()->pivot->viewed_at) ? 'bg-blue-50' : 'bg-white' }}" 
                                     data-id="{{ $notification->id }}">
                                     <div class="flex">
                                         <!-- Notification Icon -->
@@ -125,8 +122,9 @@
                                                         <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
                                                     </svg>
                                                 @elseif($notification->type === 'danger')
-                                                    <svg class="w-7 h-7" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+                                                    <svg class="w-7 h-7" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                                        <line x1="18" y1="6" x2="6" y2="20"></line>
+                                                        <line x1="6" y1="6" x2="18" y2="20"></line>
                                                     </svg>
                                                 @elseif($notification->type === 'deleted')
                                                     <svg class="w-7 h-7" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
@@ -169,6 +167,18 @@
                                 <svg class="w-4 h-4 ml-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                                     <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
                                 </svg>
+                            </button>
+                        </div>
+                    @endif
+
+                    <!-- Add clear notifications button -->
+                    @if($notifications->count() > 0)
+                        <div class="sticky bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-md">
+                            <button id="clear-notifications" class="flex items-center justify-center w-full px-4 py-3 text-sm font-medium text-red-600 transition duration-200 hover:bg-red-50">
+                                <svg class="w-4 h-4 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                </svg>
+                                Clear Notifications
                             </button>
                         </div>
                     @endif
@@ -222,7 +232,7 @@
                             class="mx-auto mb-1 text-gray-400 w-7 h-7 group-hover:text-gray-500"
                             fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                             <path fill-rule="evenodd"
-                                d="M5 3a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2V5a2 2 0 00-2-2H5zm0 2h10v7h-2l-1 2H8l-1-2H5V5z"
+                                d="M5 3a2 2 0 00-2 2v10l3.5-2 3.5 2 3.5-2 3.5 2V5a2 2 0 00-2-2H5zm0 2h10v7h-2l-1 2H8l-1-2H5V5z"
                                 clip-rule="evenodd"></path>
                         </svg>
                         <div class="text-sm text-gray-900 ">Inbox</div>
@@ -256,7 +266,7 @@
                     <a href="#"
                         class="block p-4 text-center rounded-lg hover:bg-gray-100 group">
                         <svg aria-hidden="true"
-                            class="mx-auto mb-1 text-gray-400 w-7 h-7 group-hover:text-gray-500 "
+                            class="mx-auto mb-1 text-gray-400 w-7 h-7 group-hover:text-gray-500"
                             fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                             <path d="M4 3a2 2 0 100 4h12a2 2 0 100-4H4z"></path>
                             <path fill-rule="evenodd"
@@ -364,6 +374,59 @@
     </div>
 </div>
 
+<!-- Add confirmation modal -->
+<div id="clearNotificationsModal" class="fixed inset-0 z-50 hidden overflow-y-auto">
+    <div class="flex items-center justify-center min-h-screen px-4">
+        <div class="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75"></div>
+        
+        <div class="relative w-full max-w-md bg-white rounded-lg shadow-xl">
+            <div class="p-6">
+                <h3 class="text-lg font-medium text-gray-900">Clear All Notifications</h3>
+                <p class="mt-2 text-sm text-gray-500">
+                    Are you sure you want to clear all notifications? This action cannot be undone.
+                </p>
+                
+                <div class="flex justify-end mt-4 space-x-3">
+                    <button id="cancelClearNotifications" class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
+                        Cancel
+                    </button>
+                    <button id="confirmClearNotifications" class="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                        Clear All
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Success Modal -->
+<div id="successModal" class="fixed inset-0 z-50 hidden overflow-y-auto">
+    <div class="flex items-center justify-center min-h-screen px-4">
+        <div class="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75"></div>
+        
+        <div class="relative w-full max-w-md p-6 bg-white rounded-lg shadow-xl">
+            <div class="flex items-center justify-center">
+                <div class="flex items-center justify-center w-12 h-12 mx-auto bg-green-100 rounded-full">
+                    <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                </div>
+            </div>
+            
+            <div class="mt-3 text-center">
+                <h3 class="text-lg font-medium text-gray-900">Success!</h3>
+                <p class="mt-2 text-sm text-gray-500">All notifications have been cleared successfully.</p>
+                
+                <div class="mt-4">
+                    <button id="successModalClose" class="px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <style>
     @media (max-width: 640px) {
         .dropdown-menu-content {
@@ -424,61 +487,43 @@
         const currentUserId = {{ Auth::id() }};
         
         // Function to mark notifications as viewed
-        function markNotificationsAsViewed() {
-            // Mark only unread notifications (with bg-blue-50 class) as viewed
-            const unreadNotifications = document.querySelectorAll('.notification-item.bg-blue-50');
-            
-            if (unreadNotifications.length > 0) {
-                console.log('Found unread notifications:', unreadNotifications.length);
-                
-                // Get all unread notification IDs
-                const notificationIds = Array.from(unreadNotifications).map(item => item.dataset.id);
-                
-                console.log('Marking notifications as viewed:', notificationIds);
-                
-                // Mark all notifications as viewed by current user
-                fetch('/notifications/mark-viewed-by-user', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                    },
-                    body: JSON.stringify({ 
-                        notification_ids: notificationIds,
-                        user_id: currentUserId 
-                    })
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok: ' + response.statusText);
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    if (data.success) {
-                        console.log('Successfully marked notifications as viewed');
-                        
-                        // Update background color to show they're viewed
-                        unreadNotifications.forEach(item => {
-                            item.classList.remove('bg-blue-50');
-                            item.classList.add('bg-white');
-                        });
-                        
-                        // Remove the red dot indicator if all notifications are read
-                        if (document.querySelectorAll('.notification-item.bg-blue-50').length === 0) {
-                            const indicator = notificationButton.querySelector('span.bg-red-500');
-                            if (indicator) {
-                                indicator.remove();
-                            }
-                        }
-                    }
-                })
-                .catch(error => {
-                    console.error('Error marking notifications as viewed:', error);
-                });
-            } else {
-                console.log('No unread notifications found');
+        function markNotificationsAsViewed(notificationIds) {
+            if (!notificationIds) {
+                notificationIds = Array.from(document.querySelectorAll('.notification-item.bg-blue-50'))
+                    .map(el => el.dataset.id);
             }
+
+            if (notificationIds.length === 0) return;
+
+            fetch('/notifications/mark-as-viewed', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                },
+                body: JSON.stringify({
+                    notification_ids: notificationIds
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    notificationIds.forEach(id => {
+                        const notificationItem = document.querySelector(`.notification-item[data-id="${id}"]`);
+                        if (notificationItem) {
+                            notificationItem.classList.remove('bg-blue-50');
+                            notificationItem.classList.add('bg-white');
+                        }
+                    });
+
+                    // Remove red dot if all notifications are viewed
+                    if (document.querySelectorAll('.notification-item.bg-blue-50').length === 0) {
+                        const indicator = document.querySelector('#notification-button .bg-red-500');
+                        if (indicator) indicator.remove();
+                    }
+                }
+            })
+            .catch(error => console.error('Error:', error));
         }
         
         // Toggle notification dropdown - Fixed implementation
@@ -566,6 +611,139 @@
                 // You could add navigation logic here
                 // window.location.href = '/notifications/' + this.dataset.id;
             });
+        });
+
+        // Clear notifications modal functionality
+        const clearNotificationsModal = document.getElementById('clearNotificationsModal');
+        const clearNotificationsButton = document.getElementById('clear-notifications');
+        const cancelClearNotificationsButton = document.getElementById('cancelClearNotifications');
+        const confirmClearNotificationsButton = document.getElementById('confirmClearNotifications');
+
+        if (clearNotificationsButton) {
+            clearNotificationsButton.addEventListener('click', function() {
+                clearNotificationsModal.classList.remove('hidden');
+            });
+        }
+
+        if (cancelClearNotificationsButton) {
+            cancelClearNotificationsButton.addEventListener('click', function() {
+                clearNotificationsModal.classList.add('hidden');
+            });
+        }
+
+        if (confirmClearNotificationsButton) {
+            confirmClearNotificationsButton.addEventListener('click', function() {
+                // Show loading state
+                this.disabled = true;
+                const originalText = this.innerHTML;
+                this.innerHTML = `
+                    <svg class="w-5 h-5 mr-3 -ml-1 text-white animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Clearing...
+                `;
+
+                fetch('/notifications/clear-all', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    }
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success) {
+                        // Update UI
+                        const notificationsList = document.querySelector('#notification-dropdown .overflow-y-auto');
+                        const notificationCount = document.querySelector('#notification-button .bg-red-500');
+                        
+                        // Clear notifications list
+                        if (notificationsList) {
+                            notificationsList.innerHTML = `
+                                <div class="flex items-center justify-center p-8">
+                                    <div class="text-center">
+                                        <svg class="w-16 h-16 mx-auto text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
+                                        </svg>
+                                        <p class="mt-4 text-sm text-gray-500">No new notifications</p>
+                                    </div>
+                                </div>
+                            `;
+                        }
+
+                        // Remove notification count indicator
+                        if (notificationCount) {
+                            notificationCount.remove();
+                        }
+
+                        // Remove clear button
+                        const clearButtonContainer = clearNotificationsButton.parentElement;
+                        if (clearButtonContainer) {
+                            clearButtonContainer.remove();
+                        }
+
+                        // Hide clear confirmation modal
+                        clearNotificationsModal.classList.add('hidden');
+                        notificationDropdown.classList.add('hidden');
+
+                        // Show success modal
+                        const successModal = document.getElementById('successModal');
+                        successModal.classList.remove('hidden');
+
+                        // Auto-hide success modal after 2 seconds
+                        setTimeout(() => {
+                            successModal.classList.add('hidden');
+                        }, 2000);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error clearing notifications. Please try again.');
+                })
+                .finally(() => {
+                    // Reset button state
+                    this.disabled = false;
+                    this.innerHTML = originalText;
+                });
+            });
+        }
+
+        // Close modal when clicking outside
+        window.addEventListener('click', function(event) {
+            if (event.target === clearNotificationsModal) {
+                clearNotificationsModal.classList.add('hidden');
+            }
+        });
+
+        // Close success modal
+        const successModalCloseButton = document.getElementById('successModalClose');
+        if (successModalCloseButton) {
+            successModalCloseButton.addEventListener('click', function() {
+                const successModal = document.getElementById('successModal');
+                successModal.classList.add('hidden');
+            });
+        }
+
+        // Add success modal close button handler
+        const successModalClose = document.getElementById('successModalClose');
+        if (successModalClose) {
+            successModalClose.addEventListener('click', function() {
+                document.getElementById('successModal').classList.add('hidden');
+            });
+        }
+
+        // Close success modal when clicking outside
+        window.addEventListener('click', function(event) {
+            const successModal = document.getElementById('successModal');
+            if (event.target === successModal) {
+                successModal.classList.add('hidden');
+            }
         });
     });
 </script>

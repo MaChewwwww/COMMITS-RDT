@@ -2,12 +2,13 @@
 
 @section('inventory-add')
 <x-inventory.modal target="create-inventory-medicines">
-    <x-inventory.form method="POST" action="{{ route('add_medicine_store') }}">
+    <x-inventory.form method="POST" action="{{ route('add_medicine_store') }}" id="add-medicine-form" onsubmit="return validateDateSubmit('date_received', 'expiration_date')">
         
         <!-- Date Received -->
         <x-inventory.date
             label="Date Received" 
             name="date_received" 
+            id="date_received"
             required
         />
 
@@ -15,6 +16,7 @@
         <x-inventory.date
             label="Expiration Date" 
             name="expiration_date" 
+            id="expiration_date"
             required
         />
 
@@ -62,6 +64,10 @@
 
         </x-inventory.form>
     </x-inventory.modal>
+
+    <!-- Error Modal Component -->
+    <x-inventory.date-error-modal />
+
 @endsection
 
 @section('inventory-table')
@@ -116,13 +122,16 @@
                             />
                             <!-- Edit Button -->
                             <x-inventory.btn-edit-modal heading="Edit a Record" target="{{ 'edit-'.$medicine->id }}" >  
-                                <x-inventory.form method="POST" action="{{ route('update_medicine', $medicine->id) }}">
+                                <x-inventory.form method="POST" action="{{ route('update_medicine', $medicine->id) }}" 
+                                    id="edit-medicine-form-{{ $medicine->id }}"
+                                    onsubmit="return validateDateSubmit('edit-date-received-{{ $medicine->id }}', 'edit-expiration-date-{{ $medicine->id }}')">
                                     @method('PUT')
                                     <!-- date_received -->
                                     <x-inventory.date
                                         label="Date Received" 
                                         name="date_received"    
                                         value="{{ old('date_received', \Carbon\Carbon::parse($medicine->box->date_received)->format('Y-m-d')) }}"
+                                        id="edit-date-received-{{ $medicine->id }}"
                                         required
                                     />
                                     
@@ -131,6 +140,7 @@
                                         label="Expiration Date" 
                                         name="expiration_date" 
                                         value="{{ old('expiration_date', \Carbon\Carbon::parse($medicine->expiration_date)->format('Y-m-d')) }}"
+                                        id="edit-expiration-date-{{ $medicine->id }}"
                                         required
                                     />
                 
