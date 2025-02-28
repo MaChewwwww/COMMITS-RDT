@@ -20,6 +20,7 @@ class CreateReportsTable extends Migration
             $table->string('category');
             $table->date('date');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
     
@@ -27,5 +28,8 @@ class CreateReportsTable extends Migration
     public function down()
     {
         Schema::dropIfExists('reports');
+        Schema::table('reports', function (Blueprint $table) {
+            $table->dropSoftDeletes();
+        });
     }
 }

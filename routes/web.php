@@ -51,6 +51,7 @@ Route::middleware(['auth'])->group(function () {
         // Delete a patient record
         Route::delete('/destroy/{id}', [PatientController::class, 'destroy'])->name('patients.destroy');
     });
+    
     // Medicine routes
     Route::prefix('medicine')->group(function () {
         Route::get('/', [MedicineController::class, 'index'])->name('medicine_dashboard');
@@ -61,20 +62,27 @@ Route::middleware(['auth'])->group(function () {
         Route::put('/{medicine}/deduct', [MedicineController::class, 'deduct'])->name('deduct_medicine');
         Route::delete('/medicines/{medicine}', [MedicineController::class, 'delete'])->name('delete_medicine');
     });
+
     // Logout route
     Route::post('/logout', [UserController::class, 'logout'])->name('logout');
 
     // Report routes
     Route::prefix('reports')->group(function () {
         // Display a list of reports, allowing filters
-        Route::get('/', [ReportController::class, 'index'])->name('report.index');
+        Route::get('/', [ReportController::class, 'index'])->name('reports.index');
         // Show a single report
-        Route::get('/{id}', [ReportController::class, 'show'])->name('report.show');
+        Route::get('/{id}', [ReportController::class, 'show'])->name('reports.show');
         // Store a new report
-        Route::post('/', [ReportController::class, 'store'])->name('report.store');
+        Route::post('/', [ReportController::class, 'store'])->name('reports.store');
         // Delete a report
-        Route::delete('/{id}', [ReportController::class, 'destroy'])->name('report.destroy');
+        Route::delete('/{id}', [ReportController::class, 'destroy'])->name('reports.destroy');
+        Route::get('/{id}/edit', [ReportController::class, 'edit'])->name('reports.edit');
+        Route::put('/{id}', [ReportController::class, 'update'])->name('reports.update');
     });
+
+    // Report paper route
+    Route::get('/reportPaper', [ReportController::class, 'showReportPaper'])->name('reports.showReportPaper');
+    Route::post('/reportPaper', [ReportController::class, 'filterAndCountReports'])->name('reports.filterAndCountReports');
 
     //History routes
     Route::get('/history', [PatientHistoryController::class, 'index'])->name('patient_history.index');

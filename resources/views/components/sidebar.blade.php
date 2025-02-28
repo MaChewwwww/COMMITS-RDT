@@ -49,7 +49,7 @@
                 </a>
             </li>
             <li>
-                <a href="{{ route('report.index') }}"
+                <a href="{{ route('reports.index') }}"
                     class="flex items-center p-2 text-base font-medium text-gray-300 transition duration-75 rounded-lg hover:bg-gray-100 hover:text-red-900 group">
                     <i class="w-6 h-6 text-white transition duration-75 fas fa-file-alt group-hover:text-red-800"></i>
                     <span class="ml-3">Reports</span>

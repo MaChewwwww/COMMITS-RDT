@@ -50,7 +50,7 @@
             </div>
         @endif
         
-        {{-- check if the route is profile page if not it will add margin left --}}
+        {{-- checks if the route is profile page if not it will add margin left --}}
         <main class="h-auto p-4 pt-20 {{ in_array($currentRoute, ['profile.accountSettings', 'profile.helpAndSupport']) ? '' : 'md:ml-64' }}">
             @yield('content')
         </main>

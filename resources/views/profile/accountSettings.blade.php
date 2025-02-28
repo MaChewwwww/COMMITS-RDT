@@ -116,26 +116,28 @@
 </div>
 
 <script>
-    // for upload profile button
-    const uploadBtn = document.getElementById('uploadBtn');
-    const fileInput = document.getElementById('imageInput');
-    const fileName = document.getElementById('fileName');
+    // Function to handle profile image upload
+    function handleProfileImageUpload() {
+        const uploadBtn = document.getElementById('uploadBtn');
+        const fileInput = document.getElementById('imageInput');
+        const fileName = document.getElementById('fileName');
 
-    uploadBtn.addEventListener('click', (e) => {
-        e.preventDefault(); // Prevent form submission or page reload
-        fileInput.click();
-    });
+        uploadBtn.addEventListener('click', (e) => {
+            e.preventDefault(); // Prevent form submission or page reload
+            fileInput.click();
+        });
 
-    fileInput.addEventListener('change', (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            fileName.textContent = `Selected: ${file.name}`;
-        } else {
-            fileName.textContent = '';
-        }
-    });
+        fileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                fileName.textContent = `Selected: ${file.name}`;
+            } else {
+                fileName.textContent = '';
+            }
+        });
+    }
 
-    // for toggle password visibility
+    // Function to toggle password visibility
     function togglePassword(inputId, iconId) {
         const passwordInput = document.getElementById(inputId);
         const eyeIcon = document.getElementById(iconId);
@@ -148,47 +150,48 @@
         eyeIcon.classList.toggle('text-red-500');
     }
 
-    // Event Listeners for Both Inputs
-    document.getElementById('toggleOldPassword').addEventListener('click', () => {
-        togglePassword('oldPasswordID', 'eyeIconOld');
-    });
+    // Function to handle password visibility toggle
+    function handlePasswordToggle() {
+        document.getElementById('toggleOldPassword').addEventListener('click', () => {
+            togglePassword('oldPasswordID', 'eyeIconOld');
+        });
 
-    document.getElementById('toggleNewPassword').addEventListener('click', () => {
-        togglePassword('newPasswordID', 'eyeIconNew');
-    });
+        document.getElementById('toggleNewPassword').addEventListener('click', () => {
+            togglePassword('newPasswordID', 'eyeIconNew');
+        });
+    }
 
-    // Modal for Image Preview
-    const profileImage = document.getElementById('profileImage');
-    const modal = document.getElementById('imageModal');
-    const modalImage = document.getElementById('modalImage');
-    const closeModal = document.getElementById('closeModal');
+    // Function to handle image modal
+    function handleImageModal() {
+        const profileImage = document.getElementById('profileImage');
+        const modal = document.getElementById('imageModal');
+        const modalImage = document.getElementById('modalImage');
+        const closeModal = document.getElementById('closeModal');
 
-    // Show modal with enlarged image
-    profileImage.addEventListener('click', () => {
-        modalImage.src = profileImage.src;
-        modal.classList.remove('hidden');
-        modal.classList.add('flex');
-    });
+        // Show modal with enlarged image
+        profileImage.addEventListener('click', () => {
+            modalImage.src = profileImage.src;
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        });
 
-    // Close modal on close button click
-    closeModal.addEventListener('click', () => {
-        modal.classList.add('hidden');
-        modal.classList.remove('flex');
-    });
-
-    // Close modal when clicking outside the image
-    modal.addEventListener('click', (e) => {
-        if (e.target === modal) {
-            modal.classList.remove('flex');
+        // Close modal on close button click
+        closeModal.addEventListener('click', () => {
             modal.classList.add('hidden');
-        }
-    });
+            modal.classList.remove('flex');
+        });
 
-</script>
+        // Close modal when clicking outside the image
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.classList.remove('flex');
+                modal.classList.add('hidden');
+            }
+        });
+    }
 
-{{-- Real time change profile --}}
-<script type="text/javascript">
-$(document).ready(function(){
+    // Function to handle real-time profile image change
+    function handleRealTimeProfileImageChange() {
         $('#imageInput').change(function(e){
             var reader = new FileReader();
             reader.onload = function(e) { 
@@ -196,7 +199,18 @@ $(document).ready(function(){
             }
             reader.readAsDataURL(e.target.files['0']); 
         });
-    });
+    }
+
+    // Initialize all functions
+    function initialize() {
+        handleProfileImageUpload();
+        handlePasswordToggle();
+        handleImageModal();
+        handleRealTimeProfileImageChange();
+    }
+
+    // Call initialize function on document ready
+    document.addEventListener('DOMContentLoaded', initialize);
 </script>
 
 @endsection
