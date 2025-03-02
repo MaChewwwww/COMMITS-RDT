@@ -8,6 +8,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\ReportsExport;
 
 class ReportController extends Controller
 {
@@ -141,7 +143,6 @@ class ReportController extends Controller
 
         $services = $this->getDefaultServices();
         
-        // Define a mapping from category to column index in your table (Students: index 0, Faculty: index 1, etc.)
         $categoryMapping = [
             'students'       => 0,
             'faculty'        => 1,
@@ -415,5 +416,36 @@ class ReportController extends Controller
                 'data' => ['', '', '', '', '', '']
             ],
         ];
+    }
+
+    public function exportExcel(Request $request)
+    {
+        // will get the count values of each category and services
+        $tableDatas = $request->input('tableData') 
+        ? json_decode($request->input('tableData'), true) 
+        : $this->getDefaultServices();
+        
+        // Prepare data for the export view
+        $data = [
+            'title' => $request->title,
+            'fromDate' => $request->from_date,
+            'toDate' => $request->to_date,
+            'physicianName' => $request->physician_name,
+            'submissionDate' => $request->submissionDate,
+            'tableDatas' => $tableDatas,
+            'f2fConsultMale' => $request->f2f_male,
+            'f2fConsultFemale' => $request->f2f_female,
+            'f2fConsultTotal' => $request->f2f_male + $request->f2f_female,
+            'onlineConsultMale' => $request->online_male,
+            'onlineConsultFemale' => $request->online_female,
+            'onlineConsultTotal' => $request->online_male + $request->online_female,
+            'grandTotalMale' => $request->f2f_male + $request->online_male,
+            'grandTotalFemale' => $request->f2f_female + $request->online_female,
+            'grandTotal' => $request->f2f_male + $request->f2f_female + $request->online_male + $request->online_female,
+            'campusPhysician' => $request->physician_name,
+            'campusNurse' => $request->nurse_name
+        ];
+        
+        return Excel::download(new ReportsExport($data), 'medical_report.xlsx');
     }
 }

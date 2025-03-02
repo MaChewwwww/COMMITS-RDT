@@ -25,6 +25,29 @@
                 <path stroke-linecap="round" stroke-linejoin="round" d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0 1 10.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0 .229 2.523a1.125 1.125 0 0 1-1.12 1.227H7.231c-.662 0-1.18-.568-1.12-1.227L6.34 18m11.318 0h1.091A2.25 2.25 0 0 0 21 15.75V9.456c0-1.081-.768-2.015-1.837-2.175a48.055 48.055 0 0 0-1.913-.247M6.34 18H5.25A2.25 2.25 0 0 1 3 15.75V9.456c0-1.081.768-2.015 1.837-2.175a48.041 48.041 0 0 1 1.913-.247m10.5 0a48.536 48.536 0 0 0-10.5 0m10.5 0V3.375c0-.621-.504-1.125-1.125-1.125h-8.25c-.621 0-1.125.504-1.125 1.125v3.659M18 10.5h.008v.008H18V10.5Zm-3 0h.008v.008H15V10.5Z" />
               </svg>              
         </button>
+        <form id="exportForm" action={{ route('reports.exportExcel') }} method='GET'>
+
+            <!-- Hidden field to hold the tableData -->
+            <input type="hidden" name="tableData" id="tableData">
+            <input type="hidden" name="title" id="exportTitle">
+            <input type="hidden" name="from_date" id="exportFromDate">
+            <input type="hidden" name="to_date" id="exportToDate">
+            <input type="hidden" name="physician_name" id="exportPhysicianName">
+            <input type="hidden" name="submissionDate" id="exportSubmissionDate">
+            <input type="hidden" name="campusPhysician" id="exportCampusPhysician">
+            <input type="hidden" name="nurse_name" id="exportCampusNurse">
+            <input type="hidden" name="f2f_male" id="exportF2FMale">
+            <input type="hidden" name="f2f_female" id="exportF2FFemale">
+            <input type="hidden" name="online_male" id="exportOnlineMale">
+            <input type="hidden" name="online_female" id="exportOnlineFemale">
+            <input type="hidden" name="online_female" id="exportConsultTotal">
+            <input type="hidden" name="online_female" id="exportGrandTotalMale">
+            <input type="hidden" name="online_female" id="exportGrandTotalFemale">
+
+            <button type="submit" class="px-4 py-2 bg-green-800 rounded-lg">
+                Export to Excel
+            </button>
+        </form>
     </div>
 
     {{-- report paper --}}
@@ -104,9 +127,9 @@
                             <div class="flex flex-row justify-center gap-x-1">
                                 F = <p id="f2fConsultFemaleOut"></p></td>
                             </div>
-                        <td class="text-center border border-black bg-amber-400">
+                        <td class="px-2 text-center border border-black bg-amber-400">
                             <div class="flex flex-row justify-center gap-x-1">
-                            <p id="f2fConsultTotalOut"></p></td>
+                                <p id="f2fConsultTotalOut"></p></td>
                             </div>
                     </tr>
                     <tr class="text-center">
@@ -119,7 +142,10 @@
                             <div class="flex flex-row justify-center gap-x-1">
                                 F = <p id="onlineConsultFemaleOut"></p></td>
                             </div>
-                        <td class="text-center border border-black bg-amber-400"><p id="onlineConsultTotalOut"></p></td>
+                        <td class="px-2 text-center border border-black bg-amber-400">
+                            <div class="flex flex-row justify-center gap-x-1">
+                                <p id="onlineConsultTotalOut"></p></td>
+                            </div>
                     </tr>
                     <tr class="text-center">
                         <td class="pl-5 font-semibold border border-black text-start">Grand Total</td>
@@ -131,9 +157,9 @@
                             <div class="flex flex-row justify-center gap-x-1">
                                 F = <p id="grandTotalFemaleOut"></p></td>
                             </div>
-                        <td class="text-center bg-green-400 border border-black">
+                        <td class="px-2 text-center bg-green-400 border border-black">
                             <div class="flex flex-row justify-center gap-x-1">
-                            <p id="grandTotalOut"></p></td>
+                                <p id="grandTotalOut"></p></td>
                             </div>
                     </tr>
                 </tbody>
@@ -254,6 +280,7 @@
 
 </style>
 <script>
+    let tableData = null;
     // print report paper
     function printDiv() {
 
@@ -455,15 +482,20 @@
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': '{{ csrf_token() }}' // Include CSRF token if needed
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
             },
             body: JSON.stringify(data)
         })
         .then(response => response.json())
         .then(services => {
             console.log('Success:', services);
+            tableData = services;
+
+            document.getElementById('tableData').value = JSON.stringify(tableData);
+            
             // Handle success response
             // Update table inputs based on the returned services array.
+            // populates the table
             const tableRows = document.querySelectorAll('table tbody tr');
             services.forEach((service, serviceIndex) => {
                 if (tableRows[serviceIndex]) {
@@ -478,11 +510,41 @@
         })
         .catch((error) => {
             console.error('Error:', error);
-            // Handle error response
         });
 
         closeModal();
     }
+    document.getElementById('exportForm').addEventListener('submit', function(event) {
+        
+        const remarksInputs = document.querySelectorAll('.remarks-input');
+        
+        remarksInputs.forEach((input, index) => {
+            if (tableData[index] && Array.isArray(tableData[index].data)) {
+                // Update the remark field; assuming the last element of data is for remarks
+                tableData[index].data[tableData[index].data.length - 1] = input.value;
+            }
+        });
+        
+        // Update the hidden input with the updated services array
+        document.getElementById('tableData').value = JSON.stringify(tableData);
+    
+        // Also update other hidden inputs with the values from the report paper
+        document.getElementById('exportTitle').value = document.getElementById('titleOut').innerText;
+        document.getElementById('exportFromDate').value = document.getElementById('fromDurationDateOut').innerText;
+        document.getElementById('exportToDate').value = document.getElementById('toDurationDateOut').innerText;
+        document.getElementById('exportPhysicianName').value = document.getElementById('physicianNameOut').innerText;
+        document.getElementById('exportSubmissionDate').value = document.getElementById('submissionDateOut').innerText;
+        document.getElementById('exportCampusPhysician').value = document.getElementById('campusPhysicianOut').innerText;
+        document.getElementById('exportCampusNurse').value = document.getElementById('campusNurseOut').innerText;
+        document.getElementById('exportF2FMale').value = document.getElementById('f2fConsultMaleOut').innerText;
+        document.getElementById('exportF2FFemale').value = document.getElementById('f2fConsultFemaleOut').innerText;
+        document.getElementById('exportOnlineMale').value = document.getElementById('f2fConsultTotalOut').innerText;
+        document.getElementById('exportOnlineFemale').value = document.getElementById('onlineConsultFemaleOut').innerText;
+        document.getElementById('exportConsultTotal').value = document.getElementById('grandTotalOut').innerText;
+        document.getElementById('exportGrandTotalMale').value = document.getElementById('grandTotalMaleOut').innerText;
+        document.getElementById('exportGrandTotalFemale').value = document.getElementById('grandTotalFemaleOut').innerText;
+    });
+
 </script>
     
     

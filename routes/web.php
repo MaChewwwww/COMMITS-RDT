@@ -78,11 +78,15 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('/{id}', [ReportController::class, 'destroy'])->name('reports.destroy');
         Route::get('/{id}/edit', [ReportController::class, 'edit'])->name('reports.edit');
         Route::put('/{id}', [ReportController::class, 'update'])->name('reports.update');
+        Route::get('/reports/export-excel', [ReportController::class, 'exportExcel'])->name('reports.exportExcel');
     });
 
     // Report paper route
     Route::get('/reportPaper', [ReportController::class, 'showReportPaper'])->name('reports.showReportPaper');
     Route::post('/reportPaper', [ReportController::class, 'filterAndCountReports'])->name('reports.filterAndCountReports');
+
+    // Excel export route
+    
 
     //History routes
     Route::get('/history', [PatientHistoryController::class, 'index'])->name('patient_history.index');
