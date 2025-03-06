@@ -1,8 +1,8 @@
 @extends('layouts.guest-layout')
 
 @section('guest_content')
-        
-    <div class="bg-[#D9D9D9] bg-opacity-80 p-8 flex flex-col rounded-3xl items-center justify-center">
+
+    <div class="bg-[#D9D9D9] bg-opacity-90 p-8 flex flex-col rounded-3xl items-center justify-center">
         <div class="flex flex-row items-start w-full">
             <p class="text-lg font-bold">Forgot Password</p>
         </div>

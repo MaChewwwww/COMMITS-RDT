@@ -27,31 +27,31 @@
         .transform {
             transition: transform 0.3s ease-out, opacity 0.3s ease-out;
         }
-        
+
         /* Error modal with improved animations */
         #date-error-modal-container {
             transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
             box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
         }
-        
+
         /* Scale effects */
         .scale-100 {
             transform: scale(1);
         }
-        
+
         .scale-95 {
             transform: scale(0.95);
         }
-        
+
         .scale-102 {
             transform: scale(1.02);
         }
-        
+
         /* Fix message animation */
         #error-fix-message {
             transition: opacity 0.5s ease;
         }
-        
+
         /* Countdown animation */
         #error-modal-countdown {
             display: inline-block;
@@ -59,28 +59,36 @@
             text-align: center;
             transition: all 0.2s ease;
         }
-        
+
         /* Modern rounded corners */
         #date-error-modal-container {
             border-radius: 12px;
         }
-        
+
         /* Clean button style */
         #date-error-modal button {
             transition: all 0.2s ease;
+        }
+
+        body {
+            height: 100vh;
         }
     </style>
 </head>
 
 <body>
-    <div class="antialiased bg-gray-50">
+    <header class="sticky top-0 inset-x-0 flex flex-wrap md:justify-start md:flex-nowrap z-48 w-full h-14 bg-white border-b border-gray-200 text-sm py-2.5 lg:ps-65">
+        <x-navbar />
+    </header>
+
+    <div class="antialiased bg-gray-50 h-full">
 
         @php
             $currentRoute = Route::currentRouteName(); // Get the current route name
         @endphp
 
         {{-- NAVBAR - HEADER --}}
-        <x-navbar />
+        {{-- <x-navbar /> --}}
 
         {{-- SIDEBAR --}}
         {{-- to use different sidebar for profile page --}}
@@ -100,9 +108,9 @@
                 {{ session('error') }}
             </div>
         @endif
-        
+
         {{-- check if the route is profile page if not it will add margin left --}}
-        <main class="h-auto p-4 pt-20 {{ in_array($currentRoute, ['profile.accountSettings', 'profile.helpAndSupport']) ? '' : 'md:ml-64' }}">
+        <main class="p-4 md:ml-64 h-auto pt-20 {{ in_array($currentRoute, ['profile.accountSettings', 'profile.helpAndSupport']) ? '' : 'md:ml-64' }}">
             @yield('content')
         </main>
     </div>

@@ -13,10 +13,10 @@
     <link rel ="stylesheet" href="{{ asset('src/css/iziToast.min.css') }}" /> {{-- toast notification css --}}
 </head>
 
-<body class="min-h-screen bg-center bg-cover" style="background-image: url('{{ asset('src/images/pylon-front.jpg') }}');">
+<body class="min-h-screen bg-center bg-cover" style="background-image: url('{{ asset('images/pup-bg.png') }}');">
 
     {{-- check if the route is not login.show if so it will change some tailwind classes --}}
-    <div class="flex {{ Route::currentRouteName() == 'login.show' ? 'items-center justify-end' : 'flex-col items-center justify-center' }} min-h-screen bg-[#3F0A0A] bg-opacity-70">
+    <div class="flex {{ Route::currentRouteName() == 'login.show' ? 'items-center justify-end' : 'flex-col items-center justify-center' }} min-h-screen bg-red-950 bg-opacity-90">
         <div class="mx-[70px]">
             @yield('guest_content')
         </div>

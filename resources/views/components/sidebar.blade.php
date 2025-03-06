@@ -1,12 +1,30 @@
 <aside
-    class="fixed top-0 left-0 z-40 w-64 h-screen pt-14 transition-transform -translate-x-full bg-[#7A0019] border-r md:translate-x-0"
+    class="fixed top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full bg-[#7A0019] md:translate-x-0"
     aria-label="Sidenav" id="drawer-navigation">
-    <div class="overflow-y-auto py-5 px-3 h-full bg-[#7A0019]">
-        <form action="#" method="GET" class="mb-2 md:hidden">
+
+    <div class="px-6 pt-4 flex items-center">
+        <!-- Logo -->
+        <a class="flex-none rounded-xl text-xl inline-block font-semibold focus:outline-hidden focus:opacity-80"
+            href="#" aria-label="PRMS">
+            <div class="w-full flex items-center justify-start">
+                <!--PRMS logo-->
+                <img src="{{asset('images/puplogo.png')}}" alt="logo" class="w-8 h-8 mr-2">
+                <span class="text-white font-bold text-2xl">PRMS</span>
+            </div>
+        </a>
+        <!-- End Logo -->
+
+        <div class="hidden lg:block ms-2">
+        </div>
+    </div>
+
+    <div class="overflow-y-auto px-3 py-4 h-full bg-[#7A0019]">
+        <form action="#" method="GET" class="md:hidden mb-2">
             <label for="sidebar-search" class="sr-only">Search</label>
             <div class="relative">
+                <!-- Icon container -->
                 <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                    <svg class="w-5 h-5 text-gray-500 " fill="currentColor" viewBox="0 0 20 20"
+                    <svg class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20"
                         xmlns="http://www.w3.org/2000/svg">
                         <path fill-rule="evenodd" clip-rule="evenodd"
                             d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z">
@@ -14,18 +32,14 @@
                     </svg>
                 </div>
                 <input type="text" name="search" id="sidebar-search"
-                    class="block w-full p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-primary-500 focus:border-primary-500 "
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 pr-3 p-2"
                     placeholder="Search" />
             </div>
         </form>
-        <ul class="space-y-4">
+
+        <ul class="flex flex-col space-y-1">
             <li>
-                <a href="{{ route('dashboard') }}"
-                    class="flex items-center p-2 text-base font-medium text-gray-300 transition duration-75 rounded-lg hover:bg-gray-100 hover:text-red-900 group">
-                    <i
-                        class="w-6 h-6 text-gray-300 transition duration-75 fas fa-chart-pie group-hover:text-red-800"></i>
-                    <span class="ml-3">Dashboard</span>
-                </a>
+                <x-sidebar-link :href="route('dashboard')" :active="request()->is('dashboard*') || request()->is('/')" :icon="'fas fa-chart-pie'">Dashboard</x-sidebar-link>
             </li>
             <li>
                 <x-sidebar-link :href="route('patients')" :active="request()->is('patients*') || request()->is('/')" :icon="'fas fa-user-injured'">Patients</x-sidebar-link>
