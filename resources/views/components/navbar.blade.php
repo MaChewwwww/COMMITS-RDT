@@ -122,7 +122,7 @@
                                                 @elseif($notification->type === 'danger') bg-red-300 text-red-900
                                                 @elseif($notification->type === 'deleted') bg-gray-300 text-gray-900
                                                 @else bg-blue-100 text-blue-600 @endif">
-                                                @if ($notification->type === 'warning')
+                                                @if ($notification->type === 'warning') 
                                                     <svg class="w-7 h-7" xmlns="http://www.w3.org/2000/svg"
                                                         viewBox="0 0 20 20" fill="currentColor">
                                                         <path fill-rule="evenodd"

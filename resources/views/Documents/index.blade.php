@@ -1,8 +1,8 @@
 @extends('layouts.app-layout')
 
 @section('content')
-<div class="px-4 ml-auto max-w-6xl w-full">
-    <h1 class="text-2xl font-bold mb-2">Documents</h1>
+<div class="container mx-auto">
+    <h1 class="mb-3 text-3xl font-semibold">Documents</h1>
     <!-- Header -->
     <div class="flex justify-between items-center mb-3">
         <h2 class="text-gray-500">Recents</h2>
@@ -10,7 +10,7 @@
             <!-- Filter Dropdown -->
             <div class="relative inline-block text-left">
     <button onclick="toggleDropdown('document-type-dropdown')" class="bg-red-900 text-white px-2 py-2 rounded-md hover:bg-red-1000 flex">
-        <p class="px-2">Document Type</p> 
+        <p class="px-2">Document Type</p>
         <svg xmlns="http://www.w3.org/2000/svg" width="32" height="25" viewBox="0 0 32 25" fill="none">
             <path d="M15.5993 15.4256L10.1191 11.2891L11.9458 9.91016L15.5993 12.6679L19.2526 9.91016L21.0793 11.2891L15.5993 15.4256Z" fill="#FFFFFF"/>
         </svg>
@@ -25,7 +25,7 @@
 
 <div class="relative inline-block text-left">
     <button onclick="toggleDropdown('date-dropdown')" class="bg-yellow-400 text-white px-2 py-2 rounded-md hover:bg-yellow-500 flex">
-        <p class="px-2">Month</p> 
+        <p class="px-2">Month</p>
         <svg xmlns="http://www.w3.org/2000/svg" width="32" height="25" viewBox="0 0 32 25" fill="none">
             <path d="M15.5993 15.4256L10.1191 11.2891L11.9458 9.91016L15.5993 12.6679L19.2526 9.91016L21.0793 11.2891L15.5993 15.4256Z" fill="#FFFFFF"/>
         </svg>
@@ -119,7 +119,7 @@
     </div>
 @endif
 
-    
+
 <script>
     function toggleDropdown(dropdownId) {
         document.querySelectorAll('.dropdown-content').forEach(dropdown => {
@@ -137,7 +137,7 @@
 
     function openModal() {
         document.getElementById('confirmation-modal').classList.remove('hidden');
-        
+
     }
 
     function closeModal() {

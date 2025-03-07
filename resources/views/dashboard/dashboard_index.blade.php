@@ -1,10 +1,10 @@
 @extends('layouts.app-layout')
 
 @section('content')
-    <div class="container px-4 mx-auto">
+    <div class="container mx-auto">
         <div class="flex justify-center">
             <div class="w-full">
-                <h1 class="mb-6 text-3xl font-bold text-left mt-14">Dashboard</h1>
+                <h1 class="mb-8 text-3xl font-semibold">Dashboard</h1>
             </div>
         </div>
         <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -29,7 +29,7 @@
                     <div class="flex items-center justify-center text-green-900 bg-green-200 rounded-full w-14 h-14">
                         <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor" class="bi bi-receipt" viewBox="0 0 16 16">
                             <path d="M1.92.506a.5.5 0 0 1 .434.14L3 1.293l.646-.647a.5.5 0 0 1 .708 0L5 1.293l.646-.647a.5.5 0 0 1 .708 0L7 1.293l.646-.647a.5.5 0 0 1 .708 0L9 1.293l.646-.647a.5.5 0 0 1 .708 0l.646.647.646-.647a.5.5 0 0 1 .708 0l.646.647.646-.647a.5.5 0 0 1 .801.13l.5 1A.5.5 0 0 1 15 2v12a.5.5 0 0 1-.053.224l-.5 1a.5.5 0 0 1-.8.13L13 14.707l-.646.647a.5.5 0 0 1-.708 0L11 14.707l-.646.647a.5.5 0 0 1-.708 0L9 14.707l-.646.647a.5.5 0 0 1-.708 0L7 14.707l-.646.647a.5.5 0 0 1-.708 0L5 14.707l-.646.647a.5.5 0 0 1-.708 0L3 14.707l-.646.647a.5.5 0 0 1-.801-.13l-.5-1A.5.5 0 0 1 1 14V2a.5.5 0 0 1 .053-.224l.5-1a.5.5 0 0 1 .367-.27m.217 1.338L2 2.118v11.764l.137.274.51-.51a.5.5 0 0 1 .707 0l.646.647.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.509.509.137-.274V2.118l-.137-.274-.51.51a.5.5 0 0 1-.707 0L12 1.707l-.646.647a.5.5 0 0 1-.708 0L10 1.707l-.646.647a.5.5 0 0 1-.708 0L8 1.707l-.646.647a.5.5 0 0 1-.708 0L6 1.707l-.646.647a.5.5 0 0 1-.708 0L4 1.707l-.646.647a.5.5 0 0 1-.708 0z"/>
-                            <path d="M3 4.5a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5m8-6a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5"/>  
+                            <path d="M3 4.5a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5m8-6a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5"/>
                         </svg>
                     </div>
                 </div>
@@ -101,7 +101,7 @@
                             <canvas id="typesOfPatientChart"></canvas>
                         </div>
                     </div>
-                    
+
                     <!-- Patient Distribution Column -->
                     <div class="p-3 bg-white border rounded-lg shadow-lg md:p-4">
                         <h2 class="mb-2 text-lg font-bold text-gray-800">Patient Distribution</h2>
@@ -222,7 +222,7 @@
                             <canvas id="returnedMedicineChart"></canvas>
                         </div>
                     </div>
-                    
+
                     <!-- Right Column: Horizontal Bar Graph -->
                     <div class="p-3 bg-white border rounded-lg shadow-lg md:p-4">
                         <h2 class="mb-2 text-lg font-bold text-gray-800">Top Medicines Consumed</h2>
@@ -254,7 +254,7 @@
                             <canvas id="suppliesChart"></canvas>
                         </div>
                     </div>
-                    
+
                     <!-- Right Column: Equipment Vertical Bar Graph -->
                     <div class="p-3 bg-white border rounded-lg shadow-lg md:p-4">
                         <h2 class="mb-2 text-lg font-bold text-gray-800">Equipment Status</h2>
@@ -429,17 +429,17 @@
         }
     }
 });
-        
+
 
         // Pie Chart for Types of Patient
         var typesCtx = document.getElementById('typesOfPatientChart').getContext('2d');
 
         // Check if all values are 0
         const hasData = [
-            {{ $patientCounts['students'] }}, 
-            {{ $patientCounts['faculty'] }}, 
-            {{ $patientCounts['dependents'] }}, 
-            {{ $patientCounts['admin'] }}, 
+            {{ $patientCounts['students'] }},
+            {{ $patientCounts['faculty'] }},
+            {{ $patientCounts['dependents'] }},
+            {{ $patientCounts['admin'] }},
             {{ $patientCounts['visitors'] }}
         ].some(value => value > 0);
 
@@ -457,10 +457,10 @@
                     labels: ['Students', 'Faculty', 'Dependents', 'Administrative', 'Visitors'],
                     datasets: [{
                         data: [
-                            {{ $patientCounts['students'] }}, 
-                            {{ $patientCounts['faculty'] }}, 
-                            {{ $patientCounts['dependents'] }}, 
-                            {{ $patientCounts['admin'] }}, 
+                            {{ $patientCounts['students'] }},
+                            {{ $patientCounts['faculty'] }},
+                            {{ $patientCounts['dependents'] }},
+                            {{ $patientCounts['admin'] }},
                             {{ $patientCounts['visitors'] }}
                         ],
                         backgroundColor: [
@@ -917,12 +917,12 @@ if (!hasMedicineData) {
                             const labels = ['Serviceable', 'For Repair', 'For Condemn', 'Need Replacement'];
                             const shortLabels = ['Serviceable', 'Repair', 'Condemn', 'Replacement'];
                             const noLabels = ['', '', '', ''];
-                            
+
                             // Check screen width
                             if (window.innerWidth < 412) { // 768px is typical md breakpoint
                                 return noLabels[index];
                             }
-                            else if (window.innerWidth <= 1320) { 
+                            else if (window.innerWidth <= 1320) {
                                 return shortLabels[index];
                             }
                             return labels[index];

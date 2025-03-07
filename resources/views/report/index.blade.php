@@ -1,18 +1,18 @@
 @extends('layouts.app-layout')
 
 @section('content')
-<div class="container px-4 mx-auto">
-    <h5 class="text-4xl font-bold mt-14">Reports</h5>
+<div class="container mx-auto">
+    <h1 class="mb-3 text-3xl font-semibold">Reports</h1>
 
-    <div class="flex flex-wrap items-center justify-end w-full gap-4 mb-5">
+    <div class="flex flex-wrap items-center justify-end w-full gap-4 mb-3">
         <!-- Add Button -->
-        <button class="px-3 py-2 text-white bg-green-500 rounded-md hover:bg-green-600" 
+        <button class="px-3 py-2 text-white bg-green-500 rounded-md hover:bg-green-600"
                 onclick="openModal()">
             Add Report
         </button>
 
         <div class="relative">
-    <button id="filterButton" class="w-full px-3 py-2 text-white bg-yellow-500 rounded-md hover:bg-yellow-600" onclick="toggleDropdown()"> 
+    <button id="filterButton" class="w-full px-3 py-2 text-white bg-yellow-500 rounded-md hover:bg-yellow-600" onclick="toggleDropdown()">
         Filter by Category
     </button>
 
@@ -84,14 +84,14 @@
 
 <!-- Add Report Modal -->
 <div id="addReportModal" class="fixed inset-0 flex items-center justify-center hidden bg-gray-900 bg-opacity-50">
-    <div class="bg-white p-6 rounded-lg shadow-lg w-[1500em] max-w-auto max-w-4xl mx-4 sm:mx-auto overflow-y-auto max-h-[80vh] relative"> 
+    <div class="bg-white p-6 rounded-lg shadow-lg w-[1500em] max-w-auto max-w-4xl mx-4 sm:mx-auto overflow-y-auto max-h-[80vh] relative">
         <!-- Close Button -->
         <button onclick="closeModal()" class="absolute text-xl font-bold text-red-600 top-4 right-4">
             ✖
         </button>
 
         <h5 class="mb-4 text-xl font-bold text-center">Add New Report</h5>
-        
+
         <form id="addReportForm" action="{{ route('report.store') }}" method="POST" class="space-y-4">
             @csrf
 

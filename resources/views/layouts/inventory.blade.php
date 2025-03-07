@@ -1,7 +1,7 @@
 @extends('layouts.app-layout')
 
 @section('content')
-    <div class="container flex flex-col mx-auto mt-12">
+    <div class="container flex flex-col mx-auto">
         <h1 class="mb-8 text-3xl font-semibold">Inventory</h1>
 
         <div class="relative space-y-4">
@@ -9,14 +9,14 @@
                 {{-- Tab Links --}}
                 <div class="flex flex-col text-center sm:flex-row sm:gap-4">
                     <x-inventory.tab :href="route('inventory-medicines')" :active="request()->is('inventory/medicines*') || request()->is('inventory')">Medicines</x-inventory.tab>
-                    <x-inventory.tab 
-                        :href="route('inventory-supplies')" 
+                    <x-inventory.tab
+                        :href="route('inventory-supplies')"
                         :active="request()->routeIs('inventory-supplies') || request()->routeIs('supplies.*')">
                         Supplies
                     </x-inventory.tab>
                     <x-inventory.tab :href="route('inventory-equipment')" :active="request()->is('inventory/equipment*')">Equipment</x-inventory.tab>
-                </div>   
-                
+                </div>
+
                 <button data-modal-target="create-{{ Route::currentRouteName() }}" data-modal-toggle="create-{{ Route::currentRouteName() }}" class="self-center h-12 px-4 py-2 text-lg font-semibold text-center text-white transition-all bg-blue-500 border border-transparent rounded-lg shadow-md sm:self-end w-28 hover:shadow-lg focus:bg-blue-700 focus:shadow-none active:bg-blue-600 hover:bg-blue-600 active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none" type="button">
                     <div class="flex items-center gap-1">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
@@ -24,7 +24,7 @@
                         </svg>
                         <p>Add</p>
                     </div>
-                </button>       
+                </button>
             </div>
 
             {{-- Add Form --}}
@@ -36,7 +36,7 @@
                     {{ $errors->first('password') }}
                 </div>
             @endif
-            
+
             {{-- Table --}}
             @yield('inventory-table')
 

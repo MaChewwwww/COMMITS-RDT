@@ -18,6 +18,17 @@
         </div>
     </div>
 
+    {{-- PROFILE
+    <div class="w-full flex items-center justify-start py-4 px-6">
+        <div class="rounded border border-white w-10 h-10 mr-2">
+
+        </div>
+        <div class="text-white">
+            <p>name</p>
+            <p>email</p>
+        </div>
+    </div> --}}
+
     <div class="overflow-y-auto px-3 py-4 h-full bg-[#7A0019]">
         <form action="#" method="GET" class="md:hidden mb-2">
             <label for="sidebar-search" class="sr-only">Search</label>
