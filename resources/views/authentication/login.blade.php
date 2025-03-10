@@ -2,7 +2,7 @@
 
 @section('guest_content')
 
-    <div class="bg-[#D9D9D9] bg-opacity-90 p-8 flex flex-col rounded-3xl items-center justify-center w-[423px] h-[490px]">
+    <div class="bg-white bg-opacity-90 p-4 flex flex-col rounded-xl items-center justify-center w-[423px] h-[490px]">
         <div class="flex flex-col items-center mt-5">
             <img class="w-[60px] h-[60px]" src="{{ asset('src/images/logo.png') }}" alt="logo">
             <h2 class="mt-2 text-sm font-bold">Patient Record Management System</h2>

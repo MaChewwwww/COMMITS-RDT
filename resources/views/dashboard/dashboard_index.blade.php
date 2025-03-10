@@ -4,7 +4,7 @@
     <div class="container mx-auto">
         <div class="flex justify-center">
             <div class="w-full">
-                <h1 class="mb-8 text-3xl font-semibold">Dashboard</h1>
+                <x-page-title value="Dashboard" />
             </div>
         </div>
         <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -74,7 +74,7 @@
         </div>
         <div class="flex justify-center mt-12">
             <div class="w-full">
-                <h2 class="mb-4 text-xl font-bold text-gray-800">Total Patients</h2>
+                <h2 class="mb-4 text-xl font-medium text-gray-800">Total Patients</h2>
                 <div class="p-6 bg-white border rounded-lg shadow-lg">
                     <canvas id="patientsChart" class="w-full h-64 md:h-96 lg:h-128"></canvas>
                 </div>
@@ -87,7 +87,7 @@
                 <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
                     <!-- Pie Chart Column -->
                     <div class="p-3 bg-white border rounded-lg shadow-lg md:p-4">
-                        <h2 class="mb-2 text-lg font-bold text-gray-800">Types of Patient</h2>
+                        <h2 class="mb-2 text-lg font-medium text-gray-800">Types of Patient</h2>
                         <div class="relative h-[220px] sm:h-[240px] md:h-[260px] lg:h-[280px] xl:h-[320px]">
                             @if(array_sum($patientCounts) === 0)
                                 <div class="flex flex-col items-center justify-center h-full">
@@ -104,7 +104,7 @@
 
                     <!-- Patient Distribution Column -->
                     <div class="p-3 bg-white border rounded-lg shadow-lg md:p-4">
-                        <h2 class="mb-2 text-lg font-bold text-gray-800">Patient Distribution</h2>
+                        <h2 class="mb-2 text-lg font-medium text-gray-800">Patient Distribution</h2>
                         <div class="flex flex-col space-y-2">
                             <!-- Students -->
                             <div class="p-2 transition-all duration-300 border rounded-lg bg-blue-50 bg-gradient-to-r from-blue-50 to-white hover:shadow-md hover:border-blue-500">
@@ -208,7 +208,7 @@
                 <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
                     <!-- Left Column: Pie Chart -->
                     <div class="p-3 bg-white border rounded-lg shadow-lg md:p-4">
-                        <h2 class="mb-2 text-lg font-bold text-gray-800">Returned Medicines</h2>
+                        <h2 class="mb-2 text-lg font-medium text-gray-800">Returned Medicines</h2>
                         <div class="relative h-[220px] sm:h-[240px] md:h-[260px] lg:h-[280px] xl:h-[320px]">
                         @if($medicineStatus['returned'] + $medicineStatus['active'] === 0)
                             <div class="flex flex-col items-center justify-center h-full">
@@ -225,7 +225,7 @@
 
                     <!-- Right Column: Horizontal Bar Graph -->
                     <div class="p-3 bg-white border rounded-lg shadow-lg md:p-4">
-                        <h2 class="mb-2 text-lg font-bold text-gray-800">Top Medicines Consumed</h2>
+                        <h2 class="mb-2 text-lg font-medium text-gray-800">Top Medicines Consumed</h2>
                         <div class="relative h-[220px] sm:h-[240px] md:h-[260px] lg:h-[280px] xl:h-[320px]">
                             <canvas id="topMedicinesChart"></canvas>
                         </div>
@@ -240,7 +240,7 @@
                 <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
                     <!-- Left Column: Supplies Pie Chart -->
                     <div class="p-3 bg-white border rounded-lg shadow-lg md:p-4">
-                        <h2 class="mb-2 text-lg font-bold text-gray-800">Supplies Status</h2>
+                        <h2 class="mb-2 text-lg font-medium text-gray-800">Supplies Status</h2>
                         <div class="relative h-[220px] sm:h-[240px] md:h-[260px] lg:h-[280px] xl:h-[320px]">
                         @if($suppliesStatus['initial'] + $suppliesStatus['consumed'] === 0)
                             <div class="flex flex-col items-center justify-center h-full">
@@ -257,7 +257,7 @@
 
                     <!-- Right Column: Equipment Vertical Bar Graph -->
                     <div class="p-3 bg-white border rounded-lg shadow-lg md:p-4">
-                        <h2 class="mb-2 text-lg font-bold text-gray-800">Equipment Status</h2>
+                        <h2 class="mb-2 text-lg font-medium text-gray-800">Equipment Status</h2>
                         <div class="relative h-[220px] sm:h-[240px] md:h-[260px] lg:h-[280px] xl:h-[320px]">
                             <canvas id="equipmentChart"></canvas>
                         </div>
