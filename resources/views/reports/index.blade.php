@@ -38,31 +38,19 @@
 @endif
 
 <div class="container px-4 mx-auto">
-    <h5 class="text-4xl font-bold">Reports</h5>
+    <x-page-title class="mb-2" value="Reports" />
 
-    <div class="flex flex-wrap items-center justify-end w-full gap-4 mb-5">
+    <div class="flex flex-wrap items-center justify-end w-full gap-3 mb-5">
 
         @if($filterDisplay !== 'None')
             <p class="items-start flex-grow text-gray-500">
                 Filter: {{ $filterDisplay }}
             </p>
         @endif
-        
-        <!-- Add Button -->
-        <button class="px-3 py-2 text-white bg-green-500 rounded-md hover:bg-green-600" 
-                onclick="openModal()">
-            Add Report
-        </button>
-
-        <form action="{{ route('reports.showReportPaper') }}" method="GET">
-            <button type="submit" class="px-3 py-2 text-white bg-red-800 rounded-md hover:bg-red-900">
-                Print Report Paper
-            </button>
-        </form>
 
         {{-- filter by category --}}
         <div class="relative">
-            <button id="categoryFilterButton" class="flex items-center w-full gap-2 px-3 py-2 text-white bg-yellow-500 rounded-md hover:bg-yellow-600" onclick="toggleDropdown('categoryFilterDropdown')"> 
+            <button id="categoryFilterButton" class="flex items-center w-full gap-1 px-2 py-2 text-white bg-yellow-500 rounded-md hover:bg-yellow-600" onclick="toggleDropdown('categoryFilterDropdown')">
                 Filter by Category
                 <svg xmlns="http://www.w3.org/2000/svg" width="32" height="25" viewBox="0 0 32 25" fill="none">
                     <path
@@ -82,7 +70,7 @@
 
         {{-- filter by date --}}
         <div class="relative">
-            <button id="dateFilterButton" class="flex items-center w-full gap-2 px-3 py-2 text-white bg-yellow-500 rounded-md hover:bg-yellow-600" onclick="toggleDropdown('dateFilterDropdown')"> 
+            <button id="dateFilterButton" class="flex items-center w-full gap-1 px-2 py-2 text-white bg-yellow-500 rounded-md hover:bg-yellow-600" onclick="toggleDropdown('dateFilterDropdown')">
                 Filter by Date
                 <svg xmlns="http://www.w3.org/2000/svg" width="32" height="25" viewBox="0 0 32 25" fill="none">
                     <path
@@ -107,9 +95,19 @@
                 <li><a class="block px-4 py-2 font-semibold text-gray-700 hover:bg-gray-200" href="{{ route('reports.index', array_merge(request()->query(),['month' => 2])) }}">December</a></li>
             </ul>
         </div>
-    </div>
 
-</div>
+        <form action="{{ route('reports.showReportPaper') }}" method="GET">
+            <button type="submit" class="px-3 py-2 text-white bg-red-800 rounded-md hover:bg-red-900">
+                Print Report Paper
+            </button>
+        </form>
+
+        <!-- Add Button -->
+        <button class="px-3 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600"
+                onclick="openModal()">
+            + Add Report
+        </button>
+    </div>
 
     <!-- Responsive Table -->
     @if(count($reports) > 0)
@@ -175,13 +173,13 @@
 
 <!-- Add Report Modal -->
 <div id="addReportModal" class="fixed inset-0 z-50 flex items-center justify-center hidden bg-gray-900 bg-opacity-50 h-[100vh]">
-    <div class="bg-white p-6 rounded-lg shadow-lg max-w-auto max-w-4xl mx-4 sm:mx-auto overflow-y-auto max-h-[80vh] relative"> 
+    <div class="bg-white p-6 rounded-lg shadow-lg max-w-auto max-w-4xl mx-4 sm:mx-auto overflow-y-auto max-h-[80vh] relative">
 
         <h5 class="mb-4 text-xl font-bold text-center">Add New Report</h5>
-        
+
         <form id="addReportForm" action="{{ route('reports.store') }}" method="POST" class="space-y-4">
             @csrf
-            
+
             <div>
                 <div class="flex flex-row gap-x-1">
                     <label for="title" class="block text-sm font-semibold">Title</label><span class="text-red-500">*</span>
@@ -275,10 +273,10 @@
 
 {{-- edit report modal --}}
 <div id="editReportModal" class="fixed inset-0 z-50 flex items-center justify-center hidden bg-gray-900 bg-opacity-50">
-    <div class="bg-white p-6 rounded-lg shadow-lg max-w-auto max-w-4xl mx-4 sm:mx-auto overflow-y-auto max-h-[80vh] relative"> 
+    <div class="bg-white p-6 rounded-lg shadow-lg max-w-auto max-w-4xl mx-4 sm:mx-auto overflow-y-auto max-h-[80vh] relative">
 
         <h5 class="mb-4 text-xl font-bold text-center">Edit Report</h5>
-        
+
         <form id="editReportForm" action="{{ route('reports.update', 0) }}" method="POST" class="space-y-4">
             @csrf
             @method('PUT')
@@ -377,9 +375,9 @@
     function openEditModal(report) {
 
         document.getElementById('editReportModal').classList.remove('hidden');
-        
+
         let form = document.getElementById('editReportForm');
-        
+
         form.querySelector('#title').value = report.title;
         form.querySelector('#name').value = report.name;
         form.querySelector('#age').value = report.age;
@@ -388,39 +386,39 @@
         form.querySelector('#diagnosis').value = report.diagnosis;
         form.querySelector('#remarks').value = report.remarks;
         form.querySelector('#category').value = report.category;
-        
+
         // Update the form's action to point to the update route
         form.action = '/reports/' + report.id;
         console.log("Form action set to:", form.action);
-        
+
         // Add or update the hidden _method field for PUT requests
         let methodInput = form.querySelector('#formMethod');
         if (methodInput) {
             methodInput.value = 'PUT';
         }
     }
-    function openModal() { 
+    function openModal() {
 
         document.getElementById('addReportModal').classList.remove('hidden');
-        
+
         // Get the form and reset it for a new report
         const form = document.getElementById('addReportForm');
         form.reset(); // Clear previous data
-        
+
         // Set form action to store route
         form.action = '{{ route("reports.store") }}';
-        
+
         // Remove the _method field if it exists (to ensure it's a POST)
         let methodInput = form.querySelector('#formMethod');
         if (methodInput) {
             methodInput.remove();
         }
     }
-    
-    function closeModal() { 
-        document.getElementById('addReportModal').classList.add('hidden'); 
-        document.getElementById('editReportModal').classList.add('hidden'); 
-        document.getElementById('successModal').classList.add('hidden'); 
+
+    function closeModal() {
+        document.getElementById('addReportModal').classList.add('hidden');
+        document.getElementById('editReportModal').classList.add('hidden');
+        document.getElementById('successModal').classList.add('hidden');
     }
 
     // document.addEventListener('DOMContentLoaded', function() {
@@ -431,17 +429,17 @@
     //         }
     //     }, 2000);
     // });
-    
+
     function toggleDropdown(dropdownId) {
         const dropdowns = ['categoryFilterDropdown', 'dateFilterDropdown'];
-        
+
         // Hide all dropdowns except the one being toggled
         dropdowns.forEach(id => {
             if (id !== dropdownId) {
                 document.getElementById(id).classList.add('hidden');
             }
         });
-        
+
         document.getElementById(dropdownId).classList.toggle('hidden');
     }
 
