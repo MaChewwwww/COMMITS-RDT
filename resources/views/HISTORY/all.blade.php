@@ -64,7 +64,7 @@
                     <ul class="space-y-2">
                         @foreach ($dateRecords as $record)
                             <li class="flex items-center space-x-4 history-item">
-                                <span class="font-normal text-gray-700 text-sm underline">{{ $record->patient_name }}</span>
+                                <span class="font-normal text-gray-700 text-sm underline">{{ $record->fullname }}</span>
                             </li>
                         @endforeach
                     </ul>
