@@ -342,11 +342,22 @@
                     <div class="space-y-4">
                         <!-- Personal Info -->
                         <div class="grid grid-cols-2 gap-4">
-                            <div class="col-span-2">
-                                <input type="text" name="fullname"
+                            <div>
+                                <input type="text" name="lastName"
                                     class="w-full px-4 py-2.5 text-sm rounded-lg border border-gray-300 focus:border-red-500 focus:ring focus:ring-red-200 transition-all"
-                                    placeholder="Full Name *"
+                                    placeholder="Last Name *"
                                     required>
+                            </div>
+                            <div>
+                                <input type="text" name="firstName"
+                                    class="w-full px-4 py-2.5 text-sm rounded-lg border border-gray-300 focus:border-red-500 focus:ring focus:ring-red-200 transition-all"
+                                    placeholder="First Name *"
+                                    required>
+                            </div>
+                            <div class="col-span-2">
+                                <input type="text" name="middleName"
+                                    class="w-full px-4 py-2.5 text-sm rounded-lg border border-gray-300 focus:border-red-500 focus:ring focus:ring-red-200 transition-all"
+                                    placeholder="Middle Name">
                             </div>
                             <div>
                                 <select name="sex"
@@ -464,12 +475,26 @@
                         <div class="space-y-4">
                             <!-- Personal Info -->
                             <div class="grid grid-cols-2 gap-4">
-                                <div class="col-span-2">
-                                    <input type="text" name="fullname"
+                                <div>
+                                    <input type="text" name="lastName"
                                         class="w-full px-4 py-2.5 text-sm rounded-lg border border-gray-300 focus:border-red-500 focus:ring focus:ring-red-200 transition-all"
-                                        value="{{ $patient->fullname }}"
-                                        placeholder="Full Name *"
+                                        value="{{ $patient->lastName }}"
+                                        placeholder="Last Name *"
                                         disabled required>
+                                </div>
+                                <div>
+                                    <input type="text" name="firstName"
+                                        class="w-full px-4 py-2.5 text-sm rounded-lg border border-gray-300 focus:border-red-500 focus:ring focus:ring-red-200 transition-all"
+                                        value="{{ $patient->firstName }}"
+                                        placeholder="First Name *"
+                                        disabled required>
+                                </div>
+                                <div class="col-span-2">
+                                    <input type="text" name="middleName"
+                                        class="w-full px-4 py-2.5 text-sm rounded-lg border border-gray-300 focus:border-red-500 focus:ring focus:ring-red-200 transition-all"
+                                        value="{{ $patient->middleName }}"
+                                        placeholder="Middle Name"
+                                        disabled>
                                 </div>
                                 <div>
                                     <select name="sex"
@@ -634,17 +659,21 @@ document.querySelectorAll('[id^="patientForm-"]').forEach(form => {
         const errorAlert = document.getElementById('errorAlert-' + this.id.split('-')[1]);
         const modal = this.closest('.modal');
 
+        // Reset previous errors
+        errorAlert.classList.add('d-none');
+        errorAlert.innerHTML = '';
+        
+        // Remove previous validation classes
+        form.querySelectorAll('.is-invalid').forEach(el => {
+            el.classList.remove('is-invalid');
+        });
+
         // Show loading state
         submitBtn.disabled = true;
         spinner.classList.remove('d-none');
 
         try {
             const formData = new FormData(this);
-
-            // Log form data for debugging
-            for (let [key, value] of formData.entries()) {
-                console.log(`${key}: ${value}`);
-            }
 
             const response = await fetch(this.action, {
                 method: 'POST',
@@ -677,31 +706,45 @@ document.querySelectorAll('[id^="patientForm-"]').forEach(form => {
                 } else {
                     // Show validation errors
                     errorAlert.classList.remove('d-none');
-                    errorAlert.textContent = 'Please correct the following errors:';
+                    
+                    // Display the main error message
+                    const errorHeader = document.createElement('div');
+                    errorHeader.className = 'font-medium text-red-600 mb-2';
+                    errorHeader.textContent = data.message || 'Please correct the following errors:';
+                    errorAlert.appendChild(errorHeader);
 
-                    const errorList = document.createElement('ul');
-                    Object.entries(data.errors).forEach(([field, errors]) => {
-                        const input = this.querySelector(`[name="${field}"]`);
-                        if (input) {
-                            input.classList.add('is-invalid');
-                            input.nextElementSibling.textContent = errors[0];
-                        }
+                    if (data.errors) {
+                        const errorList = document.createElement('ul');
+                        errorList.className = 'list-disc pl-5 text-sm';
+                        
+                        Object.entries(data.errors).forEach(([field, errors]) => {
+                            const input = this.querySelector(`[name="${field}"]`);
+                            if (input) {
+                                input.classList.add('is-invalid');
+                                
+                                // Add error message below input
+                                const feedback = document.createElement('div');
+                                feedback.className = 'text-red-500 text-xs mt-1';
+                                feedback.textContent = errors[0];
+                                input.parentNode.appendChild(feedback);
+                            }
 
-                        const li = document.createElement('li');
-                        li.textContent = errors[0];
-                        errorList.appendChild(li);
-                    });
-                    errorAlert.appendChild(errorList);
+                            // Add to error list
+                            const li = document.createElement('li');
+                            li.className = 'text-red-500';
+                            li.textContent = errors[0];
+                            errorList.appendChild(li);
+                        });
+                        
+                        errorAlert.appendChild(errorList);
+                    }
 
                     // Show error toast
                     Swal.fire({
                         icon: 'error',
-                        title: 'Validation Error',
-                        text: 'Please check the form for errors.',
-                        toast: true,
-                        position: 'top-end',
-                        showConfirmButton: false,
-                        timer: 3000
+                        title: 'Form Error',
+                        text: data.message || 'Please check the form for errors.',
+                        confirmButtonColor: '#9F1239'
                     });
                 }
             } else {
@@ -732,6 +775,20 @@ document.getElementById('addPatientForm').addEventListener('submit', async funct
     const errorAlert = document.getElementById('addErrorAlert');
     const modal = this.closest('.modal');
 
+    // Reset previous errors
+    errorAlert.classList.add('d-none');
+    errorAlert.innerHTML = '';
+    
+    // Remove previous validation classes
+    this.querySelectorAll('.is-invalid').forEach(el => {
+        el.classList.remove('is-invalid');
+    });
+    
+    // Remove previous error messages
+    this.querySelectorAll('.text-red-500').forEach(el => {
+        el.remove();
+    });
+
     // Show loading state
     submitBtn.disabled = true;
     spinner.classList.remove('d-none');
@@ -756,7 +813,7 @@ document.getElementById('addPatientForm').addEventListener('submit', async funct
             Swal.fire({
                 icon: 'success',
                 title: 'Success!',
-                text: 'Patient added successfully!',
+                text: data.message || 'Patient added successfully!',
                 showConfirmButton: false,
                 timer: 1500
             }).then(() => {
@@ -765,24 +822,48 @@ document.getElementById('addPatientForm').addEventListener('submit', async funct
         } else {
             // Show validation errors
             errorAlert.classList.remove('d-none');
-            errorAlert.textContent = 'Please correct the following errors:';
+            
+            // Display the main error message
+            const errorHeader = document.createElement('div');
+            errorHeader.className = 'font-medium text-red-600 mb-2';
+            errorHeader.textContent = data.message || 'Please correct the following errors:';
+            errorAlert.appendChild(errorHeader);
 
-            const errorList = document.createElement('ul');
-            Object.entries(data.errors).forEach(([field, errors]) => {
-                const input = this.querySelector(`[name="${field}"]`);
-                if (input) {
-                    input.classList.add('is-invalid');
-                    input.nextElementSibling.textContent = errors[0];
-                }
+            if (data.errors) {
+                const errorList = document.createElement('ul');
+                errorList.className = 'list-disc pl-5 text-sm';
+                
+                Object.entries(data.errors).forEach(([field, errors]) => {
+                    const input = this.querySelector(`[name="${field}"]`);
+                    if (input) {
+                        input.classList.add('is-invalid');
+                        input.classList.add('border-red-500');
+                        
+                        // Add error message below input
+                        const feedback = document.createElement('div');
+                        feedback.className = 'text-red-500 text-xs mt-1';
+                        feedback.textContent = errors[0];
+                        input.parentNode.appendChild(feedback);
+                    }
 
-                const li = document.createElement('li');
-                li.textContent = errors[0];
-                errorList.appendChild(li);
-            });
-            errorAlert.appendChild(errorList);
+                    // Add to error list
+                    const li = document.createElement('li');
+                    li.className = 'text-red-500';
+                    li.textContent = errors[0];
+                    errorList.appendChild(li);
+                });
+                
+                errorAlert.appendChild(errorList);
+            }
+
+            // Scroll to the top of the modal where errors are displayed
+            modal.scrollTop = 0;
         }
     } catch (error) {
         console.error('Error:', error);
+        errorAlert.classList.remove('d-none');
+        errorAlert.innerHTML = `<div class="font-medium text-red-600">An error occurred. Please try again later.</div>`;
+        
         Swal.fire({
             icon: 'error',
             title: 'Oops...',
@@ -895,12 +976,18 @@ document.addEventListener('DOMContentLoaded', function() {
 // Helper function for prescription submission
 async function handlePrescriptionSubmit(form) {
     try {
+        // Remove previous error messages
+        form.querySelectorAll('.text-red-500').forEach(el => {
+            el.remove();
+        });
+        
         const formData = new FormData(form);
         const response = await fetch(form.action, {
             method: 'POST',
             body: formData,
             headers: {
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                'Accept': 'application/json'
             }
         });
 
@@ -937,9 +1024,29 @@ async function handlePrescriptionSubmit(form) {
                 form.reset();
             });
         } else {
+            // Display specific error message
+            let errorMessage = data.message || 'An error occurred while creating the prescription.';
+            
+            // Handle validation errors
+            if (data.errors) {
+                // Create error messages under inputs
+                Object.entries(data.errors).forEach(([field, errors]) => {
+                    const input = form.querySelector(`[name="${field}"]`);
+                    if (input) {
+                        input.classList.add('border-red-500');
+                        
+                        // Add error message below input
+                        const feedback = document.createElement('div');
+                        feedback.className = 'text-red-500 text-xs mt-1';
+                        feedback.textContent = errors[0];
+                        input.parentNode.appendChild(feedback);
+                    }
+                });
+            }
+            
             Swal.fire({
                 title: 'Error!',
-                text: data.message,
+                text: errorMessage,
                 icon: 'error',
                 confirmButtonColor: '#dc2626'
             });
@@ -948,7 +1055,7 @@ async function handlePrescriptionSubmit(form) {
         console.error('Error:', error);
         Swal.fire({
             title: 'Error!',
-            text: 'An error occurred while creating the prescription.',
+            text: 'An error occurred while creating the prescription. Please try again.',
             icon: 'error',
             confirmButtonColor: '#dc2626'
         });

@@ -9,8 +9,15 @@ class Patient extends Model
 {
     use HasFactory;
 
+    /**
+     * The attributes that are mass assignable.
+     * 
+     * @var array<string>
+     */
     protected $fillable = [
-        'fullname',
+        'lastName',
+        'firstName',
+        'middleName',
         'sex',
         'year_course_dept',
         'contactDetails',
@@ -20,7 +27,65 @@ class Patient extends Model
         'physician_id',
     ];
 
-    // Add relationship method for physician
+    /**
+     * Validation rules for patient data
+     * 
+     * @return array
+     */
+    public static function validationRules()
+    {
+        return [
+            'lastName' => 'required|string|max:100',
+            'firstName' => 'required|string|max:100',
+            'middleName' => 'nullable|string|max:100',
+            'sex' => 'required|in:Male,Female',
+            'year_course_dept' => 'required|string|max:255',
+            'contactDetails' => 'required|string|max:255',
+            'patient_status' => 'required|string',
+            'patientType' => 'required|in:Student,Faculty,Admin,Visitor,Dependent',
+            'student_number' => 'nullable|required_if:patientType,Student|string|max:255',
+            'physician_id' => 'required|exists:users,id'
+        ];
+    }
+
+    /**
+     * Custom validation messages for patient data
+     * 
+     * @return array
+     */
+    public static function validationMessages()
+    {
+        return [
+            'lastName.required' => 'Last name is required',
+            'firstName.required' => 'First name is required',
+            'sex.required' => 'Sex is required',
+            'sex.in' => 'Sex must be either Male or Female',
+            'contactDetails.required' => 'Contact information is required',
+            'patient_status.required' => 'Patient status is required',
+            'patientType.required' => 'Patient type is required',
+            'patientType.in' => 'Patient type must be one of the allowed types',
+            'physician_id.required' => 'A physician must be assigned to the patient',
+            'physician_id.exists' => 'The selected physician is not valid',
+            'student_number.required_if' => 'Student number is required for student patients',
+            'year_course_dept.required' => 'Year/Course/Department information is required'
+        ];
+    }
+
+    /**
+     * Get full name attribute
+     *
+     * @return string
+     */
+    public function getFullnameAttribute()
+    {
+        return $this->lastName . ', ' . $this->firstName . ' ' . ($this->middleName ? $this->middleName : '');
+    }
+
+    /**
+     * Get the physician associated with the patient.
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function physician()
     {
         return $this->belongsTo(User::class, 'physician_id');
@@ -28,6 +93,8 @@ class Patient extends Model
 
     /**
      * Get all prescriptions for the patient.
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function prescriptionMedicines()
     {
@@ -36,6 +103,8 @@ class Patient extends Model
 
     /**
      * Get all medicines prescribed to the patient.
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function medicines()
     {
