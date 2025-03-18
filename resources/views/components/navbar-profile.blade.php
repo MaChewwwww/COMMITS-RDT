@@ -11,7 +11,7 @@
 <meta name="csrf-token" content="{{ csrf_token() }}">
 
 <!--======== START NAVBAR =================-->
-<nav class="fixed top-0 left-0 right-0 z-50 h-14 bg-white border-b border-gray-200 flex items-center justify-between">
+<nav class="fixed top-0 left-0 right-0 z-50 flex items-center justify-between bg-white border-b border-gray-200 h-14">
     <div class="flex flex-wrap items-center justify-between w-full">
         <div class="flex items-center justify-start">
             <button data-drawer-target="drawer-navigation" data-drawer-toggle="drawer-navigation"
@@ -232,7 +232,7 @@
                     </svg>
                     <span>Profile</span>
                 </a>
-                <a href="{{ route('profile.helpAndSupport') }}"
+                <a href="{{ route('profile.changePassword') }}"
                     class="flex items-center px-4 py-2 text-gray-800 hover:bg-gray-100">
                     <svg class="inline w-4 h-4 mr-2 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none"
                         viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
@@ -241,7 +241,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round"
                             d="M4.867 19.125h.008v.008h-.008v-.008Z" />
                     </svg>
-                    <span>Help and Support</span>
+                    <span>Change Password</span>
                 </a>
                 <a id="logout-button" class="flex items-center px-4 py-2 text-gray-800 hover:bg-gray-100">
                     <svg class="inline w-4 h-4 mr-2 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none"

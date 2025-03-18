@@ -62,7 +62,7 @@
                 <x-sidebar-link :href="route('inventory')" :active="request()->is('inventory*')" :icon="'fas fa-boxes'">Inventory</x-sidebar-link>
             </li>
             <li>
-                <x-sidebar-link :href="route('report.index')" :active="request()->is('report*')" :icon="'fas fa-file-alt'">Reports</x-sidebar-link>
+                <x-sidebar-link :href="route('reports.index')" :active="request()->is('report*')" :icon="'fas fa-file-alt'">Reports</x-sidebar-link>
             </li>
             <li>
                 <x-sidebar-link :href="route('documents.index')" :active="request()->is('documents*')" :icon="'fas fa-folder-open'">Documents</x-sidebar-link>

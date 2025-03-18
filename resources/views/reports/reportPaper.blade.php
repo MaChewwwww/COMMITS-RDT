@@ -80,7 +80,7 @@
             {{-- table --}}
             <table class="border border-collapse border-black table-auto text-start">
                 <thead>
-                    <tr id="table-header">
+                    <tr id="table-header" class="text-center">
                         <th class="font-normal border border-black">Medical Services Rendered</th>
                         <th class="font-normal border border-black">Students</th>
                         <th class="font-normal border border-black">Faculty</th>
@@ -192,68 +192,83 @@
                 @csrf
     
                 <div>
-                    <label for="title" class="block text-sm font-semibold">Title</label>
-                    <input type="text" id="title" name="title" class="w-full p-3 border rounded-md" required>
+                    <div class="flex flex-row gap-x-1">
+                        <label for="title" class="block text-sm font-semibold">Title</label><span class="text-red-500">*</span>
+                    </div>
+                    <input type="text" id="title" name="title" class="w-full p-2 border rounded-md" required>
                 </div>
     
                 <div>
-                    <label for="physicianName" class="block text-sm font-semibold">Name of physician</label>
-                    <input type="text" id="physicianName" name="physicianName" class="w-full p-3 border rounded-md" required>
+                    <div class="flex flex-row gap-x-1">
+                        <label for="physicianName" class="block text-sm font-semibold">Name of physician</label><span class="text-red-500">*</span>
+                    </div>
+                    <input type="text" id="physicianName" name="physicianName" class="w-full p-2 border rounded-md" required>
                 </div>
 
                 <div class="flex flex-col sm:w-1/2">
-                    <label class="justify-start block text-sm font-semibold">Duration date</label>
+                    <div class="flex flex-row gap-x-1">
+                        <label class="justify-start block text-sm font-semibold">Duration date</label><span class="text-red-500">*</span>
+                    </div>
                     <div class="flex flex-row">
                         <div class="flex flex-col">
                             <label for="fromDurationDate" class="block text-sm font-semibold">From</label>
-                        <input type="datetime-local" id="fromDurationDate" name="fromDurationDate" class="w-3/4 p-3 border rounded-md " required>
+                        <input type="datetime-local" id="fromDurationDate" name="fromDurationDate" class="w-3/4 p-2 border rounded-md " required>
                         </div>
                         <div class="flex flex-col">
                             <label for="toDurationDate" class="block text-sm font-semibold">To</label>
-                            <input type="datetime-local" id="toDurationDate" name="toDurationDate" class="w-3/4 p-3 pr-0 border rounded-md " required>
+                            <input type="datetime-local" id="toDurationDate" name="toDurationDate" class="w-3/4 p-2 pr-0 border rounded-md " required>
                         </div>
                     </div>
                 </div>
 
                 <div class="w-full sm:w-1/2">
-                    <label for="submissionDate" class="block text-sm font-semibold">Date of submission</label>
-                    <input type="datetime-local" id="submissionDate" name="submissionDate" class="w-full p-3 border rounded-md" required>
+                    <div class="flex flex-row gap-x-1">
+                        <label for="submissionDate" class="block text-sm font-semibold">Date of submission</label><span class="text-red-500">*</span>
+                    </div>
+                    <input type="datetime-local" id="submissionDate" name="submissionDate" class="w-full p-2 border rounded-md" required>
+                </div>
+                <div class="w-full sm:w-1/2">
+                    <div class="flex flex-row gap-x-1">
+                        <label for="campusPhysician" class="block text-sm font-semibold">Campus physician</label><span class="text-red-500">*</span>
+                    </div>
+                    <input type="text" id="campusPhysician" name="campusPhysician" class="w-full p-2 border rounded-md" required>
                 </div>
 
                 <div class="w-full sm:w-1/2">
-                    <label for="campusPhysician" class="block text-sm font-semibold">Campus physician</label>
-                    <input type="text" id="campusPhysician" name="campusPhysician" class="w-full p-3 border rounded-md" required>
-                </div>
-
-                <div class="w-full sm:w-1/2">
-                    <label for="campusNurse" class="block text-sm font-semibold">Campus nurse</label>
-                    <input type="text" id="campusNurse" name="campusNurse" class="w-full p-3 border rounded-md" required>
+                    <div class="flex flex-row gap-x-1">
+                        <label for="campusNurse" class="block text-sm font-semibold">Campus nurse</label><span class="text-red-500">*</span>
+                    </div>
+                    <input type="text" id="campusNurse" name="campusNurse" class="w-full p-2 border rounded-md" required>
                 </div>
 
                 <div class="flex flex-col sm:w-1/2">
-                    <label class="justify-start block text-sm font-semibold">Total F2F Consults</label>
+                    <div class="flex flex-row gap-x-1">
+                        <label class="justify-start block text-sm font-semibold">Total F2F Consults</label><span class="text-red-500">*</span>
+                    </div>
                     <div class="flex flex-row">
                         <div class="flex flex-col">
                             <label for="f2fConsultMale" class="block text-sm font-semibold">Male</label>
-                        <input type="number" id="f2fConsultMale" name="f2fConsultMale" class="w-3/4 p-3 text-center border rounded-md " required>
+                            <input type="number" id="f2fConsultMale" name="f2fConsultMale" class="w-3/4 p-2 text-center border rounded-md " required>
                         </div>
                         <div class="flex flex-col">
                             <label for="f2fConsultFemale" class="block text-sm font-semibold">Female</label>
-                            <input type="number" id="f2fConsultFemale" name="f2fConsultFemale" class="w-3/4 p-3 text-center border rounded-md " required>
+                            <input type="number" id="f2fConsultFemale" name="f2fConsultFemale" class="w-3/4 p-2 text-center border rounded-md " required>
                         </div>
                     </div>
                 </div>
 
                 <div class="flex flex-col sm:w-1/2">
-                    <label class="justify-start block text-sm font-semibold">Total Online Consults</label>
+                    <div class="flex flex-row gap-x-1">
+                        <label class="justify-start block text-sm font-semibold">Total Online Consults</label><span class="text-red-500">*</span>
+                    </div>
                     <div class="flex flex-row">
                         <div class="flex flex-col">
                             <label for="f2fConsultMale" class="block text-sm font-semibold">Male</label>
-                        <input type="number" id="onlineConsultMale" name="onlineConsultMale" class="w-3/4 p-3 text-center border rounded-md " required>
+                        <input type="number" id="onlineConsultMale" name="onlineConsultMale" class="w-3/4 p-2 text-center border rounded-md " required>
                         </div>
                         <div class="flex flex-col">
                             <label for="f2fConsultFemale" class="block text-sm font-semibold">Female</label>
-                            <input type="number" id="onlineConsultFemale" name="onlineConsultFemale" class="w-3/4 p-3 text-center border rounded-md " required>
+                            <input type="number" id="onlineConsultFemale" name="onlineConsultFemale" class="w-3/4 p-2 text-center border rounded-md " required>
                         </div>
                     </div>
                 </div>

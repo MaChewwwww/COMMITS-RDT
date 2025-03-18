@@ -94,7 +94,7 @@
 
         {{-- SIDEBAR --}}
         {{-- to use different sidebar for profile page --}}
-        @if (!in_array($currentRoute, ['profile.accountSettings', 'profile.helpAndSupport']))
+        @if (!in_array($currentRoute, ['profile.accountSettings', 'profile.changePassword']))
             <x-sidebar />
         @endif
 
@@ -112,7 +112,7 @@
         @endif
         
         {{-- checks if the route is profile page if not it will add margin left --}}
-        <main class="h-auto p-4 pt-20 {{ in_array($currentRoute, ['profile.accountSettings', 'profile.helpAndSupport']) ? '' : 'md:ml-64' }}">
+        <main class="h-auto p-4 pt-20 {{ in_array($currentRoute, ['profile.accountSettings', 'profile.changePassword']) ? '' : 'md:ml-64' }}">
             @yield('content')
         </main>
     </div>

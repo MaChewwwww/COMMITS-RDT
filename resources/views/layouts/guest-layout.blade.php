@@ -23,7 +23,7 @@
     </div>
 
     {{-- toast notification --}}
-    @if ($errors->any())
+    {{-- @if ($errors->any())
 
     @foreach ($errors->all() as $error)
 
@@ -49,7 +49,7 @@
                 timeout: 5000,
             });
         </script>
-    @endif
+    @endif --}}
 
 </body>
 

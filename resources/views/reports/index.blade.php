@@ -174,12 +174,8 @@
 </div>
 
 <!-- Add Report Modal -->
-<div id="addReportModal" class="fixed inset-0 z-50 flex items-center justify-center hidden bg-gray-900 bg-opacity-50">
-    <div class="bg-white p-6 rounded-lg shadow-lg w-[1500em] max-w-auto max-w-4xl mx-4 sm:mx-auto overflow-y-auto max-h-[80vh] relative"> 
-        <!-- Close Button -->
-        <button onclick="closeModal()" class="absolute text-xl font-bold text-red-600 top-4 right-4">
-            ✖
-        </button>
+<div id="addReportModal" class="fixed inset-0 z-50 flex items-center justify-center hidden bg-gray-900 bg-opacity-50 h-[100vh]">
+    <div class="bg-white p-6 rounded-lg shadow-lg max-w-auto max-w-4xl mx-4 sm:mx-auto overflow-y-auto max-h-[80vh] relative"> 
 
         <h5 class="mb-4 text-xl font-bold text-center">Add New Report</h5>
         
@@ -187,38 +183,65 @@
             @csrf
             
             <div>
-                <label for="title" class="block text-sm font-semibold">Title</label>
-                <input type="text" id="title" name="title" class="w-full p-3 border rounded-md" required>
+                <div class="flex flex-row gap-x-1">
+                    <label for="title" class="block text-sm font-semibold">Title</label><span class="text-red-500">*</span>
+                </div>
+                <input type="text" placeholder="Enter title of report" id="title" name="title" class="w-full p-2 border rounded-md" required>
             </div>
 
             <div>
-                <label for="name" class="block text-sm font-semibold">Patient's Name</label>
-                <input type="text" id="name" name="name" class="w-full p-3 border rounded-md" required>
+                <div class="flex flex-row gap-x-1">
+                    <label for="name" class="block text-sm font-semibold">Patient's Name</label><span class="text-red-500">*</span>
+                </div>
+                <input type="text" placeholder="Enter patient's full name" id="name" name="name" class="w-full p-2 border rounded-md" required>
             </div>
 
-            <div class="flex flex-wrap gap-4">
+            <div class="flex flex-row gap-4">
                 <div class="w-full sm:w-1/2">
-                    <label for="age" class="block text-sm font-semibold">Age</label>
-                    <input type="number" id="age" name="age" class="w-full p-3 border rounded-md" required>
-                </div>
-
-                <div class="w-full sm:w-1/2">
-                    <label for="sex" class="block text-sm font-semibold">Sex</label>
-                    <select id="sex" name="sex" class="w-full p-3 border rounded-md" required>
+                    <div class="flex flex-row gap-x-1">
+                        <label for="sex" class="block text-sm font-semibold">Sex</label><span class="text-red-500">*</span>
+                    </div>
+                    <select id="sex" name="sex" class="w-full p-2 border rounded-md" required>
+                        <option value="">Select biological sex</option>
                         <option value="Male">Male</option>
                         <option value="Female">Female</option>
                         <option value="Other">Other</option>
                     </select>
                 </div>
+
+                <div class="w-full sm:w-1/2">
+                    <div class="flex flex-row gap-x-1">
+                        <label for="age" class="block text-sm font-semibold">Age</label><span class="text-red-500">*</span>
+                    </div>
+                    <input type="number" placeholder="Enter patient's age" id="age" name="age" class="w-full p-2 border rounded-md" required min="0">
+                </div>
             </div>
 
             <div>
-                <label for="complaint" class="block text-sm font-semibold">Complaint/Reason</label>
-                <textarea id="complaint" name="complaint" class="w-full p-3 border rounded-md" required></textarea>
+                <div class="flex flex-row gap-x-1">
+                    <label for="category" class="block text-sm font-semibold">Category</label><span class="text-red-500">*</span>
+                </div>
+                <select id="category" name="category" class="w-full p-2.5 border rounded-md" required>
+                    <option value="">Select category</option>
+                    <option value="students">Students</option>
+                    <option value="faculty">Faculty</option>
+                    <option value="administrative">Administrative</option>
+                    <option value="admin">Dependents</option>
+                    <option value="visitors">Visitors</option>
+                </select>
             </div>
 
             <div>
-                <label for="diagnosis" class="block text-sm font-semibold">Diagnosis</label>
+                <div class="flex flex-row gap-x-1">
+                    <label for="complaint" class="block text-sm font-semibold">Complaint Reason</label><span class="text-red-500">*</span>
+                </div>
+                <textarea id="complaint" placeholder="Type complaint reason here" name="complaint" class="w-full p-3 border rounded-md" required></textarea>
+            </div>
+
+            <div>
+                <div class="flex flex-row gap-x-1">
+                    <label for="diagnosis" class="block text-sm font-semibold">Diagnosis</label><span class="text-red-500">*</span>
+                </div>
                 <select id="diagnosis" name="diagnosis" class="w-full p-2.5 border rounded-md" required>
                     <option value="">Select Diagnosis</option>
                     @foreach($services as $service)
@@ -231,34 +254,28 @@
 
             <div>
                 <label for="remarks" class="block text-sm font-semibold">Remarks</label>
-                <textarea id="remarks" name="remarks" class="w-full p-3 border rounded-md"></textarea>
+                <textarea id="remarks" placeholder="Type remarks here" name="remarks" class="w-full p-3 border rounded-md"></textarea>
             </div>
 
-            <div>
-                <label for="category" class="block text-sm font-semibold">Category</label>
-                <select id="category" name="category" class="w-full p-2.5 border rounded-md" required>
-                    <option value="students">Students</option>
-                    <option value="faculty">Faculty</option>
-                    <option value="administrative">Administrative</option>
-                    <option value="admin">Dependents</option>
-                    <option value="visitors">Visitors</option>
-                </select>
-            </div>
+            {{-- Action Buttons --}}
+            <div class="flex flex-row gap-3">
+                <button type="submit" class="flex-1 px-6 py-2.5 bg-green-600 text-white text-sm font-semibold rounded-lg
+                                hover:bg-green-700 focus:ring focus:ring-green-200 transition-all">
+                    Save
+                </button>
 
-            <button type="submit" class="w-full p-3 text-white bg-green-500 rounded-md hover:bg-green-600">
-                Save
-            </button>
+                <button type="button" onclick=closeModal() class="px-6 py-2.5 bg-gray-100 text-gray-700 text-sm font-semibold rounded-lg
+                                hover:bg-gray-200 focus:ring focus:ring-gray-200 transition-all">
+                    Cancel
+                </button>
+            </div>
         </form>
     </div>
 </div>
 
 {{-- edit report modal --}}
 <div id="editReportModal" class="fixed inset-0 z-50 flex items-center justify-center hidden bg-gray-900 bg-opacity-50">
-    <div class="bg-white p-6 rounded-lg shadow-lg w-[1500em] max-w-auto max-w-4xl mx-4 sm:mx-auto overflow-y-auto max-h-[80vh] relative"> 
-        <!-- Close Button -->
-        <button onclick="closeModal()" class="absolute text-xl font-bold text-red-600 top-4 right-4">
-            ✖
-        </button>
+    <div class="bg-white p-6 rounded-lg shadow-lg max-w-auto max-w-4xl mx-4 sm:mx-auto overflow-y-auto max-h-[80vh] relative"> 
 
         <h5 class="mb-4 text-xl font-bold text-center">Edit Report</h5>
         
@@ -266,38 +283,65 @@
             @csrf
             @method('PUT')
             <div>
-                <label for="title" class="block text-sm font-semibold">Title</label>
-                <input type="text" id="title" name="title" class="w-full p-3 border rounded-md" required>
+                <div class="flex flex-row gap-x-1">
+                    <label for="title" class="block text-sm font-semibold">Title</label><span class="text-red-500">*</span>
+                </div>
+                <input type="text" placeholder="Enter title of report" id="title" name="title" class="w-full p-2 border rounded-md" required>
             </div>
 
             <div>
-                <label for="name" class="block text-sm font-semibold">Patient's Name</label>
-                <input type="text" id="name" name="name" class="w-full p-3 border rounded-md" required>
+                <div class="flex flex-row gap-x-1">
+                    <label for="name" class="block text-sm font-semibold">Patient's Name</label><span class="text-red-500">*</span>
+                </div>
+                <input type="text" placeholder="Enter patient's full name" id="name" name="name" class="w-full p-2 border rounded-md" required>
             </div>
 
-            <div class="flex flex-wrap gap-4">
+            <div class="flex flex-row gap-4">
                 <div class="w-full sm:w-1/2">
-                    <label for="age" class="block text-sm font-semibold">Age</label>
-                    <input type="number" id="age" name="age" class="w-full p-3 border rounded-md" required>
-                </div>
-
-                <div class="w-full sm:w-1/2">
-                    <label for="sex" class="block text-sm font-semibold">Sex</label>
-                    <select id="sex" name="sex" class="w-full p-3 border rounded-md" required>
+                    <div class="flex flex-row gap-x-1">
+                        <label for="sex" class="block text-sm font-semibold">Sex</label><span class="text-red-500">*</span>
+                    </div>
+                    <select id="sex" name="sex" class="w-full p-2 border rounded-md" required>
+                        <option value="">Select biological sex</option>
                         <option value="Male">Male</option>
                         <option value="Female">Female</option>
                         <option value="Other">Other</option>
                     </select>
                 </div>
+
+                <div class="w-full sm:w-1/2">
+                    <div class="flex flex-row gap-x-1">
+                        <label for="age" class="block text-sm font-semibold">Age</label><span class="text-red-500">*</span>
+                    </div>
+                    <input type="number" placeholder="Enter patient's age" id="age" name="age" class="w-full p-2 border rounded-md" required min="0">
+                </div>
             </div>
 
             <div>
-                <label for="complaint" class="block text-sm font-semibold">Complaint/Reason</label>
-                <textarea id="complaint" name="complaint" class="w-full p-3 border rounded-md" required></textarea>
+                <div class="flex flex-row gap-x-1">
+                    <label for="category" class="block text-sm font-semibold">Category</label><span class="text-red-500">*</span>
+                </div>
+                <select id="category" name="category" class="w-full p-2.5 border rounded-md" required>
+                    <option value="">Select category</option>
+                    <option value="students">Students</option>
+                    <option value="faculty">Faculty</option>
+                    <option value="administrative">Administrative</option>
+                    <option value="admin">Dependents</option>
+                    <option value="visitors">Visitors</option>
+                </select>
             </div>
 
             <div>
-                <label for="diagnosis" class="block text-sm font-semibold">Diagnosis</label>
+                <div class="flex flex-row gap-x-1">
+                    <label for="complaint" class="block text-sm font-semibold">Complaint Reason</label><span class="text-red-500">*</span>
+                </div>
+                <textarea id="complaint" placeholder="Type complaint reason here" name="complaint" class="w-full p-3 border rounded-md" required></textarea>
+            </div>
+
+            <div>
+                <div class="flex flex-row gap-x-1">
+                    <label for="diagnosis" class="block text-sm font-semibold">Diagnosis</label><span class="text-red-500">*</span>
+                </div>
                 <select id="diagnosis" name="diagnosis" class="w-full p-2.5 border rounded-md" required>
                     <option value="">Select Diagnosis</option>
                     @foreach($services as $service)
@@ -310,31 +354,28 @@
 
             <div>
                 <label for="remarks" class="block text-sm font-semibold">Remarks</label>
-                <textarea id="remarks" name="remarks" class="w-full p-3 border rounded-md"></textarea>
+                <textarea id="remarks" placeholder="Type remarks here" name="remarks" class="w-full p-3 border rounded-md"></textarea>
             </div>
 
-            <div>
-                <label for="category" class="block text-sm font-semibold">Category</label>
-                <select id="category" name="category" class="w-full p-2.5 border rounded-md" required>
-                    <option value="students">Students</option>
-                    <option value="faculty">Faculty</option>
-                    <option value="administrative">Administrative</option>
-                    <option value="admin">Dependents</option>
-                    <option value="visitors">Visitors</option>
-                </select>
-            </div>
+            {{-- Action Buttons --}}
+            <div class="flex flex-row gap-3">
+                <button type="submit" class="flex-1 px-6 py-2.5 bg-green-600 text-white text-sm font-semibold rounded-lg
+                                hover:bg-green-700 focus:ring focus:ring-green-200 transition-all">
+                    Save
+                </button>
 
-            <button type="submit" class="w-full p-3 text-white bg-green-500 rounded-md hover:bg-green-600">
-                Save
-            </button>
+                <button type="button" onclick=closeModal() class="px-6 py-2.5 bg-gray-100 text-gray-700 text-sm font-semibold rounded-lg
+                                hover:bg-gray-200 focus:ring focus:ring-gray-200 transition-all">
+                    Cancel
+                </button>
+            </div>
         </form>
     </div>
 </div>
 
 <script>
     function openEditModal(report) {
-        console.log(report);
-        
+
         document.getElementById('editReportModal').classList.remove('hidden');
         
         let form = document.getElementById('editReportForm');
@@ -354,8 +395,8 @@
         
         // Add or update the hidden _method field for PUT requests
         let methodInput = form.querySelector('#formMethod');
-        if (methodField) {
-            methodField.value = 'PUT';
+        if (methodInput) {
+            methodInput.value = 'PUT';
         }
     }
     function openModal() { 
@@ -379,17 +420,18 @@
     function closeModal() { 
         document.getElementById('addReportModal').classList.add('hidden'); 
         document.getElementById('editReportModal').classList.add('hidden'); 
-    }
-    function closeSuccessModal() {
-        const modal = document.getElementById('successModal');
-        if (modal) {
-            modal.style.display = 'none';
-        }
+        document.getElementById('successModal').classList.add('hidden'); 
     }
 
-    window.onload = function() {
-        setTimeout(closeSuccessModal, 2000); // Auto-close after 2 seconds
-    }
+    // document.addEventListener('DOMContentLoaded', function() {
+    //     setTimeout(function() {
+    //         const modal = document.getElementById('successModal');
+    //         if (modal) {
+    //             modal.classList.add('hidden');
+    //         }
+    //     }, 2000);
+    // });
+    
     function toggleDropdown(dropdownId) {
         const dropdowns = ['categoryFilterDropdown', 'dateFilterDropdown'];
         

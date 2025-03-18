@@ -51,7 +51,7 @@ Route::middleware(['auth'])->group(function () {
     // Add these profile routes
     Route::prefix('profile')->group(function () {
         Route::get('/settings', [ProfileController::class, 'accountSettings'])->name('profile.accountSettings');
-        Route::get('/help-support', [ProfileController::class, 'helpAndSupport'])->name('profile.helpAndSupport');
+        Route::get('/changePassword', [ProfileController::class, 'changePassword'])->name('profile.changePassword');
         Route::post('/update', [ProfileController::class, 'updateProfile'])->name('profile.updateProfile');
         Route::post('/update-password', [ProfileController::class, 'updatePassword'])->name('profile.updatePassword');
     });
@@ -173,23 +173,28 @@ Route::middleware(['auth'])->group(function () {
         }   
     });
 
+    // Report Routes
     Route::prefix('reports')->group(function () {
 
         // Display a list of reports, allowing filters
         Route::get('/', [ReportController::class, 'index'])->name('reports.index');
-        Route::get('/', [ReportController::class, 'index'])->name('report.index');
 
         // Show a single report
-        Route::get('/{id}', [ReportController::class, 'show'])->name('reports.show');
-        Route::get('/{id}', [ReportController::class, 'show'])->name('report.show');
+        Route::get('/{id}', [ReportController::class, 'show'])->name('reports.show');;
 
         // Store a new report
         Route::post('/', [ReportController::class, 'store'])->name('reports.store');
-        Route::post('/', [ReportController::class, 'store'])->name('report.store');
 
         // Delete a report
-        Route::delete('/{id}', [ReportController::class, 'destroy'])->name('report.destroy');
+        Route::delete('/{id}', [ReportController::class, 'destroy'])->name('reports.destroy');
+
+        Route::get('/{id}/edit', [ReportController::class, 'edit'])->name('reports.edit');
+        Route::put('/{id}', [ReportController::class, 'update'])->name('reports.update');
+        Route::get('/reports/export-excel', [ReportController::class, 'exportExcel'])->name('reports.exportExcel');
     });
+
+    Route::get('/reportPaper', [ReportController::class, 'showReportPaper'])->name('reports.showReportPaper');
+    Route::post('/reportPaper', [ReportController::class, 'filterAndCountReports'])->name('reports.filterAndCountReports');
 
     // Patient History
     Route::get('/history', [PatientHistoryController::class, 'index'])->name('History.all');

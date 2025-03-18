@@ -24,7 +24,7 @@ class PatientController extends Controller
     }
 
     public function add() {
-        return view('patient.add');
+        return view('patients.add');
     }
 
     public function create()

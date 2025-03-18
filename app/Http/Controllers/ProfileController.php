@@ -19,11 +19,11 @@ class ProfileController extends Controller
         return view('profile.accountSettings', compact('Data'));
     }
 
-    public function helpAndSupport(Request $request)
+    public function changePassword(Request $request)
     {
         $id = Auth::user()->id; // get logged in user id
         $Data = User::find($id); // finds logged in user id
-        return view('profile.helpAndSupport', compact('Data'));
+        return view('profile.changePassword', compact('Data'));
     }
 
     public function updateProfile(Request $request)
@@ -75,18 +75,18 @@ class ProfileController extends Controller
     
             // Check if the new password is the same as the current password
             if (Hash::check($request->newPassword, $HashPassword)) {
-                return redirect()->back()->with('error', 'New Password cannot be the same as Current Password');
+                return redirect()->back()->with('error', 'New Password cannot be the same as current password');
             }
     
             $user = User::find(Auth::id());
             $user->password = bcrypt($request->newPassword);
             $user->save();
     
-            session()->flash('success', 'Password Updated Successfully');
+            session()->flash('success', 'Password updated successfully');
             return redirect()->back();
     
         } else {
-            session()->flash('error', 'Current Password is Incorrect');
+            session()->flash('error', 'Current password is incorrect');
             return redirect()->back();
         }
     }

@@ -83,7 +83,7 @@
         <x-navbar-profile />
     </header>
 
-    <div class="antialiased bg-gray-50 h-full">
+    <div class="h-full antialiased bg-gray-50">
 
         @php
             $currentRoute = Route::currentRouteName(); // Get the current route name
@@ -103,7 +103,7 @@
         @endif
 
         {{-- check if the route is profile page if not it will add margin left --}}
-        <main class="p-4 h-auto {{ in_array($currentRoute, ['profile.accountSettings', 'profile.helpAndSupport']) ? '' : 'md:ml-64' }}">
+        <main class="p-4 h-auto {{ in_array($currentRoute, ['profile.accountSettings', 'profile.changePassword']) ? '' : 'md:ml-64' }}">
             @yield('content')
         </main>
     </div>
