@@ -13,8 +13,9 @@ return new class extends Migration
     {
         Schema::create('documents', function (Blueprint $table) {
             $table->id();
-            $table->string('document_type')->unique();// Reference to `users`
+            $table->string('document_type');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

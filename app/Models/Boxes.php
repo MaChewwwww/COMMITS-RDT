@@ -18,7 +18,6 @@ class Boxes extends Model
         'date_received',
         'stock_number', 
         'isReturned',
-        'supplier_name',
         'user_id', // for user relationship
     ];
 

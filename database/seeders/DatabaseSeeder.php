@@ -16,16 +16,16 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             UserSeeder::class,
-            PatientRecordsSeeder::class,
+            MedicineSeeder::class,
         ]);
 
-// Create test user
-$user = User::factory()->create([
-    'id' => 1,
-    'name' => 'Test User',
-    'email' => 'test@example.com',
-     'password' => bcrypt('Pass12345')
- ]);
+        // // Create test user
+        // $user = User::factory()->create([
+        //     'id' => 1,
+        //     'name' => 'Test User',
+        //     'email' => 'test@example.com',
+        //     'password' => bcrypt('Pass12345')
+        // ]);
 
         // // Create boxes first
         // $boxes = Boxes::factory()

@@ -1,87 +1,102 @@
 @extends('layouts.app-layout')
 
 @section('content')
-    <header class="px-16 mb-5">
-        <div class="flex items-center justify-between">
-            <h1 class="mb-2 text-2xl font-bold">History</h1>
-            <div class="relative">
-                <button
-                    class="flex items-center px-4 py-2 text-white bg-yellow-400 rounded-md dropdown-button hover:bg-yellow-500">
-                    <p class="mr-2">Filter</p>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="25" viewBox="0 0 32 25" fill="none">
-                        <path
-                            d="M15.5993 15.4256L10.1191 11.2891L11.9458 9.91016L15.5993 12.6679L19.2526 9.91016L21.0793 11.2891L15.5993 15.4256Z"
-                            fill="#FFFFFF" />
+    <div class="container mx-auto">
+        <x-page-title class="mb-2" value="History" />
+
+        <div class="flex flex-wrap items-center justify-end w-full gap-2 mb-3">
+            <!-- Filter Dropdowns -->
+            <div class="flex space-x-2 flex-wrap>
+                <!-- Month Dropdown -->
+                <div class="relative
+                inline-block text-left">
+                <button onclick="toggleDropdown('month-dropdown')"
+                    class="flex items-center px-4 py-2 text-white bg-yellow-400 rounded-md hover:bg-yellow-500">
+                    <p class="px-2">{{ $selectedMonth ?? 'All Month' }}</p>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="white" viewBox="0 0 24 24">
+                        <path d="M7 10l5 5 5-5H7z" />
                     </svg>
                 </button>
-                <div class="absolute right-0 hidden w-48 mt-2 bg-white rounded-lg shadow-lg dropdown-content">
-                <div class="absolute right-0 hidden w-48 mt-2 bg-white rounded-lg shadow-lg dropdown-content">
-                    <a href="/all" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">All</a>
-                    <a href="/student" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Student</a>
-                    <a href="/faculty" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Faculty</a>
-                    <a href="/visitor" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Visitor</a>
-                    <a href="/dependent" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Dependent</a>
+                <div id="month-dropdown"
+                    class="absolute left-0 hidden w-40 mt-2 bg-white border border-gray-200 rounded shadow-lg dropdown-content">
+                    <ul class="py-1">
+                        <li><a href="{{ route('History.all') }}"
+                                class="block px-4 py-2 text-gray-700 hover:bg-gray-100">All</a></li>
+                        @foreach ($months as $month)
+                            <li><a href="{{ route('History.all', ['month' => $month]) }}"
+                                    class="block px-4 py-2 text-gray-700 hover:bg-gray-100">{{ $month }}</a></li>
+                        @endforeach
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Week Dropdown -->
+            <div class="relative inline-block text-left">
+                <button onclick="toggleDropdown('week-dropdown')"
+                    class="flex items-center px-4 py-2 text-white bg-red-900 rounded-md hover:bg-red-1000">
+                    <p class="px-2">Week {{ $selectedWeek ?? 'All' }}</p>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="white"
+                        viewBox="0 0 24 24">
+                        <path d="M7 10l5 5 5-5H7z" />
+                    </svg>
+                </button>
+                <div id="week-dropdown"
+                    class="absolute left-0 hidden w-40 mt-2 bg-white border border-gray-200 rounded shadow-lg dropdown-content">
+                    <ul class="py-1">
+                        <li><a href="{{ route('History.all') }}"
+                                class="block px-4 py-2 text-gray-700 hover:bg-gray-100">All</a></li>
+                        @foreach ($weeks as $week)
+                            <li><a href="{{ route('History.all', ['week' => $week]) }}"
+                                    class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Week {{ $week }}</a>
+                            </li>
+                        @endforeach
+                    </ul>
                 </div>
             </div>
         </div>
-    </header>
+    </div>
 
-    <div class="container p-5 mx-auto bg-white rounded-lg shadow-lg">
-        <table class="w-full border-collapse table-auto">
-            <thead class="bg-gray-200">
-                <tr>
-                    <th class="px-4 py-2 text-sm text-left text-gray-700">Date</th>
-                    <th class="px-4 py-2 text-sm text-left text-gray-700">Time</th>
-                    <th class="px-4 py-2 text-sm text-left text-gray-700">Printed Name</th>
-                    <th class="px-4 py-2 text-sm text-left text-gray-700">Sex</th>
-                    <th class="px-4 py-2 text-sm text-left text-gray-700">Course-Yr & Sect./Dept</th>
-                    <th class="px-4 py-2 text-sm text-left text-gray-700">Treatment Medicine</th>
-                    <th class="px-4 py-2 text-sm text-left text-gray-700">Quantity</th>
-                    <th class="px-4 py-2 text-sm text-left text-gray-700">Physician</th>
-                    <th class="px-4 py-2 text-sm text-left text-gray-700">Status</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr class="border-b border-gray-200">
-                    <td class="px-4 py-3 text-sm text-gray-700">Lorem</td>
-                    <td class="px-4 py-3 text-sm text-gray-700">Lorem</td>
-                    <td class="px-4 py-3 text-sm text-gray-700">Lorem</td>
-                    <td class="px-4 py-3 text-sm text-gray-700">Lorem</td>
-                    <td class="px-4 py-3 text-sm text-gray-700">Lorem</td>
-                    <td class="px-4 py-3 text-sm text-gray-700">Lorem</td>
-                    <td class="px-4 py-3 text-sm text-gray-700">Lorem</td>
-                    <td class="px-4 py-3 text-sm text-gray-700">Lorem</td>
-                    <td class="px-4 py-3 text-sm text-gray-700">Lorem</td>
-                </tr>
-                <tr class="border-b border-gray-200">
-                    <td class="px-4 py-3 text-sm text-gray-700">Lorem</td>
-                    <td class="px-4 py-3 text-sm text-gray-700">Lorem</td>
-                    <td class="px-4 py-3 text-sm text-gray-700">Lorem</td>
-                    <td class="px-4 py-3 text-sm text-gray-700">Lorem</td>
-                    <td class="px-4 py-3 text-sm text-gray-700">Lorem</td>
-                    <td class="px-4 py-3 text-sm text-gray-700">Lorem</td>
-                    <td class="px-4 py-3 text-sm text-gray-700">Lorem</td>
-                    <td class="px-4 py-3 text-sm text-gray-700">Lorem</td>
-                    <td class="px-4 py-3 text-sm text-gray-700">Lorem</td>
-                </tr>
-                <tr class="border-b border-gray-200">
-                    <td class="px-4 py-3 text-sm text-gray-700">Lorem</td>
-                    <td class="px-4 py-3 text-sm text-gray-700">Lorem</td>
-                    <td class="px-4 py-3 text-sm text-gray-700">Lorem</td>
-                    <td class="px-4 py-3 text-sm text-gray-700">Lorem</td>
-                    <td class="px-4 py-3 text-sm text-gray-700">Lorem</td>
-                    <td class="px-4 py-3 text-sm text-gray-700">Lorem</td>
-                    <td class="px-4 py-3 text-sm text-gray-700">Lorem</td>
-                    <td class="px-4 py-3 text-sm text-gray-700">Lorem</td>
-                    <td class="px-4 py-3 text-sm text-gray-700">Lorem</td>
-                </tr>
-            </tbody>
-        </table>
+
+    <!-- Grouping Records by Date -->
+    @php
+        $sortedRecords = $records->sortByDesc('updated_at');
+        $groupedRecords = $sortedRecords->groupBy(function ($record) {
+            return \Carbon\Carbon::parse($record->created_at)->format('l, F j, Y'); // Format by full date
+        });
+    @endphp
+
+    @if ($groupedRecords->isEmpty())
+        <p class="text-center text-gray-600">No records found.</p>
+    @else
+        @foreach ($groupedRecords as $date => $dateRecords)
+            <div class="p-4 mb-6 bg-white border border-gray-200 rounded shadow-lg">
+                <h2 class="mb-2 text-lg font-semibold text-gray-700">{{ $date }}</h2>
+                <ul class="space-y-2">
+                    @foreach ($dateRecords as $record)
+                        <li class="flex items-center space-x-4 history-item">
+                            <span class="text-sm font-normal text-gray-700 underline">{{ $record->patient_name }}</span>
+                        </li>
+                    @endforeach
+                </ul>
+            </div>
+        @endforeach
+    @endif
     </div>
 
     <script>
-        document.querySelector('.dropdown-button').addEventListener('click', function() {
-            document.querySelector('.dropdown-content').classList.toggle('hidden');
-        });
+        function toggleDropdown(dropdownId) {
+            document.querySelectorAll('.dropdown-content').forEach(dropdown => {
+                if (dropdown.id !== dropdownId) dropdown.classList.remove('show');
+            });
+            const dropdown = document.getElementById(dropdownId);
+            dropdown.classList.toggle('show');
+        }
+
+        window.onclick = function(event) {
+            if (!event.target.closest('.relative')) {
+                document.querySelectorAll('.dropdown-content').forEach(dropdown => dropdown.classList.remove('show'));
+            }
+        };
     </script>
+
 @endsection
