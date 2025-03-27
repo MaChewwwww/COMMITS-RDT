@@ -1,0 +1,71 @@
+/* Background shapes with gradients */
+.shape-blob1 {
+    position: absolute;
+    top: -100px;
+    right: -100px;
+    width: 500px;
+    height: 500px;
+    border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+    background: linear-gradient(45deg, #3b82f6, #60a5fa);
+    opacity: 0.1;
+    z-index: 0;
+    animation: blob-movement 25s infinite alternate;
+}
+
+.shape-blob2 {
+    position: absolute;
+    bottom: -150px;
+    left: -150px;
+    width: 600px;
+    height: 600px;
+    border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+    background: linear-gradient(135deg, #2563eb, #93c5fd);
+    opacity: 0.1;
+    z-index: 0;
+    animation: blob-movement 30s infinite alternate-reverse;
+}
+
+.shape-circle1 {
+    position: absolute;
+    top: 20%;
+    left: 10%;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: linear-gradient(225deg, #1d4ed8, #3b82f6);
+    opacity: 0.1;
+    z-index: 0;
+}
+
+.shape-circle2 {
+    position: absolute;
+    bottom: 15%;
+    right: 15%;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background: linear-gradient(to right, #60a5fa, #93c5fd);
+    opacity: 0.1;
+    z-index: 0;
+}
+
+@keyframes blob-movement {
+    0% {
+        transform: rotate(0deg) translate(0px, 0px);
+    }
+    33% {
+        transform: rotate(1deg) translate(5px, 10px);
+    }
+    66% {
+        transform: rotate(-1deg) translate(-10px, 5px);
+    }
+    100% {
+        transform: rotate(0deg) translate(0px, 0px);
+    }
+}
+
+/* Ensure the form content stays above the shapes */
+.content-wrapper {
+    position: relative;
+    z-index: 10;
+}
