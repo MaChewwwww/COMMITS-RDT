@@ -15,7 +15,7 @@
         </div>
 
         <!-- Tab Navigation -->
-        <div class="px-4 border-b border-gray-200">
+        <div class="border-b border-gray-200">
             <nav class="flex -mb-px space-x-4 overflow-x-auto" aria-label="Tabs">
                 <!-- Tab buttons for filtering patients -->
                 <button type="button"
@@ -52,9 +52,9 @@
         </div>
 
         <!-- Table Container -->
-        <div class="p-4">
-            <div class="overflow-x-auto rounded-lg">
-                <table class="min-w-full mt-4 bg-white">
+        <div class="mt-4">
+            <div class="overflow-x-auto shadow-sm rounded-lg">
+                <table class="min-w-full bg-white">
                     <thead>
                         <tr class="border-b border-gray-200 bg-gray-100">
                             <!-- Table headers -->

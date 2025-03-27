@@ -54,7 +54,7 @@
                     </div>
                     <input type="text" name="email" id="topbar-search"
                         class="bg-gray-200 border h-9 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-2.5 "
-                        placeholder="Search" />
+                        placeholder="Search..." />
                 </div>
             </form>
         </div>
