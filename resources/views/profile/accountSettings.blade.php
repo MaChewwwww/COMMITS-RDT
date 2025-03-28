@@ -11,22 +11,28 @@
         $profileImage = $Data->profile_image ? asset('uploads/users/'.$Data->profile_image) : $defaultImage;
     @endphp
 
-    <div class="flex flex-col p-6 bg-white">
-        <div class ="flex flex-row gap-3 pb-6">
-            <a href="{{ route('patients') }}"> {{-- change this to route of dashboard and also make a validation where it will
+    <div class="container mx-auto">
+        <div class="bg-white w-full h-full">
+
+        </div>
+    </div>
+
+    {{-- <div class="flex flex-col "> --}}
+        {{-- <div class ="flex flex-row gap-3 pb-6"> --}}
+            {{-- <a href="{{ route('patients') }}"> {{-- change this to route of dashboard and also make a validation where it will
                 ask user if they want to really go back if there is any unsaved changes--}}
-                <button>
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                {{-- <button> --}}
+                    {{-- <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
                     </svg>
                 </button>
             </a>
             <p class="text-lg">Back</p>
         </div>
-        <div class="flex flex-row">
-            @include('components.profileSideBar') {{-- sidebar --}}
+        <div class="flex flex-row"> --}}
+            {{-- @include('components.profileSideBar') sidebar --}}
             {{-- main content --}}
-            <div class="flex flex-col flex-1 w-2/3 bg-white gap-y-5">
+            {{-- <div class="flex flex-col flex-1 w-2/3 bg-white gap-y-5">
                 <div class="flex flex-row item-center gap-x-5">
                     <img id="profileImage" src="{{ $profileImage }}"
                     alt="profile picture" height="150" width="150" class="object-cover rounded-full cursor-pointer">
@@ -42,9 +48,9 @@
                 </div>
                 <div class="flex flex-row">
                     <button type="button" onclick=openEditProfileModal() class="px-8 py-2 text-white bg-green-600 rounded-xl ">Edit Profile</button>
-                </div>
+                </div> --}}
                 <!-- Modal for Image Preview -->
-                <div id="imageModal" class="fixed inset-0 z-50 items-center justify-center hidden bg-black bg-opacity-70">
+                {{-- <div id="imageModal" class="fixed inset-0 z-50 items-center justify-center hidden bg-black bg-opacity-70">
                     <div class="relative">
                         <img id="modalImage" src="" alt="Image Preview" class="max-w-full max-h-[80vh] w-[80vh] h=[80vh] object-contain">
                         <button type="button" id="closeModal" class="absolute px-2 py-1 text-white bg-red-600 rounded-full top-2 right-2">
@@ -53,18 +59,18 @@
                             </svg>
                         </button>
                     </div>
-                </div>
+                </div> --}}
                 {{-- Edit profile modal --}}
-                <div id="editProfileModal" class="fixed inset-0 z-50 flex items-center justify-center hidden bg-gray-900 bg-opacity-50 h-[100vh]">
+                {{-- <div id="editProfileModal" class="fixed inset-0 z-50 flex items-center justify-center hidden bg-gray-900 bg-opacity-50 h-[100vh]">
                     <div class="bg-white p-6 rounded-lg flex flex-col shadow-lg max-w-auto max-w-4xl mx-4 sm:mx-auto overflow-y-auto max-h-[80vh] relative">
                         <form method="POST" action="{{ route('profile.updateProfile') }}" enctype="multipart/form-data" class="flex flex-col gap-y-5">
                             @csrf
                             <div class="flex flex-col">
                                 <p class="text-lg font-medium">Edit Profile</p>
                                 <p class="text-xs font-medium text-gray-600">Update your profile information</p>
-                            </div>
+                            </div> --}}
                             {{-- Edit form --}}
-                            <div class="flex flex-row">
+                            {{-- <div class="flex flex-row">
                                 <p class="text-sm font-medium text-gray-600">Photo</p>
                             </div>
                             <div class="flex flex-row item-center gap-x-5">
@@ -89,9 +95,9 @@
                             </div>
                             @if(session('error'))
                                 <p class="text-sm text-red-500">{{ session('error') }}</p>
-                            @endif
+                            @endif --}}
                             {{-- Action buttons --}}
-                            <div class="flex flex-row justify-end gap-x-2">
+                            {{-- <div class="flex flex-row justify-end gap-x-2">
                                 <button type="button" onclick=closeEditProfileModal() class="px-8 py-1 text-white bg-red-600 rounded-xl">Cancel</button>
                                 <button type="submit" class="px-8 py-2 text-white bg-green-600 rounded-xl">Change</button>
                             </div>
@@ -100,7 +106,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
 
     <script>
         // for upload profile button

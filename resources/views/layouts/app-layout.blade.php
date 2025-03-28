@@ -21,6 +21,8 @@
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.min.css" rel="stylesheet">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link href="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="icon" type="image/png" href="{{ asset('images/prms-logo 2.jpg') }}">
 
     <!-- Custom styles for error modals -->
     <style>
@@ -79,6 +81,9 @@
 </head>
 
 <body>
+    <!--loading spinner-->
+    <x-loading-spinner />
+
     <header class="sticky top-0 inset-x-0 flex flex-wrap md:justify-start md:flex-nowrap z-48 w-full h-14 bg-white border-b border-gray-200 text-sm py-2.5 lg:ps-65">
         <x-navbar />
     </header>
@@ -121,6 +126,11 @@
 
     <!-- Add this script to hide the alert after 5 seconds -->
     <script>
+        // to show loading spinner
+        $(window).on("load", function() {
+            $(".loader-wrapper").fadeOut();
+        });
+
         document.addEventListener('DOMContentLoaded', function() {
             const alert = document.getElementById('session-alert');
             if (alert) {
