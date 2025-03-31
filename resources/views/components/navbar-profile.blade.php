@@ -11,7 +11,8 @@
 <meta name="csrf-token" content="{{ csrf_token() }}">
 
 <!--======== START NAVBAR =================-->
-<nav class="fixed top-0 left-0 right-0 z-50 flex items-center justify-between bg-white border-b border-gray-200 h-14">
+<nav
+    class="container mx-auto fixed top-0 left-0 right-0 z-50 flex items-center justify-between bg-white border-b border-gray-200 h-14">
     <div class="flex flex-wrap items-center justify-between w-full">
         <div class="flex items-center justify-start">
             {{-- <button data-drawer-target="drawer-navigation" data-drawer-toggle="drawer-navigation"
@@ -42,48 +43,25 @@
                 </div>
             @endif --}}
 
-            <div class="flex items-center px-2 py-2">
+            <div class="flex items-center space-x-2 py-2">
                 <!-- Logo -->
                 <a class="flex-none inline-block text-xl font-semibold rounded-xl focus:outline-hidden focus:opacity-80"
                     href="#" aria-label="PRMS">
                     <div class="flex items-center justify-start w-full">
                         <!--PRMS logo-->
                         <img src="{{ asset('images/prms-logo 2.jpg') }}" alt="logo" class="w-10 mr-1 rounded-full">
-                        <span class="text-2xl font-bold text-red-900">PRMS</span>
+                        <span class="text-2xl font-bold text-red-900 hidden md:block ml-1">PRMS</span>
                     </div>
                 </a>
                 <!-- End Logo -->
-                <form action="#" method="GET" class="hidden md:block md:pl-2">
-                    <label for="topbar-search" class="sr-only">Search</label>
-                    <div class="relative md:w-64">
-                        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                            <svg class="w-5 h-5 text-gray-500" fill="currentColor" viewBox="0 0 20 20"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <path fill-rule="evenodd" clip-rule="evenodd"
-                                    d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z">
-                                </path>
-                            </svg>
-                        </div>
-                        <input type="text" name="email" id="topbar-search"
-                            class="bg-gray-200 border h-9 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-2.5 "
-                            placeholder="Search..." />
-                    </div>
-                </form>
+                <div>
+                    <a href="{{ route('dashboard') }}"
+                        class="font-medium px-2 hover:underline text-base hover:text-blue-500">Dashboard</a>
+                </div>
             </div>
         </div>
 
-        <div class="relative flex items-center mr-5 lg:order-2">
-            {{-- <button type="button" data-drawer-toggle="drawer-navigation" aria-controls="drawer-navigation"
-                class="p-2 mr-1 text-gray-500 rounded-lg md:hidden hover:text-gray-900 hover:bg-gray-100 focus:ring-4 focus:ring-gray-300">
-                <span class="sr-only">Toggle search</span>
-                <svg aria-hidden="true" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
-                    xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                    <path clip-rule="evenodd" fill-rule="evenodd"
-                        d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z">
-                    </path>
-                </svg>
-            </button> --}}
-
+        <div class="relative flex items-center lg:order-2 space-x-1">
             <!-- Notifications -->
             <div class="relative">
                 <!-- Notification Button -->
@@ -189,50 +167,54 @@
                         @endif
                     </div>
                 </div>
-
             </div>
 
             {{-- Profile --}}
-            <button type="button"
-                class="flex px-1 py-1 ml-1 mr-3 text-sm text-gray-500 rounded-lg hover:text-gray-900 hover:bg-gray-100 focus:ring-4 focus:ring-gray-300"
-                id="user-menu-button" aria-expanded="false" data-dropdown-toggle="dropdown">
-                <span class="sr-only">Open user menu</span>
-                <img class="w-8 h-8 rounded-full" src="{{ $profileImage }}" alt="user photo" />
-            </button>
-            <!-- Dropdown menu profile items -->
-            <div id="profile-dropdown"
-                class="fixed top-16 right-4 z-[9999] hidden w-64 bg-white rounded-lg shadow-lg dropdown-menu-content">
-                <a href="{{ route('profile.accountSettings') }}"
-                    class="flex items-center px-4 py-2 text-gray-800 hover:bg-gray-100">
-                    <svg class="inline w-4 h-4 mr-2 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none"
-                        viewBox="0 0 20 20" stroke-width="1.5" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
-                    </svg>
-                    <span>Profile</span>
-                </a>
-                <a href="{{ route('profile.changePassword') }}"
-                    class="flex items-center px-4 py-2 text-gray-800 hover:bg-gray-100">
-                    <svg class="inline w-4 h-4 mr-2 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none"
-                        viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M21.75 6.75a4.5 4.5 0 0 1-4.884 4.484c-1.076-.091-2.264.071-2.95.904l-7.152 8.684a2.548 2.548 0 1 1-3.586-3.586l8.684-7.152c.833-.686.995-1.874.904-2.95a4.5 4.5 0 0 1 6.336-4.486l-3.276 3.276a3.004 3.004 0 0 0 2.25 2.25l3.276-3.276c.256.565.398 1.192.398 1.852Z" />
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M4.867 19.125h.008v.008h-.008v-.008Z" />
-                    </svg>
-                    <span>Change Password</span>
-                </a>
-                <a id="logout-button" class="flex items-center px-4 py-2 text-gray-800 hover:bg-gray-100">
-                    <svg class="inline w-4 h-4 mr-2 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none"
-                        viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9" />
-                    </svg>
-                    <span>Log out</span>
-                </a>
+            <div class="relative inline-block">
+                <button type="button"
+                    class="flex px-1 py-1 ml-1 text-sm text-gray-500 rounded-lg hover:text-gray-900 hover:bg-gray-100 focus:ring-4 focus:ring-gray-300"
+                    id="user-menu-button" aria-expanded="false" data-dropdown-toggle="dropdown">
+                    <span class="sr-only">Open user menu</span>
+                    <img class="w-8 h-8 rounded-full" src="{{ $profileImage }}" alt="user photo" />
+                </button>
+
+                <!-- Dropdown menu profile items -->
+                <div id="profile-dropdown"
+                    class="absolute z-50 hidden w-64 bg-white rounded-lg shadow-lg dropdown-menu-content top-full right-0 mt-2">
+                    <a href="{{ route('user.profile') }}"
+                        class="flex items-center px-4 py-2 text-gray-800 hover:bg-gray-100">
+                        <svg class="inline w-4 h-4 mr-2 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 20 20" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+                        </svg>
+                        <span>Profile</span>
+                    </a>
+                    <a href="{{ route('password.change') }}"
+                        class="flex items-center px-4 py-2 text-gray-800 hover:bg-gray-100">
+                        <svg class="inline w-4 h-4 mr-2 text-gray-500" xmlns="http://www.w3.org/2000/svg"
+                            fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M21.75 6.75a4.5 4.5 0 0 1-4.884 4.484c-1.076-.091-2.264.071-2.95.904l-7.152 8.684a2.548 2.548 0 1 1-3.586-3.586l8.684-7.152c.833-.686.995-1.874.904-2.95a4.5 4.5 0 0 1 6.336-4.486l-3.276 3.276a3.004 3.004 0 0 0 2.25 2.25l3.276-3.276c.256.565.398 1.192.398 1.852Z" />
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M4.867 19.125h.008v.008h-.008v-.008Z" />
+                        </svg>
+                        <span>Change Password</span>
+                    </a>
+                    <a id="logout-button" class="flex items-center px-4 py-2 text-gray-800 hover:bg-gray-100">
+                        <svg class="inline w-4 h-4 mr-2 text-gray-500" xmlns="http://www.w3.org/2000/svg"
+                            fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9" />
+                        </svg>
+                        <span>Log out</span>
+                    </a>
+                </div>
             </div>
 
         </div>
+
+    </div>
     </div>
 </nav>
 

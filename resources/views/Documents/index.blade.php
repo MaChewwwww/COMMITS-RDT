@@ -10,13 +10,13 @@
                 <!-- Filter Dropdown -->
                 <div class="relative inline-block text-left">
                     <button onclick="toggleDropdown('document-type-dropdown')"
-                        class="bg-red-900 text-white px-2 py-2 rounded-md hover:bg-red-1000 flex">
+                        class="inline-flex items-center gap-2 px-2 py-2.5 text-gray-500 bg-gray-50 border-2 border-gray-500 hover:bg-gray-100 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg active:shadow-sm transform active:translate-y-0">
                         <p class="px-2">Document Type</p>
                         <svg xmlns="http://www.w3.org/2000/svg" width="32" height="25" viewBox="0 0 32 25"
                             fill="none">
                             <path
                                 d="M15.5993 15.4256L10.1191 11.2891L11.9458 9.91016L15.5993 12.6679L19.2526 9.91016L21.0793 11.2891L15.5993 15.4256Z"
-                                fill="#FFFFFF" />
+                                fill="#808080" />
                         </svg>
                     </button>
                     <div id="document-type-dropdown"
@@ -32,7 +32,7 @@
 
                 <div class="relative inline-block text-left">
                     <button onclick="toggleDropdown('date-dropdown')"
-                        class="bg-yellow-400 text-white px-2 py-2 rounded-md hover:bg-yellow-500 flex">
+                        class="inline-flex items-center gap-2 px-4 py-2.5 text-white bg-yellow-500 hover:bg-yellow-400 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg active:shadow-sm transform active:translate-y-0">
                         <p class="px-2">Month</p>
                         <svg xmlns="http://www.w3.org/2000/svg" width="32" height="25" viewBox="0 0 32 25"
                             fill="none">
@@ -49,10 +49,11 @@
                         @endforeach
                     </div>
                 </div>
+
                 <!-- Add Dropdown -->
                 <div class="relative inline-block text-left">
                     <button onclick="toggleDropdown('add-dropdown')"
-                        class="bg-blue-500 text-white px-2 py-2 rounded-md hover:bg-blue-600 flex items-center justify-center">
+                        class="inline-flex items-center gap-2 px-4 py-2.5 text-white bg-blue-500 hover:bg-blue-600 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg active:shadow-sm transform active:translate-y-0">
                         <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 17 17"
                             fill="none">
                             <path
