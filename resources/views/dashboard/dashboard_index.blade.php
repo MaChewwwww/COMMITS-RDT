@@ -4,14 +4,56 @@
     <div class="container mx-auto">
         <div class="flex justify-center">
             <div class="w-full">
-                <x-page-title value="Dashboard" />
+                <h2 class="mb-3 text-2xl font-semibold text-gray-800">Dashboard</h2>
+                <form action="#" method="GET" class="flex items-center justify-start mb-4">
+                    <div class="w-full md:w-96">
+                        <label for="topbar-search" class="sr-only">Search</label>
+                        <div class="relative w-full">
+                            <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                <svg class="w-5 h-5 text-gray-500" fill="currentColor" viewBox="0 0 20 20" 
+                                     xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                          d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z">
+                                    </path>
+                                </svg>
+                            </div>
+                            <input type="text" name="search" id="topbar-search"
+                                   class="bg-gray-200 border h-11 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 pr-16 py-2.5 truncate"
+                                   placeholder="Search patients, reports, medicines..." 
+                                   value="{{ $searchTerm ?? '' }}" />
+                            <div class="absolute inset-y-0 right-0 flex items-center pr-2">
+                                <button type="submit" class="p-1 mr-1 rounded-full focus:outline-none focus:shadow-outline hover:bg-gray-100">
+                                    <svg class="w-5 h-5 text-gray-500 hover:text-gray-700" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd"
+                                              d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                                              clip-rule="evenodd"></path>
+                                    </svg>
+                                </button>
+                                @if(request()->has('search'))
+                                    <a href="{{ url()->current() }}" 
+                                       class="p-1 rounded-full focus:outline-none focus:shadow-outline hover:bg-gray-100"
+                                       title="Clear search">
+                                        <svg class="w-5 h-5 text-gray-500 hover:text-gray-700" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+                                        </svg>
+                                    </a>
+                                @endif
+                            </div>
+                        </div>
+                        @if(request()->has('search'))
+                            <div class="mt-1 text-xs text-gray-600">
+                                Searching for: <span class="font-medium">{{ request('search') }}</span>
+                            </div>
+                        @endif
+                    </div>
+                </form>
             </div>
         </div>
         <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
             <!-- Rectangle 1 -->
-            <div class="flex items-center justify-center p-4 min-w-fit bg-white rounded-lg shadow-md space-x-3">
+            <div class="flex items-center justify-center p-4 space-x-3 bg-white rounded-lg shadow-md min-w-fit">
                 <div class="flex-shrink-0">
-                    <div class="flex items-center justify-center text-blue-500 bg-blue-50 rounded-full w-14 h-14">
+                    <div class="flex items-center justify-center text-blue-500 rounded-full bg-blue-50 w-14 h-14">
                         <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor"
                             class="bi bi-person-fill" viewBox="0 0 16 16">
                             <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6" />
@@ -20,14 +62,14 @@
                 </div>
                 <div class="flex-1">
                     <p class="text-4xl font-semibold">{{ $totalPatients }}</p>
-                    <h2 class="text-base font-regular text-gray-600 text-wrap mt-1">Total Patient Records</h2>
+                    <h2 class="mt-1 text-base text-gray-600 font-regular text-wrap">Total Patient Records</h2>
                 </div>
             </div>
 
             <!-- Rectangle 2 -->
-            <div class="flex items-center justify-center p-4 min-w-fit bg-white rounded-lg shadow-md space-x-3">
+            <div class="flex items-center justify-center p-4 space-x-3 bg-white rounded-lg shadow-md min-w-fit">
                 <div class="flex-shrink-0">
-                    <div class="flex items-center justify-center text-green-500 bg-green-50 rounded-full w-14 h-14">
+                    <div class="flex items-center justify-center text-green-500 rounded-full bg-green-50 w-14 h-14">
                         <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor"
                             class="bi bi-receipt" viewBox="0 0 16 16">
                             <path
@@ -39,14 +81,14 @@
                 </div>
                 <div class="flex-1">
                     <p class="text-4xl font-semibold">{{ $totalDocuments }}</p>
-                    <h2 class="text-base font-regular text-gray-600 text-wrap mt-1">Total Documents</h2>
+                    <h2 class="mt-1 text-base text-gray-600 font-regular text-wrap">Total Documents</h2>
                 </div>
             </div>
 
             <!-- Rectangle 3 -->
-            <div class="flex items-center justify-center p-4 min-w-fit bg-white rounded-lg shadow-md space-x-3">
+            <div class="flex items-center justify-center p-4 space-x-3 bg-white rounded-lg shadow-md min-w-fit">
                 <div class="flex-shrink-0">
-                    <div class="flex items-center justify-center text-indigo-500 bg-indigo-50 rounded-full w-14 h-14">
+                    <div class="flex items-center justify-center text-indigo-500 rounded-full bg-indigo-50 w-14 h-14">
                         <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor"
                             class="bi bi-file-earmark-spreadsheet-fill" viewBox="0 0 16 16">
                             <path d="M6 12v-2h3v2z" />
@@ -57,14 +99,14 @@
                 </div>
                 <div class="flex-1">
                     <p class="text-4xl font-semibold">{{ $totalReports }}</p>
-                    <h2 class="text-base font-regular text-gray-600 text-wrap mt-1">Total Reports</h2>
+                    <h2 class="mt-1 text-base text-gray-600 font-regular text-wrap">Total Reports</h2>
                 </div>
             </div>
 
             <!-- Rectangle 4 -->
-            <div class="flex items-center justify-center p-4 min-w-fit bg-white rounded-lg shadow-md space-x-3">
+            <div class="flex items-center justify-center p-4 space-x-3 bg-white rounded-lg shadow-md min-w-fit">
                 <div class="flex-shrink-0">
-                    <div class="flex items-center justify-center text-yellow-500 bg-yellow-50 rounded-full w-14 h-14">
+                    <div class="flex items-center justify-center text-yellow-500 rounded-full bg-yellow-50 w-14 h-14">
                         <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor"
                             class="bi bi-capsule" viewBox="0 0 16 16">
                             <path
@@ -74,7 +116,7 @@
                 </div>
                 <div class="flex-1">
                     <p class="text-4xl font-semibold">{{ $totalMedicines }}</p>
-                    <h2 class="text-base font-regular text-gray-600 text-wrap mt-1">Total Medicines</h2>
+                    <h2 class="mt-1 text-base text-gray-600 font-regular text-wrap">Total Medicines</h2>
                 </div>
             </div>
         </div>

@@ -19,13 +19,13 @@
 
     {{-- PROFILE --}}
     <div class="flex items-center justify-start w-full px-6 py-2 mt-1">
-        <div class="w-14 mr-2 border bg-white rounded-lg p-1">
+        <div class="p-1 mr-2 bg-white border rounded-lg w-14">
             <img src="{{ asset('images/puplogo.png') }}" alt="">
         </div>
         <div class="text-white">
-            <p class="font-semibold text-base">{{ auth()->user()->first_name }}</p>
-            <p class="font-medium text-gray-300 text-sm">{{ auth()->user()->role }}</p>
-            <p class="font-semibold text-green-500 text-xs">• online</p>
+            <p class="text-base font-semibold">{{ auth()->user()->first_name }}</p>
+            <p class="text-sm font-medium text-gray-300">{{ auth()->user()->role }}</p>
+            <p class="text-xs font-semibold text-green-500">• online</p>
         </div>
     </div>
 
@@ -47,7 +47,7 @@
             </div>
         </form>
 
-        <p class="text-sm font-semibold text-start text-gray-300 mb-2 mt-4">Menu</p>
+        <p class="mt-4 mb-2 text-sm font-semibold text-gray-300 text-start">Menu</p>
         <ul class="flex flex-col space-y-1">
             <li>
                 <x-sidebar-link :href="route('dashboard')" :active="request()->is('dashboard*') || request()->is('/')" :icon="'fas fa-chart-pie'">Dashboard</x-sidebar-link>
@@ -56,7 +56,7 @@
                 <x-sidebar-link :href="route('patients')" :active="request()->is('patients*') || request()->is('/')" :icon="'fas fa-user-injured'">Patients</x-sidebar-link>
             </li>
             <li>
-                <x-sidebar-link :href="'history'" :active="request()->is('history*')" :icon="'fas fa-history'">History</x-sidebar-link>
+                <x-sidebar-link :href="route('History.all')" :active="request()->is('history*')" :icon="'fas fa-history'">History</x-sidebar-link>
             </li>
             <li>
                 <x-sidebar-link :href="route('inventory')" :active="request()->is('inventory*')" :icon="'fas fa-boxes'">Inventory</x-sidebar-link>
