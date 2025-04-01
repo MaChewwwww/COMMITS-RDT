@@ -9,11 +9,16 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="icon" type="image/png" href="{{ asset('images/prms-logo 2.jpg') }}">
 
     <!-- Styles -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body>
+    <!--loading spinner-->
+    <x-loading-spinner />
+
     <div id="app">
         <div class="tw-page">
             <div class="tw-page-wrapper">
@@ -41,6 +46,11 @@
 
     <!-- Add this script to hide the alert after 5 seconds -->
     <script>
+        // to show loading spinner
+        $(window).on("load", function() {
+            $(".loader-wrapper").fadeOut();
+        });
+
         document.addEventListener('DOMContentLoaded', function() {
             const alert = document.getElementById('session-alert');
             if (alert) {

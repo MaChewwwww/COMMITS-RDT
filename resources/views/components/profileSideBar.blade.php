@@ -8,9 +8,9 @@
                  </a>
             </li>
             <li>
-                <a class="{{ request()->routeIs('profile.helpAndSupport') ? 'border-b-4 border-black' : '' }}" 
-                    href="{{ route('profile.helpAndSupport') }}">
-                     Help and Support
+                <a class="{{ request()->routeIs('profile.changePassword') ? 'border-b-4 border-black' : '' }}" 
+                    href="{{ route('profile.changePassword') }}">
+                     Change password
                  </a>
             </li>
         </ul>

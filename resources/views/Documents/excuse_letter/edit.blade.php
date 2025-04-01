@@ -55,7 +55,7 @@
 
 <body class="bg-gray-100">
 
-    <div class="flex space-x-10 justify-between mb-5 p-4 print:hidden">
+    <div class="flex space-x-10 justify-between mb-5 print:hidden">
         <button class="px-4 py-2 bg-gray-300 text-black rounded hover:bg-gray-400 flex items-center space-x-2"
             onclick="goBack()" aria-label="Go Back">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
@@ -145,8 +145,8 @@
                     </div>
                 </div>
             </div>
-        </div>   
-    </div>    
+        </div>
+    </div>
                 <!-- Success Notification -->
                 <div class="container mx-auto bg-white md:py-20 md:px-20 w-[90%] md:w-[70%] lg:w-[70%]">
                     <!-- Success Notification -->
@@ -196,7 +196,7 @@
                                     <div class="form-group">
                                         <label class="block text-gray-600 font-medium mb-1">Dear (Recipient):</label>
                                         <input type="text" id="recipient" name="recipient"
-                                            class="w-full border rounded-md px-3 py-2" placeholder="Enter recipient's name" 
+                                            class="w-full border rounded-md px-3 py-2" placeholder="Enter recipient's name"
                                             value="{{ old('recipient', $associatedDocument->recipient ?? '') }}" required>
                                         <div id="nameError" class="hidden text-red-500">Please enter the recipient's name.</div>
                                     </div>
@@ -204,7 +204,7 @@
                                     <div class="form-group">
                                         <label class="block text-gray-600 font-medium mb-1">Student Name:</label>
                                         <input type="text" id="patient_name" name="patient_name"
-                                            class="w-full border rounded-md px-3 py-2" placeholder="Enter student name" 
+                                            class="w-full border rounded-md px-3 py-2" placeholder="Enter student name"
                                             value="{{ old('patient_name', $associatedDocument->patient_name ?? '') }}" required>
                                     </div>
 
@@ -225,7 +225,7 @@
                                     <div class="form-group">
                                         <label class="block text-gray-600 font-medium mb-1">Reason for Absence:</label>
                                         <input type="text" id="cause" name="cause"
-                                            class="w-full border rounded-md px-3 py-2" placeholder="Enter reason for absence" 
+                                            class="w-full border rounded-md px-3 py-2" placeholder="Enter reason for absence"
                                             value="{{ old('cause', $associatedDocument->cause ?? '') }}" required>
                                         <div id="reasonError" class="hidden text-red-500">Please enter the reason for absence.</div>
                                     </div>
@@ -244,14 +244,14 @@
                                     </div>
                                 </form>
                             </div>
-                        </div>    
+                        </div>
                     </div>
-                    
+
 
 
                     <!-- Modal Scripts -->
                     <script>
-                        
+
                         function goBack() {
                             window.location.href = "{{ route('documents.index') }}";
                         }
@@ -280,7 +280,7 @@
 
                             // Validate inputs
                             let isValid = true;
-    
+
                             // Check if fields are filled
                             if (!recipientName.trim()) {
                                 document.getElementById('nameError').classList.remove('hidden');
@@ -309,7 +309,7 @@
                             } else {
                                 document.getElementById('licenseNoError').classList.add('hidden');
                             }
-                            
+
                             console.log(isValid);
 
                             // If all fields are valid, update the placeholders in the letter
@@ -328,7 +328,7 @@
                             }
                         }
                     </script>
-    </div>               
+    </div>
 </body>
 
 </html>

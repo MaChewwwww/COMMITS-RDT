@@ -1,9 +1,14 @@
 @extends('layouts.guest-layout')
 
 @section('guest_content')
-    <div class="bg-[#D9D9D9] bg-opacity-80 p-8 flex flex-col rounded-3xl items-center justify-center">
-        <div class="flex flex-row items-start w-full">
-            <p class="text-lg font-bold">Reset Password</p>
+    <div class="flex flex-col w-[500px] items-center justify-center p-8 bg-white bg-opacity-90 rounded-3xl">
+        <div class="flex flex-col items-center">
+            <div class="flex flex-row justify-center w-full">
+                <p class="text-lg font-bold text-center">Reset Password</p>
+            </div>
+            <div class="flex flex-row justify-center w-full text-gray-500">
+                <p class="text-center">Enter your email and new password below.</p>
+            </div>
         </div>
         <form method="POST" action="{{ route('password.update') }}">
             @csrf
@@ -13,14 +18,14 @@
                         <label for="email" class="text-xs font-medium text-gray-800">Email</label>
                         <span class="text-red-500">*</span>
                     </div>
-                    <input type="email" name="email" placeholder="Enter your email" class="w-[300px] text-xs outline-none py-3 border-2 border-gray-500 focus:border-red-900 rounded-xl p-2">
+                    <input type="email" name="email" placeholder="Enter your email" class="w-full p-2 py-3 text-xs border-2 border-gray-300 outline-none focus:border-blue-500 rounded-xl">
                     {{-- Password field --}}
                     <div class="flex flex-row space-x-1">
                         <label for="password" class="text-xs font-medium text-gray-800">Password</label>
                         <span class="text-red-500">*</span>
                     </div>
                     <div class="relative">
-                        <input name="password" type="password" id="passwordID" placeholder="Enter your new password" class="pr-10 w-[300px] text-xs outline-none py-3 border-2 border-gray-500 focus:border-red-900 rounded-xl p-2">
+                        <input name="password" type="password" id="passwordID" placeholder="Enter your new password" class="w-full p-2 py-3 text-xs border-2 border-gray-300 outline-none focus:border-blue-500 rounded-xl">
                         <button type="button" id="togglePassword" class="absolute right-3 top-3">
                             <svg id="eyeIconPassword" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" 
                                 class="w-5 h-5 text-gray-400">
@@ -30,13 +35,16 @@
                             </svg>
                         </button>
                     </div>
+                    @error('password')
+                        <p class="text-sm text-red-500">{{ $message }}</p>
+                    @enderror
                     {{-- Confirm password field --}}
                     <div class="flex flex-row space-x-1">
                         <label for="confirmPassword" class="text-xs font-medium text-gray-800">Confirmation Password</label>
                         <span class="text-red-500">*</span>
                     </div>
                     <div class="relative">
-                        <input name="password_confirmation" type="password" id="confirmPasswordID" placeholder="Confirm new password" class="pr-10 w-[300px] text-xs outline-none py-3 border-2 border-gray-500 focus:border-red-900 rounded-xl p-2">
+                        <input name="password_confirmation" type="password" id="confirmPasswordID" placeholder="Confirm new password" class="w-full p-2 py-3 text-xs border-2 border-gray-300 outline-none focus:border-blue-500 rounded-xl">
                         <button type="button" id="toggleConfirmPassword" class="absolute right-3 top-3">
                             <svg id="eyeIconConfirmPassword" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" 
                                 class="w-5 h-5 text-gray-400">
@@ -46,14 +54,17 @@
                             </svg>
                         </button>
                     </div>
+                    @error('password')
+                        <p class="text-sm text-red-500">{{ $message }}</p>
+                    @enderror
                     {{-- hidden token field contained the value of secret $token --}}
                     <input type="hidden" name="token" value="{{ $token }}"> {{-- change the value to token variable --}}
             </div>
-            <div class="flex flex-row justify-end w-full mt-5 gap-x-5">
+            <div class="flex flex-row justify-end w-full mt-5 gap-x-2">
                 <a href="{{ route('login') }}">
-                    <button type="button" class="px-4 py-2 text-sm text-white bg-red-500 rounded-full">Cancel</button>
+                    <button type="button" class="px-4 py-2 text-sm text-white bg-red-500 rounded-xl w-44">Cancel</button>
                 </a>
-                <button type="submit" class="px-4 py-2 text-sm text-white bg-green-600 rounded-full">Confirm</button>
+                <button type="submit" class="px-4 py-2 text-sm text-white bg-green-600 rounded-xl w-44">Confirm</button>
             </div>
         </form>
     </div>

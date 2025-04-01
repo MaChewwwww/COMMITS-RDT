@@ -1,27 +1,49 @@
 @extends('layouts.guest-layout')
 
 @section('guest_content')
-        
-    <div class="bg-[#D9D9D9] bg-opacity-80 p-8 flex flex-col rounded-3xl items-center justify-center">
-        <div class="flex flex-row items-start w-full">
-            <p class="text-lg font-bold">Forgot Password</p>
-        </div>
-        <form method="POST" action="{{ route('password.request') }}">
-            @csrf
-            <div class="flex flex-col mt-4 gap-y-2">
-                    <div class="flex flex-row space-x-1">
-                        <label class="text-xs font-medium text-gray-800">Email</label>
-                        <span class="text-red-500">*</span>
-                    </div>
-                    <input name="email" type="email" placeholder="Enter your email" class="w-[300px] text-xs outline-none py-3 border-2 border-gray-500 focus:border-red-900 rounded-xl p-2">
+    <div class="p-6 space-y-6">
+        <div class="text-center">
+            <!-- Placeholder for logo -->
+            <div
+                class="mx-auto h-16 w-16 bg-gradient-to-r from-blue-600 to-blue-400 rounded-full flex items-center justify-center shadow-md overflow-hidden">
+                <img src="{{ asset('images/prms-logo 2.jpg') }}" alt="Logo" class="h-full w-full object-cover">
             </div>
-            <div class="flex flex-row justify-end w-full mt-5 gap-x-5">
+
+            <h1 class="mt-6 text-xl font-semibold text-gray-900">
+                Forgot Password
+            </h1>
+            <p class="mt-2 text-sm text-gray-600">
+                Enter your registered email address below
+            </p>
+        </div>
+
+        <form class="space-y-4 md:space-y-6" id="form" action="{{ route('password.request') }}" method="post">
+            @csrf
+            {{-- Email --}}
+            <div class="mt-8 input-control">
+                <div class="inline-flex items-center space-x-1">
+                    <x-input-label for="email" value="Email" />
+                    <span class="text-red-500">*</span>
+                </div>
+                <x-input-textfield id="email" name="email" class="mb-1" placeholder="Enter your email" />
+                @if (session('status'))
+                    <p class="mt-2 text-sm text-green-500">{{ session('status') }}</p>
+                @endif
+
+                {{-- Error message for invalid credentials --}}
+                @error('email')
+                    <p class="text-sm text-red-500">{{ $message }}</p>
+                @enderror
+            </div>
+            <div class="flex flex-row justify-center w-full mt-5 gap-x-2">
                 <a href="{{ route('login') }}">
-                    <button type="button" class="px-4 py-2 text-sm text-white bg-red-500 rounded-full">Cancel</button>
+                    <button type="button"
+                        class="w-full text-white bg-red-500 hover:bg-red-600 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Cancel</button>
                 </a>
-                <button type="submit" class="px-4 py-2 text-sm text-white bg-green-600 rounded-full">Send Verification</button>
+                <button type="submit"
+                    class="w-full text-white bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Send
+                    Email Verification</button>
             </div>
         </form>
     </div>
-
 @endsection

@@ -77,7 +77,7 @@
 <body class="bg-gray-100">
 
     <!-- Buttons (Optional for print view, you can hide them when printing) -->
-    <div class="flex space-x-10 justify-between mb-5 p-4">
+    <div class="flex space-x-10 justify-between mb-5">
         <button class="px-4 py-2 bg-gray-300 text-black rounded hover:bg-gray-400 flex items-center space-x-2"
             onclick="goBack()" aria-label="Go Back">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
@@ -244,7 +244,7 @@
                 <h3 class="text-xl font-bold mb-4 text-gray-700">Add Medical Clearance Form</h3>
 
                 <!-- Form Container -->
-                
+
             <form action="{{ route('documents.medical_clearance.update', $document->id) }}" method="POST">
                     <h2 class="text-xl font-medium mb-4 mt-6 text-gray-700 text-center">Form 1</h2>
                 @csrf
@@ -360,7 +360,7 @@
                              <span class="ml-2 text-gray-700">1st / second Boosters</span>
                          </label>
                     </div>
-                    
+
                     <div class="form-group">
                         <label class="block text-gray-600 font-medium mb-1">Physician Name:</label>
                         <input type="text" id="lic_no2" class="Licno w-full border rounded-md px-3 py-2" name="additional_doctorName" value="{{ old('additional_doctorName', $associatedDocument->additional_doctorName ?? '') }}"
@@ -397,7 +397,7 @@
                 </form>
             </div>
         </div>
-        
+
         <!-- Success Notification -->
         <div id="successMessage" class="hidden fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
             <div class="bg-white rounded-lg shadow-lg p-6 w-96 text-center">
@@ -430,7 +430,7 @@
             function closeEditForm() {
                 document.getElementById("editFormModal").classList.add("hidden");
             }
-            
+
             let formCount = 1;
             function addForm() {
                 formCount++;
@@ -530,7 +530,7 @@
                     document.querySelector("button[onclick='addForm()']").style.display = 'block';
                 }
             }
-            
+
         </script>
 
 </body>

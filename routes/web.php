@@ -14,6 +14,7 @@ use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\SettingController;
 use Illuminate\Support\Facades\Auth;
 
 
@@ -26,7 +27,7 @@ Route::middleware(['guest'])->group(function () {
 
     Route::get('/login', [UserController::class, 'showLogin'])->name('login.show');
     Route::post('/login', [UserController::class, 'login'])->name('login');
-    
+
     // Forgot password route
     Route::view('/forgot-password', 'authentication.forgot-password')->name('password.request');
 
@@ -51,9 +52,17 @@ Route::middleware(['auth'])->group(function () {
     // Add these profile routes
     Route::prefix('profile')->group(function () {
         Route::get('/settings', [ProfileController::class, 'accountSettings'])->name('profile.accountSettings');
-        Route::get('/help-support', [ProfileController::class, 'helpAndSupport'])->name('profile.helpAndSupport');
+        Route::get('/changePassword', [ProfileController::class, 'changePassword'])->name('profile.changePassword');
         Route::post('/update', [ProfileController::class, 'updateProfile'])->name('profile.updateProfile');
         Route::post('/update-password', [ProfileController::class, 'updatePassword'])->name('profile.updatePassword');
+    });
+
+    // Settings Routes
+    Route::prefix('settings')->group(function () {
+        Route::get('/profile', [SettingController::class, 'profile'])->name('user.profile');
+        Route::get('/change-password', [SettingController::class, 'changePassword'])->name('password.change');
+        Route::post('/update-password', [SettingController::class, 'updatePassword'])->name('password.update');
+        Route::post('/update-profile', [SettingController::class, 'updateProfile'])->name('profile.update');
     });
 
     Route::prefix('dashboard')->group(function () {
@@ -97,7 +106,7 @@ Route::middleware(['auth'])->group(function () {
                 Route::put('/{medicine}/deduct', 'deduct')->name('deduct_medicine');
                 Route::put('/{medicine}/return', 'return')->name('return_medicine');
                 Route::delete('/{medicine}', 'destroy')->name('delete_medicine');
-            });           
+            });
         });
 
         // Supplies
@@ -110,7 +119,7 @@ Route::middleware(['auth'])->group(function () {
                 Route::put('/{supply}/deduct', 'deduct')->name('deduct_supply');
                 Route::put('/{supply}/return', 'return')->name('return_supply');
                 Route::delete('/{supply}', 'destroy')->name('delete_supply');
-            });   
+            });
         });
 
         // Equipment
@@ -121,7 +130,7 @@ Route::middleware(['auth'])->group(function () {
                 Route::put('/{equipment}/update', 'update')->name('update_equipment');
                 // Route::put('/{equipment}/deduct', 'deduct')->name('deduct_equipment');
                 Route::delete('/{equipment}', 'destroy')->name('delete_equipment');
-            }); 
+            });
         });
     });
 
@@ -169,24 +178,32 @@ Route::middleware(['auth'])->group(function () {
             Route::delete("/{id}/delete/{$slug}", [DocumentController::class, 'softDelete'])
                 ->name("documents.{$slug}.delete")
                 ->defaults('document_type', $type);
-        
-        }   
+
+        }
     });
 
+    // Report Routes
     Route::prefix('reports')->group(function () {
 
         // Display a list of reports, allowing filters
-        Route::get('/', [ReportController::class, 'index'])->name('report.index');
+        Route::get('/', [ReportController::class, 'index'])->name('reports.index');
 
         // Show a single report
-        Route::get('/{id}', [ReportController::class, 'show'])->name('report.show');
+        Route::get('/{id}', [ReportController::class, 'show'])->name('reports.show');;
 
         // Store a new report
-        Route::post('/', [ReportController::class, 'store'])->name('report.store');
+        Route::post('/', [ReportController::class, 'store'])->name('reports.store');
 
         // Delete a report
-        Route::delete('/{id}', [ReportController::class, 'destroy'])->name('report.destroy');
+        Route::delete('/{id}', [ReportController::class, 'destroy'])->name('reports.destroy');
+
+        Route::get('/{id}/edit', [ReportController::class, 'edit'])->name('reports.edit');
+        Route::put('/{id}', [ReportController::class, 'update'])->name('reports.update');
+        Route::get('/reports/export-excel', [ReportController::class, 'exportExcel'])->name('reports.exportExcel');
     });
+
+    Route::get('/reportPaper', [ReportController::class, 'showReportPaper'])->name('reports.showReportPaper');
+    Route::post('/reportPaper', [ReportController::class, 'filterAndCountReports'])->name('reports.filterAndCountReports');
 
     // Patient History
     Route::get('/history', [PatientHistoryController::class, 'index'])->name('History.all');
@@ -195,20 +212,20 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/notifications/{notification}/mark-as-read', function(App\Models\Notification $notification) {
         if (Auth::check()) {
             $userId = Auth::id();
-            
+
             // Get current viewed_by array
             $viewedBy = json_decode($notification->viewed_by ?: '[]', true);
-            
+
             // Add current user if not already in the array
             if (!in_array($userId, $viewedBy)) {
                 $viewedBy[] = $userId;
                 $notification->viewed_by = json_encode($viewedBy);
                 $notification->save();
             }
-            
+
             return response()->json(['success' => true]);
         }
-        
+
         return response()->json(['success' => false], 403);
     })->name('notifications.markAsRead')->middleware('web');
 

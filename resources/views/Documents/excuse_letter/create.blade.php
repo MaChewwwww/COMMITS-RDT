@@ -54,7 +54,7 @@
 
 <body class="bg-gray-100">
 
-    <div class="flex space-x-10 justify-between mb-5 p-4 print:hidden">
+    <div class="flex space-x-10 justify-between mb-5 print:hidden">
         <button class="px-4 py-2 bg-gray-300 text-black rounded hover:bg-gray-400 flex items-center space-x-2"
             onclick="goBack()" aria-label="Go Back">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
@@ -144,10 +144,10 @@
                     </div>
                 </div>
             </div>
-        </div>   
+        </div>
         <div class="container mx-auto bg-white md:py-20 md:px-20 w-[90%] md:w-[70%] lg:w-[70%]">
         <div class="page">
-                
+
                 <!-- Success Notification -->
                 <div class="container mx-auto bg-white md:py-20 md:px-20 w-[90%] md:w-[70%] lg:w-[70%]">
                     <!-- Success Notification -->
@@ -328,7 +328,7 @@
 
                     </script>
                 </div>
-    </div>            
+    </div>
 </body>
 
 </html>

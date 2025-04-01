@@ -80,7 +80,7 @@
 <body class="bg-gray-100">
 
     <!-- Buttons (Optional for print view, you can hide them when printing) -->
-    <div class="flex space-x-10 justify-between mb-5 p-4">
+    <div class="flex space-x-10 justify-between mb-5">
         <button class="px-4 py-2 bg-gray-300 text-black rounded hover:bg-gray-400 flex items-center space-x-2"
             onclick="goBack()" aria-label="Go Back">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
@@ -378,7 +378,7 @@
         function closeAddForm() {
                 document.getElementById("addFormModal").classList.add("hidden");
          }
-            
+
             let formCount = 1;
         function addForm() {
                 formCount++;

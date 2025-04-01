@@ -1,24 +1,31 @@
 @extends('layouts.guest-layout')
 
 @section('guest_content')
-    
-    <div class="bg-[#D9D9D9] bg-opacity-80 p-8 flex flex-col rounded-3xl items-center justify-center w-[423px] h-[490px]">
-        <div class="flex flex-col items-center mt-5">
-            <img class="w-[60px] h-[60px]" src="{{ asset('src/images/logo.png') }}" alt="logo">
-            <h2 class="mt-2 text-sm font-bold">Patient Record Management System</h2>
+    <div class="p-6 space-y-6">
+        <div class="text-center">
+            <!-- Placeholder for logo -->
+            <div
+                class="mx-auto h-16 w-16 bg-gradient-to-r rounded-full flex items-center justify-center shadow-md overflow-hidden">
+                <img src="{{ asset('images/prms-logo 2.jpg') }}" alt="Logo" class="h-full w-full object-cover">
+            </div>
+
+            <h1 class="mt-6 text-xl font-semibold text-gray-900">
+                Patient Record System
+            </h1>
+            <p class="mt-2 text-sm text-gray-600">
+                Sign in to access patient records
+            </p>
         </div>
 
-        <form id="form" action="{{ route('login') }}" method="post" class="flex flex-col items-center">
+        <form class="space-y-4 md:space-y-6" id="form" action="{{ route('login') }}" method="post">
             @csrf
-
             {{-- Email --}}
             <div class="mt-8 input-control">
                 <div class="inline-flex items-center space-x-1">
-                    <x-input-label class="ml-1 text-xs font-medium text-gray-800" for="email" value="Email" />
+                    <x-input-label for="email" value="Email" />
                     <span class="text-red-500">*</span>
                 </div>
-                <x-input-textfield id="email" name="email" class="block mt-1 border-2"
-                    placeholder="Enter your email" />
+                <x-input-textfield id="email" name="email" class="" placeholder="Enter your email" />
                 <div class="mt-2 ml-1 text-xs text-red-500 error"></div> <!-- Error div for email -->
 
                 {{-- Error message for invalid credentials --}}
@@ -30,12 +37,11 @@
             {{-- Password --}}
             <div class="mt-2">
                 <div class="inline-flex items-center space-x-1">
-                    <x-input-label class="ml-1 text-xs font-medium text-gray-800" for="password" value="Password" />
+                    <x-input-label for="password" value="Password" />
                     <span class="text-red-500">*</span>
                 </div>
                 <div class="relative input-control">
-                    <x-input-textfield id="password" type="password" name="password" class="block mt-1 border-2"
-                        placeholder="Enter your password" />
+                    <x-input-textfield id="password" type="password" name="password" placeholder="Enter your password" />
                     <span id="password-hidden"
                         class="absolute text-gray-600 transform -translate-y-1/2 cursor-pointer right-3 top-1/2">
                         <i class="text-sm fas fa-eye-slash"></i>
@@ -54,21 +60,13 @@
 
             {{-- Forgot Password --}}
             <div class="flex justify-end w-full mt-2">
-                <a class="text-xs font-normal text-gray-700 underline hover:text-yellow-600" href="{{ route('password.request') }}">Forgot
+                <a class="text-sm font-medium hover:text-blue-600 text-blue-600 hover:underline"
+                    href="{{ route('password.request') }}">Forgot
                     password?</a>
             </div>
 
-            {{-- Error message for invalid credentials --}}
-            @error('failed')
-                <p class="text-sm text-red-500">{{ $message }}</p>
-            @enderror
-
-            {{-- Submit Button --}}
             <button type="submit"
-                class="bg-[#3CAA38] w-[260px] h-[42px] rounded-3xl mt-8 mb-5 text-white text-sm flex justify-center items-center">
-                Login
-            </button>
+                class="w-full text-white bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Continue</button>
         </form>
-
     </div>
 @endsection

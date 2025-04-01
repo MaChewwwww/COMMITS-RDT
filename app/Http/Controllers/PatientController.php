@@ -7,208 +7,292 @@ use App\Models\Patient;
 use App\Models\User;
 use App\Models\Medicine;
 use App\Models\PrescriptionMedicine;
+use App\Services\PatientService;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Log;
 
 class PatientController extends Controller
 {
+    /**
+     * Patient service instance
+     *
+     * @var \App\Services\PatientService
+     */
+    protected $patientService;
+
+    /**
+     * Create a new controller instance
+     *
+     * @param \App\Services\PatientService $patientService
+     */
+    public function __construct(PatientService $patientService)
+    {
+        $this->patientService = $patientService;
+    }
+
+    /**
+     * Display a listing of patients
+     *
+     * @return \Illuminate\View\View
+     */
     public function index()
     {
         $patients = Patient::with(['physician', 'prescriptionMedicines.medicine'])->get();
-        $physicians = User::where('role', 'admin')->get(); // Only get admin users      
+        $physicians = User::where('role', 'admin')->get();
         $medicines = Medicine::whereHas('box', function ($query) {
             $query->where('isReturned', 0);
-        })->get(); // Query all medicines where box is not returned
-        
+        })->get();
+
         return view('patient.patients', compact('patients', 'physicians', 'medicines'));
     }
 
-    public function add() {
-        return view('patient.add');
-    }
-
-    public function create()
+    /**
+     * Show the form for adding a new patient
+     *
+     * @return \Illuminate\View\View
+     */
+    public function add()
     {
-        $physicians = User::where('role', 'admin')->get(); // Update create method too
+        $physicians = User::where('role', 'admin')->get();
         return view('patient.add', compact('physicians'));
     }
 
+    /**
+     * Show the form for creating a new patient (alias for add)
+     *
+     * @return \Illuminate\View\View
+     */
+    public function create()
+    {
+        return $this->add();
+    }
+
+    /**
+     * Store a newly created patient in database
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function store(Request $request)
     {
         try {
-            $validated = $request->validate([
-                'fullname' => 'required|string|max:255',
-                'sex' => 'required|in:Male,Female',
-                'year_course_dept' => 'required|string|max:255',
-                'contactDetails' => 'required|string|max:255',
-                'patient_status' => 'required|string',
-                'patientType' => 'required|in:Student,Faculty,Admin,Visitor,Dependent',
-                'student_number' => 'nullable|string|max:255', 
-                'physician_id' => 'required|exists:users,id,role,admin'
-            ]);
+            $validated = $request->validate(
+                Patient::validationRules(),
+                Patient::validationMessages()
+            );
 
-            $patient = Patient::create($validated);
+            $patient = $this->patientService->executeTransaction(function () use ($validated) {
+                return $this->patientService->createPatient($validated);
+            });
 
             return response()->json([
                 'success' => true,
                 'message' => 'Patient added successfully',
                 'data' => $patient
             ]);
-
         } catch (ValidationException $e) {
             return response()->json([
                 'success' => false,
+                'message' => 'Validation failed. Please check the form and try again.',
                 'errors' => $e->errors()
             ], 422);
         } catch (\Exception $e) {
-            \Log::error('Patient creation error: ' . $e->getMessage());
+            Log::error('Patient creation error: ' . $e->getMessage(), [
+                'request' => $request->except(['_token']),
+                'trace' => $e->getTraceAsString()
+            ]);
+
             return response()->json([
                 'success' => false,
-                'message' => 'An error occurred while adding the patient.'
+                'message' => 'An error occurred while adding the patient. Please try again later.'
             ], 500);
         }
     }
 
+    /**
+     * Update the specified patient
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function update(Request $request, $id)
     {
         try {
             // Find the patient by ID
             $patient = Patient::findOrFail($id);
-            
-            $validated = $request->validate([
-                'fullname' => 'required|string|max:255',
-                'sex' => 'required|in:Male,Female',
-                'year_course_dept' => 'nullable|string|max:255',
-                'contactDetails' => 'required|string|max:255',
-                'patient_status' => 'required|string',
-                'patientType' => 'required|in:Student,Faculty,Admin,Visitor,Dependent',
-                'student_number' => 'nullable|required_if:patientType,Student|string|max:255',
-                'physician_id' => 'required|exists:users,id'
-            ]);
 
-            // Use DB transaction
-            DB::beginTransaction();
-            
-            $patient->update($validated);
-            
-            DB::commit();
+            // Apply validation rules from the Patient model
+            $validated = $request->validate(
+                Patient::validationRules(),
+                Patient::validationMessages()
+            );
+
+            $updatedPatient = $this->patientService->executeTransaction(function () use ($patient, $validated) {
+                return $this->patientService->updatePatient($patient, $validated);
+            });
 
             return response()->json([
                 'success' => true,
-                'message' => 'Patient updated successfully',
-                'data' => $patient->fresh()
+                'message' => 'Patient information updated successfully',
+                'data' => $updatedPatient
             ]);
-
-        } catch (\Illuminate\Validation\ValidationException $e) {
-            DB::rollBack();
+        } catch (ValidationException $e) {
             return response()->json([
                 'success' => false,
+                'message' => 'Validation failed. Please check the form and try again.',
                 'errors' => $e->errors()
             ], 422);
-        } catch (\Exception $e) {
-            DB::rollBack();
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'An error occurred while updating the patient.'
+                'message' => 'Patient not found. The patient may have been deleted.'
+            ], 404);
+        } catch (\Exception $e) {
+            Log::error('Patient update error: ' . $e->getMessage(), [
+                'patient_id' => $id,
+                'request' => $request->except(['_token']),
+                'trace' => $e->getTraceAsString()
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred while updating the patient. Please try again later.'
             ], 500);
         }
     }
 
+    /**
+     * Remove the specified patient from database
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function destroy($id)
     {
-        // Find patient by ID
-        $patient = Patient::findOrFail($id);
+        try {
+            // Find patient by ID
+            $patient = Patient::findOrFail($id);
 
-        // Delete patient
-        $patient->delete();
+            $this->patientService->executeTransaction(function () use ($patient) {
+                return $this->patientService->deletePatient($patient);
+            });
 
-        // Redirect back or to another page
-        return redirect()->route('patients')->with('success', 'Patient deleted successfully!');
+            // Redirect back with success message
+            return redirect()->route('patients')->with('success', 'Patient deleted successfully!');
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return redirect()->route('patients')->with('error', 'Patient not found. The patient may have been deleted already.');
+        } catch (\Exception $e) {
+            Log::error('Patient deletion error: ' . $e->getMessage(), [
+                'patient_id' => $id,
+                'trace' => $e->getTraceAsString()
+            ]);
+
+            return redirect()->route('patients')->with('error', 'An error occurred while deleting the patient. Please try again later.');
+        }
     }
 
+    /**
+     * Show the form for editing the specified patient
+     *
+     * @param  \App\Models\Patient  $patient
+     * @return \Illuminate\View\View
+     */
     public function edit(Patient $patient)
     {
-        $physicians = User::where('role', 'admin')->get(); // Update edit method too
+        $physicians = User::where('role', 'admin')->get();
         return view('patient.edit', compact('patient', 'physicians'));
     }
 
-
-
     /**
      * Store a new prescription
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\JsonResponse
      */
     public function storePrescription(Request $request)
     {
         try {
-            $request->validate([
+            $validated = $request->validate([
                 'patient_id' => 'required|exists:patients,id',
                 'medicine_id' => 'required|exists:medicines,id',
                 'quantity' => 'required|integer|min:1',
-                'instructions' => 'nullable|string'
+                'instructions' => 'nullable|string|max:1000'
+            ], [
+                'patient_id.required' => 'Patient information is missing',
+                'patient_id.exists' => 'The selected patient is not valid',
+                'medicine_id.required' => 'Medicine selection is required',
+                'medicine_id.exists' => 'The selected medicine is not valid',
+                'quantity.required' => 'Quantity is required',
+                'quantity.integer' => 'Quantity must be a whole number',
+                'quantity.min' => 'Quantity must be at least 1',
+                'instructions.max' => 'Instructions cannot exceed 1000 characters'
             ]);
 
-            DB::beginTransaction();
+            $result = $this->patientService->executeTransaction(function () use ($validated) {
+                return $this->patientService->createPrescription($validated);
+            });
 
-            $medicine = Medicine::findOrFail($request->medicine_id);
-
-            if ($medicine->remaining_quantity < $request->quantity) {
-                return response()->json([
-                    'success' => false,
-                    'message' => "Insufficient quantity available for {$medicine->medicine_name}"
-                ], 422);
-            }
-
-            $prescription = PrescriptionMedicine::create([
-                'patient_id' => $request->patient_id,
-                'medicine_id' => $request->medicine_id,
-                'quantity' => $request->quantity,
-                'instructions' => $request->instructions
-            ]);
-
-            // Update medicine quantities
-            $medicine->remaining_quantity -= $request->quantity;
-            $medicine->consumed_quantity += $request->quantity;
-            $medicine->save();
-
-            DB::commit();
-
-            // Load relationships and return response with medicine details
-            $prescription->load(['medicine', 'patient']);
+            $prescription = $result['prescription'];
+            $medicine = $result['medicine'];
 
             return response()->json([
                 'success' => true,
-                'message' => "Remaining {$medicine->medicine_name}: {$medicine->remaining_quantity} {$medicine->unit}",
+                'message' => "Prescription created successfully. Remaining {$medicine['name']}: {$medicine['remaining_quantity']} {$medicine['unit']}",
                 'prescription' => $prescription,
-                'medicine' => [
-                    'id' => $medicine->id,
-                    'name' => $medicine->medicine_name,
-                    'remaining_quantity' => $medicine->remaining_quantity,
-                    'unit' => $medicine->unit
-                ]
+                'medicine' => $medicine
             ]);
-
-        } catch (\Exception $e) {
-            DB::rollBack();
+        } catch (ValidationException $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Failed to create prescription: ' . $e->getMessage()
+                'message' => 'Validation failed. Please check the form and try again.',
+                'errors' => $e->errors()
+            ], 422);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Medicine or patient not found'
+            ], 404);
+        } catch (\Exception $e) {
+            Log::error('Prescription creation error: ' . $e->getMessage(), [
+                'request' => $request->except(['_token']),
+                'trace' => $e->getTraceAsString()
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage() ?: 'An error occurred while creating the prescription. Please try again later.'
             ], 500);
         }
     }
 
     /**
      * Get prescriptions for a patient
+     *
+     * @param  \App\Models\Patient  $patient
+     * @return \Illuminate\Http\JsonResponse
      */
     public function getPrescriptions(Patient $patient)
     {
-        $prescriptions = $patient->prescriptionMedicines()
-            ->with('medicine')
-            ->latest()
-            ->get();
+        try {
+            $prescriptions = $this->patientService->getPatientPrescriptions($patient);
 
-        return response()->json([
-            'success' => true,
-            'prescriptions' => $prescriptions
-        ]);
+            return response()->json([
+                'success' => true,
+                'prescriptions' => $prescriptions
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Prescription retrieval error: ' . $e->getMessage(), [
+                'patient_id' => $patient->id,
+                'trace' => $e->getTraceAsString()
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to retrieve prescriptions. Please try again later.'
+            ], 500);
+        }
     }
 }

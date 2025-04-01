@@ -78,7 +78,7 @@
 <body class="bg-gray-100">
 
     <!-- Buttons (Optional for print view, you can hide them when printing) -->
-    <div class="flex space-x-10 justify-between mb-5 p-4">
+    <div class="flex space-x-10 justify-between mb-5">
         <button class="px-4 py-2 bg-gray-300 text-black rounded hover:bg-gray-400 flex items-center space-x-2"
             onclick="goBack()" aria-label="Go Back">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
@@ -234,7 +234,7 @@
                             <input type="hidden" name="document_type" value="{{ $document->document_type }}">
                                 <label class="block text-gray-600 font-medium mb-1">Date:</label>
                             <input type="date" id="addDate" name="date" value="{{ old('date', $associatedDocument->date ?? '') }}"
-                                class="addDate w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                                class="addDate w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 required>
                             <span id="dateError" class="text-red-500 text-sm hidden">Date is required.</span>
                         </div>
@@ -298,7 +298,7 @@
                             class="w-full border rounded-md px-3 py-2" placeholder="License number">
                     </div> <!-- End of space-y-4 -->
                 </div>
-     
+
                     <div class="flex justify-end space-x-4 mt-6">
                         <button onclick="addForm()" type="button"
                             class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-medium py-2 px-4 rounded-md">
@@ -350,7 +350,7 @@
             function closeAddForm() {
                 document.getElementById("addFormModal").classList.add("hidden");
             }
-            
+
             let formCount = 1;
             function addForm() {
                 formCount++;
