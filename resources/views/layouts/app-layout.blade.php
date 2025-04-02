@@ -18,6 +18,7 @@
 
     <!-- Styles -->
     <link rel="stylesheet" href="{{ asset('src/css/styles.css') }}">
+    <link rel="stylesheet" href="{{ asset('src/css/documents.css') }}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.min.css" rel="stylesheet">
@@ -27,6 +28,7 @@
     <link rel="icon" type="image/png" href="{{ asset('images/prms-logo 2.jpg') }}">
 
     <!-- Custom styles for error modals -->
+    @stack('styles')
     <style>
         /* Transitions and animations */
         .transform {
@@ -79,6 +81,56 @@
             height: 100vh;
             font-family: 'Poppins', sans-serif;
         }
+
+        .loader-wrapper {
+            width: 100%;
+            height: 100%;
+            /* position: absolute; */
+            top: 0;
+            left: 0;
+            background-color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .loader {
+            height: 15px;
+            aspect-ratio: 4;
+            --_g: no-repeat radial-gradient(farthest-side, #3b82f6 90%, #0000);
+            background:
+                var(--_g) left,
+                var(--_g) right;
+            background-size: 25% 100%;
+            display: grid;
+        }
+
+        .loader:before,
+        .loader:after {
+            content: "";
+            height: inherit;
+            aspect-ratio: 1;
+            grid-area: 1/1;
+            margin: auto;
+            border-radius: 50%;
+            transform-origin: -100% 50%;
+            background: #60a5fa;
+            animation: l49 1s infinite linear;
+        }
+
+        .loader:after {
+            transform-origin: 200% 50%;
+            --s: -1;
+            animation-delay: -.5s;
+        }
+
+        @keyframes l49 {
+
+            58%,
+            100% {
+                transform: rotate(calc(var(--s, 1)*1turn))
+            }
+        }
     </style>
 </head>
 
@@ -94,8 +146,8 @@
         <x-sidebar />
 
         <!-- Notification Messages -->
-        @if (session('success'))
-            <div id="session-alert" class="fixed z-50 tw-p-4 tw-mb-4 tw-text-green-800 tw-bg-green-200 tw-rounded-lg"
+        {{-- @if (session('success'))
+            <div id="session-alert" class="fixed z-50 tw-p-4 tw-mb-4 tw-text-green-800 text-white tw-bg-green-200 tw-rounded-lg"
                 style="transition: opacity 0.5s;">
                 {{ session('success') }}
             </div>
@@ -104,15 +156,14 @@
                 style="transition: opacity 0.5s;">
                 {{ session('error') }}
             </div>
-        @endif
+        @endif --}}
 
         {{-- checks if the route is profile page if not it will add margin left --}}
-        <main
-            class="h-full md:ml-64">
+        <main class="h-full md:ml-64">
             <!--loading spinner-->
             <x-loading-spinner />
 
-            <div class="p-4">
+            <div class="p-4 h-full">
                 <!--Main Content-->
                 @yield('content')
             </div>
@@ -142,7 +193,8 @@
         });
     </script>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
     </script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.all.min.js"></script>
     <script src="{{ asset('js/date-validation.js') }}"></script>
