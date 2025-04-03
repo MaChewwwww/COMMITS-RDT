@@ -11,7 +11,7 @@
 <meta name="csrf-token" content="{{ csrf_token() }}">
 
 <!--======== START NAVBAR =================-->
-<nav class="fixed top-0 left-0 right-0 z-40 flex items-center justify-between bg-white border-b border-gray-200 h-14">
+<nav class="fixed top-0 left-0 right-0 z-30 flex items-center justify-between bg-white border-b border-gray-200 h-14">
     <div class="flex flex-wrap items-center justify-between w-full">
         <div class="flex items-center justify-start">
             <button data-drawer-target="drawer-navigation" data-drawer-toggle="drawer-navigation"
