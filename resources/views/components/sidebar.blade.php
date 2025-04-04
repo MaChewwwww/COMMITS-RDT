@@ -1,4 +1,4 @@
-<aside class="fixed top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full bg-[#7A0019] md:translate-x-0"
+<aside class="fixed top-0 left-0 z-50 w-64 h-screen transition-transform -translate-x-full bg-[#7A0019] md:translate-x-0"
     aria-label="Sidenav" id="drawer-navigation">
 
     <div class="flex items-center px-2 py-2 border-b-2 border-red-900">
