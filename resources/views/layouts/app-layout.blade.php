@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>{{ env('APP_NAME') }}</title>
+    <title>@yield('title', env('APP_NAME'))</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -87,7 +87,7 @@
 <body class="bg-slate-50 scrollbar-hidden">
 
     <header
-        class="sticky top-0 inset-x-0 flex flex-wrap md:justify-start md:flex-nowrap z-50 w-full h-14 border-b border-gray-200 text-sm py-2.5 lg:ps-65">
+        class="sticky top-0 inset-x-0 flex flex-wrap md:justify-start md:flex-nowrap z-30 w-full h-14 border-b border-gray-200 text-sm py-2.5 lg:ps-65">
         <x-navbar />
     </header>
 

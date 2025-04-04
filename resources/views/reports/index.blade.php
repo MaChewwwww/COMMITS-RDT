@@ -1,5 +1,7 @@
 @extends('layouts.app-layout')
 
+@section('title', 'Reports')
+
 @section('content')
 
     {{--  gets the filter queries --}}

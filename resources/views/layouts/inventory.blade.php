@@ -1,5 +1,7 @@
 @extends('layouts.app-layout')
 
+@section('title', 'Inventory')
+
 @section('content')
     <div class="container flex flex-col mx-auto">
         <x-page-title class="mb-8" value="Inventory" />

@@ -1,7 +1,7 @@
 @props(['target', 'heading' => 'Add New Record'])
 
 <div id="{{ $target }}" tabindex="-1" aria-hidden="true"
-     class="hidden overflow-y-auto overflow-x-hidden fixed z-50 top-0 right-0 bg-black/50 mt-0 h-screen left-0 justify-center items-center w-full md:inset-0 max-h-full"
+     class="hidden overflow-y-auto overflow-x-hidden fixed z-50 top-0 right-0 mt-0 h-screen left-0 justify-center items-center w-full md:inset-0 max-h-full"
 >
     <div class="relative p-4 w-full max-w-xl max-h-full">
         <div class="relative bg-white rounded-lg shadow-sm">

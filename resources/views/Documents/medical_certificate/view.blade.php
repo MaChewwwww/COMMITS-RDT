@@ -1,5 +1,7 @@
 @extends('layouts.app-layout')
 
+@section('title', 'Medical Certificate')
+
 @section('content')
 <!DOCTYPE html>
 <html lang="en">

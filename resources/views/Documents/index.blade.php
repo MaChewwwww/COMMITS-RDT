@@ -1,5 +1,7 @@
 @extends('layouts.app-layout')
 
+@section('title', 'Documents')
+
 @section('content')
     <div class="container mx-auto">
         <x-page-title class="mb-2" value="Documents" />
