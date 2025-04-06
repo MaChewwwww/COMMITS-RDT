@@ -237,3 +237,18 @@ Route::middleware(['auth'])->group(function () {
         ->name('notifications.clearAll')
         ->middleware('auth');
 });
+
+
+
+//Super Admin
+Route::get('/Superadmin_dashboard', function () {
+    return view('SuperAdmin.Superadmin_dashboard');
+})->name('Superadmin_dashboard');
+
+Route::get('/User', function () {
+    return view('SuperAdmin.User');
+})->name('User');
+
+Route::get('/Auditlog', function () {
+    return view('SuperAdmin.Auditlog');
+})->name('Auditlog');
