@@ -89,16 +89,6 @@ class EquipmentController extends Controller
     public function destroy(Request $request, Equipment $equipment)
     {
         try {
-            $request->validate([
-                'password' => 'required',
-            ]);
-
-            if (!Hash::check($request->password, auth()->user()->password)) {
-                throw ValidationException::withMessages([
-                    'password' => ['The provided password is incorrect.']
-                ]);
-            }
-
             $equipment->delete();
             
             return response()->json([
@@ -106,10 +96,6 @@ class EquipmentController extends Controller
                 'message' => 'Equipment deleted successfully'
             ]);
 
-        } catch (ValidationException $e) {
-            return response()->json([
-                'error' => $e->errors()['password'][0]
-            ], 422);
         } catch (\Exception $e) {
             return response()->json([
                 'error' => 'An error occurred while deleting the equipment.'

@@ -122,16 +122,6 @@ class MedicineController extends Controller
     public function destroy(Request $request, Medicine $medicine)
     {
         try {
-            $request->validate([
-                'password' => 'required',
-            ]);
-
-            if (!Hash::check($request->password, auth()->user()->password)) {
-                throw ValidationException::withMessages([
-                    'password' => ['The provided password is incorrect.']
-                ]);
-            }
-
             $medicine->delete();
 
             return response()->json([
@@ -139,10 +129,6 @@ class MedicineController extends Controller
                 'message' => 'Medicine deleted successfully'
             ]);
 
-        } catch (ValidationException $e) {
-            return response()->json([
-                'error' => $e->errors()['password'][0]
-            ], 422);
         } catch (\Exception $e) {
             return response()->json([
                 'error' => 'An error occurred while deleting the medicine.'
