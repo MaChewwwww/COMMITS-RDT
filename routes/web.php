@@ -8,6 +8,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\MedicineController;
 use App\Http\Controllers\SupplyController;
 use App\Http\Controllers\EquipmentController;
+use App\Http\Controllers\InventoryExportController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\PatientHistoryController;
 use App\Http\Controllers\ForgotPasswordController;
@@ -132,6 +133,9 @@ Route::middleware(['auth'])->group(function () {
                 Route::delete('/{equipment}', 'destroy')->name('delete_equipment');
             });
         });
+
+        // Add this route in an appropriate section of your web.php file
+        Route::get('/export/{type}', [App\Http\Controllers\InventoryExportController::class, 'export'])->name('inventory.export');
     });
 
     // Document Routes
