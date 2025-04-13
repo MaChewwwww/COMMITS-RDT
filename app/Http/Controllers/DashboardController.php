@@ -428,14 +428,37 @@ class DashboardController extends Controller
                     'days_remaining' => $daysRemaining
                 ]);
 
+                // Quarterly notification (31-90 days)
+                if ($daysRemaining <= 90 && $daysRemaining > 30 && !$medicine->notified_quarterly) {
+                    try {
+                        $this->createNotification(
+                            'Medicine Expiring within 3 Months',
+                            "{$medicine->medicine_name} will expire in {$daysRemaining} " . 
+                            ($daysRemaining == 1 ? 'day' : 'days') . " on " . 
+                            $expiryDate->format('M d, Y') . "",
+                            'warning',
+                            $userIds,
+                            $medicine->id
+                        );
+                        
+                        $medicine->notified_quarterly = true;
+                        $medicine->save();
+                    } catch (\Exception $e) {
+                        Log::error('Error creating monthly notification', [
+                            'error' => $e->getMessage(),
+                            'trace' => $e->getTraceAsString()
+                        ]);
+                    }
+                }
+
                 // Monthly notification (8-30 days)
                 if ($daysRemaining <= 30 && $daysRemaining > 7 && !$medicine->notified_monthly) {
                     try {
                         $this->createNotification(
                             'Medicine Expiring in a Month',
                             "{$medicine->medicine_name} will expire in {$daysRemaining} " . 
-                            ($daysRemaining == 1 ? 'day' : 'days') . " (on " . 
-                            $expiryDate->format('M d, Y') . ")",
+                            ($daysRemaining == 1 ? 'day' : 'days') . " on " . 
+                            $expiryDate->format('M d, Y') . "",
                             'warning',
                             $userIds,
                             $medicine->id
@@ -457,8 +480,8 @@ class DashboardController extends Controller
                         $this->createNotification(
                             'Medicine Expiring This Week',
                             "{$medicine->medicine_name} will expire in {$daysRemaining} " . 
-                            ($daysRemaining == 1 ? 'day' : 'days') . " (on " . 
-                            $expiryDate->format('M d, Y') . ")",
+                            ($daysRemaining == 1 ? 'day' : 'days') . " on " . 
+                            $expiryDate->format('M d, Y') . ".",
                             'danger',
                             $userIds,
                             $medicine->id
@@ -501,7 +524,7 @@ class DashboardController extends Controller
                     try {
                         $this->createNotification(
                             'Medicine Expiring Today',
-                            "{$medicine->medicine_name} will expire today (" . $expiryDate->format('M d, Y') . ")",
+                            "{$medicine->medicine_name} will expire today " . $expiryDate->format('M d, Y') . ".",
                             'deleted',
                             $userIds,
                             $medicine->id
