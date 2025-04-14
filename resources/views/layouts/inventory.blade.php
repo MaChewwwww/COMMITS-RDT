@@ -3,7 +3,7 @@
 @section('title', 'Inventory')
 
 @section('content')
-    <div class="container flex flex-col mx-auto">
+    <div class="flex flex-col mx-auto">
         <x-page-title class="mb-8" value="Inventory" />
 
         <div class="relative space-y-4 bg-white p-4 shadow rounded-lg">

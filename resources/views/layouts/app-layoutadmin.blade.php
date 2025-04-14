@@ -27,6 +27,8 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="icon" type="image/png" href="{{ asset('images/prms-logo 2.jpg') }}">
 
+    <script src="https://unpkg.com/alpinejs" defer></script>
+
     <!-- Custom styles for error modals -->
     @stack('styles')
     <style>
@@ -105,6 +107,27 @@
                 @yield('content')
             </div>
         </main>
+    </div>
+
+    <div id="logoutModal"
+        class="fixed inset-0 z-50 w-full h-full flex items-center justify-center hidden overflow-auto bg-gray-900 bg-opacity-50">
+        <div class="bg-white rounded-lg shadow-lg w-80">
+            <div class="p-4">
+                <h3 class="text-lg font-semibold text-gray-900">Logout</h3>
+            </div>
+            <div class="p-4">
+                <p class="text-sm text-gray-600">Are you sure you want to log out?</p>
+            </div>
+            <div class="flex justify-end p-4">
+                <button id="cancelButton"
+                    class="px-4 py-2 mr-2 text-sm font-medium text-gray-700 bg-gray-200 rounded hover:bg-gray-300">Cancel</button>
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button type="submit"
+                        class="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded hover:bg-red-700">Logout</button>
+                </form>
+            </div>
+        </div>
     </div>
 
     <script src="https://unpkg.com/@material-tailwind/html@latest/scripts/dialog.js"></script>

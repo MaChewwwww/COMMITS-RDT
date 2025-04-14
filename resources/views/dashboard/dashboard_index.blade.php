@@ -3,7 +3,7 @@
 @section('title', 'Dashboard')
 
 @section('content')
-    <div class="container mx-auto">
+    <div class="mx-auto">
         <div class="flex justify-center">
             <div class="w-full">
                 <x-page-title value="Dashboard" />
@@ -11,7 +11,7 @@
         </div>
         <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
             <!-- Rectangle 1 -->
-            <div class="flex items-center justify-center p-4 min-w-fit bg-white rounded-lg shadow-md space-x-3">
+            <div class="flex items-center justify-center p-4 min-w-fit border-1 border-gray-200 bg-white rounded-lg shadow-md space-x-3">
                 <div class="flex-shrink-0">
                     <div class="flex items-center justify-center text-blue-500 bg-blue-50 rounded-full w-14 h-14">
                         <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor"
@@ -27,7 +27,7 @@
             </div>
 
             <!-- Rectangle 2 -->
-            <div class="flex items-center justify-center p-4 min-w-fit bg-white rounded-lg shadow-md space-x-3">
+            <div class="flex items-center justify-center p-4 min-w-fit border-1 border-gray-200 bg-white rounded-lg shadow-md space-x-3">
                 <div class="flex-shrink-0">
                     <div class="flex items-center justify-center text-green-500 bg-green-50 rounded-full w-14 h-14">
                         <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor"
@@ -46,7 +46,7 @@
             </div>
 
             <!-- Rectangle 3 -->
-            <div class="flex items-center justify-center p-4 min-w-fit bg-white rounded-lg shadow-md space-x-3">
+            <div class="flex items-center justify-center p-4 min-w-fit border-1 border-gray-200 bg-white rounded-lg shadow-md space-x-3">
                 <div class="flex-shrink-0">
                     <div class="flex items-center justify-center text-indigo-500 bg-indigo-50 rounded-full w-14 h-14">
                         <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor"
@@ -64,7 +64,7 @@
             </div>
 
             <!-- Rectangle 4 -->
-            <div class="flex items-center justify-center p-4 min-w-fit bg-white rounded-lg shadow-md space-x-3">
+            <div class="flex items-center justify-center p-4 min-w-fit border-1 border-gray-200 bg-white rounded-lg shadow-md space-x-3">
                 <div class="flex-shrink-0">
                     <div class="flex items-center justify-center text-yellow-500 bg-yellow-50 rounded-full w-14 h-14">
                         <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor"

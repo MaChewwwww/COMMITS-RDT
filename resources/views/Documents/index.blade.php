@@ -3,7 +3,7 @@
 @section('title', 'Documents')
 
 @section('content')
-    <div class="container mx-auto">
+    <div class=" mx-auto">
         <x-page-title class="mb-2" value="Documents" />
         <!-- Header -->
         <div class="flex justify-between items-center mb-4">

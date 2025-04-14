@@ -33,15 +33,33 @@
         <p class="text-sm font-semibold text-start text-gray-300 mb-2 mt-4">Menu</p>
         <ul class="flex flex-col space-y-1">
             <li>
-                <x-sidebar-link :href="route('Superadmin_dashboard')" :active="request()->is('Superadmin_dashboard*') || request()->is('/')" :icon="'fas fa-chart-pie'">Dashboard</x-sidebar-link>
+                <a href="{{ route('Superadmin_dashboard') }}"
+                    class="flex items-center p-2 text-base font-medium  transition duration-75 rounded-lg hover:bg-gray-200 hover:text-red-900 group {{ Route::is('Superadmin_dashboard') ? 'text-red-900 bg-gray-200' : 'text-gray-300' }}">
+                    <i
+                        class="fas fa-chart-pie w-6 h-5  transition duration-75 group-hover:text-red-800"></i>
+                    <span class="ml-3">Dashbord</span>
+                </a>
+                {{-- <x-sidebar-link :href="route('Superadmin_dashboard')" :active="request()->is('/admin*') || request()->is('/admin')" :icon="'fas fa-chart-pie'">Dashboard</x-sidebar-link> --}}
             </li>
             <li>
-                <x-sidebar-link :href="route('User')" :active="request()->is('User*') || request()->is('/')" :icon="'fas fa-user-injured'">User</x-sidebar-link>
+                <a href="{{ route('users.get') }}"
+                    class="flex items-center p-2 text-base font-medium  transition duration-75 rounded-lg hover:bg-gray-200 hover:text-red-900 group {{ Route::is('users.get') ? 'text-red-900 bg-gray-200' : 'text-gray-300' }}">
+                    <i
+                        class="fas fa-user w-6 h-5  transition duration-75 group-hover:text-red-800"></i>
+                    <span class="ml-3">User Management</span>
+                </a>
+                {{-- <x-sidebar-link :href="route('User')" :active="request()->is('/admin/users*')" :icon="'fas fa-user'">User Management</x-sidebar-link> --}}
             </li>
             <li>
-                <x-sidebar-link :href="'Auditlog'" :active="request()->is('Auditlog*')" :icon="'fas fa-history'">Audit log</x-sidebar-link>
+                <a href="{{ route('Auditlog') }}"
+                    class="flex items-center p-2 text-base font-medium  transition duration-75 rounded-lg hover:bg-gray-200 hover:text-red-900 group {{ Route::is('Auditlog') ? 'text-red-900 bg-gray-200' : 'text-gray-300' }}">
+                    <i
+                        class="fas fa-history w-6 h-5  transition duration-75 group-hover:text-red-800"></i>
+                    <span class="ml-3">Audit Logs</span>
+                </a>
+                {{-- <x-sidebar-link :href="'Auditlog'" :active="request()->is('/admin/auditlogs')" :icon="'fas fa-history'">Audit Logs</x-sidebar-link> --}}
             </li>
         </ul>
     </div>
-   
+
 </aside>

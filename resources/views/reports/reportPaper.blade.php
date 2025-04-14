@@ -28,7 +28,7 @@
             </button>
 
             <button onclick="printDiv()"
-                class="group relative py-2 px-3 bg-blue-100 hover:bg-blue-200 hover:text-blue-600 rounded-lg font-bold text-blue-500 flex flex-col items-center space-y-1">
+                class="group relative py-2 px-3 bg-red-100 hover:bg-red-200 hover:text-red-600 rounded-lg font-bold text-red-500 flex flex-col items-center space-y-1">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
                     stroke="currentColor" class="size-6">
                     <path stroke-linecap="round" stroke-linejoin="round"
