@@ -116,6 +116,11 @@
     <div class="container mx-auto bg-white md:py-20 md:px-20 w-[90%] md:w-[70%] lg:w-[70%]">
         <div class="page">
             <div class="container">
+                    <div class="flex flex-col items-end text-xs leading-tight text-gray-800">
+                        <p>{{ $associatedDocument->control_number ?? '__________' }}</p>
+                        <p>Rev. {{ $associatedDocument->revision ?? '_________'}}</p>
+                        <p>{{ \Carbon\Carbon::parse($associatedDocument->date_issued)->format('F j, Y') ?? '__________' }} </p>
+                    </div>
                 <div class="flex items-center justify-center mb-5">
                     <div class="mr-5">
                         <img src="{{ asset('Logo_image/logopup.png') }}" alt="Logo" class="w-28 mb-5">
@@ -162,6 +167,11 @@
     <!-- Document 2 (duplicate the structure as needed) -->
     <div class="container mx-auto bg-white md:py-20 md:px-20 w-[90%] md:w-[70%] lg:w-[70%]">
             <div class="container mt-15">
+                    <div class="flex flex-col items-end text-xs leading-tight text-gray-800">
+                        <p>{{ $associatedDocument->control_number ?? '__________' }}</p>
+                        <p>Rev. {{ $associatedDocument->revision ?? '_________'}}</p>
+                        <p>{{ \Carbon\Carbon::parse($associatedDocument->date_issued)->format('F j, Y') ?? '__________' }} </p>
+                    </div>
                 <div class="flex items-center justify-center mb-5">
                     <div class="mr-5">
                         <img src="{{ asset('Logo_image/logopup.png') }}" alt="Logo" class="w-28 mb-5">
@@ -221,7 +231,10 @@
             @method('PUT')
                 <!-- Date Field -->
                 <div class="form-group">
-                    <input type="hidden" name="document_type" value="{{ request('document_type') }}">
+                                    <input type="hidden" name="document_type" value="{{ $document->document_type }}">
+                                    <input type="hidden" name="control_number" value="{{ $associatedDocument->control_number }}">
+                                    <input type="hidden" name="revision" value="{{ $associatedDocument->revision }}">
+                                    <input type="hidden" name="date_issued" value="{{ $associatedDocument->date_issued }}">
                     <label class="block text-gray-600 font-medium mb-1">Date:</label>
                     <input type="date" id="AddDate" name="date" value="{{ old('date', $associatedDocument->date ?? '') }}"
                         class="AddDate w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"

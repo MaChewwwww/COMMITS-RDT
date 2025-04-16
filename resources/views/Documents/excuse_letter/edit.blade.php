@@ -92,6 +92,11 @@
         <div class="page">
             <!-- Document Content -->
             <div class="container">
+                    <div class="flex flex-col items-end text-xs leading-tight text-gray-800">
+                        <p>{{ $associatedDocument->control_number ?? '__________' }}</p>
+                        <p>Rev. {{ $associatedDocument->revision ?? '_________'}}</p>
+                        <p>{{ \Carbon\Carbon::parse($associatedDocument->date_issued)->format('F j, Y') ?? '__________' }} </p>
+                    </div>
                 <div class="flex items-center justify-center mb-10">
                     <div class="mr-5">
                         <img src="{{ asset('Logo_image/logopup.png') }}" alt="University logo" class="w-28 mb-5">
@@ -110,7 +115,8 @@
                 <div id="letterOutput" class="md:px-10" style="font-size: 16px">
                     <div class="mb-10 text-right">
                         <label class="font-medium">Date: </label>
-                        <span id="letterDate" class="underline"> {{ \Carbon\Carbon::parse($associatedDocument->date)->format('F j, Y') : '__________'' }} </span>
+                        <span id="letterDate" class="underline"> {{ \Carbon\Carbon::parse($associatedDocument->date)->format('F j, Y') ?? '__________' }} </span>
+
                     </div>
                     <div class="space-y-4">
                         <p class="text-lg">
@@ -120,7 +126,7 @@
                             I, <span id="studentName" class="underline">{{ $associatedDocument->patient_name ?? '__________' }}</span>, a student of the
                             <span id="department" class="underline">{{ $associatedDocument->department ?? '__________' }}</span> Department, would
                             like to inform you that I was unable to attend class on <span
-                                id="absenceDate" class="underline">{{ \Carbon\Carbon::parse($associatedDocument->excuse_for)->format('F j, Y') : '__________' }}</span> due to <span
+                                id="absenceDate" class="underline">{{ \Carbon\Carbon::parse($associatedDocument->excuse_for)->format('F j, Y') ?? '__________' }}</span> due to <span
                                 id="reasons" class="underline">{{ $associatedDocument->cause ?? '__________' }}</span>.
                         </p>
                         <p class="text-lg">
@@ -186,6 +192,9 @@
                                     @csrf
                                     @method('PUT') <!-- This ensures the method is PUT for updating -->
                                     <input type="hidden" name="document_type" value="{{ $document->document_type }}">
+                                    <input type="hidden" name="control_number" value="{{ $associatedDocument->control_number }}">
+                                    <input type="hidden" name="revision" value="{{ $associatedDocument->revision }}">
+                                    <input type="hidden" name="date_issued" value="{{ $associatedDocument->date_issued }}">
                                     <div class="form-group">
                                         <label class="block text-gray-600 font-medium mb-1">Date:</label>
                                         <input type="date" id="date" class="w-full border rounded-md px-3 py-2" name="date"

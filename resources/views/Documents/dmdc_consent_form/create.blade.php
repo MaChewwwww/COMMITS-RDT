@@ -118,6 +118,13 @@
         <div class="page">
             <!-- Document 2 (duplicate the structure as needed) -->
             <div class="container">
+                @foreach ($controlNumber->where('document_type', $documentType) as $control)
+                    <div class="flex flex-col items-end text-xs leading-tight text-gray-800">
+                        <p>{{ $control->control_number ?? '__________' }}</p>
+                        <p>Rev. {{ $control->revision ?? '_________'}}</p>
+                        <p>{{ \Carbon\Carbon::parse($control->date_issued)->format('F j, Y') ?? '__________' }} </p>
+                    </div>
+                @endforeach
                 <div class="flex items-center">
                     <div class="mr-5">
                         <img src="{{ asset('Logo_image/logopup.png') }}" alt="Logo" class="w-24 ">
@@ -203,13 +210,17 @@
 
 
                 <h3 class="text-xl font-semibold mb-4 text-gray-700">Add Declaration of Medical Information</h3>
+        @foreach ($controlNumber->where('document_type', $documentType) as $control)
             <form action="{{ route('documents.dmdc_consent_form.store') }}" method="POST">
                 @csrf
                 <!-- Form Container -->
                 <div id="formContainer" class="space-y-4">
                     <!-- Patient Name Field -->
                     <div class="form-group">
-                        <input type="hidden" name="document_type" value="{{ request('document_type') }}">
+                                    <input type="hidden" name="document_type" value="{{ request('document_type') }}">
+                                    <input type="hidden" name="control_number" value="{{ $control->control_number }}">
+                                    <input type="hidden" name="revision" value="{{ $control->revision }}">
+                                    <input type="hidden" name="date_issued" value="{{ $control->date_issued }}">
                         <label class="block text-gray-600 font-medium mb-1"> Name of the event or activity:</label>
                         <input type="text" id="activityNameInput" class="w-full border rounded-md px-3 py-2" name="event_name"
                             placeholder="Enter activity name" required>
@@ -224,6 +235,7 @@
                     </button>
                 </div>
             </form>
+        @endforeach
             </div>
         </div>
     </div>

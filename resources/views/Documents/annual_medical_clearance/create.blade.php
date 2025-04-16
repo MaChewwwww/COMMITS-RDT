@@ -113,6 +113,13 @@
         <div class="page">
             <!-- Document 2 (duplicate the structure as needed) -->
             <div class="container">
+                @foreach ($controlNumber->where('document_type', $documentType) as $control)
+                    <div class="flex flex-col items-end text-xs leading-tight text-gray-800">
+                        <p>{{ $control->control_number ?? '__________' }}</p>
+                        <p>Rev. {{ $control->revision ?? '_________'}}</p>
+                        <p>{{ \Carbon\Carbon::parse($control->date_issued)->format('F j, Y') ?? '__________' }} </p>
+                    </div>
+                @endforeach
                 <div class="flex items-center justify-center mb-5">
                     <div class="mr-5">
                         <img src="{{ asset('Logo_image/logopup.png') }}" alt="Logo" class="w-28 mb-5">
@@ -166,6 +173,13 @@
 
         <!-- Document 2 (duplicate the structure as needed) -->
         <div class="container2 mt-5">
+                @foreach ($controlNumber->where('document_type', $documentType) as $control)
+                    <div class="flex flex-col items-end text-xs leading-tight text-gray-800">
+                        <p>{{ $control->control_number ?? '__________' }}</p>
+                        <p>Rev. {{ $control->revision ?? '_________'}}</p>
+                        <p>{{ \Carbon\Carbon::parse($control->date_issued)->format('F j, Y') ?? '__________' }} </p>
+                    </div>
+                @endforeach
             <div class="flex items-center justify-center mb-5">
                 <div class="mr-5">
                     <img src="{{ asset('Logo_image/logopup.png') }}" alt="Logo" class="w-28 mb-5">
@@ -226,12 +240,16 @@
 
                 <!-- Form Container -->
                 <div id="formContainer" class="space-y-4">
+            @foreach ($controlNumber->where('document_type', $documentType) as $control)
                 <form action="{{ route('documents.annual_medical_clearance.store') }}" method="POST">
                     <h2 class="text-xl font-medium mb-4 mt-6 text-gray-700 text-center">Form 1</h2>
                         @csrf
                         <!-- Date Field -->
                         <div class="form-group">
-                            <input type="hidden" name="document_type" value="{{ request('document_type') }}">
+                                    <input type="hidden" name="document_type" value="{{ request('document_type') }}">
+                                    <input type="hidden" name="control_number" value="{{ $control->control_number }}">
+                                    <input type="hidden" name="revision" value="{{ $control->revision }}">
+                                    <input type="hidden" name="date_issued" value="{{ $control->date_issued }}">
                                 <label class="block text-gray-600 font-medium mb-1">Date:</label>
                             <input type="date" id="addDate" name="date"
                                 class="addDate w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -274,7 +292,10 @@
                 <div class="hidden" id="formContainer1">
                     <div class="space-y-1">
                     <h1 class="text-xl font-medium mb-4 mt-6 text-gray-700 text-center">Form 2</h2>
-                        <input type="hidden" name="document_type" value="{{ request('document_type') }}">
+                                    <input type="hidden" name="document_type" value="{{ request('document_type') }}">
+                                    <input type="hidden" name="control_number" value="{{ $control->control_number }}">
+                                    <input type="hidden" name="revision" value="{{ $control->revision }}">
+                                    <input type="hidden" name="date_issued" value="{{ $control->date_issued }}">
                         <label class="block text-gray-600 font-medium mb-1">Date:</label>
                         <input type="date" id="addDate${formCount}" name="additional_date"
                             class="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
@@ -310,6 +331,7 @@
                             </button>
                         </div>
                 </form>
+            @endforeach
         </div>
     </div>
     </div>

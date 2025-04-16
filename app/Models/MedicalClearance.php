@@ -22,7 +22,10 @@ class MedicalClearance extends Model
         'doctorName',
         'position',
         'license_number',
-        'xray_result', // Newly added field
+        'xray_result',
+        'control_number',
+        'revision',
+        'date_issued',
         'additional_date',
         'additional_patient_name',
         'additional_vaccination_status',

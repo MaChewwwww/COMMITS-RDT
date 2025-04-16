@@ -22,6 +22,9 @@ class Excuseletter extends Model
         'cause', 
         'doctorName',
         'document_id',
+        'control_number',
+        'revision',
+        'date_issued',
     ];
 
     public function document()

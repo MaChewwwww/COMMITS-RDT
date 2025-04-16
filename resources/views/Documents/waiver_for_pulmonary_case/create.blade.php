@@ -114,6 +114,13 @@
     <div class="container mx-auto bg-white md:py-20 md:px-20 w-[90%] md:w-[70%] lg:w-[70%]">
         <div class="page">
             <div class="container">
+                @foreach ($controlNumber->where('document_type', $documentType) as $control)
+                    <div class="flex flex-col items-end text-xs leading-tight text-gray-800">
+                        <p>{{ $control->control_number ?? '__________' }}</p>
+                        <p>Rev. {{ $control->revision ?? '_________'}}</p>
+                        <p>{{ \Carbon\Carbon::parse($control->date_issued)->format('F j, Y') ?? '__________' }} </p>
+                    </div>
+                @endforeach
                 <div class="flex items-center justify-center mb-5">
                     <div class="mr-5">
                         <img src="{{ asset('Logo_image/logopup.png') }}" alt="Logo" class="w-28 mb-5">
@@ -165,6 +172,13 @@
     <!-- Document 2 (duplicate the structure as needed) -->
     <div class="container mx-auto bg-white md:py-20 md:px-20 w-[90%] md:w-[70%] lg:w-[70%]">
         <div class="container2 mt-15">
+                @foreach ($controlNumber->where('document_type', $documentType) as $control)
+                    <div class="flex flex-col items-end text-xs leading-tight text-gray-800">
+                        <p>{{ $control->control_number ?? '__________' }}</p>
+                        <p>Rev. {{ $control->revision ?? '_________'}}</p>
+                        <p>{{ \Carbon\Carbon::parse($control->date_issued)->format('F j, Y') ?? '__________' }} </p>
+                    </div>
+                @endforeach
             <div class="flex items-center justify-center mb-5">
                 <div class="mr-5">
                     <img src="{{ asset('Logo_image/logopup.png') }}" alt="Logo" class="w-28 mb-5">
@@ -231,11 +245,15 @@
             <div id="formContainer" class="space-y-4">
                 <!-- Date Field -->
                 <!-- Form 1 Inputs -->
+        @foreach ($controlNumber->where('document_type', $documentType) as $control)
             <form action="{{ route('documents.waiver_for_pulmonary_case.store') }}" method="POST">
                 <h2 class="text-xl font-medium mb-4 mt-6 text-gray-700 text-center">Form 1</h2>
                 @csrf
                 <div class="form-group">
                     <input type="hidden" name="document_type" value="{{ request('document_type') }}">
+                    <input type="hidden" name="control_number" value="{{ $control->control_number }}">
+                    <input type="hidden" name="revision" value="{{ $control->revision }}">
+                    <input type="hidden" name="date_issued" value="{{ $control->date_issued }}">
                     <label class="block text-gray-600 font-medium mb-1">Date:</label>
                     <input type="date" id="editDate" class="w-full border rounded-md px-3 py-2" name="date" required>
                     <span id="editDateError" class="text-red-500 text-sm hidden">Date is required.</span>
@@ -313,6 +331,7 @@
                     </button>
                 </div>
             </form>
+        @endforeach
         </div>
     </div>
     <!-- Success Notification -->

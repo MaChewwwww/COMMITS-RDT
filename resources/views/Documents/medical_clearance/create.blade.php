@@ -37,6 +37,13 @@
         <div class="page">
             <!-- Document 2 (duplicate the structure as needed) -->
             <div class="container">
+                @foreach ($controlNumber->where('document_type', $documentType) as $control)
+                    <div class="flex flex-col items-end text-xs leading-tight text-gray-800">
+                        <p>{{ $control->control_number ?? '__________' }}</p>
+                        <p>Rev. {{ $control->revision ?? '_________'}}</p>
+                        <p>{{ \Carbon\Carbon::parse($control->date_issued)->format('F j, Y') ?? '__________' }} </p>
+                    </div>
+                @endforeach
                 <div class="flex items-center justify-center mb-5">
                     <div class="mr-5">
                         <img src="{{ asset('Logo_image/logopup.png') }}" alt="Logo" class="w-28 mb-5">
@@ -96,6 +103,13 @@
 
         <!-- Document 2 (duplicate the structure as needed) -->
         <div class="container2 mt-10">
+                @foreach ($controlNumber->where('document_type', $documentType) as $control)
+                    <div class="flex flex-col items-end text-xs leading-tight text-gray-800">
+                        <p>{{ $control->control_number ?? '__________' }}</p>
+                        <p>Rev. {{ $control->revision ?? '_________'}}</p>
+                        <p>{{ \Carbon\Carbon::parse($control->date_issued)->format('F j, Y') ?? '__________' }} </p>
+                    </div>
+                @endforeach
             <div class="flex items-center justify-center mb-5">
                 <div class="mr-5">
                     <img src="{{ asset('Logo_image/logopup.png') }}" alt="Logo" class="w-28 mb-5">

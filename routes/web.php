@@ -181,8 +181,10 @@ Route::middleware(['auth'])->group(function () {
 
         }
     });
-
-    // Report Routes
+    //Control Number
+    Route::post('/documents', [DocumentController::class, 'ControlNumber'])->name('control-numbers.store');
+    Route::put('/documents/{id}', [DocumentController::class, 'updateControlNumber'])->name('control-numbers.update');
+    Route::get('/documents/edit/{id}', [DocumentController::class, 'editControlNumber'])->name('control-number.edit');    // Report Routes
     Route::prefix('reports')->group(function () {
 
         // Display a list of reports, allowing filters

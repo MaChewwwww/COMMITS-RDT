@@ -19,11 +19,15 @@ class AnnualMedicalClearance extends Model
         'doctorName',
         'license_number',
         'document_type',
+        'control_number',
+        'revision',
+        'date_issued',
         'additional_date',
         'additional_patient_name',
         'additional_excuse_date',
         'additional_doctorName',
         'additional_license_number',
+
     ];
 
     public function document()

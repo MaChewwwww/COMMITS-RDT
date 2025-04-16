@@ -15,6 +15,9 @@ class DMDCConsentForm extends Model
         'document_id',
         'event_name',
         'document_type',
+        'control_number',
+        'revision',
+        'date_issued',
     ];
 
     public function document()
