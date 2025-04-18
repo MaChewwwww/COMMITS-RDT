@@ -7,7 +7,7 @@ use App\Models\Patient;
 use App\Models\Medicine;
 use App\Models\Supply;
 use App\Models\Equipment;
-use App\Models\Document;  
+use App\Models\Document;
 use App\Models\Report;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -24,12 +24,12 @@ class DashboardController extends Controller
 
         // Get total patient count
         $totalPatients = Patient::count();
-        
+
         // Get total medicines count (only for boxes that are not returned)
         $totalMedicines = Medicine::whereHas('box', function($query) {
             $query->where('isReturned', 0);
         })->count();
-        
+
         // You can also get counts by patient type
         $patientCounts = [
             'students' => Patient::where('patientType', 'Student')->count(),
@@ -38,7 +38,7 @@ class DashboardController extends Controller
             'admin' => Patient::where('patientType', 'Admin')->count(),
             'visitors' => Patient::where('patientType', 'Visitor')->count(),
         ];
-        
+
         // Get monthly patient counts for current year
         $monthlyPatients = Patient::select(
             DB::raw('MONTH(created_at) as month'),
@@ -98,8 +98,8 @@ class DashboardController extends Controller
         $totalReports = Report::count();
 
         return view('dashboard.dashboard_index', compact(
-            'totalPatients', 
-            'patientCounts', 
+            'totalPatients',
+            'patientCounts',
             'totalMedicines',
             'monthlyPatientCounts',
             'medicineStatus',
@@ -146,7 +146,7 @@ class DashboardController extends Controller
         try {
             $today = Carbon::today('Asia/Manila');
             $userIds = User::pluck('id')->toArray();
-            
+
             Log::info('Starting medicine expiry check', [
                 'today' => $today->format('Y-m-d'),
                 'users' => count($userIds)
@@ -163,7 +163,7 @@ class DashboardController extends Controller
             foreach ($medicines as $medicine) {
                 $expiryDate = Carbon::parse($medicine->expiration_date)->startOfDay();
                 $daysRemaining = $today->diffInDays($expiryDate);
-                
+
                 Log::info('Checking medicine', [
                     'id' => $medicine->id,
                     'name' => $medicine->medicine_name,
@@ -176,14 +176,14 @@ class DashboardController extends Controller
                     try {
                         $this->createNotification(
                             'Medicine Expiring in a Month',
-                            "{$medicine->medicine_name} will expire in {$daysRemaining} " . 
-                            ($daysRemaining == 1 ? 'day' : 'days') . " (on " . 
+                            "{$medicine->medicine_name} will expire in {$daysRemaining} " .
+                            ($daysRemaining == 1 ? 'day' : 'days') . " (on " .
                             $expiryDate->format('M d, Y') . ")",
                             'warning',
                             $userIds,
                             $medicine->id
                         );
-                        
+
                         $medicine->notified_monthly = true;
                         $medicine->save();
                     } catch (\Exception $e) {
@@ -193,20 +193,20 @@ class DashboardController extends Controller
                         ]);
                     }
                 }
-                
+
                 // Weekly notification (2-7 days)
                 if ($daysRemaining <= 7 && $daysRemaining >= 1 && !$medicine->notified_weekly) {
                     try {
                         $this->createNotification(
                             'Medicine Expiring This Week',
-                            "{$medicine->medicine_name} will expire in {$daysRemaining} " . 
-                            ($daysRemaining == 1 ? 'day' : 'days') . " (on " . 
+                            "{$medicine->medicine_name} will expire in {$daysRemaining} " .
+                            ($daysRemaining == 1 ? 'day' : 'days') . " (on " .
                             $expiryDate->format('M d, Y') . ")",
                             'danger',
                             $userIds,
                             $medicine->id
                         );
-                        
+
                         $medicine->notified_weekly = true;
                         $medicine->save();
                     } catch (\Exception $e) {
@@ -222,13 +222,13 @@ class DashboardController extends Controller
                     try {
                         $this->createNotification(
                             'Medicine Has Expired',
-                            "{$medicine->medicine_name} has expired on " . $expiryDate->format('M d, Y') . 
+                            "{$medicine->medicine_name} has expired on " . $expiryDate->format('M d, Y') .
                             " and is not usable anymore. Please dispose of properly.",
                             'deleted',
                             $userIds,
                             $medicine->id
                         );
-                        
+
                         $medicine->notified_today = true;
                         $medicine->save();
                     } catch (\Exception $e) {
@@ -238,7 +238,7 @@ class DashboardController extends Controller
                         ]);
                     }
                 }
-                
+
                 // Daily notification (0 day)
                 if ($daysRemaining == 0 && !$medicine->notified_today) {
                     try {
@@ -249,7 +249,7 @@ class DashboardController extends Controller
                             $userIds,
                             $medicine->id
                         );
-                        
+
                         $medicine->notified_today = true;
                         $medicine->save();
                     } catch (\Exception $e) {
@@ -260,14 +260,23 @@ class DashboardController extends Controller
                     }
                 }
             }
-            
+
             Log::info('Completed medicine expiry check');
-            
+
         } catch (\Exception $e) {
             Log::error('Error checking expiring medicines', [
                 'message' => $e->getMessage(),
                 'trace' => $e->getTraceAsString()
             ]);
         }
+    }
+
+    public function superadminDashboard ()
+    {
+        $total_users = User::all()->count();
+        $total_active_users = User::where('status', 'active')->count();
+        $total_inactive_users = User::where('status', 'inactive')->count();
+
+        return view('SuperAdmin.Superadmin_dashboard', compact('total_users','total_active_users','total_inactive_users'));
     }
 }

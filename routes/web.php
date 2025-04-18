@@ -16,7 +16,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\SettingController;
 use Illuminate\Support\Facades\Auth;
-
+use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 // Guest routes
 Route::middleware(['guest'])->group(function () {
@@ -178,7 +178,6 @@ Route::middleware(['auth'])->group(function () {
             Route::delete("/{id}/delete/{$slug}", [DocumentController::class, 'softDelete'])
                 ->name("documents.{$slug}.delete")
                 ->defaults('document_type', $type);
-
         }
     });
     //Control Number
@@ -210,7 +209,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/history', [PatientHistoryController::class, 'index'])->name('History.all');
 
     // Mark notification as read
-    Route::post('/notifications/{notification}/mark-as-read', function(App\Models\Notification $notification) {
+    Route::post('/notifications/{notification}/mark-as-read', function (App\Models\Notification $notification) {
         if (Auth::check()) {
             $userId = Auth::id();
 
@@ -239,3 +238,32 @@ Route::middleware(['auth'])->group(function () {
         ->name('notifications.clearAll')
         ->middleware('auth');
 });
+
+//Super Admin
+Route::middleware(['auth'])->group((function () {
+    Route::prefix('admin')->group(function () {
+
+        Route::get('/', function () {
+            return redirect()->route('Superadmin_dashboard');
+        });
+
+
+        //Dashboard
+        Route::get('/dashboard', [DashboardController::class, 'superadminDashboard'])->name('Superadmin_dashboard');
+
+        // User management
+        Route::prefix('users')->group(function () {
+            Route::get('/', [UserController::class, 'getUsers'])->name('users.get');
+            Route::post('/add', [UserController::class, 'store'])->name('user.store');
+            Route::post('/edit', [UserController::class, 'update'])->name('user.update');
+            Route::post('/delete', [UserController::class, 'delete'])->name('user.destroy');
+        });
+
+
+
+        Route::get('/auditlogs', function () {
+            return view('SuperAdmin.Auditlog');
+        })->name('Auditlog');
+    });
+}));
+

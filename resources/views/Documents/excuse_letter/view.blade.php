@@ -1,5 +1,7 @@
 @extends('layouts.app-layout')
 
+@section('title', 'Excuse Letter')
+
 @section('content')
 <!DOCTYPE html>
 <html lang="en">

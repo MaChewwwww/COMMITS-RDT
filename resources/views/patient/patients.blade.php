@@ -1,10 +1,14 @@
 @extends('layouts.app-layout')
 
+@section('title', 'Patients Records')
+
 @section('content')
-    <div class="container mx-auto">
-        <x-page-title class="mb-2" value="Patients Record" />
+    <div class="mx-auto">
+        <x-page-title class="mb-2" value="Patients Records" class="mb-0"/>
+        <p class="text-sm text-gray-500 mb-7">A list of all patient records.</p>
 
         <div class="flex flex-wrap items-center justify-end w-full gap-4 mb-3">
+
             <!-- Add Button -->
             <button type="button"
                 class="inline-flex items-center gap-2 px-6 py-2.5 text-white bg-blue-500 hover:bg-blue-600 rounded-lg
@@ -15,8 +19,8 @@
         </div>
 
         <div class="bg-white p-4 shadow rounded-lg">
-            <!-- Tab Navigation -->
-            <div class="">
+            <div class="flex items-center justify-between">
+                <!-- Tab Navigation -->
                 <nav class="flex -mb-px space-x-3 overflow-x-auto" aria-label="Tabs">
                     <!-- Tab buttons for filtering patients -->
                     <button type="button"
@@ -50,6 +54,13 @@
                         Dependents
                     </button>
                 </nav>
+
+                <!-- Search bar -->
+                <div>
+                    <input type="text" placeholder="Search for patients..."
+                        class="w-64 h-10 p-3 text-sm text-gray-500 bg-gray-100 border border-gray-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500"
+                        id="patient_search" autocomplete="off" onkeyup="" />
+                </div>
             </div>
 
             <!-- Table Container -->
@@ -993,7 +1004,8 @@
             tabButtons.forEach(button => {
                 button.addEventListener('click', () => {
                     tabButtons.forEach(btn => {
-                        btn.classList.remove('border-blue-500', 'text-gray-800', 'bg-blue-50');
+                        btn.classList.remove('border-blue-500', 'text-gray-800',
+                            'bg-blue-50');
                         btn.classList.add('border-gray-300', 'text-gray-500');
                     });
                     button.classList.remove('border-gray-300', 'text-gray-500');

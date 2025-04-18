@@ -1,5 +1,7 @@
 @extends('layouts.app-layout')
 
+@section('title', 'Waver for Pulmonary Case Form')
+
 @section('content')
 <!DOCTYPE html>
 <html lang="en">
