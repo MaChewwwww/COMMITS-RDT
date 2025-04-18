@@ -1,14 +1,13 @@
-<aside
-    class="fixed top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full bg-[#7A0019] md:translate-x-0"
+<aside class="fixed top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full bg-[#7A0019] md:translate-x-0"
     aria-label="Sidenav" id="drawer-navigation">
 
-    <div class="flex items-center px-6 pt-4">
+    <div class="flex items-center px-2 py-2 border-b-2 border-red-900">
         <!-- Logo -->
         <a class="flex-none inline-block text-xl font-semibold rounded-xl focus:outline-hidden focus:opacity-80"
             href="#" aria-label="PRMS">
             <div class="flex items-center justify-start w-full">
                 <!--PRMS logo-->
-                <img src="{{asset('images/puplogo.png')}}" alt="logo" class="w-8 h-8 mr-2">
+                <img src="{{ asset('images/prms-logo 2.jpg') }}" alt="logo" class="w-10 mr-1">
                 <span class="text-2xl font-bold text-white">PRMS</span>
             </div>
         </a>
@@ -28,24 +27,23 @@
             <p class="text-sm font-medium text-gray-300">{{ auth()->user()->role }}</p>
             <p class="text-xs font-semibold text-green-500">• online</p>
         </div>
-    </div> --}}
+    </div>
 
-    <div class="overflow-y-auto px-3 py-4 h-full bg-[#7A0019]">
-        <form action="#" method="GET" class="mb-2 md:hidden">
-            <label for="sidebar-search" class="sr-only">Search</label>
-            <div class="relative">
-                <!-- Icon container -->
+    <div class="overflow-y-auto px-3 pb-4 pt-2 h-full bg-[#7A0019]">
+        <form action="#" method="GET" class=" md:hidden md:pl-2">
+            <label for="topbar-search" class="sr-only">Search</label>
+            <div class="relative md:w-64">
                 <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                    <svg class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20"
+                    <svg class="w-5 h-5 text-gray-500" fill="currentColor" viewBox="0 0 20 20"
                         xmlns="http://www.w3.org/2000/svg">
                         <path fill-rule="evenodd" clip-rule="evenodd"
                             d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z">
                         </path>
                     </svg>
                 </div>
-                <input type="text" name="search" id="sidebar-search"
-                    class="block w-full p-2 pl-10 pr-3 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-primary-500 focus:border-primary-500"
-                    placeholder="Search" />
+                <input type="text" name="email" id="topbar-search"
+                    class="bg-gray-200 border h-9 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-2.5 "
+                    placeholder="Search..." />
             </div>
         </form>
 

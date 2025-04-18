@@ -14,6 +14,7 @@ use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\SettingController;
 use Illuminate\Support\Facades\Auth;
 
 
@@ -26,7 +27,7 @@ Route::middleware(['guest'])->group(function () {
 
     Route::get('/login', [UserController::class, 'showLogin'])->name('login.show');
     Route::post('/login', [UserController::class, 'login'])->name('login');
-    
+
     // Forgot password route
     Route::view('/forgot-password', 'authentication.forgot-password')->name('password.request');
 
@@ -54,6 +55,14 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/changePassword', [ProfileController::class, 'changePassword'])->name('profile.changePassword');
         Route::post('/update', [ProfileController::class, 'updateProfile'])->name('profile.updateProfile');
         Route::post('/update-password', [ProfileController::class, 'updatePassword'])->name('profile.updatePassword');
+    });
+
+    // Settings Routes
+    Route::prefix('settings')->group(function () {
+        Route::get('/profile', [SettingController::class, 'profile'])->name('user.profile');
+        Route::get('/change-password', [SettingController::class, 'changePassword'])->name('password.change');
+        Route::post('/update-password', [SettingController::class, 'updatePassword'])->name('password.update');
+        Route::post('/update-profile', [SettingController::class, 'updateProfile'])->name('profile.update');
     });
 
     Route::prefix('dashboard')->group(function () {
@@ -97,7 +106,7 @@ Route::middleware(['auth'])->group(function () {
                 Route::put('/{medicine}/deduct', 'deduct')->name('deduct_medicine');
                 Route::put('/{medicine}/return', 'return')->name('return_medicine');
                 Route::delete('/{medicine}', 'destroy')->name('delete_medicine');
-            });           
+            });
         });
 
         // Supplies
@@ -110,7 +119,7 @@ Route::middleware(['auth'])->group(function () {
                 Route::put('/{supply}/deduct', 'deduct')->name('deduct_supply');
                 Route::put('/{supply}/return', 'return')->name('return_supply');
                 Route::delete('/{supply}', 'destroy')->name('delete_supply');
-            });   
+            });
         });
 
         // Equipment
@@ -121,7 +130,7 @@ Route::middleware(['auth'])->group(function () {
                 Route::put('/{equipment}/update', 'update')->name('update_equipment');
                 // Route::put('/{equipment}/deduct', 'deduct')->name('deduct_equipment');
                 Route::delete('/{equipment}', 'destroy')->name('delete_equipment');
-            }); 
+            });
         });
     });
 
@@ -169,8 +178,8 @@ Route::middleware(['auth'])->group(function () {
             Route::delete("/{id}/delete/{$slug}", [DocumentController::class, 'softDelete'])
                 ->name("documents.{$slug}.delete")
                 ->defaults('document_type', $type);
-        
-        }   
+
+        }
     });
 
     // Report Routes
@@ -203,20 +212,20 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/notifications/{notification}/mark-as-read', function(App\Models\Notification $notification) {
         if (Auth::check()) {
             $userId = Auth::id();
-            
+
             // Get current viewed_by array
             $viewedBy = json_decode($notification->viewed_by ?: '[]', true);
-            
+
             // Add current user if not already in the array
             if (!in_array($userId, $viewedBy)) {
                 $viewedBy[] = $userId;
                 $notification->viewed_by = json_encode($viewedBy);
                 $notification->save();
             }
-            
+
             return response()->json(['success' => true]);
         }
-        
+
         return response()->json(['success' => false], 403);
     })->name('notifications.markAsRead')->middleware('web');
 
