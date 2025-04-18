@@ -18,14 +18,15 @@
         </div>
     </div>
 
-    {{-- PROFILE
-    <div class="flex items-center justify-start w-full px-6 py-4">
-        <div class="w-10 h-10 mr-2 border border-white rounded">
-
+    {{-- PROFILE --}}
+    <div class="flex items-center justify-start w-full px-6 py-2 mt-1">
+        <div class="p-1 mr-2 bg-white border rounded-lg w-14">
+            <img src="{{ asset('images/puplogo.png') }}" alt="">
         </div>
         <div class="text-white">
-            <p>name</p>
-            <p>email</p>
+            <p class="text-base font-semibold">{{ auth()->user()->first_name }}</p>
+            <p class="text-sm font-medium text-gray-300">{{ auth()->user()->role }}</p>
+            <p class="text-xs font-semibold text-green-500">• online</p>
         </div>
     </div> --}}
 
@@ -48,6 +49,7 @@
             </div>
         </form>
 
+        <p class="mt-4 mb-2 text-sm font-semibold text-gray-300 text-start">Menu</p>
         <ul class="flex flex-col space-y-1">
             <li>
                 <x-sidebar-link :href="route('dashboard')" :active="request()->is('dashboard*') || request()->is('/')" :icon="'fas fa-chart-pie'">Dashboard</x-sidebar-link>

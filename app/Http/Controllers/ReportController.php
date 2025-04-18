@@ -151,7 +151,7 @@ class ReportController extends Controller
             'visitors'       => 4
         ];
 
-        // Loop over the query results and update your services array
+        // Loop over the query results and update services array
         foreach ($results as $result) {
             foreach ($services as &$service) {
                 if ($service['name'] === $result->diagnosis) {
@@ -164,256 +164,405 @@ class ReportController extends Controller
             }
         }
 
-        // Return the results as JSON (or pass them to a view)
-        return response()->json($services);
+        // Initialize totals array
+        $totals = [
+            'students' => 0,
+            'faculty' => 0,
+            'administrative' => 0,
+            'dependents' => 0,
+            'visitors' => 0,
+            'overall' => 0
+        ];
+
+        // Loop over the query results and update services array
+        foreach ($results as $result) {
+            foreach ($services as &$service) {
+                if ($service['name'] === $result->diagnosis) {
+                    $cat = strtolower($result->category);
+                    if (isset($categoryMapping[$cat])) {
+                        $index = $categoryMapping[$cat];
+                        $service['data'][$index] = $result->report_count;
+                        
+                        // Add to totals
+                        $totals[$cat] += $result->report_count;
+                        $totals['overall'] += $result->report_count;
+                    }
+                }
+            }
+        }
+
+        return response()->json([
+            'services' => $services,
+            'totals' => $totals
+        ]);
     }
 
     // to initialize the services array once
     private function getDefaultServices(): array {
         return [
             [
-                'name' => '1. Consultation / Treatment',
-                'data' => ['', '', '', '', '', '']
+                'name' => 'I. CONSULTATION / TREATMENT',
+                'data' => ['', '', '', '', '', 'I.']
             ],
             [
-                'name' => 'A. Respiratory Disorder',
-                'data' => ['', '', '', '', '', '']
+                'name' => 'A. RESPIRATORY DISORDER',
+                'data' => ['', '', '', '', '', 'A.']
             ],
             [
                 'name' => '1. URTI',
                 'data' => ['', '', '', '', '', '']
             ],
             [
-                'name' => 'a. T/C URTI',
+                'name' => '2. T/C URTI',
                 'data' => ['', '', '', '', '', '']
             ],
             [
-                'name' => 'b. Allergic Rhinitis',
+                'name' => '3. PTB IV',
                 'data' => ['', '', '', '', '', '']
             ],
             [
-                'name' => 'c. T/C Allergic Pharyngitis',
+                'name' => '4. Pneumonia',
                 'data' => ['', '', '', '', '', '']
             ],
             [
-                'name' => 'd. T/C Allergic Rhinitis',
+                'name' => '5. T/C Allergic Pharyngitis',
                 'data' => ['', '', '', '', '', '']
             ],
             [
-                'name' => '1.2 LRTI',
+                'name' => '6. PTB III',
                 'data' => ['', '', '', '', '', '']
             ],
             [
-                'name' => 'a. PTB III',
+                'name' => '7. Allergic Rhinitis',
                 'data' => ['', '', '', '', '', '']
             ],
             [
-                'name' => 'b. CAP, low risk',
+                'name' => '8. Exudative Tonsillopharyngitis',
                 'data' => ['', '', '', '', '', '']
             ],
             [
-                'name' => 'c. Acute Bronchitis',
+                'name' => '9. T/C Bacterial Lymphadenitis, submandibular area',
                 'data' => ['', '', '', '', '', '']
             ],
             [
-                'name' => 'd. PTB IV',
+                'name' => 'B. GI DISORDER',
+                'data' => ['', '', '', '', '', 'B.']
+            ],
+            [
+                'name' => '1. Dyshidrosis',
                 'data' => ['', '', '', '', '', '']
             ],
             [
-                'name' => 'e. PTB V',
+                'name' => '2. T/C Cero',
                 'data' => ['', '', '', '', '', '']
             ],
             [
-                'name' => '2. Bronchial Asthma',
+                'name' => '3. NERD',
                 'data' => ['', '', '', '', '', '']
             ],
             [
-                'name' => 'B. Digestive / GI DIsorder',
+                'name' => '4. AGE',
                 'data' => ['', '', '', '', '', '']
             ],
             [
-                'name' => '1. T/C Age',
+                'name' => '5. T/C AGE',
                 'data' => ['', '', '', '', '', '']
             ],
             [
-                'name' => '2. AGE',
+                'name' => '6. T/C Dyspepsia',
                 'data' => ['', '', '', '', '', '']
             ],
             [
-                'name' => '3. R/O AGE',
+                'name' => '7. R/O Abdominal Colic',
                 'data' => ['', '', '', '', '', '']
             ],
             [
-                'name' => '4. APD',
+                'name' => '8. T/C Abdominal Colic',
                 'data' => ['', '', '', '', '', '']
             ],
             [
-                'name' => '5. T/C PUP',
+                'name' => '9. T/C Food Intolerance',
                 'data' => ['', '', '', '', '', '']
             ],
             [
-                'name' => 'C. Genitourinary Tract Disorder',
+                'name' => 'C. MUSCULOSKELETAL DISORDER',
+                'data' => ['', '', '', '', '', 'C.']
+            ],
+            [
+                'name' => '1. Thoracolumbar Scoliosis, Sever',
                 'data' => ['', '', '', '', '', '']
+            ],
+            [
+                'name' => '2. Muscle Strain',
+                'data' => ['', '', '', '', '', '']
+            ],
+            [
+                'name' => '3. T/C Muscle Strain',
+                'data' => ['', '', '', '', '', '']
+            ],
+            [
+                'name' => '4. Muscle Spasm',
+                'data' => ['', '', '', '', '', '']
+            ],
+            [
+                'name' => '5. T/C Muscle Spasm',
+                'data' => ['', '', '', '', '', '']
+            ],
+            [
+                'name' => 'D. BP MONITORING',
+                'data' => ['', '', '', '', '', 'D.']
+            ],
+            [
+                'name' => '1. BP Assessment',
+                'data' => ['', '', '', '', '', '']
+            ],
+            [
+                'name' => '2. HTN 2',
+                'data' => ['', '', '', '', '', '']
+            ],
+            [
+                'name' => '3. HCVD',
+                'data' => ['', '', '', '', '', '']
+            ],
+            [
+                'name' => '4. HTN 1',
+                'data' => ['', '', '', '', '', '']
+            ],
+            [
+                'name' => 'E. CARDIOVASCULAR DISORDER',
+                'data' => ['', '', '', '', '', 'E.']
+            ],
+            [
+                'name' => 'F. CNS DISORDER',
+                'data' => ['', '', '', '', '', 'F.']
+            ],
+            [
+                'name' => '1. Tension Headache',
+                'data' => ['', '', '', '', '', '']
+            ],
+            [
+                'name' => '2. T/C Common Migraine',
+                'data' => ['', '', '', '', '', '']
+            ],
+            [
+                'name' => 'G. Viral Viral Infections',
+                'data' => ['', '', '', '', '', 'G.']
+            ],
+            [
+                'name' => '1. T/C Acute Viral Illness',
+                'data' => ['', '', '', '', '', '']
+            ],
+            [
+                'name' => '2. Acute Viral Illness',
+                'data' => ['', '', '', '', '', '']
+            ],
+            [
+                'name' => '3. Varicella Zoster',
+                'data' => ['', '', '', '', '', '']
+            ],
+            [
+                'name' => '4. Dengue Fever',
+                'data' => ['', '', '', '', '', '']
+            ],
+            [
+                'name' => 'H. DERMA DISORDERS',
+                'data' => ['', '', '', '', '', 'H.']
+            ],
+            [
+                'name' => '1. Abscess, Right axilla',
+                'data' => ['', '', '', '', '', '']
+            ],
+            [
+                'name' => 'I. SURGERY / TRAUMA',
+                'data' => ['', '', '', '', '', 'I']
+            ],
+            [
+                'name' => '1. S/P Tendon Sheat Incision',
+                'data' => ['', '', '', '', '', '']
+            ],
+            [
+                'name' => '2. Infected Ingrown Toenail',
+                'data' => ['', '', '', '', '', '']
+            ],
+            [
+                'name' => '3. Incised Wound',
+                'data' => ['', '', '', '', '', '']
+            ],
+            [
+                'name' => '4. Dog Bite, CAT III',
+                'data' => ['', '', '', '', '', '']
+            ],
+            [
+                'name' => '5. Infected Wound, left leg',
+                'data' => ['', '', '', '', '', '']
+            ],
+            [
+                'name' => '6. Abrasion, Left knee',
+                'data' => ['', '', '', '', '', '']
+            ],
+            [
+                'name' => 'J. EENT DISORDERS',
+                'data' => ['', '', '', '', '', 'J.']
+            ],
+            [
+                'name' => '1. T/C Allergic Conjunctivitis',
+                'data' => ['', '', '', '', '', '']
+            ],
+            [
+                'name' => '2. R/O Nasal Polyps',
+                'data' => ['', '', '', '', '', '']
+            ],
+            [
+                'name' => '3. T/C Mineare\'s Disease',
+                'data' => ['', '', '', '', '', '']
+            ],
+            [
+                'name' => '4. Acute Otitis Media',
+                'data' => ['', '', '', '', '', '']
+            ],
+            [
+                'name' => 'K. REPRODUCTIVE DISORDERS',
+                'data' => ['', '', '', '', '', 'K.']
+            ],
+            [
+                'name' => '1. Dysmenorrhea',
+                'data' => ['', '', '', '', '', '']
+            ],
+            [
+                'name' => '2. Abnormal Uterine Bleeding',
+                'data' => ['', '', '', '', '', '']
+            ],
+            [
+                'name' => '3. T/C Fibroadenoma',
+                'data' => ['', '', '', '', '', '']
+            ],
+            [
+                'name' => 'L. NUTRITIONAL DEFICIENCY',
+                'data' => ['', '', '', '', '', 'L.']
+            ],
+            [
+                'name' => 'M. ENDOCRINE DISORDERS',
+                'data' => ['', '', '', '', '', 'M.']
+            ],
+            [
+                'name' => '1. T2DM',
+                'data' => ['', '', '', '', '', '']
+            ],
+            [
+                'name' => '2. Pre-Diabetes',
+                'data' => ['', '', '', '', '', '']
+            ],
+            [
+                'name' => '3. T/C Pre-Diabetes',
+                'data' => ['', '', '', '', '', '']
+            ],
+            [
+                'name' => '4. R/O Pre-Diabetes',
+                'data' => ['', '', '', '', '', '']
+            ],
+            [
+                'name' => '5. Dyslipidemia',
+                'data' => ['', '', '', '', '', '']
+            ],
+            [
+                'name' => '6. T/C Dyslipidemia',
+                'data' => ['', '', '', '', '', '']
+            ],
+            [
+                'name' => 'N. URINARY DISORDERS',
+                'data' => ['', '', '', '', '', 'N.']
             ],
             [
                 'name' => '1. UTI',
                 'data' => ['', '', '', '', '', '']
             ],
             [
-                'name' => '2. Genital tract infection',
+                'name' => '2. Nephorolithiasis',
                 'data' => ['', '', '', '', '', '']
             ],
             [
-                'name' => '3. Other genitourinary disorder',
+                'name' => 'II. MEDICAL CERTIFICATE',
+                'data' => ['', '', '', '', '', 'II.']
+            ],
+            [
+                'name' => '1. Medical Clearance (Returning Student)',
                 'data' => ['', '', '', '', '', '']
             ],
             [
-                'name' => '4. Kidney disease',
+                'name' => '2. Medical Clearance (For APE)',
                 'data' => ['', '', '', '', '', '']
             ],
             [
-                'name' => '5. Genitourinary tract cancers',
+                'name' => '3. Medical Clearance (OJT)',
                 'data' => ['', '', '', '', '', '']
             ],
             [
-                'name' => 'L. Viral Infections',
+                'name' => '4. Medical Certificate (Excuse Slip)',
                 'data' => ['', '', '', '', '', '']
             ],
             [
-                'name' => '1. SVI',
+                'name' => '5. Off-Campus',
                 'data' => ['', '', '', '', '', '']
             ],
             [
-                'name' => '2. T/C SVI',
+                'name' => 'III. INJECTIONS',
+                'data' => ['', '', '', '', '', 'III.']
+            ],
+            [
+                'name' => '1. IM Injections',
                 'data' => ['', '', '', '', '', '']
             ],
             [
-                'name' => '3. R/O SVI',
+                'name' => 'IV. REFERRALS',
+                'data' => ['', '', '', '', '', 'IV.']
+            ],
+            [
+                'name' => 'a. Ref to Hospital w/o Nurse',
                 'data' => ['', '', '', '', '', '']
             ],
             [
-                'name' => 'M. Dermatologic Disorder',
+                'name' => 'b. Ref. to Hospital w/ Nurse',
                 'data' => ['', '', '', '', '', '']
             ],
             [
-                'name' => '1. Expidermal inclusion Cyst, S/P removal',
+                'name' => 'V. OTHERS',
+                'data' => ['', '', '', '', '', 'V.']
+            ],
+            [
+                'name' => 'a. E/N at the time of examination',
                 'data' => ['', '', '', '', '', '']
             ],
             [
-                'name' => '2. Beginning Blister Formation, Achilles Area, Left',
+                'name' => 'b. Dental Canes',
                 'data' => ['', '', '', '', '', '']
             ],
             [
-                'name' => '3. Hypersensitivity Reaction Type 12 to Food',
+                'name' => 'c. T/C Acute Anxiety Reaction',
                 'data' => ['', '', '', '', '', '']
             ],
             [
-                'name' => 'N. Surgery / Trauma',
+                'name' => 'd. T/C Heat Exhaustion',
                 'data' => ['', '', '', '', '', '']
             ],
             [
-                'name' => '1. Mericle Strain with conclusion hematoma 2\' to Fall',
-                'data' => ['', '', '', '', '', '']
+                'name' => 'VI. ON-LINE CONSULTATION',
+                'data' => ['', '', '', '', 'VI.']
             ],
             [
-                'name' => '2. Incised wound, 1st Digit, Left Hand',
-                'data' => ['', '', '', '', '', '']
+                'name' => 'a. Consultation',
+                'data' => ['', '', '', '', '']
             ],
             [
-                'name' => '3. Conclusion Hematoma, Right Wrist',
-                'data' => ['', '', '', '', '', '']
+                'name' => 'b. Medical certificate',
+                'data' => ['', '', '', '', '']
             ],
             [
-                'name' => '4. Infected Wound, Right Elbow',
-                'data' => ['', '', '', '', '', '']
+                'name' => 'c. Others',
+                'data' => ['', '', '', '', '']
             ],
             [
-                'name' => '5. S/P Appendectomy',
-                'data' => ['', '', '', '', '', '']
-            ],
-            [
-                'name' => 'O. Vitamin / Mineral Deficiency',
-                'data' => ['', '', '', '', '', '']
-            ],
-            [
-                'name' => 'P. Dental',
-                'data' => ['', '', '', '', '', '']
-            ],
-            [
-                'name' => '1. Dental Caries',
-                'data' => ['', '', '', '', '', '']
-            ],
-            [
-                'name' => 'Q. Others',
-                'data' => ['', '', '', '', '', '']
-            ],
-            [
-                'name' => '1. T/C Generalized Anxiety Disorder',
-                'data' => ['', '', '', '', '', '']
-            ],
-            [
-                'name' => '2. T/C Acute Anxiety Reaction',
-                'data' => ['', '', '', '', '', '']
-            ],
-            [
-                'name' => '3. T/C Otherstatic hypotension',
-                'data' => ['', '', '', '', '', '']
-            ],
-            [
-                'name' => 'R. E/N at the time of Examination',
-                'data' => ['', '', '', '', '', '']
-            ],
-            [
-                'name' => 'T/C AGE, R/O Amoebiasis',
-                'data' => ['', '', '', '', '', '']
-            ],
-            [
-                'name' => 'LGTB rpob, 2th to Hemorrhoids, R/O Colonic Pathology',
-                'data' => ['', '', '', '', '', '']
-            ],
-            [
-                'name' => 'HCVD: CKD Stage 4-5',
-                'data' => ['', '', '', '', '', '']
-            ],
-            [
-                'name' => 'T/C Allergic Pharyngitis',
-                'data' => ['', '', '', '', '', '']
-            ],
-            [
-                'name' => 'T/C SVI',
-                'data' => ['', '', '', '', '', '']
-            ],
-            [
-                'name' => 'T/C Tenssion Headache',
-                'data' => ['', '', '', '', '', '']
-            ],
-            [
-                'name' => 'R/O Leptospirosis',
-                'data' => ['', '', '', '', '', '']
-            ],
-            [
-                'name' => 'APD',
-                'data' => ['', '', '', '', '', '']
-            ],
-            [
-                'name' => 'T/C HTN',
-                'data' => ['', '', '', '', '', '']
-            ],
-            [
-                'name' => 'HTN 2',
-                'data' => ['', '', '', '', '', '']
-            ],
-            [
-                'name' => 'Muscle Strain, LS area',
-                'data' => ['', '', '', '', '', '']
-            ],
-            [
-                'name' => 'UTI',
-                'data' => ['', '', '', '', '', '']
-            ],
-            [
-                'name' => 'Total Online Consults',
-                'data' => ['', '', '', '', '', '']
+                'name' => 'VII. TRIAGE SURVEY',
+                'data' => ['', '', '', '', 'VII.']
             ],
         ];
     }
@@ -424,26 +573,90 @@ class ReportController extends Controller
         $tableDatas = $request->input('tableData') 
         ? json_decode($request->input('tableData'), true) 
         : $this->getDefaultServices();
+
+        $bulletinUpdates = str_replace("\n", "\r\n", $request->input('bulletinUpdates'));
+
+        // initialize totals
+        $totals = [
+            'students'       => 0,
+            'faculty'        => 0,
+            'administrative' => 0,
+            'dependents'     => 0,
+            'visitors'       => 0,
+            'overall'        => 0,
+        ];
+
+        // sum up each column
+        foreach ($tableDatas as $service) {
+            foreach ($service['data'] as $idx => $count) {
+                // map index to key
+                switch ($idx) {
+                    case 0: $key = 'students'; break;
+                    case 1: $key = 'faculty'; break;
+                    case 2: $key = 'administrative'; break;
+                    case 3: $key = 'dependents'; break;
+                    case 4: $key = 'visitors'; break;
+                    default: continue 2;
+                }
+                $totals[$key] += (int) $count;
+                $totals['overall'] += (int) $count;
+            }
+        }
         
         // Prepare data for the export view
         $data = [
             'title' => $request->title,
-            'fromDate' => $request->from_date,
-            'toDate' => $request->to_date,
-            'physicianName' => $request->physician_name,
+            'fromDate' => $request->fromDate,
+            'toDate' => $request->toDate,
+            'physicianName' => $request->physicianName,
             'submissionDate' => $request->submissionDate,
+            'position' => $request->position,
+            'unitDepartment' => $request->unitDepartment,
             'tableDatas' => $tableDatas,
-            'f2fConsultMale' => $request->f2f_male,
-            'f2fConsultFemale' => $request->f2f_female,
-            'f2fConsultTotal' => $request->f2f_male + $request->f2f_female,
-            'onlineConsultMale' => $request->online_male,
-            'onlineConsultFemale' => $request->online_female,
-            'onlineConsultTotal' => $request->online_male + $request->online_female,
-            'grandTotalMale' => $request->f2f_male + $request->online_male,
-            'grandTotalFemale' => $request->f2f_female + $request->online_female,
-            'grandTotal' => $request->f2f_male + $request->f2f_female + $request->online_male + $request->online_female,
-            'campusPhysician' => $request->physician_name,
-            'campusNurse' => $request->nurse_name
+            'campusPhysician' => $request->campusPhysician,
+            'campusNurse' => $request->campusNurse,
+            'bulletinUpdates' => $bulletinUpdates,
+            'totals' => $totals,
+            'female'        => [
+                'Student'   => $request->femaleStudent,
+                'Faculty'   => $request->femaleFaculty,
+                'Admin'     => $request->femaleAdmin,
+                'Dependent' => $request->femaleDependent,
+                'Visitor'   => $request->femaleVisitor,
+                'Total'     => $request->femaleTotal,
+            ],
+            'male'          => [
+                'Student'   => $request->maleStudent,
+                'Faculty'   => $request->maleFaculty,
+                'Admin'     => $request->maleAdmin,
+                'Dependent' => $request->maleDependent,
+                'Visitor'   => $request->maleVisitor,
+                'Total'     => $request->maleTotal, 
+            ],
+            'pwd'           => [
+                'Student'   => $request->pwdStudent,
+                'Faculty'   => $request->pwdFaculty,
+                'Admin'     => $request->pwdAdmin,
+                'Dependent' => $request->pwdDependent,
+                'Visitor'   => $request->pwdVisitor,
+                'Total'     => $request->pwdTotal,
+             ],
+            'seniorCitizen' => [
+                'Student'   => $request->seniorCitizenStudent,
+                'Faculty'   => $request->seniorCitizenFaculty,
+                'Admin'     => $request->seniorCitizenAdmin,
+                'Dependent' => $request->seniorCitizenDependent,
+                'Visitor'   => $request->seniorCitizenVisitor,
+                'Total'     => $request->seniorCitizenTotal,
+             ],
+            'total'       => [
+                'Student'   => $request->totalStudent,
+                'Faculty'   => $request->totalFaculty,
+                'Admin'     => $request->totalAdmin,
+                'Dependent' => $request->totalDependent,
+                'Visitor'   => $request->totalVisitor,
+                'Overall'     => $request->totalOverall,
+            ],
         ];
         
         return Excel::download(new ReportsExport($data), 'medical_report.xlsx');

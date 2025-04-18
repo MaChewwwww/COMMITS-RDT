@@ -111,61 +111,70 @@
 
 </div>
 
-    <!-- Responsive Table -->
-    @if(count($reports) > 0)
-        <div class="overflow-x-auto">
-            <table class="w-full text-sm text-left text-black-500 dark:text-black-400">
-                <thead class="text-xs text-gray-700 uppercase bg-gray-200 text-black-700">
-                    <tr>
-                        <th class="px-6 py-3">Title</th>
-                        <th class="px-6 py-3">Name</th>
-                        <th class="px-6 py-3">Age</th>
-                        <th class="px-6 py-3">Sex</th>
-                        <th class="px-6 py-3">Complaint/Reason</th>
-                        <th class="px-6 py-3">Diagnosis</th>
-                        <th class="px-6 py-3">Remarks</th>
-                        <th class="px-6 py-3">Category</th>
-                        <th class="px-6 py-3">Actions</th>
-                    </tr>
-                </thead>
-                <tbody id="reportTableBody">
-                    @foreach ($reports as $report)
-                        <tr class="bg-white border-b">
-                            <td class="px-6 py-4">{{ $report->title }}</td>
-                            <td class="px-6 py-4">{{ $report->name }}</td>
-                            <td class="px-6 py-4">{{ $report->age }}</td>
-                            <td class="px-6 py-4">{{ $report->sex }}</td>
-                            <td class="px-6 py-4">{{ $report->complaint }}</td>
-                            <td class="px-6 py-4">{{ $report->diagnosis }}</td>
-                            <td class="px-6 py-4">{{ $report->remarks }}</td>
-                            <td class="px-6 py-4">{{ $report->category }}</td>
-                            <td class="flex px-6 py-4 gap-x-2">
-                            <button onclick='openEditModal(@json($report->toArray()))' class="px-3 py-2 text-white bg-yellow-500 rounded-md hover:bg-yellow-600">
-                            <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z"/>
-                            </svg>
-                        </button>
-                        <form action="{{ route('reports.destroy', $report->id) }}" method="POST">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="px-3 py-2 text-white bg-red-500 rounded-md hover:bg-red-600">
-                                <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-                                    <path fill-rule="evenodd" d="M8.586 2.586A2 2 0 0 1 10 2h4a2 2 0 0 1 2 2v2h3a1 1 0 1 1 0 2v12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V8a1 1 0 0 1 0-2h3V4a2 2 0 0 1 .586-1.414ZM10 6h4V4h-4v2Zm1 4a1 1 0 1 0-2 0v8a1 1 0 1 0 2 0v-8Zm4 0a1 1 0 1 0-2 0v8a1 1 0 1 0 2 0v-8Z" clip-rule="evenodd"/>
-                                </svg>
-                            </button>
-                                </form>
-                            </td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
+        <!-- Responsive Table -->
+        <div class="p-4 bg-white rounded-lg shadow">
+            @if (count($reports) > 0)
+                <div class="overflow-x-auto shadow-md">
+                    <table class="w-full text-sm text-left text-black-500">
+                        <thead class="text-xs text-gray-700 uppercase bg-gray-200 text-black-700">
+                            <tr>
+                                <th class="px-6 py-3">Title</th>
+                                <th class="px-6 py-3">Name</th>
+                                <th class="px-6 py-3">Age</th>
+                                <th class="px-6 py-3">Sex</th>
+                                <th class="px-6 py-3">Complaint/Reason</th>
+                                <th class="px-6 py-3">Diagnosis</th>
+                                <th class="px-6 py-3">Remarks</th>
+                                <th class="px-6 py-3">Category</th>
+                                <th class="px-6 py-3">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="reportTableBody">
+                            @foreach ($reports as $report)
+                                <tr class="bg-white border-b">
+                                    <td class="px-4 py-2">{{ $report->title }}</td>
+                                    <td class="px-4 py-2">{{ $report->name }}</td>
+                                    <td class="px-4 py-2">{{ $report->age }}</td>
+                                    <td class="px-4 py-2">{{ $report->sex }}</td>
+                                    <td class="px-4 py-2">{{ $report->complaint }}</td>
+                                    <td class="px-4 py-2">{{ $report->diagnosis }}</td>
+                                    <td class="px-4 py-2">{{ $report->remarks }}</td>
+                                    <td class="px-4 py-2">{{ $report->category }}</td>
+                                    <td class="flex px-4 py-2 gap-x-2">
+                                        <button title="Edit" onclick='openEditModal(@json($report->toArray()))'
+                                            class="px-3 py-2 text-white bg-yellow-500 rounded-md hover:bg-yellow-600">
+                                            <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z" />
+                                            </svg>
+                                        </button>
+                                        <form action="{{ route('reports.destroy', $report->id) }}" method="POST">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button title="Delete" type="submit"
+                                                class="px-3 py-2 text-white bg-red-500 rounded-md hover:bg-red-600">
+                                                <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg"
+                                                    fill="currentColor" viewBox="0 0 24 24">
+                                                    <path fill-rule="evenodd"
+                                                        d="M8.586 2.586A2 2 0 0 1 10 2h4a2 2 0 0 1 2 2v2h3a1 1 0 1 1 0 2v12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V8a1 1 0 0 1 0-2h3V4a2 2 0 0 1 .586-1.414ZM10 6h4V4h-4v2Zm1 4a1 1 0 1 0-2 0v8a1 1 0 1 0 2 0v-8Zm4 0a1 1 0 1 0-2 0v8a1 1 0 1 0 2 0v-8Z"
+                                                        clip-rule="evenodd" />
+                                                </svg>
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            @else
+                <div class="p-8 text-center">
+                    <p class="text-xl text-gray-600">No reports available.</p>
+                    <p class="mt-2 text-gray-500">Click on "Add Report" to create your first report.</p>
+                </div>
+            @endif
         </div>
-    @else
-        <div class="p-8 text-center">
-            <p class="text-xl text-gray-600">No reports available.</p>
-            <p class="mt-2 text-gray-500">Click on "Add Report" to create your first report.</p>
-        </div>
-    @endif
 
     <!-- Pagination -->
     <div class="mt-4">
@@ -238,19 +247,37 @@
                 <textarea id="complaint" placeholder="Type complaint reason here" name="complaint" class="w-full p-3 border rounded-md" required></textarea>
             </div>
 
-            <div>
-                <div class="flex flex-row gap-x-1">
-                    <label for="diagnosis" class="block text-sm font-semibold">Diagnosis</label><span class="text-red-500">*</span>
-                </div>
-                <select id="diagnosis" name="diagnosis" class="w-full p-2.5 border rounded-md" required>
-                    <option value="">Select Diagnosis</option>
-                    @foreach($services as $service)
-                        @if(!$loop->last) {{-- to not include the "Total Online Consult" --}}
-                            <option value="{{ $service['name'] }}">{{ $service['name'] }}</option>
+                <div>
+                    <div class="flex flex-row gap-x-1">
+                        <label for="diagnosis" class="block text-sm font-semibold">Diagnosis</label><span
+                            class="text-red-500">*</span>
+                    </div>
+                    <select id="diagnosis" name="diagnosis" class="w-full p-2.5 border rounded-md" required>
+                        <option value="">Select Diagnosis</option>
+                    
+                        @php $currentGroup = null; @endphp
+                    
+                        @foreach ($services as $service)
+                            @php
+                                $isGroup = filled($service['data'][5] ?? null) || filled($service['data'][4] ?? null); // detects if it's a header (e.g., 'III.')
+                            @endphp
+                    
+                            @if ($isGroup)
+                                @if ($currentGroup !== null)
+                                    </optgroup>
+                                @endif
+                                @php $currentGroup = $service['name']; @endphp
+                                <optgroup label="{{ $currentGroup }}">
+                            @else
+                                <option value="{{ $service['name'] }}">{{ $service['name'] }}</option>
+                            @endif
+                        @endforeach
+                    
+                        @if ($currentGroup !== null)
+                            </optgroup>
                         @endif
-                    @endforeach
-                </select>
-            </div>
+                    </select>                    
+                </div>
 
             <div>
                 <label for="remarks" class="block text-sm font-semibold">Remarks</label>
@@ -317,19 +344,20 @@
                 </div>
             </div>
 
-            <div>
-                <div class="flex flex-row gap-x-1">
-                    <label for="category" class="block text-sm font-semibold">Category</label><span class="text-red-500">*</span>
+                <div>
+                    <div class="flex flex-row gap-x-1">
+                        <label for="category" class="block text-sm font-semibold">Category</label><span
+                            class="text-red-500">*</span>
+                    </div>
+                    <select id="category" name="category" class="w-full p-2.5 border rounded-md" required>
+                        <option value="">Select category</option>
+                        <option value="students">Students</option>
+                        <option value="faculty">Faculty</option>
+                        <option value="administrative">Administrative</option>
+                        <option value="dependents">Dependents</option>
+                        <option value="visitors">Visitors</option>
+                    </select>
                 </div>
-                <select id="category" name="category" class="w-full p-2.5 border rounded-md" required>
-                    <option value="">Select category</option>
-                    <option value="students">Students</option>
-                    <option value="faculty">Faculty</option>
-                    <option value="administrative">Administrative</option>
-                    <option value="admin">Dependents</option>
-                    <option value="visitors">Visitors</option>
-                </select>
-            </div>
 
             <div>
                 <div class="flex flex-row gap-x-1">

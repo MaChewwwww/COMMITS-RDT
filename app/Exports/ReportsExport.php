@@ -41,10 +41,9 @@ class ReportsExport implements FromView, WithEvents
                 $event->sheet->mergeCells('A4:H4');
                 $event->sheet->mergeCells('A5:H5');
                 $event->sheet->mergeCells('A6:H6');
-                $event->sheet->mergeCells('A8:D8');
-                $event->sheet->mergeCells('A9:D9');
-                $event->sheet->mergeCells('E8:H8');
-                $event->sheet->mergeCells('E9:H9');
+                $event->sheet->mergeCells('B107:F109');
+
+                $event->sheet->getDelegate()->getStyle('B107')->getAlignment()->setWrapText(true);
 
                 // Center's a cell text/value
                 $event->sheet->getStyle('A1:H6')
@@ -57,12 +56,12 @@ class ReportsExport implements FromView, WithEvents
                 ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER)
                 ->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
 
-                $event->sheet->getStyle('B12:G76')
+                $event->sheet->getStyle('B12:F97')
                 ->getAlignment()
                 ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER)
                 ->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
 
-                $event->sheet->getStyle('B74:D76')
+                $event->sheet->getStyle('B99:E101')
                 ->getAlignment()
                 ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER)
                 ->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
