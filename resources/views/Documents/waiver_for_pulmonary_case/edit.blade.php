@@ -166,7 +166,9 @@
             </div>
         </div>
     </div>
-
+    
+    @include('Documents.waiver_for_pulmonary_case.edit-form')
+    {{--
     <!-- Modal -->
     <div id="editFormModal" class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 hidden">
         <div class="modal-content1 bg-white rounded-lg shadow-lg p-6 w-full max-w-lg relative">
@@ -283,11 +285,9 @@
             </div>
             <p class="text-lg font-semibold">Successfully Edited!</p>
         </div>
-    </div>
+    </div> --}}
 
 
-
-    @include('Documents.waiver_for_pulmonary_case.edit-form')
 @endsection
 
 @push('scripts')

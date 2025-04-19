@@ -5,9 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 class WaiverForPulmonaryCase extends Model
 {
+    use LogsActivity;
     use HasFactory, SoftDeletes;
     protected $table = 'waiver_for_pulmonary_cases'; 
     
@@ -29,6 +31,14 @@ class WaiverForPulmonaryCase extends Model
         'additional_followUpDate',
 
     ];
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logAll() // logs all fillable attributes
+            ->useLogName('document')
+            ->logOnlyDirty(); // only logs changes
+    }
 
     public function document()
     {

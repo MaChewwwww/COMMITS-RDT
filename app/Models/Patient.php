@@ -4,9 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 class Patient extends Model
 {
+    use LogsActivity;
     use HasFactory;
 
     /**
@@ -71,6 +73,13 @@ class Patient extends Model
         ];
     }
 
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logAll() // logs all fillable attributes
+            ->useLogName('patient')
+            ->logOnlyDirty(); // only logs changes
+    }
     /**
      * Get full name attribute
      *

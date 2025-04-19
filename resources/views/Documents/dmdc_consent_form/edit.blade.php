@@ -123,6 +123,7 @@
 
         <!-- Modal -->
         @include('Documents.dmdc_consent_form.edit-form')
+        {{--
         <div id="EditFormModal" class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 hidden">
             <div class="modal-content1 bg-white rounded-lg shadow-lg p-6 w-full max-w-lg relative">
                 <!-- Close Button in Top-Right -->
@@ -161,8 +162,7 @@
             </div>
         </div>
         <!-- Edit Modal -->
-        @include('Documents.dmdc_consent_form.edit-form')
-    </div>
+    </div>--}}
 @endsection
 
 @push('scripts')

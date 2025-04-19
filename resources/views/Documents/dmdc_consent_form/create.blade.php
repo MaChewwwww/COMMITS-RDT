@@ -122,6 +122,7 @@
 
         <!-- Modal -->
         @include('Documents.dmdc_consent_form.create-form')
+        {{--   
         <div id="addFormModal" class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 hidden">
             <div class="modal-content1 bg-white rounded-lg shadow-lg p-6 w-full max-w-lg relative">
                 <!-- Close Button in Top-Right -->
@@ -160,7 +161,7 @@
         @endforeach
             </div>
         </div>
-    </div>
+    </div> --}}
 @endsection
 
 @push('scripts')

@@ -122,6 +122,7 @@
                         </div>
                     </div>
                 </div>
+                @include('Documents.excuse_letter.edit-form')
                     <!-- Modal -->
                     <div id="editFormModal"
                         class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 hidden">
@@ -205,8 +206,6 @@
                         </div>
                     </div>
 
-
-    @include('Documents.excuse_letter.edit-form')
 @endsection
 
 @push('scripts')

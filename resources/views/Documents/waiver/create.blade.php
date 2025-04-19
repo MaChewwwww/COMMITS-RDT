@@ -142,6 +142,9 @@
             </div>
         </div>
     </div>
+
+    @include('Documents.waiver.create-form')
+    {{--
     <!-- Modal -->
     <div id="addFormModal" class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 hidden">
         <div class="modal-content1 bg-white rounded-lg shadow-lg p-6 w-full max-w-lg relative">
@@ -282,6 +285,7 @@
     @endforeach
         </div>
     </div>
+    --}}
     <!-- Success Notification -->
     <div id="successMessage" class="hidden fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
         <div class="bg-white rounded-lg shadow-lg p-6 w-96 text-center">
@@ -297,9 +301,9 @@
             <p class="text-lg font-semibold">Successfully Saved!</p>
         </div>
     </div>
+@endsection
 
-
-
+ @push('scripts')
     <script>
         function printWaiver() {
             window.print();

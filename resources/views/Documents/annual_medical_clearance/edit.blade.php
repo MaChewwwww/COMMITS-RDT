@@ -325,6 +325,7 @@
             // document.getElementById("addFormModal").classList.add("hidden");
             let modal = document.getElementById("addFormModal");
             let modalContent = modal.querySelector("div.relative");
+            modal.classList.add("hidden");
 
             modal.classList.add("opacity-0");
             modalContent.classList.remove("scale-100");

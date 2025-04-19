@@ -17,6 +17,7 @@ use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\SettingController;
 use Illuminate\Support\Facades\Auth;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
+use App\Http\Controllers\ActivityLogController;
 
 // Guest routes
 Route::middleware(['guest'])->group(function () {
@@ -261,9 +262,7 @@ Route::middleware(['auth'])->group((function () {
 
 
 
-        Route::get('/auditlogs', function () {
-            return view('SuperAdmin.Auditlog');
-        })->name('Auditlog');
+        Route::get('/activity-logs', [ActivityLogController::class, 'index'])->name('Auditlog');
     });
 }));
 

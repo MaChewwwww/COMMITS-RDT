@@ -182,14 +182,14 @@
                             </div>
                         </div>
                     </div>
+@endsection
 
-
-
+@push('scripts')
                     <!-- Modal Scripts -->
-                    <script>
-                        function goBack() {
-                            window.location.href = "{{ route('documents.index') }}";
-                        }
+    <script>
+        function goBack() {
+            window.location.href = "{{ route('documents.index') }}";
+        }
 
 
         function printWaiver() {

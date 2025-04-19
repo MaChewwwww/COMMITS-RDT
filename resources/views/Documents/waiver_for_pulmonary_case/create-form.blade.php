@@ -24,7 +24,10 @@
         <form action="{{ route('documents.waiver_for_pulmonary_case.store') }}" method="POST"
             class="max-h-[80vh] overflow-y-auto ">
             @csrf
-            <input type="hidden" name="document_type" value="{{ request('document_type') }}">
+                    <input type="hidden" name="document_type" value="{{ request('document_type') }}">
+                    <input type="hidden" name="control_number" value="{{ $control->control_number }}">
+                    <input type="hidden" name="revision" value="{{ $control->revision }}">
+                    <input type="hidden" name="date_issued" value="{{ $control->date_issued }}">
             <h4 class="block mb-3 text-lg font-semibold text-blue-500 text-center">Form 1</h4>
             <div class="grid gap-4 mb-4 sm:grid-cols-2 px-2">
                 <!-- Date Field -->
