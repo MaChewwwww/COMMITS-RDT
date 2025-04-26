@@ -195,10 +195,9 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/', [ReportController::class, 'store'])->name('reports.store');
 
         // Delete a report
-        Route::delete('/{id}', [ReportController::class, 'destroy'])->name('reports.destroy');
-
+        Route::post('/delete', [ReportController::class, 'destroy'])->name('reports.destroy');
         Route::get('/{id}/edit', [ReportController::class, 'edit'])->name('reports.edit');
-        Route::put('/{id}', [ReportController::class, 'update'])->name('reports.update');
+        Route::put('/update', [ReportController::class, 'update'])->name('reports.update');
         Route::get('/reports/export-excel', [ReportController::class, 'exportExcel'])->name('reports.exportExcel');
     });
 

@@ -21,7 +21,7 @@
             </button>
         </div>
         <!-- Modal body -->
-        <form onsubmit="saveEdit()" class="max-h-[80vh] overflow-y-auto " id="editReportForm">
+        <form onsubmit="saveEdit(event)" class="max-h-[80vh] overflow-y-auto " id="editReportForm">
             @csrf
             <div class="grid gap-4 px-2 mb-4 sm:grid-cols-2">
                 <div>
@@ -39,30 +39,18 @@
                         placeholder="Enter physician's full name" required="">
                 </div>
                 <div>
-                    <label class="block mb-2 text-sm font-medium text-gray-900">Duration date <span
-                            class="text-red-500">*</span></label>
-                    <div>
-                        <label class="block mb-2 text-sm font-medium text-gray-900">From</label>
-                        <input type="datetime-local" id="fromDurationDate" name="fromDurationDate"
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-2 focus:outline-none focus:ring-blue-500 block w-full p-2.5"
-                            required>
-                    </div>
+                    <label for="position" class="block mb-2 text-sm font-medium text-gray-900">Position
+                        <span class="text-red-500">*</span></label>
+                    <input type="text" name="position" id="position"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-2 focus:outline-none focus:ring-blue-500 block w-full p-2.5"
+                        placeholder="Enter position" required="">
                 </div>
                 <div>
-                    <label class="block mb-2 text-sm font-medium text-transparent">Duration date</label>
-                    <div>
-                        <label for="toDurationDate" class="block mb-2 text-sm font-medium text-gray-900">To</label>
-                        <input type="datetime-local" id="toDurationDate" name="toDurationDate"
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-2 focus:outline-none focus:ring-blue-500 block w-full p-2.5"
-                            required>
-                    </div>
-                </div>
-                <div class="col-span-2">
-                    <label for="submissionDate" class="block mb-2 text-sm font-medium text-gray-900">Date of submission
-                        <span class="text-red-500">*</span></label>
-                    <input type="datetime-local" id="submissionDate" name="submissionDate"
+                    <label for="unitDepartment" class="block mb-2 text-sm font-medium text-gray-900">Unit / Department <span
+                            class="text-red-500">*</span></label>
+                    <input type="text" name="unitDepartment" id="unitDepartment"
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-2 focus:outline-none focus:ring-blue-500 block w-full p-2.5"
-                        required>
+                        placeholder="Enter unit / department" required="">
                 </div>
                 <div>
                     <label for="campusPhysician" class="block mb-2 text-sm font-medium text-gray-900">Campus Physician
@@ -79,53 +67,65 @@
                         placeholder="Enter campus nurse's full name" required="">
                 </div>
                 <div>
-                    <label class="block mb-2 text-sm font-medium text-gray-900">Total face to face consultations <span
+                    <label class="block mb-2 text-sm font-medium text-gray-900">Duration date <span
                             class="text-red-500">*</span></label>
                     <div>
-                        <label class="block mb-2 text-sm font-medium text-gray-900">Male</label>
-                        <input type="number" id="f2fConsultMale" name="f2fConsultMale"
+                        <label class="block mb-2 text-sm font-medium text-gray-900">From</label>
+                        <input type="datetime-local" id="fromDurationDate" name="fromDurationDate"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-2 focus:outline-none focus:ring-blue-500 block w-full p-2.5"
                             required>
                     </div>
                 </div>
                 <div>
-                    <label class="block mb-2 text-sm font-medium text-transparent">Total face to face
-                        consultations</label>
+                    <label class="block mb-2 text-sm font-medium text-transparent">Duration date </label>
                     <div>
-                        <label for="toDurationDate" class="block mb-2 text-sm font-medium text-gray-900">Female</label>
-                        <input type="number" id="f2fConsultFemale" name="f2fConsultFemale"
+                        <label for="toDurationDate" class="block mb-2 text-sm font-medium text-gray-900">To</label>
+                        <input type="datetime-local" id="toDurationDate" name="toDurationDate"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-2 focus:outline-none focus:ring-blue-500 block w-full p-2.5"
                             required>
                     </div>
-
                 </div>
                 <div>
-                    <label class="block mb-2 text-sm font-medium text-gray-900">Total online consultations <span
+                    <div>
+                        <label for="submissionDate" class="block mb-2 text-sm font-medium text-gray-900">Date of submission
+                            <span class="text-red-500">*</span></label>
+                        <input type="datetime-local" id="submissionDate" name="submissionDate"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-2 focus:outline-none focus:ring-blue-500 block w-full p-2.5"
+                            required>
+                    </div>
+                </div>
+                <div>
+                    <div>
+                        <label for="controlNumberDate" class="block mb-2 text-sm font-medium text-gray-900">Control number date <span
+                            class="text-red-500">*</span></label></label>
+                        <input type="datetime-local" id="controlNumberDate" name="controlNumberDate"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-2 focus:outline-none focus:ring-blue-500 block w-full p-2.5"
+                            required>
+                    </div>
+                </div>
+                <div>
+                    <label for="controlNumber" class="block mb-2 text-sm font-medium text-gray-900">Control number <span
                             class="text-red-500">*</span></label>
-                    <div>
-                        <label class="block mb-2 text-sm font-medium text-gray-900">Male</label>
-                        <input type="number" id="onlineConsultMale" name="onlineConsultMale"
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-2 focus:outline-none focus:ring-blue-500 block w-full p-2.5"
-                            required>
-                    </div>
+                    <input type="text" name="controlNumber" id="controlNumber"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-2 focus:outline-none focus:ring-blue-500 block w-full p-2.5"
+                        placeholder="Enter control number" required="">
                 </div>
+            
                 <div>
-                    <label class="block mb-2 text-sm font-medium text-transparent">Total online consultations</label>
-                    <div>
-                        <label for="onlineConsultMale"
-                            class="block mb-2 text-sm font-medium text-gray-900">Female</label>
-                        <input type="number" id="onlineConsultMale" name="onlineConsultMale"
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-2 focus:outline-none focus:ring-blue-500 block w-full p-2.5"
-                            required>
-                    </div>
+                    <label for="controlNumberRevision" class="block mb-2 text-sm font-medium text-gray-900">Revision <span
+                            class="text-red-500">*</span></label>
+                    <input type="number" name="controlNumberRevision" id="controlNumberRevision"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-2 focus:outline-none focus:ring-blue-500 block w-full p-2.5"
+                        placeholder="Enter number of revisions" required="">
                 </div>
             </div>
+            {{-- action buttons --}}
             <div class="flex items-center justify-end w-full gap-3 mt-6">
                 <button type="button" onclick="closeModal()"
                     class="flex justify-center w-full px-4 py-3 text-sm font-medium text-gray-700 transition-colors bg-white border border-gray-300 rounded-lg focus:ring-4 focus:outline-none focus:ring-gray-300 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 sm:w-auto">
                     Close
                 </button>
-                <button id="submitBtn" type="submit"
+                <button id="submitBtn" onclick="saveEdit()" type="submit"
                     class="flex justify-center w-full px-4 py-3 text-sm font-medium text-white bg-green-500 rounded-lg focus:ring-4 focus:outline-none focus:ring-green-300 hover:bg-green-600 bg-brand-500 shadow-theme-xs hover:bg-brand-600 sm:w-auto">
                     Save Changes
                 </button>
