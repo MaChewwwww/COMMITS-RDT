@@ -25,7 +25,7 @@
             @csrf
             @method('PUT')
             <input type="hidden" id="report_id" name="id">
-            <div class="grid gap-4 mb-4 sm:grid-cols-2">
+            <div class="grid gap-4 px-3 mb-4 sm:grid-cols-2">
                 <div>
                     <label for="title" class="block mb-2 text-sm font-medium text-gray-900">Report title <span
                             class="text-red-500">*</span></label>
@@ -96,7 +96,7 @@
                         placeholder="Type remarks here"></textarea>
                 </div>
             </div>
-            <div class="flex items-center justify-end w-full gap-3 mt-6">
+            <div class="flex items-center justify-end w-full gap-3 px-3 mt-6 mb-4">
                 <button type="button" onclick="hideEditReportModal()"
                     class="flex justify-center w-full px-4 py-3 text-sm font-medium text-gray-700 transition-colors bg-white border border-gray-300 rounded-lg focus:ring-4 focus:outline-none focus:ring-gray-300 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 sm:w-auto">
                     Close

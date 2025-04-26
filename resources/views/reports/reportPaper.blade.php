@@ -15,12 +15,12 @@
     </div>
 
     <div class="flex flex-row justify-end pb-6 pr-16 text-white gap-x-5">
-        <button title="Edit" onclick=openModal() class="relative flex flex-col items-center px-3 py-2 space-y-1 font-bold text-blue-500 bg-blue-100 rounded-lg group hover:bg-blue-200 hover:text-blue-600">
+        <button title="Edit" onclick=openEditFormModal() class="relative flex flex-col items-center px-3 py-2 space-y-1 font-bold text-blue-500 bg-blue-100 rounded-lg group hover:bg-blue-200 hover:text-blue-600">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-6">
                 <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
               </svg>              
         </button>
-        <button title="Print" onclick=printDiv() class="relative flex flex-col items-center px-3 py-2 space-y-1 font-bold text-blue-500 bg-blue-100 rounded-lg group hover:bg-blue-200 hover:text-blue-600">
+        <button title="Print" onclick=printReportPaper() class="relative flex flex-col items-center px-3 py-2 space-y-1 font-bold text-blue-500 bg-blue-100 rounded-lg group hover:bg-blue-200 hover:text-blue-600">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
                 stroke="currentColor" class="size-6">
                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -480,25 +480,24 @@
                 }
             };
         });
+        // expands the text area in VII. BULLETIN UPDATES
         function autoExpand(field) {
             field.style.height = 'auto';
             field.style.height = field.scrollHeight + 'px';
         }
-
-        // Optional: if you want the textarea to size itself on page‐load
-        document.querySelectorAll('textarea[oninput="autoExpand(this)"]')
-            .forEach(t => autoExpand(t));
         // print report paper
-        function printDiv() {
+        function printReportPaper() {
             // Update the remarks input's attribute so the printed HTML contains the current value
             const remarkInputs = document.querySelectorAll('.remarks-input');
             remarkInputs.forEach(function(input) {
                 input.setAttribute('value', input.value);
             });
+            // Update the table5 to have their values in the printed HTML
             const table5Inputs = document.querySelectorAll('#table5 input[type="number"], #table5 input[type="text"]');
             table5Inputs.forEach(function(input) {
                 input.setAttribute('value', input.value);
             });
+            // Update the textarea in table3 to include its values in the printed HTML
             const textareas = document.querySelectorAll('.textarea-input');
             textareas.forEach(function(ta) {
                 ta.textContent = ta.value;
@@ -646,9 +645,9 @@
                 printWindow.close();
             };
         }
-        function openModal() { 
+        function openEditFormModal() { 
             // Get the values from the form
-            let modal = document.getElementById("editModal");
+            let modal = document.getElementById("editFormModal");
             let modalContent = modal.querySelector("div.relative");
 
             modal.classList.remove("hidden");
@@ -658,8 +657,8 @@
                 modalContent.classList.add("scale-100");
             }, 10);
         }
-        function closeModal() { 
-            let modal = document.getElementById("editModal");
+        function closeEditFormModal() { 
+            let modal = document.getElementById("editFormModal");
             let modalContent = modal.querySelector("div.relative");
 
             modal.classList.add("opacity-0");
@@ -792,7 +791,7 @@
                 
                 // Handle success response
                 // Update table inputs based on the returned services array.
-                // populates the table
+                // populates the table1
                 const table1Rows = document.querySelectorAll('#table1 tbody tr');
                 services.forEach((service, serviceIndex) => {
                     if (table1Rows[serviceIndex]) {
@@ -802,7 +801,7 @@
                     });
                     }
                 });
-
+                // populates the table2
                 const table2Rows = document.querySelectorAll('#table2 tbody tr');
                 services.forEach((service, serviceIndex) => {
                     if (serviceIndex >= 86) {
@@ -833,7 +832,7 @@
                 console.error('Error:', error);
             });
 
-            closeModal();
+            closeEditFormModal();
         }
         function setupAutoSum() {
             const groups = ['female', 'male', 'pwd', 'seniorCitizen'];

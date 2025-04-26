@@ -1,4 +1,4 @@
-<div id="editModal" tabindex="-1" aria-hidden="true"
+<div id="editFormModal" tabindex="-1" aria-hidden="true"
     class="fixed inset-0 z-50 flex items-center justify-center hidden transition-opacity duration-300 ease-out opacity-0 bg-black/50">
     <!-- Modal content -->
     <div
@@ -8,7 +8,7 @@
             <h3 class="text-lg font-semibold text-gray-900">
                 Edit Report Paper
             </h3>
-            <button type="button" onclick="closeModal()"
+            <button type="button" onclick="closeEditFormModal()"
                 class="inline-flex items-center p-2 ml-auto text-sm text-gray-400 bg-gray-200 rounded-full focus:ring-4 focus:outline-none focus:ring-gray-300 hover:bg-gray-300 hover:text-gray-900"
                 data-modal-toggle="editReportModal">
                 <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
@@ -23,7 +23,7 @@
         <!-- Modal body -->
         <form onsubmit="saveEdit(event)" class="max-h-[80vh] overflow-y-auto " id="editReportForm">
             @csrf
-            <div class="grid gap-4 px-2 mb-4 sm:grid-cols-2">
+            <div class="grid gap-4 px-2 mx-3 mb-4 sm:grid-cols-2">
                 <div>
                     <label for="title" class="block mb-2 text-sm font-medium text-gray-900">Report title <span
                             class="text-red-500">*</span></label>
@@ -120,8 +120,8 @@
                 </div>
             </div>
             {{-- action buttons --}}
-            <div class="flex items-center justify-end w-full gap-3 mt-6">
-                <button type="button" onclick="closeModal()"
+            <div class="flex items-center justify-end w-full gap-3 pr-5 mt-6 mb-4">
+                <button type="button" onclick="closeEditFormModal()"
                     class="flex justify-center w-full px-4 py-3 text-sm font-medium text-gray-700 transition-colors bg-white border border-gray-300 rounded-lg focus:ring-4 focus:outline-none focus:ring-gray-300 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 sm:w-auto">
                     Close
                 </button>
