@@ -16,38 +16,38 @@
             </button>
         </div>
 
-        <div class="bg-white p-4 shadow rounded-lg">
+        <div class="p-4 bg-white rounded-lg shadow">
             <!-- Tab Navigation -->
             <div class="">
                 <nav class="flex -mb-px space-x-3 overflow-x-auto" aria-label="Tabs">
                     <!-- Tab buttons for filtering patients -->
                     <button type="button"
-                        class="px-4 py-2 text-base rounded text-gray-800 border-b-2 rounded-t border-blue-500 bg-blue-50 tab-btn whitespace-nowrap active hover:text-gray-700"
+                        class="px-4 py-2 text-base text-gray-800 border-b-2 border-blue-500 rounded rounded-t bg-blue-50 tab-btn whitespace-nowrap active hover:text-gray-700"
                         data-filter="all">
                         All Patients
                     </button>
                     <button type="button"
-                        class="text-base text-gray-500 px-4 py-2 border-b-2 border-gray-300 rounded cursor-pointer tab-btn whitespace-nowrap hover:text-gray-700"
+                        class="px-4 py-2 text-base text-gray-500 border-b-2 border-gray-300 rounded cursor-pointer tab-btn whitespace-nowrap hover:text-gray-700"
                         data-filter="Student">
                         Students
                     </button>
                     <button type="button"
-                        class="text-base text-gray-500 px-4 py-2 border-b-2 border-gray-300 rounded cursor-pointer tab-btn whitespace-nowrap hover:text-gray-700"
+                        class="px-4 py-2 text-base text-gray-500 border-b-2 border-gray-300 rounded cursor-pointer tab-btn whitespace-nowrap hover:text-gray-700"
                         data-filter="Faculty">
                         Faculty
                     </button>
                     <button type="button"
-                        class="text-base text-gray-500 px-4 py-2 border-b-2 border-gray-300 rounded cursor-pointer tab-btn whitespace-nowrap hover:text-gray-700"
+                        class="px-4 py-2 text-base text-gray-500 border-b-2 border-gray-300 rounded cursor-pointer tab-btn whitespace-nowrap hover:text-gray-700"
                         data-filter="Admin">
                         Administrative
                     </button>
                     <button type="button"
-                        class="text-base text-gray-500 px-4 py-2 border-b-2 border-gray-300 rounded cursor-pointer tab-btn whitespace-nowrap hover:text-gray-700"
+                        class="px-4 py-2 text-base text-gray-500 border-b-2 border-gray-300 rounded cursor-pointer tab-btn whitespace-nowrap hover:text-gray-700"
                         data-filter="Visitor">
                         Visitors
                     </button>
                     <button type="button"
-                        class="text-base text-gray-500 px-4 py-2 border-b-2 border-gray-300 rounded cursor-pointer tab-btn whitespace-nowrap hover:text-gray-700"
+                        class="px-4 py-2 text-base text-gray-500 border-b-2 border-gray-300 rounded cursor-pointer tab-btn whitespace-nowrap hover:text-gray-700"
                         data-filter="Dependent">
                         Dependents
                     </button>
@@ -56,10 +56,10 @@
 
             <!-- Table Container -->
             <div class="mt-4">
-                <div class="overflow-x-auto shadow-sm rounded-lg">
+                <div class="overflow-x-auto rounded-lg shadow-sm">
                     <table class="min-w-full bg-white">
                         <thead>
-                            <tr class="border-b border-gray-200 bg-gray-100">
+                            <tr class="bg-gray-100 border-b border-gray-200">
                                 <!-- Table headers -->
                                 <th class="px-6 py-3 text-left group">
                                     <div class="flex items-center gap-x-2">
@@ -215,7 +215,7 @@
                                                                         <button type="button" 
                                                                             class="px-3 py-1.5 text-sm text-white transition-colors duration-200 bg-blue-500 rounded-lg hover:bg-blue-600"
                                                                             onclick="printPrescription({{ $prescription->id }}, '{{ $patient->fullname }}', '{{ $patient->sex }}', '{{ $patient->age ?? '' }}', '{{ $prescription->medicine ? $prescription->medicine->medicine_name : 'Medicine unavailable' }}', {{ $prescription->quantity }}, '{{ $prescription->medicine ? $prescription->medicine->unit : '' }}', '{{ $prescription->created_at->format('M d, Y') }}', '{{ $patient->physician ? $patient->physician->first_name . ' ' . $patient->physician->last_name : 'Not assigned' }}', '{{ $patient->physician ? $patient->physician->license_number ?? '' : '' }}')">
-                                                                            <i class="fas fa-print mr-1"></i> Print
+                                                                            <i class="mr-1 fas fa-print"></i> Print
                                                                         </button>
                                                                     </div>
                                                                 </div>
@@ -365,7 +365,7 @@
                             <div class="grid grid-cols-3 gap-2">
                                 <div>
                                     <div class="flex"><x-input-label value="First Name " /><span
-                                            class="text-red-500 ml-1">*</span></div>
+                                            class="ml-1 text-red-500">*</span></div>
                                     <input type="text" name="firstName"
                                         class="w-full px-2 py-2.5 text-sm rounded-lg border border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 transition-all"
                                         placeholder="First Name" required>
@@ -378,7 +378,7 @@
                                 </div>
                                 <div>
                                     <div class="flex"><x-input-label value="Last Name " /><span
-                                            class="text-red-500 ml-1">*</span></div>
+                                            class="ml-1 text-red-500">*</span></div>
                                     <input type="text" name="lastName"
                                         class="w-full px-2 py-2.5 text-sm rounded-lg border border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 transition-all"
                                         placeholder="Last Name" required>
@@ -387,7 +387,7 @@
                             <div class="grid grid-cols-2 gap-4">
                                 <div>
                                     <div class="flex"><x-input-label value="Sex " /><span
-                                            class="text-red-500 ml-1">*</span></div>
+                                            class="ml-1 text-red-500">*</span></div>
                                     <select name="sex"
                                         class="w-full px-2 py-2.5 text-sm rounded-lg border border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 transition-all"
                                         required>
@@ -398,7 +398,7 @@
                                 </div>
                                 <div>
                                     <div class="flex"><x-input-label value="Contact Number " /><span
-                                            class="text-red-500 ml-1">*</span></div>
+                                            class="ml-1 text-red-500">*</span></div>
                                     <input type="tel" name="contactDetails"
                                         class="w-full px-2 py-2.5 text-sm rounded-lg border border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 transition-all"
                                         placeholder="Contact Number" pattern="[0-9]{11}"
@@ -410,7 +410,7 @@
                             <div class="grid grid-cols-2 gap-4">
                                 <div>
                                     <div class="flex"><x-input-label value="Patient Type" /><span
-                                            class="text-red-500 ml-1">*</span></div>
+                                            class="ml-1 text-red-500">*</span></div>
                                     <select name="patientType"
                                         class="w-full px-2 py-2.5 text-sm rounded-lg border border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 transition-all"
                                         required>
@@ -424,14 +424,14 @@
                                 </div>
                                 <div>
                                     <div class="flex"><x-input-label value="Year/Course/Dept" /><span
-                                            class="text-red-500 ml-1">*</span></div>
+                                            class="ml-1 text-red-500">*</span></div>
                                     <input type="text" name="year_course_dept"
                                         class="w-full px-2 py-2.5 text-sm rounded-lg border border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 transition-all"
                                         placeholder="Year/Course/Dept">
                                 </div>
                                 <div class="col-span-2">
                                     <div class="flex"><x-input-label value="Student Number" /><span
-                                            class="text-red-500 ml-1">*</span></div>
+                                            class="ml-1 text-red-500">*</span></div>
                                     <input type="text" name="student_number"
                                         class="w-full px-2 py-2.5 text-sm rounded-lg border border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 transition-all"
                                         placeholder="Enter student number">
@@ -442,14 +442,14 @@
                             <div class="grid grid-cols-2 gap-4">
                                 <div>
                                     <div class="flex"><x-input-label value="Patient Status" /><span
-                                            class="text-red-500 ml-1">*</span></div>
+                                            class="ml-1 text-red-500">*</span></div>
                                     <input type="text" name="patient_status"
                                         class="w-full px-2 py-2.5 text-sm rounded-lg border border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 transition-all"
                                         placeholder="Enter patient status" required>
                                 </div>
                                 <div>
                                     <div class="flex"><x-input-label value="Physician" /><span
-                                            class="text-red-500 ml-1">*</span></div>
+                                            class="ml-1 text-red-500">*</span></div>
                                     <select name="physician_id"
                                         class="w-full px-2 py-2.5 text-sm rounded-lg border border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 transition-all"
                                         required>
@@ -518,7 +518,7 @@
                                 <div class="grid grid-cols-3 gap-2">
                                     <div>
                                         <div class="flex"><x-input-label value="First Name" /><span
-                                                class="text-red-500 ml-1">*</span></div>
+                                                class="ml-1 text-red-500">*</span></div>
                                         <input type="text" name="firstName"
                                             class="w-full px-2 py-2.5 text-sm rounded-lg border border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 transition-all"
                                             value="{{ $patient->firstName }}" placeholder="First Name" disabled required>
@@ -531,7 +531,7 @@
                                     </div>
                                     <div>
                                         <div class="flex"><x-input-label value="Last Name" /><span
-                                                class="text-red-500 ml-1">*</span></div>
+                                                class="ml-1 text-red-500">*</span></div>
                                         <input type="text" name="lastName"
                                             class="w-full px-2 py-2.5 text-sm rounded-lg border border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 transition-all"
                                             value="{{ $patient->lastName }}" placeholder="Last Name" disabled required>
@@ -540,7 +540,7 @@
                                 <div class="grid grid-cols-2 gap-4">
                                     <div>
                                         <div class="flex"><x-input-label value="Sex" /><span
-                                                class="text-red-500 ml-1">*</span></div>
+                                                class="ml-1 text-red-500">*</span></div>
                                         <select name="sex"
                                             class="w-full px-2 py-2.5 text-sm rounded-lg border border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 transition-all"
                                             disabled required>
@@ -552,7 +552,7 @@
                                     </div>
                                     <div>
                                         <div class="flex"><x-input-label value="Contact Number" /><span
-                                                class="text-red-500 ml-1">*</span></div>
+                                                class="ml-1 text-red-500">*</span></div>
                                         <input type="tel" name="contactDetails"
                                             class="w-full px-2 py-2.5 text-sm rounded-lg border border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 transition-all"
                                             value="{{ $patient->contactDetails }}" placeholder="Contact Number *"
@@ -564,7 +564,7 @@
                                 <div class="grid grid-cols-2 gap-4">
                                     <div>
                                         <div class="flex"><x-input-label value="Patient Type" /><span
-                                                class="text-red-500 ml-1">*</span></div>
+                                                class="ml-1 text-red-500">*</span></div>
                                         <select name="patientType"
                                             class="w-full px-2 py-2.5 text-sm rounded-lg border border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 transition-all"
                                             disabled required>
@@ -583,7 +583,7 @@
                                     </div>
                                     <div>
                                         <div class="flex"><x-input-label value="Year/Course/Dept" /><span
-                                                class="text-red-500 ml-1">*</span></div>
+                                                class="ml-1 text-red-500">*</span></div>
                                         <input type="text" name="year_course_dept"
                                             class="w-full px-2 py-2.5 text-sm rounded-lg border border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 transition-all"
                                             value="{{ $patient->year_course_dept }}" placeholder="Year/Course/Dept"
@@ -591,7 +591,7 @@
                                     </div>
                                     <div class="col-span-2">
                                         <div class="flex"><x-input-label value="Student Number" /><span
-                                                class="text-red-500 ml-1">*</span></div>
+                                                class="ml-1 text-red-500">*</span></div>
                                         <input type="text" name="student_number"
                                             class="w-full px-2 py-2.5 text-sm rounded-lg border border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 transition-all"
                                             value="{{ $patient->student_number }}" placeholder="Student Number" disabled>
@@ -602,7 +602,7 @@
                                 <div class="grid grid-cols-2 gap-4">
                                     <div>
                                         <div class="flex"><x-input-label value="Patient Status" /><span
-                                                class="text-red-500 ml-1">*</span></div>
+                                                class="ml-1 text-red-500">*</span></div>
                                         <input type="text" name="patient_status"
                                             class="w-full px-2 py-2.5 text-sm rounded-lg border border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 transition-all"
                                             placeholder="Patient Status *" value="{{ $patient->patient_status }}"
@@ -610,7 +610,7 @@
                                     </div>
                                     <div>
                                         <div class="flex"><x-input-label value="Physician" /><span
-                                                class="text-red-500 ml-1">*</span></div>
+                                                class="ml-1 text-red-500">*</span></div>
                                         <select name="physician_id"
                                             class="w-full px-2 py-2.5 text-sm rounded-lg border border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 transition-all"
                                             disabled>
@@ -838,9 +838,9 @@
         document.body.insertAdjacentHTML('beforeend', `
             <div id="prescriptionPrintModal" class="fixed inset-0 z-50 hidden overflow-y-auto">
                 <div class="flex min-h-screen text-center sm:block">
-                    <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
-                    <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-                        <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                    <div class="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75"></div>
+                    <div class="inline-block overflow-hidden text-left align-bottom transition-all transform bg-white rounded-lg shadow-xl sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                        <div class="px-4 pt-5 pb-4 bg-white sm:p-6 sm:pb-4">
                             <div class="prescription-form">
                                 <div class="prescription-control-section no-print">
                                     <div class="control-number-box">
@@ -886,12 +886,12 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="bg-gray-50 px-4 py-4 sm:px-6 sm:flex sm:flex-row-reverse no-print">
+                        <div class="px-4 py-4 bg-gray-50 sm:px-6 sm:flex sm:flex-row-reverse no-print">
                             <button type="button" onclick="window.print()" aria-label="Print Prescription" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2.5 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm">
-                                <i class="fas fa-print mr-2" aria-hidden="true"></i> Print
+                                <i class="mr-2 fas fa-print" aria-hidden="true"></i> Print
                             </button>
                             <button type="button" onclick="closePrintModal()" aria-label="Close Modal" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2.5 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
-                                <i class="fas fa-times mr-2" aria-hidden="true"></i> Close
+                                <i class="mr-2 fas fa-times" aria-hidden="true"></i> Close
                             </button>
                         </div>
                     </div>
