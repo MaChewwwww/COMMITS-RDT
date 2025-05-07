@@ -17,7 +17,8 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\SettingController;
 use Illuminate\Support\Facades\Auth;
-
+use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
+use App\Http\Controllers\ActivityLogController;
 
 // Guest routes
 Route::middleware(['guest'])->group(function () {
@@ -185,8 +186,10 @@ Route::middleware(['auth'])->group(function () {
 
         }
     });
-
-    // Report Routes
+    //Control Number
+    Route::post('/documents', [DocumentController::class, 'ControlNumber'])->name('control-numbers.store');
+    Route::put('/documents/{id}', [DocumentController::class, 'updateControlNumber'])->name('control-numbers.update');
+    Route::get('/documents/edit/{id}', [DocumentController::class, 'editControlNumber'])->name('control-number.edit');    // Report Routes
     Route::prefix('reports')->group(function () {
 
         // Display a list of reports, allowing filters
@@ -245,14 +248,26 @@ Route::middleware(['auth'])->group(function () {
 
 
 //Super Admin
-Route::get('/Superadmin_dashboard', function () {
-    return view('SuperAdmin.Superadmin_dashboard');
-})->name('Superadmin_dashboard');
+Route::middleware(['auth', 'superadmin'])->group(function () {
+    Route::prefix('admin')->group(function () {
 
-Route::get('/User', function () {
-    return view('SuperAdmin.User');
-})->name('User');
+        Route::get('/', function () {
+            return redirect()->route('Superadmin_dashboard');
+        });
 
-Route::get('/Auditlog', function () {
-    return view('SuperAdmin.Auditlog');
-})->name('Auditlog');
+        //Dashboard
+        Route::get('/dashboard', [DashboardController::class, 'superadminDashboard'])->name('Superadmin_dashboard');
+
+        // User management
+        Route::prefix('users')->group(function () {
+            Route::get('/', [UserController::class, 'getUsers'])->name('users.get');
+            // Add this to your routes/web.php
+            Route::get('/admin/users/add', [UserController::class, 'create'])->name('user.create');
+            Route::post('/admin/users/add', [UserController::class, 'store'])->name('user.store');
+            Route::post('/edit', [UserController::class, 'update'])->name('user.update');
+            Route::post('/delete', [UserController::class, 'delete'])->name('user.destroy');
+        });
+
+        Route::get('/activity-logs', [ActivityLogController::class, 'index'])->name('Auditlog');
+    });
+});

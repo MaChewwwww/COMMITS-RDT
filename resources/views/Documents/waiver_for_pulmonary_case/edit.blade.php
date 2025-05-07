@@ -39,6 +39,11 @@
     <div class="container mx-auto bg-white md:py-20 md:px-20 w-[90%] md:w-[70%] lg:w-[70%]">
         <div class="page">
             <div class="container">
+                    <div class="flex flex-col items-end text-xs leading-tight text-gray-800">
+                        <p>{{ $associatedDocument->control_number ?? '__________' }}</p>
+                        <p>Rev. {{ $associatedDocument->revision ?? '_________'}}</p>
+                        <p>{{ \Carbon\Carbon::parse($associatedDocument->date_issued)->format('F j, Y') ?? '__________' }} </p>
+                    </div>
                 <div class="flex items-center justify-center mb-5">
                     <div class="mr-5">
                         <img src="{{ asset('Logo_image/logopup.png') }}" alt="Logo" class="w-28 mb-5">
@@ -97,6 +102,11 @@
     <!-- Document 2 (duplicate the structure as needed) -->
     <div class="container mx-auto bg-white md:py-20 md:px-20 w-[90%] md:w-[70%] lg:w-[70%]">
         <div class="container2 mt-15">
+                    <div class="flex flex-col items-end text-xs leading-tight text-gray-800">
+                        <p>{{ $associatedDocument->control_number ?? '__________' }}</p>
+                        <p>Rev. {{ $associatedDocument->revision ?? '_________'}}</p>
+                        <p>{{ \Carbon\Carbon::parse($associatedDocument->date_issued)->format('F j, Y') ?? '__________' }} </p>
+                    </div>
             <div class="flex items-center justify-center mb-5">
                 <div class="mr-5">
                     <img src="{{ asset('Logo_image/logopup.png') }}" alt="Logo" class="w-28 mb-5">
@@ -156,9 +166,128 @@
             </div>
         </div>
     </div>
-
-    <!-- Modal -->
+    
     @include('Documents.waiver_for_pulmonary_case.edit-form')
+    {{--
+    <!-- Modal -->
+    <div id="editFormModal" class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 hidden">
+        <div class="modal-content1 bg-white rounded-lg shadow-lg p-6 w-full max-w-lg relative">
+            <!-- Close Button in Top-Right -->
+            <span class="close absolute top-2.5 right-2.5 text-red-500 text-2xl cursor-pointer hover:text-red-700"
+                onclick="closeEditForm()">&times;</span>
+
+            <!-- Modal Title -->
+            <h3 class="text-xl font-bold mb-4 text-gray-700">Edit Waiver For Pulmonary Case Form</h3>
+
+            <!-- Form Container -->
+            <div id="formContainer" class="space-y-4">
+                <!-- Date Field -->
+                <!-- Form 1 Inputs -->
+            <form action="{{ route('documents.waiver.update', $document->id) }}" method="POST">
+                <h2 class="text-xl font-medium mb-4 mt-6 text-gray-700 text-center">Form 1</h2>
+                @csrf
+                @method('PUT')
+                <div class="form-group">
+                                    <input type="hidden" name="document_type" value="{{ $document->document_type }}">
+                                    <input type="hidden" name="control_number" value="{{ $associatedDocument->control_number }}">
+                                    <input type="hidden" name="revision" value="{{ $associatedDocument->revision }}">
+                                    <input type="hidden" name="date_issued" value="{{ $associatedDocument->date_issued }}">
+                    <label class="block text-gray-600 font-medium mb-1">Date:</label>
+                    <input type="date" id="editDate" class="w-full border rounded-md px-3 py-2" name="date" value="{{ old('date', $associatedDocument->date ?? '') }}" required>
+                    <span id="editDateError" class="text-red-500 text-sm hidden">Date is required.</span>
+                </div>
+
+                <div class="form-group">
+                    <label class="block text-gray-600 font-medium mb-1">Student's Name:</label>
+                    <input type="text" id="editPatientName" class="w-full border rounded-md px-3 py-2" name="patient_name" value="{{ old('patient_name', $associatedDocument->patient_name ?? '') }}" required>
+                    <span id="editPatientNameError" class="text-red-500 text-sm hidden">Student's name is
+                        required.</span>
+                </div>
+
+                <div class="form-group">
+                    <label class="block text-gray-600 font-medium mb-1">School Name:</label>
+                    <input type="text" id="editschoolname" class="w-full border rounded-md px-3 py-2" name="collegeName" value="{{ old('collegeName', $associatedDocument->collegeName ?? '') }}">
+                    <span id="editschoolnameError" class="text-red-500 text-sm hidden">School name is required.</span>
+                </div>
+
+                <div class="form-group">
+                    <label class="block text-gray-600 font-medium mb-1">School Year:</label>
+                    <input type="text" id="schoolyear" class="w-full border rounded-md px-3 py-2" name="year" value="{{ old('year', $associatedDocument->year ?? '') }}">
+                    <span id="schoolyearError" class="text-red-500 text-sm hidden">School year is required.</span>
+                </div>
+
+                <div class="form-group">
+                    <label class="block text-gray-600 font-medium mb-1">Follow-up Check-up Date:</label>
+                    <input type="date" id="editDateefollowcheck" class="w-full border rounded-md px-3 py-2" name="followUpDate" value="{{ old('followUpDate', $associatedDocument->followUpDate ?? '') }}" required>
+                    <span id="editDateefollowcheckError" class="text-red-500 text-sm hidden">Follow-up date is
+                        required.</span>
+                </div>
+            </div>
+            <!-- Form 2 Inputs -->
+            <div id="formContainer1" class="space-y-4 hidden">
+             <h2 class="text-xl font-medium mb-4 mt-6 text-gray-700 text-center">Form 2</h2>
+
+                <div class="form-group">
+                    <label class="block text-gray-600 font-medium mb-1">Date:</label>
+                    <input type="date" id="editDate2_2" class="w-full border rounded-md px-3 py-2" name="additional_date" value="{{ old('additional_date', $associatedDocument->additional_date ?? '') }}">
+                    <span id="editDate2Error_2" class="text-red-500 text-sm hidden">Date is required.</span>
+                </div>
+
+                <div class="form-group">
+                    <label class="block text-gray-600 font-medium mb-1">Student's Name:</label>
+                    <input type="text" id="editPatientName2_2" class="w-full border rounded-md px-3 py-2" name="additional_patient_name" value="{{ old('additional_patient_name', $associatedDocument->additional_patient_name ?? '') }}">
+                    <span id="editPatientName2Error_2" class="text-red-500 text-sm hidden">Student's name is required.</span>
+                </div>
+
+                <div class="form-group">
+                    <label class="block text-gray-600 font-medium mb-1">School Name:</label>
+                    <input type="text" id="editschoolname2_2" class="w-full border rounded-md px-3 py-2" name="additional_collegeName" value="{{ old('additional_collegeName', $associatedDocument->additional_collegeName ?? '') }}">
+                    <span id="editschoolname2Error_2" class="text-red-500 text-sm hidden">School name is required.</span>
+                </div>
+
+                <div class="form-group">
+                    <label class="block text-gray-600 font-medium mb-1">School Year:</label>
+                    <input type="text" id="schoolyear2_2" class="w-full border rounded-md px-3 py-2" name="additional_year" value="{{ old('additional_year', $associatedDocument->additional_year ?? '') }}">
+                    <span id="schoolyear2Error_2" class="text-red-500 text-sm hidden">School year is required.</span>
+                </div>
+
+                <div class="form-group">
+                    <label class="block text-gray-600 font-medium mb-1">Follow-up Check-up Date:</label>
+                    <input type="date" id="editDateefollowcheck2_2" class="w-full border rounded-md px-3 py-2" name="additional_followUpDate" value="{{ old('additional_followUpDate', $associatedDocument->additional_followUpDate ?? '') }}">
+                    <span id="editDateefollowcheck2Error_2" class="text-red-500 text-sm hidden">Follow-up date is required.</span>
+                </div>
+            </div>
+
+                <div class="flex justify-end space-x-4 mt-6">
+                    <button onclick="addForm()" type="button"
+                        class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-medium py-2 px-4 rounded-md">
+                            Add Form
+                    </button>
+                    <button onclick="saveEdits()" type="submit"
+                        class="bg-[#3CAA38] hover:bg-[#2B8E2F] text-white font-medium py-2 px-4 rounded-md">
+                            Submit
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- Success Notification -->
+    <div id="successMessage" class="hidden fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
+        <div class="bg-white rounded-lg shadow-lg p-6 w-96 text-center">
+            <div class="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                <!-- Green Checkmark Icon -->
+                <svg class="w-8 h-8 text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                    fill="currentColor" aria-hidden="true">
+                    <path fill-rule="evenodd"
+                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.707a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 10-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                        clip-rule="evenodd" />
+                </svg>
+            </div>
+            <p class="text-lg font-semibold">Successfully Edited!</p>
+        </div>
+    </div> --}}
+
+
 @endsection
 
 @push('scripts')

@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Medicine extends Model
 {
@@ -59,6 +61,13 @@ class Medicine extends Model
         return $this->hasMany(PrescriptionMedicine::class);
     }
 
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logAll() // logs all fillable attributes
+            ->useLogName('stock')
+            ->logOnlyDirty(); // only logs changes
+    }
     /**
      * Get all patients who have been prescribed this medicine.
      */

@@ -25,7 +25,10 @@
             class="max-h-[80vh] overflow-y-auto ">
             @csrf
             @method('PUT')
-            <input type="hidden" name="document_type" value="{{ request('document_type') }}">
+                                    <input type="hidden" name="document_type" value="{{ $document->document_type }}">
+                                    <input type="hidden" name="control_number" value="{{ $associatedDocument->control_number }}">
+                                    <input type="hidden" name="revision" value="{{ $associatedDocument->revision }}">
+                                    <input type="hidden" name="date_issued" value="{{ $associatedDocument->date_issued }}">
             <h4 class="block mb-3 text-lg font-semibold text-blue-500 text-center">Form 1</h4>
             <div class="grid gap-4 mb-4 sm:grid-cols-2 px-2">
                 <!-- Date Field -->
