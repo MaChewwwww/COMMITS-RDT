@@ -550,4 +550,14 @@ class DashboardController extends Controller
             ]);
         }
     }
+
+    public function superadminDashboard ()
+    {
+        $total_users = User::all()->count();
+        $total_active_users = User::where('status', 'active')->count();
+        $total_inactive_users = User::where('status', 'inactive')->count();
+
+        return view('SuperAdmin.Superadmin_dashboard', compact('total_users','total_active_users','total_inactive_users'));
+    }
+    
 }

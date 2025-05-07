@@ -248,14 +248,12 @@ Route::middleware(['auth'])->group(function () {
 
 
 //Super Admin
-Route::get('/Superadmin_dashboard', function () {
-    return view('SuperAdmin.Superadmin_dashboard');
-})->name('Superadmin_dashboard');
+Route::middleware(['auth', 'superadmin'])->group(function () {
+    Route::prefix('admin')->group(function () {
 
         Route::get('/', function () {
             return redirect()->route('Superadmin_dashboard');
         });
-
 
         //Dashboard
         Route::get('/dashboard', [DashboardController::class, 'superadminDashboard'])->name('Superadmin_dashboard');
@@ -263,17 +261,13 @@ Route::get('/Superadmin_dashboard', function () {
         // User management
         Route::prefix('users')->group(function () {
             Route::get('/', [UserController::class, 'getUsers'])->name('users.get');
-            Route::post('/add', [UserController::class, 'store'])->name('user.store');
+            // Add this to your routes/web.php
+            Route::get('/admin/users/add', [UserController::class, 'create'])->name('user.create');
+            Route::post('/admin/users/add', [UserController::class, 'store'])->name('user.store');
             Route::post('/edit', [UserController::class, 'update'])->name('user.update');
             Route::post('/delete', [UserController::class, 'delete'])->name('user.destroy');
         });
 
-
-
         Route::get('/activity-logs', [ActivityLogController::class, 'index'])->name('Auditlog');
     });
-}));
-
-Route::get('/Auditlog', function () {
-    return view('SuperAdmin.Auditlog');
-})->name('Auditlog');
+});
