@@ -40,7 +40,9 @@ class PatientController extends Controller
     public function index()
     {
         $patients = Patient::with(['physician', 'prescriptionMedicines.medicine'])->get();
-        $physicians = User::where('role', 'admin')->get();
+        $physicians = User::where('status', 'active')
+             ->where('is_activated', true)
+             ->get();
         $medicines = Medicine::whereHas('box', function ($query) {
             $query->where('isReturned', 0);
         })->get();
