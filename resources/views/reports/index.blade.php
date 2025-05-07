@@ -1,5 +1,7 @@
 @extends('layouts.app-layout')
 
+@section('title', 'Reports')
+
 @section('content')
 
     {{--  gets the filter queries --}}
@@ -21,26 +23,7 @@
         $filterDisplay = count($filters) ? implode(', ', $filters) : 'None';
     @endphp
 
-    {{-- notification modal --}}
-    @if (session('success'))
-        <div id="successModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-            <div class="p-6 text-center bg-white rounded shadow-lg">
-                <h2 class="mb-4 text-lg font-bold">Success!</h2>
-                <div class="flex justify-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="100" height="100" viewBox="0 0 48 48">
-                        <path fill="#4caf50" d="M44,24c0,11.045-8.955,20-20,20S4,35.045,4,24S12.955,4,24,4S44,12.955,44,24z">
-                        </path>
-                        <path fill="#ccff90"
-                            d="M34.602,14.602L21,28.199l-5.602-5.598l-2.797,2.797L21,33.801l16.398-16.402L34.602,14.602z">
-                        </path>
-                    </svg>
-                </div>
-                <p>{{ session('success') }}</p>
-            </div>
-        </div>
-    @endif
-
-    <div class="container px-4 mx-auto">
+    <div class="container px-4 mx-auto h-full">
         <x-page-title class="mb-2" value="Reports" />
 
         <div class="flex flex-wrap items-center justify-end w-full gap-2 mb-4">
@@ -54,38 +37,38 @@
             {{-- filter by category --}}
             <div class="relative">
                 <button id="categoryFilterButton"
-                    class="inline-flex items-center gap-2 px-2 py-2.5 text-gray-500 bg-gray-50 border-2 border-gray-500 hover:bg-gray-100 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg active:shadow-sm transform active:translate-y-0"
-                    onclick="toggleDropdown('categoryFilterDropdown')">
-                    Filter by Category
-                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="25" viewBox="0 0 32 25"
-                        fill="none">
+                    class="flex items-center justify-center gap-2 px-4 py-2.5 text-gray-500 bg-gray-200 hover:bg-gray-300 rounded-lg transition-all duration-200 "
+                    onclick="toggleDropdown()">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="size-6" viewBox="0 0 32 25" fill="none">
                         <path
-                            d="M15.5993 15.4256L10.1191 11.2891L11.9458 9.91016L15.5993 12.6679L19.2526 9.91016L21.0793 11.2891L15.5993 15.4256Z"
-                            fill="#808080" />
+                            d="M29.815,6.168C29.484,5.448,28.783,5,27.986,5H4.014c-0.797,0-1.498,0.448-1.83,1.168 c-0.329,0.714-0.215,1.53,0.297,2.128c0,0,0.001,0.001,0.001,0.001L12,19.371V28c0,0.369,0.203,0.708,0.528,0.882 C12.676,28.961,12.838,29,13,29c0.194,0,0.387-0.057,0.555-0.168l6-4C19.833,24.646,20,24.334,20,24v-4.629l9.519-11.074 C30.031,7.698,30.145,6.882,29.815,6.168z"
+                            fill="currentColor"></path>
                     </svg>
+                    Filter
                 </button>
 
-                <ul id="categoryFilterDropdown"
-                    class="absolute z-50 hidden w-full mt-1 bg-white border rounded-md shadow-lg">
-                    <li><a class="block px-4 py-2 font-semibold text-gray-700 hover:bg-gray-200"
-                            href="{{ route('reports.index') }}">All</a></li>
-                    <li><a class="block px-4 py-2 font-semibold text-gray-700 hover:bg-gray-200"
-                            href="{{ route('reports.index', array_merge(request()->query(), ['category' => 'students'])) }}">Students</a>
-                    </li>
-                    <li><a class="block px-4 py-2 font-semibold text-gray-700 hover:bg-gray-200"
-                            href="{{ route('reports.index', array_merge(request()->query(), ['category' => 'faculty'])) }}">Faculty</a>
-                    </li>
-                    <li><a class="block px-4 py-2 font-semibold text-gray-700 hover:bg-gray-200"
-                            href="{{ route('reports.index', array_merge(request()->query(), ['category' => 'admin'])) }}">Admin</a>
-                    </li>
-                    <li><a class="block px-4 py-2 font-semibold text-gray-700 hover:bg-gray-200"
-                            href="{{ route('reports.index', array_merge(request()->query(), ['category' => 'visitors'])) }}">Visitors</a>
-                    </li>
-                </ul>
+                <div id="categoryFilterDropdown" class=" bg-white border rounded-md shadow-lg absolute z-50 hidden mt-1">
+                    <ul class="w-full">
+                        <li><a class="block px-6 py-2 font-normal text-gray-700 hover:bg-gray-100 hover:text-gray-700"
+                                href="{{ route('reports.index') }}">All</a></li>
+                        <li><a class="block px-6 py-2 font-normal text-gray-700 hover:bg-gray-100 hover:text-gray-700"
+                                href="{{ route('reports.index', array_merge(request()->query(), ['category' => 'students'])) }}">Students</a>
+                        </li>
+                        <li><a class="block px-6 py-2 font-normal text-gray-700 hover:bg-gray-100 hover:text-gray-700"
+                                href="{{ route('reports.index', array_merge(request()->query(), ['category' => 'faculty'])) }}">Faculty</a>
+                        </li>
+                        <li><a class="block px-6 py-2 font-normal text-gray-700 hover:bg-gray-100 hover:text-gray-700"
+                                href="{{ route('reports.index', array_merge(request()->query(), ['category' => 'admin'])) }}">Admin</a>
+                        </li>
+                        <li><a class="block px-6 py-2 font-normal text-gray-700 hover:bg-gray-100 hover:text-gray-700"
+                                href="{{ route('reports.index', array_merge(request()->query(), ['category' => 'visitors'])) }}">Visitors</a>
+                        </li>
+                    </ul>
+                </div>
             </div>
 
             {{-- filter by date --}}
-            <div class="relative">
+            {{-- <div class="relative">
                 <button id="dateFilterButton"
                     class="inline-flex items-center gap-2 px-2 py-2.5 text-gray-500 bg-gray-50 border-2 border-gray-500 hover:bg-gray-100 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg active:shadow-sm transform active:translate-y-0"
                     onclick="toggleDropdown('dateFilterDropdown')">
@@ -139,25 +122,33 @@
                             href="{{ route('reports.index', array_merge(request()->query(), ['month' => 2])) }}">December</a>
                     </li>
                 </ul>
-            </div>
+            </div> --}}
 
             <form action="{{ route('reports.showReportPaper') }}" method="GET">
                 <button type="submit"
-                    class="inline-flex items-center gap-2 px-6 py-2.5 text-white bg-yellow-500 hover:bg-yellow-600 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg active:shadow-sm transform active:translate-y-0">
-                    Print Report Paper
+                    class="group relative py-2 px-3 bg-blue-100 hover:bg-blue-200 hover:text-blue-600 rounded-lg font-bold text-blue-500 flex flex-col items-center space-y-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                        stroke="currentColor" class="size-6">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0 1 10.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0 .229 2.523a1.125 1.125 0 0 1-1.12 1.227H7.231c-.662 0-1.18-.568-1.12-1.227L6.34 18m11.318 0h1.091A2.25 2.25 0 0 0 21 15.75V9.456c0-1.081-.768-2.015-1.837-2.175a48.055 48.055 0 0 0-1.913-.247M6.34 18H5.25A2.25 2.25 0 0 1 3 15.75V9.456c0-1.081.768-2.015 1.837-2.175a48.041 48.041 0 0 1 1.913-.247m10.5 0a48.536 48.536 0 0 0-10.5 0m10.5 0V3.375c0-.621-.504-1.125-1.125-1.125h-8.25c-.621 0-1.125.504-1.125 1.125v3.659M18 10.5h.008v.008H18V10.5Zm-3 0h.008v.008H15V10.5Z" />
+                    </svg>
+                    <span
+                        class="absolute bottom-[-1.5rem] left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-white font-normal text-gray-700 px-4 text-sm py-1 rounded-md shadow">
+                        Print
+                    </span>
                 </button>
             </form>
 
             <!-- Add Button -->
             <button
                 class="inline-flex items-center gap-2 px-6 py-2.5 text-white bg-blue-500 hover:bg-blue-600 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg active:shadow-sm transform active:translate-y-0"
-                onclick="openModal()">
+                onclick="showAddReportModal()">
                 + Add Report
             </button>
         </div>
 
         <!-- Responsive Table -->
-        <div class="bg-white p-4 shadow rounded-lg">
+        <div class="bg-white p-4 shadow-md h-full rounded-lg">
             @if (count($reports) > 0)
                 <div class="overflow-x-auto shadow-md">
                     <table class="w-full text-sm text-left text-black-500">
@@ -176,7 +167,7 @@
                         </thead>
                         <tbody id="reportTableBody">
                             @foreach ($reports as $report)
-                                <tr class="bg-white border-b">
+                                <tr class="bg-white border-b hover:bg-gray-100">
                                     <td class="px-4 py-2">{{ $report->title }}</td>
                                     <td class="px-4 py-2">{{ $report->name }}</td>
                                     <td class="px-4 py-2">{{ $report->age }}</td>
@@ -186,7 +177,7 @@
                                     <td class="px-4 py-2">{{ $report->remarks }}</td>
                                     <td class="px-4 py-2">{{ $report->category }}</td>
                                     <td class="flex px-4 py-2 gap-x-2">
-                                        <button onclick='openEditModal(@json($report->toArray()))'
+                                        <button onclick='showEditReportModal(@json($report->toArray()))'
                                             class="px-3 py-2 text-white bg-yellow-500 rounded-md hover:bg-yellow-600">
                                             <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none"
                                                 viewBox="0 0 24 24" stroke="currentColor">
@@ -194,13 +185,15 @@
                                                     d="m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z" />
                                             </svg>
                                         </button>
-                                        <form action="{{ route('reports.destroy', $report->id) }}" method="POST">
+                                        <form action="{{ route('reports.destroy') }}" method="POST">
                                             @csrf
-                                            @method('DELETE')
-                                            <button type="submit"
+                                            <input type="hidden" id="report_id" value="{{ $report->id }}"
+                                                name="id">
+                                            <button type="button"
+                                                onclick="confirmDelete('{{ $report->title }}', this.form)"
                                                 class="px-3 py-2 text-white bg-red-500 rounded-md hover:bg-red-600">
-                                                <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg"
-                                                    fill="currentColor" viewBox="0 0 24 24">
+                                                <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                                                    viewBox="0 0 24 24">
                                                     <path fill-rule="evenodd"
                                                         d="M8.586 2.586A2 2 0 0 1 10 2h4a2 2 0 0 1 2 2v2h3a1 1 0 1 1 0 2v12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V8a1 1 0 0 1 0-2h3V4a2 2 0 0 1 .586-1.414ZM10 6h4V4h-4v2Zm1 4a1 1 0 1 0-2 0v8a1 1 0 1 0 2 0v-8Zm4 0a1 1 0 1 0-2 0v8a1 1 0 1 0 2 0v-8Z"
                                                         clip-rule="evenodd" />
@@ -228,308 +221,17 @@
     </div>
 
     <!-- Add Report Modal -->
-    <div id="addReportModal"
-        class="fixed inset-0 z-50 flex items-center justify-center hidden bg-gray-900 bg-opacity-50 h-[100vh]">
-        <div
-            class="bg-white p-6 rounded-lg shadow-lg max-w-auto max-w-4xl mx-4 sm:mx-auto overflow-y-auto max-h-[80vh] relative">
+    @include('reports.create')
 
-            <h5 class="mb-4 text-xl font-bold text-center">Add New Report</h5>
+    <!-- Edit Report Modal -->
+    @include('reports.edit')
 
-            <form id="addReportForm" action="{{ route('reports.store') }}" method="POST" class="space-y-4">
-                @csrf
+@endsection
 
-                <div>
-                    <div class="flex flex-row gap-x-1">
-                        <label for="title" class="block text-sm font-semibold">Title</label><span
-                            class="text-red-500">*</span>
-                    </div>
-                    <input type="text" placeholder="Enter title of report" id="title" name="title"
-                        class="w-full p-2 border rounded-md" required>
-                </div>
-
-                <div>
-                    <div class="flex flex-row gap-x-1">
-                        <label for="name" class="block text-sm font-semibold">Patient's Name</label><span
-                            class="text-red-500">*</span>
-                    </div>
-                    <input type="text" placeholder="Enter patient's full name" id="name" name="name"
-                        class="w-full p-2 border rounded-md" required>
-                </div>
-
-                <div class="flex flex-row gap-4">
-                    <div class="w-full sm:w-1/2">
-                        <div class="flex flex-row gap-x-1">
-                            <label for="sex" class="block text-sm font-semibold">Sex</label><span
-                                class="text-red-500">*</span>
-                        </div>
-                        <select id="sex" name="sex" class="w-full p-2 border rounded-md" required>
-                            <option value="">Select biological sex</option>
-                            <option value="Male">Male</option>
-                            <option value="Female">Female</option>
-                            <option value="Other">Other</option>
-                        </select>
-                    </div>
-
-                    <div class="w-full sm:w-1/2">
-                        <div class="flex flex-row gap-x-1">
-                            <label for="age" class="block text-sm font-semibold">Age</label><span
-                                class="text-red-500">*</span>
-                        </div>
-                        <input type="number" placeholder="Enter patient's age" id="age" name="age"
-                            class="w-full p-2 border rounded-md" required min="0">
-                    </div>
-                </div>
-
-                <div>
-                    <div class="flex flex-row gap-x-1">
-                        <label for="category" class="block text-sm font-semibold">Category</label><span
-                            class="text-red-500">*</span>
-                    </div>
-                    <select id="category" name="category" class="w-full p-2.5 border rounded-md" required>
-                        <option value="">Select category</option>
-                        <option value="students">Students</option>
-                        <option value="faculty">Faculty</option>
-                        <option value="administrative">Administrative</option>
-                        <option value="admin">Dependents</option>
-                        <option value="visitors">Visitors</option>
-                    </select>
-                </div>
-
-                <div>
-                    <div class="flex flex-row gap-x-1">
-                        <label for="complaint" class="block text-sm font-semibold">Complaint Reason</label><span
-                            class="text-red-500">*</span>
-                    </div>
-                    <textarea id="complaint" placeholder="Type complaint reason here" name="complaint"
-                        class="w-full p-3 border rounded-md" required></textarea>
-                </div>
-
-                <div>
-                    <div class="flex flex-row gap-x-1">
-                        <label for="diagnosis" class="block text-sm font-semibold">Diagnosis</label><span
-                            class="text-red-500">*</span>
-                    </div>
-                    <select id="diagnosis" name="diagnosis" class="w-full p-2.5 border rounded-md" required>
-                        <option value="">Select Diagnosis</option>
-                        @foreach ($services as $service)
-                            @if (!$loop->last)
-                                {{-- to not include the "Total Online Consult" --}}
-                                <option value="{{ $service['name'] }}">{{ $service['name'] }}</option>
-                            @endif
-                        @endforeach
-                    </select>
-                </div>
-
-                <div>
-                    <label for="remarks" class="block text-sm font-semibold">Remarks</label>
-                    <textarea id="remarks" placeholder="Type remarks here" name="remarks" class="w-full p-3 border rounded-md"></textarea>
-                </div>
-
-                {{-- Action Buttons --}}
-                <div class="flex flex-row gap-3">
-                    <button type="submit"
-                        class="flex-1 px-6 py-2.5 bg-green-600 text-white text-sm font-semibold rounded-lg
-                                hover:bg-green-700 focus:ring focus:ring-green-200 transition-all">
-                        Save
-                    </button>
-
-                    <button type="button" onclick=closeModal()
-                        class="px-6 py-2.5 bg-gray-100 text-gray-700 text-sm font-semibold rounded-lg
-                                hover:bg-gray-200 focus:ring focus:ring-gray-200 transition-all">
-                        Cancel
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    {{-- edit report modal --}}
-    <div id="editReportModal"
-        class="fixed inset-0 z-50 flex items-center justify-center hidden bg-gray-900 bg-opacity-50">
-        <div
-            class="bg-white p-6 rounded-lg shadow-lg max-w-auto max-w-4xl mx-4 sm:mx-auto overflow-y-auto max-h-[80vh] relative">
-
-            <h5 class="mb-4 text-xl font-bold text-center">Edit Report</h5>
-
-            <form id="editReportForm" action="{{ route('reports.update', 0) }}" method="POST" class="space-y-4">
-                @csrf
-                @method('PUT')
-                <div>
-                    <div class="flex flex-row gap-x-1">
-                        <label for="title" class="block text-sm font-semibold">Title</label><span
-                            class="text-red-500">*</span>
-                    </div>
-                    <input type="text" placeholder="Enter title of report" id="title" name="title"
-                        class="w-full p-2 border rounded-md" required>
-                </div>
-
-                <div>
-                    <div class="flex flex-row gap-x-1">
-                        <label for="name" class="block text-sm font-semibold">Patient's Name</label><span
-                            class="text-red-500">*</span>
-                    </div>
-                    <input type="text" placeholder="Enter patient's full name" id="name" name="name"
-                        class="w-full p-2 border rounded-md" required>
-                </div>
-
-                <div class="flex flex-row gap-4">
-                    <div class="w-full sm:w-1/2">
-                        <div class="flex flex-row gap-x-1">
-                            <label for="sex" class="block text-sm font-semibold">Sex</label><span
-                                class="text-red-500">*</span>
-                        </div>
-                        <select id="sex" name="sex" class="w-full p-2 border rounded-md" required>
-                            <option value="">Select biological sex</option>
-                            <option value="Male">Male</option>
-                            <option value="Female">Female</option>
-                            <option value="Other">Other</option>
-                        </select>
-                    </div>
-
-                    <div class="w-full sm:w-1/2">
-                        <div class="flex flex-row gap-x-1">
-                            <label for="age" class="block text-sm font-semibold">Age</label><span
-                                class="text-red-500">*</span>
-                        </div>
-                        <input type="number" placeholder="Enter patient's age" id="age" name="age"
-                            class="w-full p-2 border rounded-md" required min="0">
-                    </div>
-                </div>
-
-                <div>
-                    <div class="flex flex-row gap-x-1">
-                        <label for="category" class="block text-sm font-semibold">Category</label><span
-                            class="text-red-500">*</span>
-                    </div>
-                    <select id="category" name="category" class="w-full p-2.5 border rounded-md" required>
-                        <option value="">Select category</option>
-                        <option value="students">Students</option>
-                        <option value="faculty">Faculty</option>
-                        <option value="administrative">Administrative</option>
-                        <option value="admin">Dependents</option>
-                        <option value="visitors">Visitors</option>
-                    </select>
-                </div>
-
-                <div>
-                    <div class="flex flex-row gap-x-1">
-                        <label for="complaint" class="block text-sm font-semibold">Complaint Reason</label><span
-                            class="text-red-500">*</span>
-                    </div>
-                    <textarea id="complaint" placeholder="Type complaint reason here" name="complaint"
-                        class="w-full p-3 border rounded-md" required></textarea>
-                </div>
-
-                <div>
-                    <div class="flex flex-row gap-x-1">
-                        <label for="diagnosis" class="block text-sm font-semibold">Diagnosis</label><span
-                            class="text-red-500">*</span>
-                    </div>
-                    <select id="diagnosis" name="diagnosis" class="w-full p-2.5 border rounded-md" required>
-                        <option value="">Select Diagnosis</option>
-                        @foreach ($services as $service)
-                            @if (!$loop->last)
-                                {{-- to not include the "Total Online Consult" --}}
-                                <option value="{{ $service['name'] }}">{{ $service['name'] }}</option>
-                            @endif
-                        @endforeach
-                    </select>
-                </div>
-
-                <div>
-                    <label for="remarks" class="block text-sm font-semibold">Remarks</label>
-                    <textarea id="remarks" placeholder="Type remarks here" name="remarks" class="w-full p-3 border rounded-md"></textarea>
-                </div>
-
-                {{-- Action Buttons --}}
-                <div class="flex flex-row gap-3">
-                    <button type="submit"
-                        class="flex-1 px-6 py-2.5 bg-green-600 text-white text-sm font-semibold rounded-lg
-                                hover:bg-green-700 focus:ring focus:ring-green-200 transition-all">
-                        Save
-                    </button>
-
-                    <button type="button" onclick=closeModal()
-                        class="px-6 py-2.5 bg-gray-100 text-gray-700 text-sm font-semibold rounded-lg
-                                hover:bg-gray-200 focus:ring focus:ring-gray-200 transition-all">
-                        Cancel
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-
+@push('scripts')
     <script>
-        function openEditModal(report) {
-
-            document.getElementById('editReportModal').classList.remove('hidden');
-
-            let form = document.getElementById('editReportForm');
-
-            form.querySelector('#title').value = report.title;
-            form.querySelector('#name').value = report.name;
-            form.querySelector('#age').value = report.age;
-            form.querySelector('#sex').value = report.sex;
-            form.querySelector('#complaint').value = report.complaint;
-            form.querySelector('#diagnosis').value = report.diagnosis;
-            form.querySelector('#remarks').value = report.remarks;
-            form.querySelector('#category').value = report.category;
-
-            // Update the form's action to point to the update route
-            form.action = '/reports/' + report.id;
-            console.log("Form action set to:", form.action);
-
-            // Add or update the hidden _method field for PUT requests
-            let methodInput = form.querySelector('#formMethod');
-            if (methodInput) {
-                methodInput.value = 'PUT';
-            }
-        }
-
-        function openModal() {
-
-            document.getElementById('addReportModal').classList.remove('hidden');
-
-            // Get the form and reset it for a new report
-            const form = document.getElementById('addReportForm');
-            form.reset(); // Clear previous data
-
-            // Set form action to store route
-            form.action = '{{ route('reports.store') }}';
-
-            // Remove the _method field if it exists (to ensure it's a POST)
-            let methodInput = form.querySelector('#formMethod');
-            if (methodInput) {
-                methodInput.remove();
-            }
-        }
-
-        function closeModal() {
-            document.getElementById('addReportModal').classList.add('hidden');
-            document.getElementById('editReportModal').classList.add('hidden');
-            document.getElementById('successModal').classList.add('hidden');
-        }
-
-        // document.addEventListener('DOMContentLoaded', function() {
-        //     setTimeout(function() {
-        //         const modal = document.getElementById('successModal');
-        //         if (modal) {
-        //             modal.classList.add('hidden');
-        //         }
-        //     }, 2000);
-        // });
-
-        function toggleDropdown(dropdownId) {
-            const dropdowns = ['categoryFilterDropdown', 'dateFilterDropdown'];
-
-            // Hide all dropdowns except the one being toggled
-            dropdowns.forEach(id => {
-                if (id !== dropdownId) {
-                    document.getElementById(id).classList.add('hidden');
-                }
-            });
-
-            document.getElementById(dropdownId).classList.toggle('hidden');
+        function toggleDropdown() {
+            document.getElementById('categoryFilterDropdown').classList.toggle('hidden');
         }
 
         // Hide dropdowns when clicking outside
@@ -539,11 +241,118 @@
                 const dropdown = document.getElementById(id);
                 const button = document.getElementById(id.replace('Dropdown', 'Button'));
                 if (dropdown && !dropdown.classList.contains('hidden') && !dropdown.contains(event
-                    .target) && !button.contains(event.target)) {
+                        .target) && !button.contains(event.target)) {
                     dropdown.classList.add('hidden');
                 }
             });
         });
+
+        function showAddReportModal() {
+            let modal = document.getElementById("addReportModal");
+            let modalContent = modal.querySelector("div.relative");
+
+            modal.classList.remove("hidden");
+            setTimeout(() => {
+                modal.classList.remove("opacity-0");
+                modalContent.classList.remove("scale-95");
+                modalContent.classList.add("scale-100");
+            }, 10); // Small delay to trigger animation
+        }
+
+        function hideAddReportModal() {
+            let modal = document.getElementById("addReportModal");
+            let modalContent = modal.querySelector("div.relative");
+
+            modal.classList.add("opacity-0");
+            modalContent.classList.remove("scale-100");
+            modalContent.classList.add("scale-95");
+
+            setTimeout(() => {
+                modal.classList.add("hidden");
+            }, 300); // Matches transition duration
+        }
+
+        function showEditReportModal(report) {
+            let modal = document.getElementById("editReportModal");
+            let modalContent = modal.querySelector("div.relative");
+            let form = document.getElementById('editReportForm');
+
+            form.querySelector('#report_id').value = report.id;
+            form.querySelector('#title').value = report.title;
+            form.querySelector('#name').value = report.name;
+            form.querySelector('#age').value = report.age;
+            form.querySelector('#sex').value = report.sex;
+            form.querySelector('#complaint').value = report.complaint;
+            form.querySelector('#diagnosis').value = report.diagnosis;
+            form.querySelector('#remarks').value = report.remarks;
+            form.querySelector('#category').value = report.category;
+
+            modal.classList.remove("hidden");
+            setTimeout(() => {
+                modal.classList.remove("opacity-0");
+                modalContent.classList.remove("scale-95");
+                modalContent.classList.add("scale-100");
+            }, 10); // Small delay to trigger animation
+        }
+
+        function hideEditReportModal() {
+            let modal = document.getElementById("editReportModal");
+            let modalContent = modal.querySelector("div.relative");
+            let form = document.getElementById('editReportForm');
+
+            form.querySelector('#report_id').value = "";
+            form.querySelector('#title').value = "";
+            form.querySelector('#name').value = "";
+            form.querySelector('#age').value = "";
+            form.querySelector('#sex').value = "";
+            form.querySelector('#complaint').value = "";
+            form.querySelector('#diagnosis').value = "";
+            form.querySelector('#remarks').value = "";
+            form.querySelector('#category').value = "";
+
+            modal.classList.add("opacity-0");
+            modalContent.classList.remove("scale-100");
+            modalContent.classList.add("scale-95");
+
+            setTimeout(() => {
+                modal.classList.add("hidden");
+            }, 300); // Matches transition duration
+        }
+
+        function confirmDelete(title, form) {
+            Swal.fire({
+                title: "Warning!",
+                html: "Are you sure you want to delete this report with title: <strong>" + title + "</strong>?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: '#FF0000',
+                confirmButtonText: 'Delete',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit();
+                }
+            });
+        }
     </script>
 
-@endsection
+    @if (session('success'))
+        <script>
+            Swal.fire({
+                title: "Success!",
+                text: `{!! session('success') !!}`,
+                icon: "success"
+            });
+        </script>
+    @endif
+
+    @if (session('error'))
+        <script>
+            Swal.fire({
+                title: "Error!",
+                text: `{!! session('error') !!}`,
+                icon: "error"
+            });
+        </script>
+    @endif
+@endpush

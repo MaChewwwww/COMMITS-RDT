@@ -114,10 +114,7 @@
                                 target="{{'return-'.$medicine->id}}" 
                                 action="{{ route('return_medicine', $medicine->id) }}" 
                             />
-                            <x-inventory.confirm-return 
-                                target="{{ 'return-'.$medicine->id }}"
-                                action="{{ route('return_medicine', $medicine->id) }}"
-                            />
+                            
                             <!-- Edit Button -->
                             <x-inventory.btn-edit-modal heading="Edit a Record" target="{{ 'edit-'.$medicine->id }}" >  
                                 <x-inventory.form method="POST" action="{{ route('update_medicine', $medicine->id) }}" 

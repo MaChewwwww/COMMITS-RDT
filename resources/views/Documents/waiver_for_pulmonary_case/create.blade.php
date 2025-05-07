@@ -1,83 +1,8 @@
 @extends('layouts.app-layout')
 
+@section('title', 'Waver for Pulmonary Case Form')
+
 @section('content')
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <title>Waiver For Pulmonary Case Form</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        /* Adjusting for print */
-        @media print {
-            header {
-                padding: 0;
-            }
-
-            @page {
-                size: A4;
-                margin: 0;
-
-            }
-
-            .page {
-                margin-top: 0;
-                /* Move the form up */
-                position: relative;
-                padding-top: 0;
-                top: -90px;
-                padding-left: 20px;
-                padding-right: 20px;
-                /* Adjust to move the form higher */
-
-            }
-
-            body {
-                font-family: Arial;
-                font-size: 12px;
-            }
-
-            /* Hide all content except the container */
-            body * {
-                visibility: hidden;
-            }
-
-            .container,
-            .container * {
-                visibility: visible;
-                margin-top: 0;
-                padding-top: 0;
-            }
-
-            .page {
-                display: block;
-                height: 100%;
-
-            }
-
-            .flex-container {
-                flex-direction: column;
-                /* gap: 5px; */
-            }
-        }
-
-        /* Make the modal scrollable */
-        .modal-content1 {
-            max-height: 80vh;
-            /* Limit the height to 80% of the viewport */
-            overflow-y: auto;
-            /* Enable vertical scrolling if content exceeds */
-            padding-right: 15px;
-            /* Add space for scrollbar */
-        }
-    </style>
-</head>
-
-<body class="bg-gray-100">
 
     <!-- Buttons (Optional for print view, you can hide them when printing) -->
     <div class="flex space-x-10 justify-between mb-5">
@@ -216,123 +141,14 @@
             </div>
         </div>
     </div>
-    </div>
+
+
     <!-- Modal -->
-    <div id="editFormModal" class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 hidden">
-        <div class="modal-content1 bg-white rounded-lg shadow-lg p-6 w-full max-w-lg relative">
-            <!-- Close Button in Top-Right -->
-            <span class="close absolute top-2.5 right-2.5 text-red-500 text-2xl cursor-pointer hover:text-red-700"
-                onclick="closeEditForm()">&times;</span>
+    @include('Documents.waiver_for_pulmonary_case.create-form')
 
-            <!-- Modal Title -->
-            <h3 class="text-xl font-bold mb-4 text-gray-700">Add Waiver For Pulmonary Case Form</h3>
+@endsection
 
-            <!-- Form Container -->
-            <div id="formContainer" class="space-y-4">
-                <!-- Date Field -->
-                <!-- Form 1 Inputs -->
-            <form action="{{ route('documents.waiver_for_pulmonary_case.store') }}" method="POST">
-                <h2 class="text-xl font-medium mb-4 mt-6 text-gray-700 text-center">Form 1</h2>
-                @csrf
-                <div class="form-group">
-                    <input type="hidden" name="document_type" value="{{ request('document_type') }}">
-                    <label class="block text-gray-600 font-medium mb-1">Date:</label>
-                    <input type="date" id="editDate" class="w-full border rounded-md px-3 py-2" name="date" required>
-                    <span id="editDateError" class="text-red-500 text-sm hidden">Date is required.</span>
-                </div>
-
-                <div class="form-group">
-                    <label class="block text-gray-600 font-medium mb-1">Student's Name:</label>
-                    <input type="text" id="editPatientName" class="w-full border rounded-md px-3 py-2" name="patient_name" required>
-                    <span id="editPatientNameError" class="text-red-500 text-sm hidden">Student's name is
-                        required.</span>
-                </div>
-
-                <div class="form-group">
-                    <label class="block text-gray-600 font-medium mb-1">School Name:</label>
-                    <input type="text" id="editschoolname" class="w-full border rounded-md px-3 py-2" name="collegeName">
-                    <span id="editschoolnameError" class="text-red-500 text-sm hidden">School name is required.</span>
-                </div>
-
-                <div class="form-group">
-                    <label class="block text-gray-600 font-medium mb-1">School Year:</label>
-                    <input type="text" id="schoolyear" class="w-full border rounded-md px-3 py-2" name="year">
-                    <span id="schoolyearError" class="text-red-500 text-sm hidden">School year is required.</span>
-                </div>
-
-                <div class="form-group">
-                    <label class="block text-gray-600 font-medium mb-1">Follow-up Check-up Date:</label>
-                    <input type="date" id="editDateefollowcheck" class="w-full border rounded-md px-3 py-2" name="followUpDate" required>
-                    <span id="editDateefollowcheckError" class="text-red-500 text-sm hidden">Follow-up date is
-                        required.</span>
-                </div>
-            </div>
-            <!-- Form 2 Inputs -->
-        <div class="hidden" id="formContainer1">
-             <h2 class="text-xl font-medium mb-4 mt-6 text-gray-700 text-center">Form 2</h2>
-
-                <div class="form-group">
-                    <label class="block text-gray-600 font-medium mb-1">Date:</label>
-                    <input type="date" id="editDate2_${formCount}" class="w-full border rounded-md px-3 py-2" name="additional_date">
-                    <span id="editDate2Error_${formCount}" class="text-red-500 text-sm hidden">Date is required.</span>
-                </div>
-
-                <div class="form-group">
-                    <label class="block text-gray-600 font-medium mb-1">Student's Name:</label>
-                    <input type="text" id="editPatientName2_${formCount}" class="w-full border rounded-md px-3 py-2" name="additional_patient_name">
-                    <span id="editPatientName2Error_${formCount}" class="text-red-500 text-sm hidden">Student's name is required.</span>
-                </div>
-
-                <div class="form-group">
-                    <label class="block text-gray-600 font-medium mb-1">School Name:</label>
-                    <input type="text" id="editschoolname2_${formCount}" class="w-full border rounded-md px-3 py-2" name="additional_collegeName">
-                    <span id="editschoolname2Error_${formCount}" class="text-red-500 text-sm hidden">School name is required.</span>
-                </div>
-
-                <div class="form-group">
-                    <label class="block text-gray-600 font-medium mb-1">School Year:</label>
-                    <input type="text" id="schoolyear2_${formCount}" class="w-full border rounded-md px-3 py-2" name="additional_year">
-                    <span id="schoolyear2Error_${formCount}" class="text-red-500 text-sm hidden">School year is required.</span>
-                </div>
-
-                <div class="form-group">
-                    <label class="block text-gray-600 font-medium mb-1">Follow-up Check-up Date:</label>
-                    <input type="date" id="editDateefollowcheck2_${formCount}" class="w-full border rounded-md px-3 py-2" name="additional_followUpDate">
-                    <span id="editDateefollowcheck2Error_${formCount}" class="text-red-500 text-sm hidden">Follow-up date is required.</span>
-                </div>
-            </div>
-            <!-- Buttons -->
-                <div class="flex justify-end space-x-4 mt-6">
-                    <button onclick="addForm()" type="button"
-                        class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-medium py-2 px-4 rounded-md">
-                        Add Form
-                    </button>
-                    <button onclick="saveEdits()" type="submit"
-                        class="bg-[#3CAA38] hover:bg-[#2B8E2F] text-white font-medium py-2 px-4 rounded-md">
-                        Submit
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-    <!-- Success Notification -->
-    <div id="successMessage" class="hidden fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
-        <div class="bg-white rounded-lg shadow-lg p-6 w-96 text-center">
-            <div class="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                <!-- Green Checkmark Icon -->
-                <svg class="w-8 h-8 text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
-                    fill="currentColor" aria-hidden="true">
-                    <path fill-rule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.707a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 10-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                        clip-rule="evenodd" />
-                </svg>
-            </div>
-            <p class="text-lg font-semibold">Successfully Saved!</p>
-        </div>
-    </div>
-
-
-
+@push('scripts')
     <script>
         function printWaiver() {
             window.print();
@@ -342,24 +158,50 @@
             window.location.href = "{{ route('documents.index') }}";
         }
 
-        function openEditForm() {
-            document.getElementById("editFormModal").classList.remove("hidden");
+        // Function to close the edit form modal
+        function closeEditForm() {
+            // const modal = document.getElementById("editFormModal");
+            // modal.classList.add("hidden");
+
+            let modal = document.getElementById("editFormModal");
+            let modalContent = modal.querySelector("div.relative");
+
+            modal.classList.add("opacity-0");
+            modalContent.classList.remove("scale-100");
+            modalContent.classList.add("scale-95");
+
+            setTimeout(() => {
+                modal.classList.add("hidden");
+            }, 300); // Matches transition duration
         }
 
-        function closeEditForm() {
-            document.getElementById("editFormModal").classList.add("hidden");
+        // Function to open the edit form modal
+        function openEditForm() {
+            // const modal = document.getElementById("editFormModal");
+            // modal.classList.remove("hidden");
+
+            let modal = document.getElementById("editFormModal");
+            let modalContent = modal.querySelector("div.relative");
+
+            modal.classList.remove("hidden");
+            setTimeout(() => {
+                modal.classList.remove("opacity-0");
+                modalContent.classList.remove("scale-95");
+                modalContent.classList.add("scale-100");
+            }, 10); // Small delay to trigger animation
         }
 
         let formCount = 1;
 
         function addForm() {
-                formCount++;
-                const formContainer1 = document.getElementById("formContainer1");
-                formContainer1.classList.remove("hidden");
-                if (formCount === 2) {
-                        document.querySelector("button[onclick='addForm()']").style.display = 'none';
-                }
+            formCount++;
+            const formContainer1 = document.getElementById("formContainer1");
+            formContainer1.classList.remove("hidden");
+            if (formCount === 2) {
+                document.querySelector("button[onclick='addForm()']").style.display = 'none';
+            }
         }
+
         function validateField(fieldId, errorId) {
             const fieldValue = document.getElementById(fieldId).value;
             const errorElement = document.getElementById(errorId);
@@ -377,7 +219,7 @@
         function saveEdits() {
             let isValid = true;
 
-             // Validate the first form fields
+            // Validate the first form fields
             isValid &= validateField("editDate", "editDateError");
             isValid &= validateField("editPatientName", "editPatientNameError");
             isValid &= validateField("editschoolname", "editschoolnameError");
@@ -402,34 +244,19 @@
 
 
             if (isValid) {
-                    const successMessage = document.getElementById("successMessage");
-                    successMessage.classList.remove("hidden"); // Make the success message visible
-                    console.log("Success message is visible.");
-
-                                // Hide the success message after a short delay, close the modal, and trigger print preview
-                    setTimeout(() => {
-                        successMessage.classList.add("hidden"); // Hide success message after 3.5 seconds
-                        closeAddForm(); // Close the modal
-                        document.querySelector('form').submit(); // This submits the form to Laravel
-                        }, 3500);
-                } else {
-                    console.log("Form validation failed.");
-                }
-        }
-        // Function to close the edit form modal
-        function closeEditForm() {
-            const modal = document.getElementById("editFormModal");
-            modal.classList.add("hidden");
+                Swal.fire({
+                    title: "Success!",
+                    text: 'Document has been saved successfully.',
+                    icon: "success"
+                });
+            } else {
+                Swal.fire({
+                    title: "Error!",
+                    text: 'Failed to save the document.',
+                    icon: "error"
+                });
+            }
         }
 
-        // Function to open the edit form modal
-        function openEditForm() {
-            const modal = document.getElementById("editFormModal");
-            modal.classList.remove("hidden");
-        }
     </script>
-
-</body>
-
-</html>
-@endsection
+@endpush

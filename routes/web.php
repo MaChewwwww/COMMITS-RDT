@@ -199,10 +199,9 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/', [ReportController::class, 'store'])->name('reports.store');
 
         // Delete a report
-        Route::delete('/{id}', [ReportController::class, 'destroy'])->name('reports.destroy');
-
+        Route::post('/delete', [ReportController::class, 'destroy'])->name('reports.destroy');
         Route::get('/{id}/edit', [ReportController::class, 'edit'])->name('reports.edit');
-        Route::put('/{id}', [ReportController::class, 'update'])->name('reports.update');
+        Route::put('/update', [ReportController::class, 'update'])->name('reports.update');
         Route::get('/reports/export-excel', [ReportController::class, 'exportExcel'])->name('reports.exportExcel');
     });
 
@@ -242,3 +241,18 @@ Route::middleware(['auth'])->group(function () {
         ->name('notifications.clearAll')
         ->middleware('auth');
 });
+
+
+
+//Super Admin
+Route::get('/Superadmin_dashboard', function () {
+    return view('SuperAdmin.Superadmin_dashboard');
+})->name('Superadmin_dashboard');
+
+Route::get('/User', function () {
+    return view('SuperAdmin.User');
+})->name('User');
+
+Route::get('/Auditlog', function () {
+    return view('SuperAdmin.Auditlog');
+})->name('Auditlog');
