@@ -39,6 +39,11 @@
     <div class="container mx-auto bg-white md:py-20 md:px-20 w-[90%] md:w-[70%] lg:w-[70%]">
         <div class="page">
             <div class="container">
+                    <div class="flex flex-col items-end text-xs leading-tight text-gray-800">
+                        <p>{{ $associatedDocument->control_number ?? '__________' }}</p>
+                        <p>Rev. {{ $associatedDocument->revision ?? '_________'}}</p>
+                        <p>{{ \Carbon\Carbon::parse($associatedDocument->date_issued)->format('F j, Y') ?? '__________' }} </p>
+                    </div>
                 <div class="flex items-center justify-center mb-5">
                     <div class="mr-5">
                         <img src="{{ asset('Logo_image/logopup.png') }}" alt="Logo" class="w-28 mb-5">
@@ -94,22 +99,26 @@
 
     <!-- Document 2 (duplicate the structure as needed) -->
     <div class="container mx-auto bg-white md:py-20 md:px-20 w-[90%] md:w-[70%] lg:w-[70%]">
-        <div class="container mt-15">
-            <div class="flex items-center justify-center mb-5">
-                <div class="mr-5">
-                    <img src="{{ asset('Logo_image/logopup.png') }}" alt="Logo" class="w-28 mb-5">
+            <div class="container mt-15">
+                    <div class="flex flex-col items-end text-xs leading-tight text-gray-800">
+                        <p>{{ $associatedDocument->control_number ?? '__________' }}</p>
+                        <p>Rev. {{ $associatedDocument->revision ?? '_________'}}</p>
+                        <p>{{ \Carbon\Carbon::parse($associatedDocument->date_issued)->format('F j, Y') ?? '__________' }} </p>
+                    </div>
+                <div class="flex items-center justify-center mb-5">
+                    <div class="mr-5">
+                        <img src="{{ asset('Logo_image/logopup.png') }}" alt="Logo" class="w-28 mb-5">
+                    </div>
+                    <div class="text-center" style="font-family: 'Times New Roman', serif;">
+                        <h1 class="text-sm font-normal">Republic of the Philippines</h1>
+                        <h1 class="text-base font-normal">POLYTECHNIC UNIVERSITY OF THE PHILIPPINES</h1>
+                        <p class="text-sm mb-5">Quezon City</p>
+                        <h2 class="text-xl font-semibold">WAIVER</h2>
+                    </div>
                 </div>
-                <div class="text-center" style="font-family: 'Times New Roman', serif;">
-                    <h1 class="text-sm font-normal">Republic of the Philippines</h1>
-                    <h1 class="text-base font-normal">POLYTECHNIC UNIVERSITY OF THE PHILIPPINES</h1>
-                    <p class="text-sm mb-5">Quezon City</p>
-                    <h2 class="text-xl font-semibold">WAIVER</h2>
-                </div>
-            </div>
-            <div class="text-right my-10 mb-8 font-Arial">
-                <label class="font-medium">Date: </label>
-                <span> <span id="date-placeholder"
-                        class="underline">{{ $associatedDocument->additional_date ? \Carbon\Carbon::parse($associatedDocument->additional_date)->format('F j, Y') : '__________' }}
+                <div class="text-right my-10 mb-8 font-Arial">
+                    <label class="font-medium">Date: </label>
+                    <span> <span id="date-placeholder" class="underline">{{ $associatedDocument->additional_date ? \Carbon\Carbon::parse($associatedDocument->additional_date)->format('F j, Y') : '__________' }}
                     </span>
             </div>
 
@@ -147,8 +156,168 @@
         </div>
     </div>
 
-    <!-- Modal -->
     @include('Documents.waiver.edit-form')
+    {{--
+    <!-- Modal -->
+    <div id="addFormModal" class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 hidden">
+        <div class="modal-content1 bg-white rounded-lg shadow-lg p-6 w-full max-w-lg relative">
+            <!-- Close Button in Top-Right -->
+            <span class="close absolute top-2.5 right-2.5 text-red-500 text-2xl cursor-pointer hover:text-red-700"
+                onclick="closeAddForm()">&times;</span>
+
+            <!-- Modal Title -->
+            <h3 class="text-xl font-bold mb-4 text-gray-700">Edit Waiver Form</h3>
+
+            <!-- Form Container -->
+            <div id="formContainer" class="space-y-4">
+            <form action="{{ route('documents.waiver.update', $document->id) }}" method="POST">
+            <h2 class="text-xl font-medium mb-4 mt-6 text-gray-700 text-center">Form 1</h2>
+            @csrf
+            @method('PUT')
+                <!-- Date Field -->
+                <div class="form-group">
+                                    <input type="hidden" name="document_type" value="{{ $document->document_type }}">
+                                    <input type="hidden" name="control_number" value="{{ $associatedDocument->control_number }}">
+                                    <input type="hidden" name="revision" value="{{ $associatedDocument->revision }}">
+                                    <input type="hidden" name="date_issued" value="{{ $associatedDocument->date_issued }}">
+                    <label class="block text-gray-600 font-medium mb-1">Date:</label>
+                    <input type="date" id="AddDate" name="date" value="{{ old('date', $associatedDocument->date ?? '') }}"
+                        class="AddDate w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        required>
+                    <span id="dateError" class="text-red-500 text-sm hidden">Date is required.</span>
+                </div>
+
+                <!-- Patient Name Field -->
+                <div class="form-group">
+                    <label class="block text-gray-600 font-medium mb-1">Patient's Name:</label>
+                    <input type="text" id="AddPatientName" name="name" value="{{ old('name', $associatedDocument->name ?? '') }}"
+                        class="AddPatientName w-full border rounded-md px-3 py-2" placeholder="Enter patient's name"
+                        required>
+                    <span id="nameError" class="text-red-500 text-sm hidden">Name is required.</span>
+                </div>
+
+                <!-- Name of school -->
+                <div class="form-group">
+                    <label class="block text-gray-600 font-medium mb-1">Name of School:</label>
+                    <input type="text" id="AddExcuse" class="AddExcuse w-full border rounded-md px-3 py-2" name="collegeName"
+                        value="{{ old('collegeName', $associatedDocument->collegeName ?? '') }}"
+                        placeholder="School Name">
+                </div>
+                <!--Department of -->
+                <div class="form-group">
+                    <label class="block text-gray-600 font-medium mb-1">Department of:</label>
+                    <input type="text" id="deparatment" class="AddExcuse w-full border rounded-md px-3 py-2" name="department"
+                        value="{{ old('department', $associatedDocument->department ?? '') }}"
+                        placeholder="Enter Department">
+                </div>
+                <!--Date -->
+                <div class="form-group">
+                    <label class="block text-gray-600 font-medium mb-1">Date Examined:</label>
+                    <input type="date" id="AddDateexamined" name="diagnosedDate" value="{{ old('diagnosedDate', $associatedDocument->diagnosedDate ?? '') }}"
+                        class="AddDate w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        required>
+                    <span id="dateError" class="text-red-500 text-sm hidden">Date is required.</span>
+                </div>
+                <!--diagnosis of -->
+                <div class="form-group">
+                    <label class="block text-gray-600 font-medium mb-1">Diagnose of:</label>
+                    <input type="text" id="AddDiagnose" class="AddExcuse w-full border rounded-md px-3 py-2" name="diagnosedIllness"
+                        value="{{ old('diagnosedIllness', $associatedDocument->diagnosedIllness ?? '') }}"
+                        placeholder="Enter Diagnosis">
+                </div>
+
+                <!--Date follow up-->
+                <div class="form-group">
+                    <label class="block text-gray-600 font-medium mb-1"> Follow-up Date:</label>
+                    <input type="date" id="followup" name="followUpDate" value="{{ old('followUpDate', $associatedDocument->followUpDate ?? '') }}"
+                        class="AddDate w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        required>
+                    <span id="dateError" class="text-red-500 text-sm hidden">Follow-up Date is required.</span>
+                </div>
+
+                <!-- License Number -->
+                <div class="form-group">
+                    <label class="block text-gray-600 font-medium mb-1">Physician Name:</label>
+                    <input type="text" id="lic_no" class="Licno w-full border rounded-md px-3 py-2" name="doctorName"
+                        value="{{ old('doctorName', $associatedDocument->doctorName ?? '') }}"
+                        placeholder="Physician Name" required>
+                    <span id="licError" class="text-red-500 text-sm hidden">Physician Name is required.</span>
+                </div>
+            </div>
+        <div id="formContainer1" class="hidden space-y-4">
+            <h1 class="text-xl font-medium mb-4 mt-6 text-gray-700 text-center">Form 2</h2>
+                <!-- Second Form (Medical Clearance) -->
+                <div class="form-group">
+                    <label class="block text-gray-600 font-medium mb-1">Date:</label>
+                    <input type="date" id="AddDate-clearance1" name="additional_date" class="w-full border rounded-md px-3 py-2" value="{{ old('additional_date', $associatedDocument->additional_date ?? '') }}">
+                </div>
+
+                <div class="form-group">
+                    <label class="block text-gray-600 font-medium mb-1">Patient's Name:</label>
+                    <input type="text" id="AddPatientName-clearance1"  name="additional_name" class="w-full border rounded-md px-3 py-2" placeholder="Patient Name" value="{{ old('additional_name', $associatedDocument->additional_name ?? '') }}">
+                </div>
+
+                <div class="form-group">
+                    <label class="block text-gray-600 font-medium mb-1">School Name:</label>
+                    <input type="text" id="AddExcuse-clearance1"  name="additional_collegeName" class="w-full border rounded-md px-3 py-2" placeholder="School Name" value="{{ old('additional_collegeName', $associatedDocument->additional_collegeName ?? '') }}">
+                </div>
+
+                <div class="form-group">
+                    <label class="block text-gray-600 font-medium mb-1">Department:</label>
+                    <input type="text" id="AddXray1-clearance1"  name="additional_department" class="w-full border rounded-md px-3 py-2" placeholder="Enter Department" value="{{ old('additional_department', $associatedDocument->additional_department ?? '') }}">
+                </div>
+
+                <div class="form-group">
+                    <label class="block text-gray-600 font-medium mb-1">Date Examined:</label>
+                    <input type="date" id="AddDateexa-clearance1"  name="additional_diagnosedDate" class="w-full border rounded-md px-3 py-2" value="{{ old('additional_diagnosedDate', $associatedDocument->additional_diagnosedDate ?? '') }}">
+                </div>
+
+                <div class="form-group">
+                    <label class="block text-gray-600 font-medium mb-1">Diagnosis:</label>
+                    <input type="text" id="AddXray2-clearance1"  name="additional_diagnosedIllness" class="w-full border rounded-md px-3 py-2" placeholder="Enter Diagnosis" value="{{ old('additional_diagnosedIllness', $associatedDocument->additional_diagnosedIllness ?? '') }}">
+                </div>
+
+                <div class="form-group">
+                    <label class="block text-gray-600 font-medium mb-1">Follow-up Date:</label>
+                    <input type="date" id="AddDatefollow-clearance1"  name="additional_followUpDate" class="w-full border rounded-md px-3 py-2" value="{{ old('additional_followUpDate', $associatedDocument->additional_followUpDate ?? '') }}">
+                </div>
+
+                <div class="form-group">
+                    <label class="block text-gray-600 font-medium mb-1">Physician Name:</label>
+                    <input type="text" id="licNo-clearance1" name="additional_doctorName" class="w-full border rounded-md px-3 py-2" placeholder="Physician Name" value="{{ old('additional_doctorName', $associatedDocument->additional_doctorName ?? '') }}">
+                </div>
+        </div>
+                <div class="flex justify-end space-x-4 mt-6">
+                    <button onclick="addForm()" type="button"
+                        class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-medium py-2 px-4 rounded-md">
+                        Add Form
+                    </button>
+                    <button onclick="saveAdd()" type="submit"
+                        class="bg-[#3CAA38] hover:bg-[#2B8E2F] text-white font-medium py-2 px-4 rounded-md">
+                        Submit
+                    </button>
+                </div>
+            </div>
+         </form>
+        </div>
+    </div>
+    <!-- Success Notification -->
+    <div id="successMessage" class="hidden fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
+        <div class="bg-white rounded-lg shadow-lg p-6 w-96 text-center">
+            <div class="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                <!-- Green Checkmark Icon -->
+                <svg class="w-8 h-8 text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                    fill="currentColor" aria-hidden="true">
+                    <path fill-rule="evenodd"
+                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.707a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 10-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                        clip-rule="evenodd" />
+                </svg>
+            </div>
+            <p class="text-lg font-semibold">Successfully Edited!</p>
+        </div>
+    </div> --}}
+
+
 
 @endsection
 

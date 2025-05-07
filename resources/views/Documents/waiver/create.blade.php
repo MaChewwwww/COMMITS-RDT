@@ -39,6 +39,13 @@
     <div class="container mx-auto bg-white md:py-20 md:px-20 w-[90%] md:w-[70%] lg:w-[70%]">
         <div class="page">
             <div class="container">
+                @foreach ($controlNumber->where('document_type', $documentType) as $control)
+                    <div class="flex flex-col items-end text-xs leading-tight text-gray-800">
+                        <p>{{ $control->control_number ?? '__________' }}</p>
+                        <p>Rev. {{ $control->revision ?? '_________'}}</p>
+                        <p>{{ \Carbon\Carbon::parse($control->date_issued)->format('F j, Y') ?? '__________' }} </p>
+                    </div>
+                @endforeach
                 <div class="flex items-center justify-center mb-5">
                     <div class="mr-5">
                         <img src="{{ asset('Logo_image/logopup.png') }}" alt="Logo" class="w-28 mb-5">
@@ -84,6 +91,13 @@
     <!-- Document 2 (duplicate the structure as needed) -->
     <div class="container mx-auto bg-white md:py-20 md:px-20 w-[90%] md:w-[70%] lg:w-[70%]">
         <div class="container2 mt-15">
+                @foreach ($controlNumber->where('document_type', $documentType) as $control)
+                    <div class="flex flex-col items-end text-xs leading-tight text-gray-800">
+                        <p>{{ $control->control_number ?? '__________' }}</p>
+                        <p>Rev. {{ $control->revision ?? '_________'}}</p>
+                        <p>{{ \Carbon\Carbon::parse($control->date_issued)->format('F j, Y') ?? '__________' }} </p>
+                    </div>
+                @endforeach
             <div class="flex items-center justify-center mb-5">
                 <div class="mr-5">
                     <img src="{{ asset('Logo_image/logopup.png') }}" alt="Logo" class="w-28 mb-5">
@@ -129,13 +143,167 @@
         </div>
     </div>
 
-
-    <!-- Add Waiver Modal -->
     @include('Documents.waiver.create-form')
+    {{--
+    <!-- Modal -->
+    <div id="addFormModal" class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 hidden">
+        <div class="modal-content1 bg-white rounded-lg shadow-lg p-6 w-full max-w-lg relative">
+            <!-- Close Button in Top-Right -->
+            <span class="close absolute top-2.5 right-2.5 text-red-500 text-2xl cursor-pointer hover:text-red-700"
+                onclick="closeAddForm()">&times;</span>
 
+            <!-- Modal Title -->
+            <h3 class="text-xl font-bold mb-4 text-gray-700">Add Waiver Form</h3>
+
+            <!-- Form Container -->
+            <div id="formContainer" class="space-y-4">
+    @foreach ($controlNumber->where('document_type', $documentType) as $control)
+        <form action="{{ route('documents.waiver.store') }}" method="POST">
+            <h2 class="text-xl font-medium mb-4 mt-6 text-gray-700 text-center">Form 1</h2>
+            @csrf
+                <!-- Date Field -->
+                <div class="form-group">
+                        <input type="hidden" name="document_type" value="{{ request('document_type') }}">
+                        <input type="hidden" name="control_number" value="{{ $control->control_number }}">
+                        <input type="hidden" name="revision" value="{{ $control->revision }}">
+                        <input type="hidden" name="date_issued" value="{{ $control->date_issued }}">
+                    <label class="block text-gray-600 font-medium mb-1">Date:</label>
+                    <input type="date" id="AddDate" name="date"
+                        class="AddDate w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        required>
+                    <span id="dateError" class="text-red-500 text-sm hidden">Date is required.</span>
+                </div>
+
+                <!-- Patient Name Field -->
+                <div class="form-group">
+                    <label class="block text-gray-600 font-medium mb-1">Patient's Name:</label>
+                    <input type="text" id="AddPatientName" name="name"
+                        class="AddPatientName w-full border rounded-md px-3 py-2" placeholder="Enter patient's name"
+                        required>
+                    <span id="nameError" class="text-red-500 text-sm hidden">Name is required.</span>
+                </div>
+
+                <!-- Name of school -->
+                <div class="form-group">
+                    <label class="block text-gray-600 font-medium mb-1">Name of School:</label>
+                    <input type="text" id="AddExcuse" class="AddExcuse w-full border rounded-md px-3 py-2" name="collegeName"
+                        placeholder="School Name">
+                </div>
+                <!--Department of -->
+                <div class="form-group">
+                    <label class="block text-gray-600 font-medium mb-1">Department of:</label>
+                    <input type="text" id="deparatment" class="AddExcuse w-full border rounded-md px-3 py-2" name="department"
+                        placeholder="Enter Department">
+                </div>
+                <!--Date -->
+                <div class="form-group">
+                    <label class="block text-gray-600 font-medium mb-1">Date Examined:</label>
+                    <input type="date" id="AddDateexamined" name="diagnosedDate"
+                        class="AddDate w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        required>
+                    <span id="dateError" class="text-red-500 text-sm hidden">Date is required.</span>
+                </div>
+                <!--diagnosis of -->
+                <div class="form-group">
+                    <label class="block text-gray-600 font-medium mb-1">Diagnose of:</label>
+                    <input type="text" id="AddDiagnose" class="AddExcuse w-full border rounded-md px-3 py-2" name="diagnosedIllness"
+                        placeholder="Enter Diagnosis">
+                </div>
+
+                <!--Date follow up-->
+                <div class="form-group">
+                    <label class="block text-gray-600 font-medium mb-1"> Follow-up Date:</label>
+                    <input type="date" id="followup" name="followUpDate"
+                        class="AddDate w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        required>
+                    <span id="dateError" class="text-red-500 text-sm hidden">Follow-up Date is required.</span>
+                </div>
+
+                <!-- License Number -->
+                <div class="form-group">
+                    <label class="block text-gray-600 font-medium mb-1">Physician Name:</label>
+                    <input type="text" id="lic_no" class="Licno w-full border rounded-md px-3 py-2" name="doctorName"
+                        placeholder="Physician Name" required>
+                    <span id="licError" class="text-red-500 text-sm hidden">Physician Name is required.</span>
+                </div>
+            </div>
+        <div class="hidden" id="formContainer1">
+            <h1 class="text-xl font-medium mb-4 mt-6 text-gray-700 text-center">Form 2</h2>
+                <!-- Second Form (Medical Clearance) -->
+                <div class="form-group">
+                    <label class="block text-gray-600 font-medium mb-1">Date:</label>
+                    <input type="date" id="AddDate-clearance" name="additional_date" class="w-full border rounded-md px-3 py-2">
+                </div>
+
+                <div class="form-group">
+                    <label class="block text-gray-600 font-medium mb-1">Patient's Name:</label>
+                    <input type="text" id="AddPatientName-clearance"  name="additional_name" class="w-full border rounded-md px-3 py-2" placeholder="Patient Name">
+                </div>
+
+                <div class="form-group">
+                    <label class="block text-gray-600 font-medium mb-1">School Name:</label>
+                    <input type="text" id="AddExcuse-clearance"  name="additional_collegeName" class="w-full border rounded-md px-3 py-2" placeholder="School Name">
+                </div>
+
+                <div class="form-group">
+                    <label class="block text-gray-600 font-medium mb-1">Department:</label>
+                    <input type="text" id="AddXray1-clearance"  name="additional_department" class="w-full border rounded-md px-3 py-2" placeholder="Enter Department">
+                </div>
+
+                <div class="form-group">
+                    <label class="block text-gray-600 font-medium mb-1">Date Examined:</label>
+                    <input type="date" id="AddDateexa-clearance"  name="additional_diagnosedDate" class="w-full border rounded-md px-3 py-2">
+                </div>
+
+                <div class="form-group">
+                    <label class="block text-gray-600 font-medium mb-1">Diagnosis:</label>
+                    <input type="text" id="AddXray2-clearance"  name="additional_diagnosedIllness" class="w-full border rounded-md px-3 py-2" placeholder="Enter Diagnosis">
+                </div>
+
+                <div class="form-group">
+                    <label class="block text-gray-600 font-medium mb-1">Follow-up Date:</label>
+                    <input type="date" id="AddDatefollow-clearance"  name="additional_followUpDate" class="w-full border rounded-md px-3 py-2">
+                </div>
+
+                <div class="form-group">
+                    <label class="block text-gray-600 font-medium mb-1">Physician Name:</label>
+                    <input type="text" id="licNo-clearance" name="additional_doctorName" class="w-full border rounded-md px-3 py-2" placeholder="Physician Name">
+                </div>
+            </div>
+                <div class="flex justify-end space-x-4 mt-6">
+                    <button onclick="addForm()" type="button"
+                        class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-medium py-2 px-4 rounded-md">
+                        Add Form
+                    </button>
+                    <button onclick="saveAdd()" type="submit"
+                        class="bg-[#3CAA38] hover:bg-[#2B8E2F] text-white font-medium py-2 px-4 rounded-md">
+                        Submit
+                    </button>
+                </div>
+            </div>
+         </form>
+    @endforeach
+        </div>
+    </div>
+    --}}
+    <!-- Success Notification -->
+    <div id="successMessage" class="hidden fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
+        <div class="bg-white rounded-lg shadow-lg p-6 w-96 text-center">
+            <div class="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                <!-- Green Checkmark Icon -->
+                <svg class="w-8 h-8 text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                    fill="currentColor" aria-hidden="true">
+                    <path fill-rule="evenodd"
+                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.707a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 10-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                        clip-rule="evenodd" />
+                </svg>
+            </div>
+            <p class="text-lg font-semibold">Successfully Saved!</p>
+        </div>
+    </div>
 @endsection
 
-@push('scripts')
+ @push('scripts')
     <script>
         function printWaiver() {
             window.print();

@@ -24,7 +24,10 @@
         <form action="{{ route('documents.dmdc_consent_form.store') }}" method="POST"
             class="max-h-[80vh] overflow-y-auto ">
             @csrf
-            <input type="hidden" name="document_type" value="{{ request('document_type') }}">
+                                    <input type="hidden" name="document_type" value="{{ request('document_type') }}">
+                                    <input type="hidden" name="control_number" value="{{ $control->control_number }}">
+                                    <input type="hidden" name="revision" value="{{ $control->revision }}">
+                                    <input type="hidden" name="date_issued" value="{{ $control->date_issued }}">
             <div class="grid gap-4 mb-4 sm:grid-cols-2 px-2">
                 <!-- Activity Name Field -->
                 <div class="col-span-2">

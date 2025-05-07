@@ -10,6 +10,7 @@ use App\Models\AnnualMedicalClearance;
 use App\Models\Waiver;
 use App\Models\WaiverForPulmonaryCase;
 use App\Models\DMDCConsentForm;
+use App\Models\ControlNumber;
 use Illuminate\Http\Request;
 
 class DocumentController extends Controller
@@ -29,17 +30,103 @@ class DocumentController extends Controller
             'Waiver for Pulmonary Case' => 'documents.waiver_for_pulmonary_case.create',
             'DMDC Consent Form' => 'documents.dmdc_consent_form.create',
         ];
-
+        
+        $controlNumber = ControlNumber::all();
         // Check if the document type exists in the view mapping
         if (!array_key_exists($documentType, $views)) {
             return redirect()->route('documents.index')->with('error', 'Invalid document type.');
         }
 
         // Render the corresponding create view
-        return view($views[$documentType], compact('documentType'));
+        return view($views[$documentType], compact('documentType', 'controlNumber'));
     }
 
+    public function ControlNumber(Request $request)
+    {
+        // Validate common fields
+        $request->validate([
+            'document_type' => 'required|string|max:255',
+            'control_number' => 'required|string|max:255',
+            'revision' => 'required|string|max:255',
+            'date_issued' => 'required|date',
+        ]);
+        
+        // Check if the document type already exists
+        $existing = ControlNumber::where('document_type', $request->input('document_type'))->first();
 
+        if ($existing) {
+            return redirect()->back()->withInput()->withErrors([
+                'document_type' => 'This document type already exists.'
+            ]);
+        }
+        // Create the ControlNumber record
+        $controlNumber = ControlNumber::create([
+            'document_type' => $request->input('document_type'),
+            'control_number' => $request->input('control_number'),
+            'revision' => $request->input('revision'),
+            'date_issued' => $request->input('date_issued'),
+        ]);
+        
+        //dd($request->all()); //debugging
+        return redirect()->route('documents.index')->with('success', 'Control number created successfully!');
+    }
+    
+    public function updateControlNumber(Request $request, $id)
+    {
+        //dd($request->all()); //debugging
+        // Find the ControlNumber record
+        $controlNumber = ControlNumber::findOrFail($id);
+        // Validate common fields
+        $request->validate([
+            'document_type' => 'required|string|max:255',
+            'control_number' => 'required|string|max:255',
+            'revision' => 'required|string|max:255',
+            'date_issued' => 'required|date',
+        ]);
+        // Check if the document type already exists
+        $existing = ControlNumber::where('document_type', $request->input('document_type'))
+            ->where('id', '!=', $id) // Exclude the current record
+            ->first();
+        if ($existing) {
+            return redirect()->back()->withInput()->withErrors([
+                'document_type' => 'This document type already exists.'
+            ]);
+        }
+        // Update the ControlNumber record
+        $controlNumber->update([
+            'document_type' => $request->input('document_type'),
+            'control_number' => $request->input('control_number'),
+            'revision' => $request->input('revision'),
+            'date_issued' => $request->input('date_issued'),
+        ]);
+        
+        $models = [
+            \App\Models\ExcuseLetter::class,
+            \App\Models\AnnualMedicalClearance::class,
+            \App\Models\MedicalClearance::class,
+            \App\Models\MedicalCertificate::class,
+            \App\Models\Waiver::class,
+            \App\Models\WaiverForPulmonaryCase::class,
+            \App\Models\DMDCConsentForm::class,
+        ];
+    
+        foreach ($models as $model) {
+            $model::where('document_type', $request->document_type)->update([
+                'control_number' => $request->control_number,
+                'revision' => $request->revision,
+                'date_issued' => $request->date_issued,
+            ]);
+        }
+        //dd($request->all()); //debugging
+        return redirect()->route('documents.index')->with('success', 'Control number updated successfully!');
+    }
+
+    public function editControlNumber($id)
+    {
+        $controlNumber = ControlNumber::findOrFail($id);
+        return view('controlNumber.edit', compact('controlNumber'));
+    }
+    
     public function store(Request $request)
     {
         $document_type = $request->input('document_type');
@@ -49,7 +136,7 @@ class DocumentController extends Controller
         $request->validate([
             'document_type' => 'required|string|max:255',
         ]);
-
+        $controlNumber = ControlNumber::where('document_type', $request['document_type'])->first();
         // Create the document record
         $document = Document::create([
             'document_type' => $document_type,
@@ -69,8 +156,11 @@ class DocumentController extends Controller
                     'doctorName' => 'required|string|max:255',
                     'recipient' => 'required|string|max:255',
                     'department' => 'required|string|max:255',
+                    'control_number' => 'required|string|max:255',
+                    'revision' => 'required|string|max:255',
+                    'date_issued' => 'required|date',
                 ]);
-
+                
                 ExcuseLetter::create([
                     'document_type' => $request->document_type,
                     'document_id' => $document->id, // link document_id
@@ -81,6 +171,9 @@ class DocumentController extends Controller
                     'doctorName' => $request->doctorName,
                     'recipient' => $request->recipient,
                     'department' => $request->department,
+                    'control_number' => $request->control_number,
+                    'revision' => $request->revision,
+                    'date_issued' => $request->date_issued,
                 ]);
                 break;
 
@@ -95,6 +188,9 @@ class DocumentController extends Controller
                         'position' => 'required|string|max:255',
                         'license_number' => 'required|string|max:255',
                         'xray_result' => 'nullable|string|max:255',
+                        'control_number' => 'required|string|max:255',
+                        'revision' => 'required|string|max:255',
+                        'date_issued' => 'required|date',
                         'additional_date' => 'nullable|date',
                         'additional_patient_name' => 'nullable|string|max:255',
                         'additional_vaccination_status' => 'nullable|string|max:255',
@@ -115,6 +211,9 @@ class DocumentController extends Controller
                     'position' => $request->position,
                     'license_number' => $request->license_number,
                     'xray_result' => $request->xray_result,
+                    'control_number' => $request->control_number,
+                    'revision' => $request->revision,
+                    'date_issued' => $request->date_issued,
                     'additional_date' => $request->additional_date,
                     'additional_patient_name' => $request->additional_patient_name,
                     'additional_vaccination_status' => $request->additional_vaccination_status,
@@ -137,6 +236,9 @@ class DocumentController extends Controller
                     'endDate' => 'required|date',
                     'reason' => 'required|string|max:255',
                     'doctorName' => 'required|string|max:255',
+                    'control_number' => 'required|string|max:255',
+                    'revision' => 'required|string|max:255',
+                    'date_issued' => 'required|date',
                     'additional_date' => 'nullable|date',
                     'additional_patient_name' => 'nullable|string|max:255',
                     'additional_sickness' => 'nullable|string|max:255',
@@ -158,6 +260,9 @@ class DocumentController extends Controller
                     'endDate' => $request->endDate,
                     'reason' => $request->reason,
                     'doctorName' => $request->doctorName,
+                    'control_number' => $request->control_number,
+                    'revision' => $request->revision,
+                    'date_issued' => $request->date_issued,
                     'additional_date' => $request->additional_date,
                     'additional_patient_name' => $request->additional_patient_name,
                     'additional_sickness' => $request->additional_sickness,
@@ -176,6 +281,9 @@ class DocumentController extends Controller
                     'excuseDate' => 'required|date',
                     'doctorName' => 'required|string|max:255',
                     'license_number' => 'required|string|max:255',
+                    'control_number' => 'required|string|max:255',
+                    'revision' => 'required|string|max:255',
+                    'date_issued' => 'required|date',
                     'additional_date' => 'nullable|date',
                     'additional_patient_name' => 'nullable|string|max:255',
                     'additional_excuse_date' => 'nullable|date',
@@ -191,6 +299,9 @@ class DocumentController extends Controller
                     'excuseDate' => $request->excuseDate,
                     'doctorName' => $request->doctorName,
                     'license_number' => $request->license_number,
+                    'control_number' => $request->control_number,
+                    'revision' => $request->revision,
+                    'date_issued' => $request->date_issued,
                     'additional_date' => $request->additional_date,
                     'additional_patient_name' => $request->additional_patient_name,
                     'additional_excuse_date' => $request->additional_excuse_date,
@@ -210,6 +321,9 @@ class DocumentController extends Controller
                     'diagnosedIllness' => 'required|string|max:255',
                     'followUpDate' => 'required|date',
                     'doctorName' => 'required|string|max:255',
+                    'control_number' => 'required|string|max:255',
+                    'revision' => 'required|string|max:255',
+                    'date_issued' => 'required|date',
                     'additional_date' => 'nullable|date',
                     'additional_name' => 'nullable|string|max:255',
                     'additional_collegeName' => 'nullable|string|max:255',
@@ -231,6 +345,9 @@ class DocumentController extends Controller
                     'diagnosedIllness' => $request->diagnosedIllness,
                     'followUpDate' => $request->followUpDate,
                     'doctorName' => $request->doctorName,
+                    'control_number' => $request->control_number,
+                    'revision' => $request->revision,
+                    'date_issued' => $request->date_issued,
                     'additional_date' => $request->additional_date,
                     'additional_name' => $request->additional_name,
                     'additional_collegeName' => $request->additional_collegeName,
@@ -250,6 +367,9 @@ class DocumentController extends Controller
                     'year' => 'required|string|max:255',
                     'followUpDate' => 'required|date',
                     'date' => 'required|date',
+                    'control_number' => 'required|string|max:255',
+                    'revision' => 'required|string|max:255',
+                    'date_issued' => 'required|date',
                     'additional_date' => 'nullable|date',
                     'additional_patient_name' => 'nullable|string|max:255',
                     'additional_collegeName' => 'nullable|string|max:255',
@@ -266,6 +386,9 @@ class DocumentController extends Controller
                     'year' => $request->year,
                     'followUpDate' => $request->followUpDate,
                     'date' => $request->date,
+                    'control_number' => $request->control_number,
+                    'revision' => $request->revision,
+                    'date_issued' => $request->date_issued,
                     'additional_patient_name' => $request->additional_patient_name,
                     'additional_collegeName' => $request->additional_collegeName,
                     'additional_department' => $request->additional_department,
@@ -279,18 +402,25 @@ class DocumentController extends Controller
                 $request->validate([
                     'document_type' => 'required|string|max:255',
                     'event_name' => 'required|string|max:255',
+                    'control_number' => 'required|string|max:255',
+                    'revision' => 'required|string|max:255',
+                    'date_issued' => 'required|date',
                 ]);
 
                 DMDCConsentForm::create([
                     'document_id' => $document->id, // link document_id
                     'event_name' => $request->event_name,
+                    'document_type' => $request->document_type,
+                    'control_number' => $request->control_number,
+                    'revision' => $request->revision,
+                    'date_issued' => $request->date_issued,
                 ]);
                 break;
         }
 
 
-        $view = 'documents.' . strtolower(str_replace(' ', '_', $document_type)) . '.view';
-        return redirect()->route($view, ['id' => $document->id])->with('success', 'Document created successfully!');
+        $edit = 'documents.' . strtolower(str_replace(' ', '_', $document_type)) . '.edit';
+        return redirect()->route($edit, ['id' => $document->id])->with('success', 'Document created successfully!');
     }
 
     public function view($id, $documentSlug)
@@ -330,15 +460,13 @@ class DocumentController extends Controller
         }
 
         // Pass the specific document ID along with data
-        return view($viewName, [
-            'document' => $document,
-            'specificDocument' => $specificDocument,
-            'specificDocumentId' => $specificDocument->id
-        ]);
+        return view($viewName, compact('document', 'specificDocument'));
     }
 
     public function index(Request $request)
     {
+        
+        $documentTypes = Document::select('document_type')->distinct()->pluck('document_type');
         $typeOptions = [
             'Medical Certificate',
             'Medical Clearance',
@@ -365,6 +493,9 @@ class DocumentController extends Controller
         ]);
 
         $documents = Document::whereNull('deleted_at')->get();
+        $controlNumber = ControlNumber::all();
+        $existingTypes = $controlNumber->pluck('document_type')->unique()->toArray();
+        $allTypesCreated = count(array_intersect($typeOptions, $existingTypes)) === count($typeOptions);
 
 
         // Filter by document type
@@ -384,7 +515,7 @@ class DocumentController extends Controller
 
         $documents = $query->get();
 
-        return view('documents.index', compact('documents', 'typeOptions', 'MonthOptions'));
+        return view('documents.index', compact('documents','controlNumber', 'typeOptions', 'MonthOptions', 'allTypesCreated'));
     }
 
 
@@ -392,6 +523,7 @@ class DocumentController extends Controller
     public function edit($id)
     {
         $document = Document::findOrFail($id);
+        $controlNumber = ControlNumber::all();
 
         // Fetch the associated document type based on the document_type
         switch ($document->document_type) {
@@ -430,7 +562,7 @@ class DocumentController extends Controller
         // Dynamically construct the view path based on the document_type
         $viewPath = 'documents.' . strtolower(str_replace(' ', '_', $document->document_type)) . '.edit';
 
-        return view($viewPath, compact('document', 'associatedDocument'));
+        return view($viewPath, compact('document', 'associatedDocument', 'controlNumber'));
     }
 
 // Update a specific document

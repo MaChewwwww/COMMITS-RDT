@@ -39,6 +39,13 @@
         <div class="page">
             <!-- Document 2 (duplicate the structure as needed) -->
             <div class="container">
+                @foreach ($controlNumber->where('document_type', $documentType) as $control)
+                    <div class="flex flex-col items-end text-xs leading-tight text-gray-800">
+                        <p>{{ $control->control_number ?? '__________' }}</p>
+                        <p>Rev. {{ $control->revision ?? '_________'}}</p>
+                        <p>{{ \Carbon\Carbon::parse($control->date_issued)->format('F j, Y') ?? '__________' }} </p>
+                    </div>
+                @endforeach
                 <div class="flex items-center">
                     <div class="mr-5">
                         <img src="{{ asset('Logo_image/logopup.png') }}" alt="Logo" class="w-24 ">
@@ -115,7 +122,46 @@
 
         <!-- Modal -->
         @include('Documents.dmdc_consent_form.create-form')
-    </div>
+        {{--   
+        <div id="addFormModal" class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 hidden">
+            <div class="modal-content1 bg-white rounded-lg shadow-lg p-6 w-full max-w-lg relative">
+                <!-- Close Button in Top-Right -->
+                <span class="close absolute top-2.5 right-2.5 text-red-500 text-2xl cursor-pointer hover:text-red-700"
+                    onclick="closeaddForm()">&times;</span>
+
+                <!-- Modal Title -->
+
+
+                <h3 class="text-xl font-semibold mb-4 text-gray-700">Add Declaration of Medical Information</h3>
+        @foreach ($controlNumber->where('document_type', $documentType) as $control)
+            <form action="{{ route('documents.dmdc_consent_form.store') }}" method="POST">
+                @csrf
+                <!-- Form Container -->
+                <div id="formContainer" class="space-y-4">
+                    <!-- Patient Name Field -->
+                    <div class="form-group">
+                                    <input type="hidden" name="document_type" value="{{ request('document_type') }}">
+                                    <input type="hidden" name="control_number" value="{{ $control->control_number }}">
+                                    <input type="hidden" name="revision" value="{{ $control->revision }}">
+                                    <input type="hidden" name="date_issued" value="{{ $control->date_issued }}">
+                        <label class="block text-gray-600 font-medium mb-1"> Name of the event or activity:</label>
+                        <input type="text" id="activityNameInput" class="w-full border rounded-md px-3 py-2" name="event_name"
+                            placeholder="Enter activity name" required>
+                        <span id="nameError" class="text-red-500 text-sm hidden">Activity name is required.</span>
+                    </div>
+                </div>
+
+                <div class="flex justify-center space-x-4 mt-6">
+                    <button onclick="saveadds()" type="submit"
+                        class="bg-[#3CAA38] hover:bg-[#2B8E2F] text-white font-medium py-2 px-20 rounded-md">
+                        Save
+                    </button>
+                </div>
+            </form>
+        @endforeach
+            </div>
+        </div>
+    </div> --}}
 @endsection
 
 @push('scripts')

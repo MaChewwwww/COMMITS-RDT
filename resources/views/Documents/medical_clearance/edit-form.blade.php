@@ -22,10 +22,13 @@
         </div>
         <!-- Modal body -->
         <form action="{{ route('documents.medical_clearance.update', $document->id) }}" method="POST"
-            class="max-h-[80vh] overflow-y-auto ">
+                class="max-h-[80vh] overflow-y-auto ">
             @csrf
             @method('PUT')
-            <input type="hidden" name="document_type" value="{{ request('document_type') }}">
+                                    <input type="hidden" name="document_type" value="{{ $document->document_type }}">
+                                    <input type="hidden" name="control_number" value="{{ $associatedDocument->control_number }}">
+                                    <input type="hidden" name="revision" value="{{ $associatedDocument->revision }}">
+                                    <input type="hidden" name="date_issued" value="{{ $associatedDocument->date_issued }}">
             <h4 class="block mb-3 text-lg font-semibold text-blue-500 text-center">Form 1</h4>
             <div class="grid gap-4 mb-4 sm:grid-cols-2 px-2">
                 <!-- Date Field -->
@@ -62,13 +65,13 @@
                 <div>
                     <label for="vaccination_status" class="block mb-2 text-sm font-medium text-gray-900">COVID-19
                         Vaccination Status <span class="text-red-500">*</span></label>
-                    <select id="vaccination_status" name="vaccination_status" value="{{ old('vaccination_status', $associatedDocument->vaccination_status ?? '') }}"
-                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-2 focus:outline-none focus:ring-blue-500 block w-full p-2.5">
+                    <select id="vaccination_status" name="vaccination_status"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-2 focus:outline-none focus:ring-blue-500 block w-full p-2.5">
                         <option value="">Select status</option>
-                        <option value="Unvaccinated">Unvaccinated</option>
-                        <option value="Primary Incomplete">Primary Series Incomplete</option>
-                        <option value="Primary Complete">Primary dose / series completed</option>
-                        <option value="Boosters">1st / second Boosters</option>
+                        <option value="Unvaccinated" {{ (old('vaccination_status', $associatedDocument->vaccination_status) == 'Unvaccinated') ? 'selected' : '' }}>Unvaccinated</option>
+                        <option value="Primary Incomplete" {{ (old('vaccination_status', $associatedDocument->vaccination_status) == 'Primary Incomplete') ? 'selected' : '' }}>Primary Series Incomplete</option>
+                        <option value="Primary Complete" {{ (old('vaccination_status', $associatedDocument->vaccination_status) == 'Primary Complete') ? 'selected' : '' }}>Primary dose / series completed</option>
+                        <option value="Boosters" {{ (old('vaccination_status', $associatedDocument->vaccination_status) == 'Boosters') ? 'selected' : '' }}>1st / second Boosters</option>
                     </select>
                 </div>
 
@@ -76,7 +79,7 @@
                 <div>
                     <label for="doctorName" class="block mb-2 text-sm font-medium text-gray-900">Physician's name
                         <span class="text-red-500">*</span></label>
-                    <input type="date" name="doctorName" id="doctorName" value="{{ old('doctorName', $associatedDocument->doctorName ?? '') }}"
+                    <input type="text" name="doctorName" id="doctorName" value="{{ old('doctorName', $associatedDocument->doctorName ?? '') }}"
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-2 focus:outline-none focus:ring-blue-500 block w-full p-2.5"
                         placeholder="Enter physician's full name" required="">
                     <span id="PhcError" class="text-red-500 text-sm hidden">Physician name is required.</span>
@@ -153,13 +156,13 @@
                     <div>
                         <label for="additional_vaccination_status" class="block mb-2 text-sm font-medium text-gray-900">COVID-19
                             Vaccination Status <span class="text-red-500">*</span></label>
-                        <select id="additional_vaccination_status2" name="additional_vaccination_status" value="{{ old('vaccination_status', $associatedDocument->additional_vaccination_status ?? '') }}"
+                        <select id="additional_vaccination_status2" name="additional_vaccination_status"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-2 focus:outline-none focus:ring-blue-500 block w-full p-2.5">
                             <option value="">Select status</option>
-                            <option value="Unvaccinated">Unvaccinated</option>
-                            <option value="Primary Incomplete">Primary Series Incomplete</option>
-                            <option value="Primary Complete">Primary dose / series completed</option>
-                            <option value="Boosters">1st / second Boosters</option>
+                            <option value="Unvaccinated" {{ (old('additional_vaccination_status', $associatedDocument->additional_vaccination_status) == 'Unvaccinated') ? 'selected' : '' }}>Unvaccinated</option>
+                            <option value="Primary Incomplete" {{ (old('additional_vaccination_status', $associatedDocument->additional_vaccination_status) == 'Primary Incomplete') ? 'selected' : '' }}>Primary Series Incomplete</option>
+                            <option value="Primary Complete" {{ (old('additional_vaccination_status', $associatedDocument->additional_vaccination_status) == 'Primary Complete') ? 'selected' : '' }}>Primary dose / series completed</option>
+                            <option value="Boosters" {{ (old('additional_vaccination_status', $associatedDocument->additional_vaccination_status) == 'Boosters') ? 'selected' : '' }}>1st / second Boosters</option>
                         </select>
                     </div>
 

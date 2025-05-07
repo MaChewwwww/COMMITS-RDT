@@ -38,22 +38,29 @@
         <div class="page">
             <!-- Document Content -->
             <div class="container">
+                @foreach ($controlNumber->where('document_type', $documentType) as $control)
+                    <div class="flex flex-col items-end text-xs leading-tight text-gray-800">
+                        <p>{{ $control->control_number ?? '__________' }}</p>
+                        <p>Rev. {{ $control->revision ?? '_________'}}</p>
+                        <p>{{ \Carbon\Carbon::parse($control->date_issued)->format('F j, Y') ?? '__________' }} </p>
+                    </div>
+                @endforeach
                 <div class="flex items-center justify-center mb-10">
                     <div class="mr-5">
-                        <img src="{{ asset('Logo_image/logopup.png') }}" alt="University logo" class="w-28 mb-5">
-                    </div>
-                    <div class="text-center" style="font-family: 'Times New Roman', serif;">
+                            <img src="{{ asset('Logo_image/logopup.png') }}" alt="University logo" class="w-28 mb-5">
+                        </div>
+                        <div class="text-center" style="font-family: 'Times New Roman', serif;">
 
-                        <h1 class="text-sm font-normal">Republic of the Philippines</h1>
-                        <h1 class="text-base font-normal">POLYTECHNIC UNIVERSITY OF THE PHILIPPINES</h1>
-                        <p class="text-sm mb-5">Quezon City</p>
-                        <h2 class="text-xl font-semibold">EXCUSE LETTER</h2>
+                            <h1 class="text-sm font-normal">Republic of the Philippines</h1>
+                            <h1 class="text-base font-normal">POLYTECHNIC UNIVERSITY OF THE PHILIPPINES</h1>
+                            <p class="text-sm mb-5">Quezon City</p>
+                            <h2 class="text-xl font-semibold">EXCUSE LETTER</h2>
+                        </div>
                     </div>
-                </div>
 
-                <!-- Body Content -->
-                <!-- Body Content -->
-                <div id="letterOutput" class="md:px-10" style="font-size: 14px">
+                    <!-- Body Content -->
+                    <!-- Body Content -->
+                    <div id="letterOutput" class="md:px-10" style="font-size: 14px">
                     <div class="mb-10 text-right">
                         <input class="font-medium"></input>
                         <span id="letterDate">Date_____________________</span>
@@ -97,13 +104,93 @@
         @include('Documents.excuse_letter.create-form')
     </div>
 
+                    <!-- Modal -->
+                    <div id="addFormModal"
+                        class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 hidden">
+                        <div class="modal-content bg-white rounded-lg shadow-lg p-6 w-full max-w-lg relative"
+                            style="max-height: 80%; overflow-y: auto;">
+                            <!-- Close Button in Top-Right -->
+                            <span
+                                class="close absolute top-2.5 right-2.5 text-red-500 text-3xl cursor-pointer hover:text-red-700"
+                                onclick="closeAddForm()">&times;</span>
+
+                            <!-- Modal Title -->
+                            <h3 class="text-xl font-semibold mb-4 text-gray-700">Add Excuse Letter</h3>
+
+                            <!-- Form Container -->
+
+                            <div id="formContainer" class="space-y-4">
+                            @foreach ($controlNumber->where('document_type', $documentType) as $control)
+                                <form action="{{ route('documents.excuse_letter.store') }}" method="POST">
+
+                                     @csrf
+                                    <input type="hidden" name="document_type" value="{{ request('document_type') }}">
+                                    <input type="hidden" name="control_number" value="{{ $control->control_number }}">
+                                    <input type="hidden" name="revision" value="{{ $control->revision }}">
+                                    <input type="hidden" name="date_issued" value="{{ $control->date_issued }}">
+                                    <div class="form-group">
+                                        <label class="block text-gray-600 font-medium mb-1">Date:</label>
+                                        <input type="date" id="date" name="date" class="w-full border rounded-md px-3 py-2" required>
+                                        <div id="dateError1" class="hidden text-red-500">Please enter the date of absence. </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="block text-gray-600 font-medium mb-1">Dear (Recipient):</label>
+                                        <input type="text" id="recipient" name="recipient" class="w-full border rounded-md px-3 py-2" required>
+                                        <div id="nameError" class="hidden text-red-500">Please enter the recipient's name. </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="block text-gray-600 font-medium mb-1">Student Name:</label>
+                                        <input type="text" id="patient_name" name="patient_name" class="w-full border rounded-md px-3 py-2" required>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="block text-gray-600 font-medium mb-1">Department:</label>
+                                        <input type="text" id="department" name="department" class="w-full border rounded-md px-3 py-2" placeholder="Enter department" required>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="block text-gray-600 font-medium mb-1">Date of Absence:</label>
+                                        <input type="date" id="excuse_for" name="excuse_for" class="w-full border rounded-md px-3 py-2" required>
+                                        <div id="dateError2" class="hidden text-red-500">Please enter the date of absence.
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="block text-gray-600 font-medium mb-1">Reason for Absence:</label>
+                                        <input type="text" id="cause" name="cause" class="w-full border rounded-md px-3 py-2" required>
+                                        <div id="reasonError" class="hidden text-red-500">Please enter the reason for
+                                            absence.
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="block text-gray-600 font-medium mb-1">Physician's Name:</label>
+                                        <input type="text" id="doctorName" name="doctorName" class="w-full border rounded-md px-3 py-2" required>
+                                        <div id="licenseNoError" class="hidden text-red-500">Please enter the physician's
+                                            name.
+                                        </div>
+                                    </div>
+
+                                    <!-- Save Button -->
+                                    <div class="flex justify-center space-x-4 mt-6">
+                                        <button  onclick="saveAdded()" class="bg-[#3CAA38] hover:bg-[#2B8E2F] text-white font-medium py-2 px-20 rounded-md">Submit</button>
+                                    </div>
+                                </form>
+                            @endforeach
+                            </div>
+                        </div>
+                    </div>
 @endsection
 
 @push('scripts')
+                    <!-- Modal Scripts -->
     <script>
         function goBack() {
             window.location.href = "{{ route('documents.index') }}";
         }
+
 
         function printWaiver() {
             window.print();

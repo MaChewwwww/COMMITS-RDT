@@ -21,10 +21,14 @@
             </button>
         </div>
         <!-- Modal body -->
+    @foreach ($controlNumber->where('document_type', $documentType) as $control)
         <form action="{{ route('documents.medical_clearance.store') }}" method="POST"
             class="max-h-[80vh] overflow-y-auto ">
             @csrf
-            <input type="hidden" name="document_type" value="{{ request('document_type') }}">
+                        <input type="hidden" name="document_type" value="{{ request('document_type') }}">
+                        <input type="hidden" name="control_number" value="{{ $control->control_number }}">
+                        <input type="hidden" name="revision" value="{{ $control->revision }}">
+                        <input type="hidden" name="date_issued" value="{{ $control->date_issued }}">
             <h4 class="block mb-3 text-lg font-semibold text-blue-500 text-center">Form 1</h4>
             <div class="grid gap-4 mb-4 sm:grid-cols-2 px-2">
                 <!-- Date Field -->
@@ -75,7 +79,7 @@
                 <div>
                     <label for="doctorName" class="block mb-2 text-sm font-medium text-gray-900">Physician's name
                         <span class="text-red-500">*</span></label>
-                    <input type="date" name="doctorName" id="doctorName"
+                    <input type="text" name="doctorName" id="doctorName"
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-2 focus:outline-none focus:ring-blue-500 block w-full p-2.5"
                         placeholder="Enter physician's full name" required="">
                     <span id="PhcError" class="text-red-500 text-sm hidden">Physician name is required.</span>
@@ -208,5 +212,6 @@
                 </button>
             </div>
         </form>
+    @endforeach
     </div>
 </div>

@@ -39,6 +39,11 @@
         <div class="page">
             <!-- Document Content -->
             <div class="container">
+                    <div class="flex flex-col items-end text-xs leading-tight text-gray-800">
+                        <p>{{ $associatedDocument->control_number ?? '__________' }}</p>
+                        <p>Rev. {{ $associatedDocument->revision ?? '_________'}}</p>
+                        <p>{{ \Carbon\Carbon::parse($associatedDocument->date_issued)->format('F j, Y') ?? '__________' }} </p>
+                    </div>
                 <div class="flex items-center justify-center mb-10">
                     <div class="mr-5">
                         <img src="{{ asset('Logo_image/logopup.png') }}" alt="University logo" class="w-28 mb-5">
@@ -56,8 +61,7 @@
                 <div id="letterOutput" class="md:px-10" style="font-size: 16px">
                     <div class="mb-10 text-right">
                         <label class="font-medium">Date: </label>
-                        <span id="letterDate" class="underline">
-                            {{ \Carbon\Carbon::parse($associatedDocument->date)->format('F j, Y') }} </span>
+                        <span id="letterDate" class="underline"> {{ \Carbon\Carbon::parse($associatedDocument->date)->format('F j, Y') ?? '__________' }} </span>
 
                     </div>
                     <div class="space-y-4">
@@ -66,16 +70,11 @@
                                 class="underline">{{ $associatedDocument->recipient ?? '__________' }}</span>,
                         </p>
                         <p class="text-lg">
-                            I, <span id="studentName"
-                                class="underline">{{ $associatedDocument->patient_name ?? '__________' }}</span>, a student
-                            of the
-                            <span id="department"
-                                class="underline">{{ $associatedDocument->department ?? '__________' }}</span> Department,
-                            would
-                            like to inform you that I was unable to attend class on <span id="absenceDate"
-                                class="underline">{{ \Carbon\Carbon::parse($associatedDocument->excuse_for)->format('F j, Y') }}</span>
-                            due to <span id="reasons"
-                                class="underline">{{ $associatedDocument->cause ?? '__________' }}</span>.
+                            I, <span id="studentName" class="underline">{{ $associatedDocument->patient_name ?? '__________' }}</span>, a student of the
+                            <span id="department" class="underline">{{ $associatedDocument->department ?? '__________' }}</span> Department, would
+                            like to inform you that I was unable to attend class on <span
+                                id="absenceDate" class="underline">{{ \Carbon\Carbon::parse($associatedDocument->excuse_for)->format('F j, Y') ?? '__________' }}</span> due to <span
+                                id="reasons" class="underline">{{ $associatedDocument->cause ?? '__________' }}</span>.
                         </p>
                         <p class="text-lg">
                             Thank you for your consideration.
@@ -103,9 +102,110 @@
             </div>
         </div>
     </div>
+                <!-- Success Notification -->
+                <div class="container mx-auto bg-white md:py-20 md:px-20 w-[90%] md:w-[70%] lg:w-[70%]">
+                    <!-- Success Notification -->
+                    <div id="successMessage"
+                        class="hidden fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-10">
+                        <div class="bg-white rounded-lg shadow-lg p-6 w-96 text-center">
+                            <div
+                                class="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <!-- Green Checkmark Icon -->
+                                <svg class="w-8 h-8 text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                                    fill="currentColor" aria-hidden="true">
+                                    <path fill-rule="evenodd"
+                                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.707a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 10-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                        clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                            <p class="text-lg font-semibold">Successfully Edited!</p>
+                        </div>
+                    </div>
+                </div>
+                @include('Documents.excuse_letter.edit-form')
+                    <!-- Modal -->
+                    <div id="editFormModal"
+                        class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 hidden">
+                        <div class="modal-content bg-white rounded-lg shadow-lg p-6 w-full max-w-lg relative"
+                            style="max-height: 80%; overflow-y: auto;">
+                            <!-- Close Button in Top-Right -->
+                            <span
+                                class="close absolute top-2.5 right-2.5 text-red-500 text-2xl cursor-pointer hover:text-red-700"
+                                onclick="closeEditForm()">&times;</span>
 
+                            <!-- Modal Title -->
+                            <h3 class="text-xl font-semibold mb-4 text-gray-700">Edit Excuse Letter</h3>
 
-    @include('Documents.excuse_letter.edit-form')
+                            <!-- Form Container -->
+                            <div id="formContainer" class="space-y-4">
+                                <form action="{{ route('documents.excuse_letter.update', $document->id) }}" method="POST">
+                                    @csrf
+                                    @method('PUT') <!-- This ensures the method is PUT for updating -->
+                                    <input type="hidden" name="document_type" value="{{ $document->document_type }}">
+                                    <input type="hidden" name="control_number" value="{{ $associatedDocument->control_number }}">
+                                    <input type="hidden" name="revision" value="{{ $associatedDocument->revision }}">
+                                    <input type="hidden" name="date_issued" value="{{ $associatedDocument->date_issued }}">
+                                    <div class="form-group">
+                                        <label class="block text-gray-600 font-medium mb-1">Date:</label>
+                                        <input type="date" id="date" class="w-full border rounded-md px-3 py-2" name="date"
+                                            value="{{ old('date', $associatedDocument->date ?? '') }}" required>
+                                        <div id="dateError" class="hidden text-red-500">Please enter the date of absence.</div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="block text-gray-600 font-medium mb-1">Dear (Recipient):</label>
+                                        <input type="text" id="recipient" name="recipient"
+                                            class="w-full border rounded-md px-3 py-2" placeholder="Enter recipient's name"
+                                            value="{{ old('recipient', $associatedDocument->recipient ?? '') }}" required>
+                                        <div id="nameError" class="hidden text-red-500">Please enter the recipient's name.</div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="block text-gray-600 font-medium mb-1">Student Name:</label>
+                                        <input type="text" id="patient_name" name="patient_name"
+                                            class="w-full border rounded-md px-3 py-2" placeholder="Enter student name"
+                                            value="{{ old('patient_name', $associatedDocument->patient_name ?? '') }}" required>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="block text-gray-600 font-medium mb-1">Department:</label>
+                                        <input type="text" id="departmentInput" name="department"
+                                            class="w-full border rounded-md px-3 py-2" placeholder="Enter department"
+                                            value="{{ old('department', $associatedDocument->department ?? '') }}" required>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="block text-gray-600 font-medium mb-1">Date of Absence:</label>
+                                        <input type="date" id="excuse_for" name="excuse_for"
+                                            class="w-full border rounded-md px-3 py-2" value="{{ old('excuse_for', $associatedDocument->excuse_for ?? '') }}" required>
+                                        <div id="dateError" class="hidden text-red-500">Please enter the date of absence.</div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="block text-gray-600 font-medium mb-1">Reason for Absence:</label>
+                                        <input type="text" id="cause" name="cause"
+                                            class="w-full border rounded-md px-3 py-2" placeholder="Enter reason for absence"
+                                            value="{{ old('cause', $associatedDocument->cause ?? '') }}" required>
+                                        <div id="reasonError" class="hidden text-red-500">Please enter the reason for absence.</div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="block text-gray-600 font-medium mb-1">Physician's Name:</label>
+                                        <input type="text" id="doctorName" name="doctorName"
+                                            class="w-full border rounded-md px-3 py-2" placeholder="Enter physician's name"
+                                            value="{{ old('doctorName', $associatedDocument->doctorName ?? '') }}" required>
+                                        <div id="licenseNoError" class="hidden text-red-500">Please enter the physician's name.</div>
+                                    </div>
+
+                                    <!-- Save Button -->
+                                    <div class="flex justify-center space-x-4 mt-6">
+                                        <button onclick="saveEdits()" class="bg-[#3CAA38] hover:bg-[#2B8E2F] text-white font-medium py-2 px-20 rounded-md">Save</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
 @endsection
 
 @push('scripts')
