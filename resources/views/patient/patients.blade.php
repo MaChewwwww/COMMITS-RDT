@@ -1,8 +1,10 @@
 @extends('layouts.app-layout')
 
+@section('title', 'Patients Records')
+
 @section('content')
     <div class="container mx-auto">
-        <x-page-title class="mb-2" value="Patients Record" />
+        <x-page-title class="mb-2" value="Patients Records" />
 
         <div class="flex flex-wrap items-center justify-end w-full gap-4 mb-3">
             <!-- Add Button -->

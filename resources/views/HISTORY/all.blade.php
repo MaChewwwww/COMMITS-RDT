@@ -1,5 +1,7 @@
 @extends('layouts.app-layout')
 
+@section('title', 'History')
+
 @section('content')
     <div class="container px-4 mx-auto">
         <x-page-title class="mb-2" value="History" />

@@ -19,7 +19,7 @@ class ReportController extends Controller
     public function index(Request $request)
     {
         $query = Report::query();
-        
+
         if ($request->has('category')) {
             $query->where('category', $request->category);
         }
@@ -52,31 +52,39 @@ class ReportController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'title' => 'required',
-            'name' => 'required',
-            'age' => 'required',
-            'sex' => 'required',
-            'complaint' => 'required',
-            'diagnosis' => 'required',
-            'remarks' => 'nullable',
-            'category' => 'required',
-        ]);
+        try {
+            $request->validate([
+                'title' => 'required',
+                'name' => 'required',
+                'age' => 'required|numeric',
+                'sex' => 'required|in:Male,Female',
+                'complaint' => 'required|string|max:255',
+                'diagnosis' => 'required',
+                'remarks' => 'nullable|string|max:255',
+                'category' => 'required|in:students,faculty,administrative,dependents,visitors',
+            ]);
 
-        // Create a new report
-        Report::create([
-            'title' => $request->title,
-            'name' => $request->name,
-            'age' => $request->age,
-            'sex' => $request->sex,
-            'complaint' => $request->complaint,
-            'diagnosis' => $request->diagnosis,
-            'remarks' => $request->remarks,
-            'category' => $request->category,
-            'date' => Carbon::today(),
-        ]);
+            // Create a new report
+            $isSuccess = Report::create([
+                'title' => $request->title,
+                'name' => $request->name,
+                'age' => $request->age,
+                'sex' => $request->sex,
+                'complaint' => $request->complaint,
+                'diagnosis' => $request->diagnosis,
+                'remarks' => $request->remarks,
+                'category' => $request->category,
+                'date' => Carbon::today(),
+            ]);
 
-        return redirect()->route('reports.index')->with('success', 'Report added successfully.');
+            if ($isSuccess) {
+                return redirect()->route('reports.index')->with('success', 'Report added successfully');
+            } else {
+                return redirect()->route('reports.index')->with('error', 'Failed to add report');
+            }
+        } catch (\Throwable $th) {
+            return redirect()->route('reports.index')->with('error', 'Failed to add report');
+        }
     }
 
     // Show a single report
@@ -87,39 +95,61 @@ class ReportController extends Controller
         return view('reports.show', compact('report'));
     }
     // update report
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        $request->validate([
-            'title'      => 'required',
-            'name'       => 'required',
-            'age'        => 'required',
-            'sex'        => 'required',
-            'complaint'  => 'required',
-            'diagnosis'  => 'required',
-            'remarks'    => 'nullable',
-            'category'   => 'required',
-        ]);
+        try {
+            $request->validate([
+                'id' => 'required|exists:reports,id',
+                'name' => 'required',
+                'age' => 'required|numeric',
+                'sex' => 'required|in:Male,Female',
+                'complaint' => 'required|string|max:255',
+                'diagnosis' => 'required',
+                'remarks' => 'nullable|string|max:255',
+                'category' => 'required|in:students,faculty,administrative,dependents,visitors',
+            ]);
 
-        $report = Report::findOrFail($id);
+            $report = Report::findOrFail($request->id);
 
-        $report->update($request->all());
+            $isSuccess = $report->update($request->all());
 
-        return redirect()->route('reports.index')
-                        ->with('success', 'Report updated successfully.');
+            if ($isSuccess) {
+                return redirect()->route('reports.index')->with('success', 'Report updated successfully');
+            } else {
+                return redirect()->route('reports.index')->with('error', 'Failed to update report');
+            }
+        } catch (\Throwable $th) {
+            return redirect()->route('reports.index')->with('error', 'Failed to update report');
+        }
     }
 
     // Delete a report
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        $report = Report::findOrFail($id);
-        $report->delete();
-        return redirect()->route('reports.index')->with('success', 'Report deleted successfully.');
+        try {
+            $request->validate([
+                'id' => 'required|exists:reports,id'
+            ]);
+
+            $report = Report::findOrFail($request->id);
+            $isSuccess = $report->delete();
+
+            if ($isSuccess) {
+                return redirect()->route('reports.index')->with('success', 'Report deleted successfully');
+            }
+            else {
+                return redirect()->route('reports.index')->with('error', 'Failed to delete report');
+            }
+        } catch (\Throwable $th) {
+            return redirect()->route('reports.index')->with('error', 'Failed to delete report');
+        }
     }
 
-    public function showReportPaper(){
+    public function showReportPaper()
+    {
 
         $services = $this->getDefaultServices();
-        
+
         return view('reports.reportPaper', compact('services'));
     }
 
@@ -129,7 +159,7 @@ class ReportController extends Controller
             'fromDurationDate' => 'required|date',
             'toDurationDate'   => 'required|date',
         ]);
-        
+
         // Convert the incoming date strings to Carbon instances and ensure they cover the full day.
         $from = Carbon::parse($request->input('fromDurationDate'))->startOfDay();
         $to = Carbon::parse($request->input('toDurationDate'))->endOfDay();
@@ -142,7 +172,7 @@ class ReportController extends Controller
             ->get();
 
         $services = $this->getDefaultServices();
-        
+
         $categoryMapping = [
             'students'       => 0,
             'faculty'        => 1,
@@ -169,7 +199,8 @@ class ReportController extends Controller
     }
 
     // to initialize the services array once
-    private function getDefaultServices(): array {
+    private function getDefaultServices(): array
+    {
         return [
             [
                 'name' => '1. Consultation / Treatment',
@@ -421,10 +452,10 @@ class ReportController extends Controller
     public function exportExcel(Request $request)
     {
         // will get the count values of each category and services
-        $tableDatas = $request->input('tableData') 
-        ? json_decode($request->input('tableData'), true) 
-        : $this->getDefaultServices();
-        
+        $tableDatas = $request->input('tableData')
+            ? json_decode($request->input('tableData'), true)
+            : $this->getDefaultServices();
+
         // Prepare data for the export view
         $data = [
             'title' => $request->title,
@@ -445,7 +476,7 @@ class ReportController extends Controller
             'campusPhysician' => $request->physician_name,
             'campusNurse' => $request->nurse_name
         ];
-        
+
         return Excel::download(new ReportsExport($data), 'medical_report.xlsx');
     }
 }
