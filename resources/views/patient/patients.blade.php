@@ -366,20 +366,20 @@
                                 <div>
                                     <div class="flex"><x-input-label value="First Name " /><span
                                             class="ml-1 text-red-500">*</span></div>
-                                    <input type="text" name="firstName"
+                                    <input type="text" name="firstName" id="firstName"
                                         class="w-full px-2 py-2.5 text-sm rounded-lg border border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 transition-all"
                                         placeholder="First Name" required>
                                 </div>
                                 <div>
                                     <x-input-label class="mb-1" value="Middle Name " />
-                                    <input type="text" name="middleName"
+                                    <input type="text" name="middleName" id="middleName"
                                         class="w-full px-2 py-2.5 text-sm rounded-lg border border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 transition-all"
                                         placeholder="Middle Name">
                                 </div>
                                 <div>
                                     <div class="flex"><x-input-label value="Last Name " /><span
                                             class="ml-1 text-red-500">*</span></div>
-                                    <input type="text" name="lastName"
+                                    <input type="text" name="lastName" id="lastName"
                                         class="w-full px-2 py-2.5 text-sm rounded-lg border border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 transition-all"
                                         placeholder="Last Name" required>
                                 </div>
@@ -465,7 +465,7 @@
 
                             <!-- Action Buttons -->
                             <div class="flex gap-3 pt-4">
-                                <button type="submit"
+                                <button type="button" id="savePatientBtn" disabled
                                     class="flex-1 px-6 py-2.5 bg-green-600 text-white text-sm font-semibold rounded-lg
                                 hover:bg-green-700 focus:ring focus:ring-red-200 transition-all">
                                     <span class="spinner-border spinner-border-sm d-none me-2" role="status"></span>
@@ -484,6 +484,31 @@
             </div>
         </div>
     </div>
+
+    {{-- <div class="modal fade" id="similarPatientsModal" tabindex="-1" role="dialog" aria-labelledby="similarPatientsModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="similarPatientsModalLabel">Similar Patients Found</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-warning">
+                <i class="fas fa-exclamation-triangle"></i> 
+                The following similar patients were found in the database:
+                </div>
+                <div class="patient-list"></div>
+                <p class="mt-3">Are you sure you want to add this patient anyway?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" id="cancelAddPatient">Cancel</button>
+                <button type="button" class="btn btn-primary" id="confirmAddPatient">Add Anyway</button>
+            </div>
+            </div>
+        </div>
+    </div> --}}
 
     @foreach ($patients as $patient)
         <div class="modal fade" id="viewPatient-{{ $patient->id }}" tabindex="-1" role="dialog" aria-hidden="true">
@@ -796,6 +821,114 @@
 
 @section('scripts')
     <script>
+        // send an AJAX request to check for duplicate patients
+        $(document).ready(function() {
+            let formSubmitting = false;
+
+            // Reload the page when the modal is closed (to update the table)
+            $('#addPatientModal').on('hidden.bs.modal', function () {
+                window.location.reload();
+            });
+
+            // Click handler for the Save Patient button
+            $('#savePatientBtn').on('click', function(e) {
+                e.preventDefault();
+
+                if (formSubmitting) {
+                    return;
+                }
+
+                // Reference the form and clear any previous error
+                const form = $('#addPatientForm');
+                $('#addErrorAlert').addClass('d-none').html('');
+
+                // Retrieve trimmed values from input fields.
+                const firstName  = form.find('input[name="firstName"]').val().trim();
+                const middleName = form.find('input[name="middleName"]').val().trim();
+                const lastName   = form.find('input[name="lastName"]').val().trim();
+
+                // First, perform duplicate check via the check-similar route.
+                $.ajax({
+                    url: "{{ route('patients.check-similar') }}",
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        firstName: firstName,
+                        middleName: middleName,
+                        lastName: lastName
+                    },
+                    success: function(response) {
+                        console.log("Duplicate check response:", response);
+                        if (response.similarFound && response.similarPatients.length > 0) {
+                            console.log("Duplicate detected, preventing submission.");
+                            // Show error alert at the top.
+                            $('#addErrorAlert')
+                                .html('A patient with this name already exists. Please check before proceeding.')
+                                .removeClass('d-none')
+                                .removeClass('alert-success')
+                                .addClass('alert alert-danger');
+                            // Disable the Save button
+                            $('#savePatientBtn')
+                                .prop('disabled', true)
+                            formSubmitting = false;
+                            return; // Stop further processing
+                        } else {
+                            formSubmitting = true;
+                            // Proceed to save the patient via the store route.
+                            $.ajax({
+                                url: form.attr('action'),
+                                type: form.attr('method'),
+                                data: form.serialize(),
+                                success: function(resp) {
+                                    $('#addErrorAlert')
+                                        .html('Patient added successfully.')
+                                        .removeClass('d-none')
+                                        .removeClass('alert-danger')
+                                        .addClass('alert alert-success');
+                                    // Close the modal and reset the form.
+                                    $('#addPatientModal').modal('hide');
+                                    form.trigger('reset');
+                                    // Re-enable the Save button (restore green button)
+                                    $('#savePatientBtn')
+                                        .prop('disabled', false)
+                                    formSubmitting = false;
+                                },
+                                error: function(xhr, status, error) {
+                                    // If the server returns a 422, try to extract the JSON message.
+                                    let msg = error;
+                                    if (xhr.status === 422 && xhr.responseJSON && xhr.responseJSON.message) {
+                                        msg = xhr.responseJSON.message;
+                                    }
+                                    $('#addErrorAlert')
+                                        .html('Error while saving patient: ' + msg)
+                                        .removeClass('d-none')
+                                        .removeClass('alert-success')
+                                        .addClass('alert alert-danger');
+                                    formSubmitting = false;
+                                }
+                            });
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        $('#addErrorAlert')
+                            .html('Error while checking duplicates: ' + error)
+                            .removeClass('d-none')
+                            .removeClass('alert-success')
+                            .addClass('alert alert-danger');
+                        formSubmitting = false;
+                    }
+                });
+            });
+
+            // When any name field is modified, clear error messages and re-enable the Save button.
+            $('#firstName, #middleName, #lastName').on('input', function() {
+                $('#addErrorAlert').addClass('d-none').html('');
+                $('#savePatientBtn')
+                    .prop('disabled', false)
+            });
+        });
+
         function toggleEdit(patientID) {
             const patientForm = document.getElementById('patientForm-' + patientID);
             const patientInputs = patientForm.querySelectorAll('input:not([type="hidden"]), select, textarea');

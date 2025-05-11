@@ -139,6 +139,9 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/export/{type}', [App\Http\Controllers\InventoryExportController::class, 'export'])->name('inventory.export');
     });
 
+    //Fuzzy Search Route
+    Route::post('/patients/check-similar', [PatientController::class, 'checkSimilar'])->name('patients.check-similar');
+
     // Document Routes
     Route::prefix('documents')->group(function () {
         Route::get('/', [DocumentController::class, 'index'])->name('documents.index');

@@ -61,6 +61,40 @@ class PatientController extends Controller
         return view('patient.add', compact('physicians'));
     }
 
+    public function checkSimilar(Request $request)
+    {
+        $first  = $request->input('firstName');
+        $middle = $request->input('middleName');
+        $last   = $request->input('lastName');
+
+        $query = trim(implode(' ', array_filter([$first, $middle, $last])));
+        
+        if (empty($query)) {
+            return response()->json([
+                'similarFound'   => false,
+                'similarPatients'=> [],
+            ]);
+        }
+
+        // Use Laravel Scout with Meilisearch to perform a fuzzy search.
+        $results = Patient::search($query)->get();
+
+        $similarFound = $results->isNotEmpty();
+
+        return response()->json([
+            'similarFound' => $similarFound,
+            'similarPatients' => $results->map(function ($p) {
+                return [
+                    'id' => $p->id,
+                    'firstName' => $p->firstName,
+                    'middleName' => $p->middleName,
+                    'lastName' => $p->lastName,
+                ];
+            }),
+        ]);
+    }
+
+
     /**
      * Show the form for creating a new patient (alias for add)
      *
@@ -80,11 +114,35 @@ class PatientController extends Controller
     public function store(Request $request)
     {
         try {
+            // Validate incoming request data.
             $validated = $request->validate(
                 Patient::validationRules(),
                 Patient::validationMessages()
             );
 
+            // Trim and extract the name fields.
+            $first  = trim($validated['firstName'] ?? '');
+            $middle = trim($validated['middleName'] ?? '');
+            $last   = trim($validated['lastName'] ?? '');
+
+            // Check for an exact duplicate. Adjust the query as needed.
+            $duplicate = Patient::query()
+                ->whereRaw('LOWER(firstName) = ?', [strtolower($first)])
+                ->whereRaw('LOWER(lastName) = ?', [strtolower($last)])
+                ->when(!empty($middle), function ($query) use ($middle) {
+                    $query->whereRaw('LOWER(middleName) = ?', [strtolower($middle)]);
+                })
+                ->first();
+
+            if ($duplicate) {
+                // If a duplicate is found, return an error response.
+                return response()->json([
+                    'success' => false,
+                    'message' => 'A patient with this name already exists.',
+                ], 422);
+            }
+
+            // If no duplicate is found, proceed with saving the patient.
             $patient = $this->patientService->executeTransaction(function () use ($validated) {
                 return $this->patientService->createPatient($validated);
             });
@@ -92,18 +150,18 @@ class PatientController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => 'Patient added successfully',
-                'data' => $patient
+                'data'    => $patient
             ]);
         } catch (ValidationException $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Validation failed. Please check the form and try again.',
-                'errors' => $e->errors()
+                'errors'  => $e->errors()
             ], 422);
         } catch (\Exception $e) {
             Log::error('Patient creation error: ' . $e->getMessage(), [
                 'request' => $request->except(['_token']),
-                'trace' => $e->getTraceAsString()
+                'trace'   => $e->getTraceAsString()
             ]);
 
             return response()->json([
