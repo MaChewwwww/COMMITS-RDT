@@ -35,6 +35,7 @@ class Patient extends Model
     public function toSearchableArray()
     {
         return [
+            'id' => $this->id,
             'firstName' => $this->firstName,
             'middleName' => $this->middleName,
             'lastName' => $this->lastName,
