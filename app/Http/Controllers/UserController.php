@@ -41,14 +41,15 @@ class UserController extends Controller
             if (!$user->is_activated && $user->status == "inactive") {
                 $user->is_activated = true;
                 $user->status = "active";
-
                 $user->save();
             }
 
             // Check user role and redirect accordingly
-            return $user->role === 'superadmin'
-                ? redirect()->route('Superadmin_dashboard') // if superadmin
-                : redirect()->route('dashboard');
+            if ($user->role === 'superadmin') {
+                return redirect()->route('Superadmin_dashboard');
+            } else {
+                return redirect()->route('dashboard');
+            }
         }
 
         // Authentication failed
@@ -83,30 +84,49 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $user = $request->validate([
-            'first_name' => 'required|max:255',
-            'last_name' => 'required|max:255',
-            'email' => 'required|email|unique:users,email|max:255',
-            'role' => 'required|in:standard,superadmin'
+        $validatedData = $request->validate([
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'role' => 'required|string|in:standard,superadmin',
         ]);
-
-        // Generate a random string for password
-        $generatedPassword = Str::random(8) . rand(100, 999) . Str::random(1) . '!@#';
-        $generatedPassword = str_shuffle($generatedPassword);
-
-        $user['password'] = Hash::make($generatedPassword);
-
-        // create user and store the user for sending email
-        $created_user = User::create($user);
-
-        if ($created_user) {
-            // send the credentials to the respective email
-            Mail::to($created_user->email)->send(new WelcomeMail($created_user->first_name, $created_user->email, $generatedPassword));
-
-            return redirect()->back()->with('success', 'User added successfully.');
-        } else {
-
-            return redirect()->back()->with('error', 'Creation of account failed.');
+        
+        try {
+            // Generate a random password
+            $password = Str::random(10);
+            
+            // Create the user
+            $user = User::create([
+                'first_name' => $validatedData['first_name'],
+                'last_name' => $validatedData['last_name'],
+                'email' => $validatedData['email'],
+                'role' => $validatedData['role'],
+                'password' => Hash::make($password),
+                'status' => 'inactive',
+                'is_activated' => false,
+            ]);
+            
+            // Send welcome email with password
+            // Mail::to($user->email)->send(new WelcomeMail($user->first_name, $user->email, $password));
+            
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'User created successfully!',
+                    'user' => $user
+                ]);
+            }
+            
+            return redirect()->route('users.get')->with('success', 'User created successfully!');
+        } catch (\Exception $e) {
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Error creating user: ' . $e->getMessage()
+                ]);
+            }
+            
+            return redirect()->back()->with('error', 'Error creating user: ' . $e->getMessage())->withInput();
         }
     }
 
@@ -115,22 +135,34 @@ class UserController extends Controller
      */
     public function update(Request $request)
     {
-        $request->validate([
+        $validatedData = $request->validate([
             'id' => 'required|exists:users,id',
-            'status' => 'required|in:active,,inactive,suspended,deactivated',
+            'status' => 'required|string|in:active,inactive,suspended,deactivated',
         ]);
-
-        $user = User::find($request->id);
-
-        $isUpdated = $user->update([
-            'status' => $request->status,
-        ]);
-
-        if ($isUpdated) {
-            return redirect()->back()->with('success', 'User details updated successfully.');
-        } else {
-
-            return redirect()->back()->with('error', 'Failed to update user details.');
+        
+        try {
+            $user = User::findOrFail($validatedData['id']);
+            $user->status = $validatedData['status'];
+            $user->save();
+            
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'User updated successfully!',
+                    'user' => $user
+                ]);
+            }
+            
+            return redirect()->route('users.get')->with('success', 'User updated successfully!');
+        } catch (\Exception $e) {
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Error updating user: ' . $e->getMessage()
+                ]);
+            }
+            
+            return redirect()->back()->with('error', 'Error updating user: ' . $e->getMessage());
         }
     }
 

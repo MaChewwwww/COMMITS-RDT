@@ -37,16 +37,5 @@ class UserSeeder extends Seeder
             'updated_at' => now(),
         ]);
 
-        // for test only
-        User::create([
-            'first_name' => 'Mobaraq',
-            'last_name' => 'Camar',
-            'email' => 'mobaraqcamar@gmail.com',
-            'email_verified_at' => now(),
-            'password' => Hash::make('@.Admin123'),
-            'role' => 'standard',
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
     }
 }

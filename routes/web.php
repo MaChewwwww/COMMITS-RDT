@@ -8,6 +8,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\MedicineController;
 use App\Http\Controllers\SupplyController;
 use App\Http\Controllers\EquipmentController;
+use App\Http\Controllers\InventoryExportController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\PatientHistoryController;
 use App\Http\Controllers\ForgotPasswordController;
@@ -133,7 +134,13 @@ Route::middleware(['auth'])->group(function () {
                 Route::delete('/{equipment}', 'destroy')->name('delete_equipment');
             });
         });
+
+        // Add this route in an appropriate section of your web.php file
+        Route::get('/export/{type}', [App\Http\Controllers\InventoryExportController::class, 'export'])->name('inventory.export');
     });
+
+    //Fuzzy Search Route
+    Route::post('/patients/check-similar', [PatientController::class, 'checkSimilar'])->name('patients.check-similar');
 
     // Document Routes
     Route::prefix('documents')->group(function () {
@@ -179,6 +186,7 @@ Route::middleware(['auth'])->group(function () {
             Route::delete("/{id}/delete/{$slug}", [DocumentController::class, 'softDelete'])
                 ->name("documents.{$slug}.delete")
                 ->defaults('document_type', $type);
+
         }
     });
     //Control Number
@@ -210,7 +218,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/history', [PatientHistoryController::class, 'index'])->name('History.all');
 
     // Mark notification as read
-    Route::post('/notifications/{notification}/mark-as-read', function (App\Models\Notification $notification) {
+    Route::post('/notifications/{notification}/mark-as-read', function(App\Models\Notification $notification) {
         if (Auth::check()) {
             $userId = Auth::id();
 
@@ -240,14 +248,15 @@ Route::middleware(['auth'])->group(function () {
         ->middleware('auth');
 });
 
+
+
 //Super Admin
-Route::middleware(['auth'])->group((function () {
+Route::middleware(['auth', 'superadmin'])->group(function () {
     Route::prefix('admin')->group(function () {
 
         Route::get('/', function () {
             return redirect()->route('Superadmin_dashboard');
         });
-
 
         //Dashboard
         Route::get('/dashboard', [DashboardController::class, 'superadminDashboard'])->name('Superadmin_dashboard');
@@ -255,14 +264,13 @@ Route::middleware(['auth'])->group((function () {
         // User management
         Route::prefix('users')->group(function () {
             Route::get('/', [UserController::class, 'getUsers'])->name('users.get');
-            Route::post('/add', [UserController::class, 'store'])->name('user.store');
+            // Add this to your routes/web.php
+            Route::get('/admin/users/add', [UserController::class, 'create'])->name('user.create');
+            Route::post('/admin/users/add', [UserController::class, 'store'])->name('user.store');
             Route::post('/edit', [UserController::class, 'update'])->name('user.update');
             Route::post('/delete', [UserController::class, 'delete'])->name('user.destroy');
         });
 
-
-
         Route::get('/activity-logs', [ActivityLogController::class, 'index'])->name('Auditlog');
     });
-}));
-
+});

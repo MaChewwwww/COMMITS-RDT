@@ -25,7 +25,7 @@
             <div class="flex items-start justify-center w-full rounded-lg my-7">
                 <div class="w-full h-auto">
                     <table id="user_table" class="w-full rounded-lg shadow table-auto user_table">
-                        <thead class="border-b-2 rounded-lg bg-gray-100">
+                        <thead class="bg-gray-100 border-b-2 rounded-lg">
                             <tr>
                                 <th class="p-3 text-sm font-semibold tracking-wide text-center min-w-max">No.</th>
                                 <th class="p-3 text-sm font-semibold tracking-wide text-center min-w-max">First Name
@@ -183,25 +183,38 @@
         }
 
         function closeEditModal() {
-
-            // clear values
-            document.getElementById('id').value = "";
-            document.getElementById('edit_first_name').value = "";
-            document.getElementById('edit_last_name').value = "";
-            document.getElementById('edit_email').value = "";
-            document.getElementById('edit_role').value = "";
-            document.getElementById('edit_status').value = "";
-
-            let modal = document.getElementById("editFormModal");
-            let modalContent = modal.querySelector("div.relative");
-
-            modal.classList.add("opacity-0");
-            modalContent.classList.remove("scale-100");
-            modalContent.classList.add("scale-95");
-
-            setTimeout(() => {
-                modal.classList.add("hidden");
-            }, 300); // Matches transition duration
+            // Get the modal element
+            const modal = document.getElementById('editFormModal');
+            const modalContent = modal.querySelector("div.relative");
+            
+            // Add a debug log to check if the function is being called
+            console.log('Closing edit modal');
+            
+            try {
+                // Apply closing animation
+                modal.classList.add("opacity-0");
+                modalContent.classList.remove("scale-100");
+                modalContent.classList.add("scale-95");
+                
+                // Hide modal after animation completes
+                setTimeout(() => {
+                    modal.classList.add("hidden");
+                    
+                    // clear form values (optional)
+                    document.getElementById('user_id').value = "";
+                    document.getElementById('edit_first_name').value = "";
+                    document.getElementById('edit_last_name').value = "";
+                    document.getElementById('edit_email').value = "";
+                    document.getElementById('edit_role').value = "";
+                    document.getElementById('edit_status').value = "";
+                    
+                    console.log('Modal hidden');
+                }, 300);
+            } catch (error) {
+                console.error('Error closing modal:', error);
+                // Fallback: force hide the modal
+                modal.style.display = 'none';
+            }
         }
 
 
@@ -268,14 +281,15 @@
                                   d="m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z"/>
                         </svg>
                     </button>
-                    <button onclick="confirmDelete('${user.first_name}', this)"
-                        class="px-3 py-2 text-white bg-red-500 rounded-md hover:bg-red-600">
-                        <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-                            <path fill-rule="evenodd"
-                                  d="M8.586 2.586A2 2 0 0 1 10 2h4a2 2 0 0 1 2 2v2h3a1 1 0 1 1 0 2v12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V8a1 1 0 0 1 0-2h3V4a2 2 0 0 1 .586-1.414ZM10 6h4V4h-4v2Zm1 4a1 1 0 1 0-2 0v8a1 1 0 1 0 2 0v-8Zm4 0a1 1 0 1 0-2 0v8a1 1 0 1 0 2 0v-8Z"
-                                  clip-rule="evenodd"/>
-                        </svg>
-                    </button>
+                    <form action="{{ route('user.destroy') }}" method="POST">
+                        @csrf
+                        <input type="hidden" name="delete_user_id" value="${user.id}">
+                        <button type="button" onclick="confirmDelete('${user.first_name}', this.form)" class="px-3 py-2 text-white bg-red-500 rounded-md hover:bg-red-600">
+                            <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                                <path fill-rule="evenodd" d="M8.586 2.586A2 2 0 0 1 10 2h4a2 2 0 0 1 2 2v2h3a1 1 0 1 1 0 2v12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V8a1 1 0 0 1 0-2h3V4a2 2 0 0 1 .586-1.414ZM10 6h4V4h-4v2Zm1 4a1 1 0 1 0-2 0v8a1 1 0 1 0 2 0v-8Zm4 0a1 1 0 1 0-2 0v8a1 1 0 1 0 2 0v-8Z" clip-rule="evenodd"/>
+                            </svg>
+                        </button>
+                    </form>
                 </td>
             </tr>
         `;
@@ -310,7 +324,7 @@
             );
 
             if (filteredUsers.length > 0) {
-                renderUsers(filtered);
+                renderUsers(filteredUsers);
                 noUsersMessage.classList.add("hidden");
             } else {
                 userTableBody.innerHTML = "";

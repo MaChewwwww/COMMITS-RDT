@@ -1,15 +1,15 @@
 <div id="editReportModal" tabindex="-1" aria-hidden="true"
-    class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/50 opacity-0 transition-opacity duration-300 ease-out">
+    class="fixed inset-0 z-50 flex items-center justify-center hidden transition-opacity duration-300 ease-out opacity-0 bg-black/50">
     <!-- Modal content -->
     <div
-        class="relative p-4 w-full max-w-2xl h-full md:h-auto transform scale-95 transition-transform duration-300 ease-out bg-white rounded-lg shadow sm:p-5">
+        class="relative w-full h-full max-w-2xl p-4 transition-transform duration-300 ease-out transform scale-95 bg-white rounded-lg shadow md:h-auto sm:p-5">
         <!-- Modal header -->
-        <div class="flex justify-between items-center pb-4 mb-4 rounded-t sm:mb-5">
+        <div class="flex items-center justify-between pb-4 mb-4 rounded-t sm:mb-5">
             <h3 class="text-lg font-semibold text-gray-900">
                 Edit Report
             </h3>
             <button type="button" onclick="hideEditReportModal()"
-                class="text-gray-400 focus:ring-4 focus:outline-none focus:ring-gray-300 bg-gray-200 hover:bg-gray-300 hover:text-gray-900 rounded-full text-sm p-2 ml-auto inline-flex items-center"
+                class="inline-flex items-center p-2 ml-auto text-sm text-gray-400 bg-gray-200 rounded-full focus:ring-4 focus:outline-none focus:ring-gray-300 hover:bg-gray-300 hover:text-gray-900"
                 data-modal-toggle="editReportModal">
                 <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
                     xmlns="http://www.w3.org/2000/svg">
@@ -25,7 +25,7 @@
             @csrf
             @method('PUT')
             <input type="hidden" id="report_id" name="id">
-            <div class="grid gap-4 mb-4 sm:grid-cols-2">
+            <div class="grid gap-4 px-3 mb-4 sm:grid-cols-2">
                 <div>
                     <label for="title" class="block mb-2 text-sm font-medium text-gray-900">Report title <span
                             class="text-red-500">*</span></label>
@@ -96,13 +96,13 @@
                         placeholder="Type remarks here"></textarea>
                 </div>
             </div>
-            <div class="flex items-center justify-end w-full gap-3 mt-6">
+            <div class="flex items-center justify-end w-full gap-3 px-3 mt-6 mb-4">
                 <button type="button" onclick="hideEditReportModal()"
-                    class="flex w-full justify-center focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm font-medium text-gray-700 shadow-theme-xs transition-colors hover:bg-gray-50 hover:text-gray-800 sm:w-auto">
+                    class="flex justify-center w-full px-4 py-3 text-sm font-medium text-gray-700 transition-colors bg-white border border-gray-300 rounded-lg focus:ring-4 focus:outline-none focus:ring-gray-300 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 sm:w-auto">
                     Close
                 </button>
                 <button type="submit"
-                    class="flex justify-center focus:ring-4 focus:outline-none focus:ring-green-300 w-full px-4 py-3 text-sm bg-green-500 hover:bg-green-600 font-medium text-white rounded-lg bg-brand-500 shadow-theme-xs hover:bg-brand-600 sm:w-auto">
+                    class="flex justify-center w-full px-4 py-3 text-sm font-medium text-white bg-green-500 rounded-lg focus:ring-4 focus:outline-none focus:ring-green-300 hover:bg-green-600 bg-brand-500 shadow-theme-xs hover:bg-brand-600 sm:w-auto">
                     Save Changes
                 </button>
             </div>

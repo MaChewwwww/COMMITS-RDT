@@ -19,47 +19,29 @@
 
     {{-- PROFILE --}}
     <div class="flex items-center justify-start w-full px-6 py-2 mt-1">
-        <div class="w-14 mr-2 border bg-white rounded-lg p-1">
+        <div class="p-1 mr-2 bg-white border rounded-lg w-14">
             <img src="{{ asset('images/puplogo.png') }}" alt="">
         </div>
         <div class="text-white">
-            <p class="font-semibold text-base">{{ auth()->user()->first_name }}</p>
-            <p class="font-medium text-gray-300 text-sm">{{ auth()->user()->role }}</p>
-            <p class="font-semibold text-green-500 text-xs">• online</p>
+            <p class="text-base font-semibold">{{ auth()->user()->first_name }}</p>
+            <p class="text-sm font-medium text-gray-300">{{ auth()->user()->role }}</p>
+            <p class="text-xs font-semibold text-green-500">• online</p>
         </div>
     </div>
 
     <div class="overflow-y-auto px-3 pb-4 pt-2 h-full bg-[#7A0019]">
-        <p class="text-sm font-semibold text-start text-gray-300 mb-2 mt-4">Menu</p>
+        <p class="mt-4 mb-2 text-sm font-semibold text-gray-300 text-start">Menu</p>
         <ul class="flex flex-col space-y-1">
             <li>
-                <a href="{{ route('Superadmin_dashboard') }}"
-                    class="flex items-center p-2 text-base font-medium  transition duration-75 rounded-lg hover:bg-gray-200 hover:text-red-900 group {{ Route::is('Superadmin_dashboard') ? 'text-red-900 bg-gray-200' : 'text-gray-300' }}">
-                    <i
-                        class="fas fa-chart-pie w-6 h-5  transition duration-75 group-hover:text-red-800"></i>
-                    <span class="ml-3">Dashbord</span>
-                </a>
-                {{-- <x-sidebar-link :href="route('Superadmin_dashboard')" :active="request()->is('/admin*') || request()->is('/admin')" :icon="'fas fa-chart-pie'">Dashboard</x-sidebar-link> --}}
+                <x-sidebar-link :href="route('Superadmin_dashboard')" :active="request()->is('Superadmin_dashboard*') || request()->is('/')" :icon="'fas fa-chart-pie'">Dashboard</x-sidebar-link>
             </li>
             <li>
-                <a href="{{ route('users.get') }}"
-                    class="flex items-center p-2 text-base font-medium  transition duration-75 rounded-lg hover:bg-gray-200 hover:text-red-900 group {{ Route::is('users.get') ? 'text-red-900 bg-gray-200' : 'text-gray-300' }}">
-                    <i
-                        class="fas fa-user w-6 h-5  transition duration-75 group-hover:text-red-800"></i>
-                    <span class="ml-3">User Management</span>
-                </a>
-                {{-- <x-sidebar-link :href="route('User')" :active="request()->is('/admin/users*')" :icon="'fas fa-user'">User Management</x-sidebar-link> --}}
+                <x-sidebar-link :href="route('users.get')" :active="request()->is('admin/users*')" :icon="'fas fa-user-injured'">User</x-sidebar-link>
             </li>
             <li>
-                <a href="{{ route('Auditlog') }}"
-                    class="flex items-center p-2 text-base font-medium  transition duration-75 rounded-lg hover:bg-gray-200 hover:text-red-900 group {{ Route::is('Auditlog') ? 'text-red-900 bg-gray-200' : 'text-gray-300' }}">
-                    <i
-                        class="fas fa-history w-6 h-5  transition duration-75 group-hover:text-red-800"></i>
-                    <span class="ml-3">Audit Logs</span>
-                </a>
-                {{-- <x-sidebar-link :href="'Auditlog'" :active="request()->is('/admin/auditlogs')" :icon="'fas fa-history'">Audit Logs</x-sidebar-link> --}}
+                <x-sidebar-link :href="route('Auditlog')" :active="request()->is('admin/activity-logs*')" :icon="'fas fa-history'">Audit log</x-sidebar-link>
             </li>
         </ul>
     </div>
-
+   
 </aside>

@@ -113,7 +113,7 @@
             <!--loading spinner-->
             <x-loading-spinner />
 
-            <div class="py-4 px-8 h-full">
+            <div class="p-4 h-full">
                 <!--Main Content-->
                 @yield('content')
             </div>

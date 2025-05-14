@@ -1,15 +1,15 @@
 <div id="editFormModal" tabindex="-1" aria-hidden="true"
-    class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/50 opacity-0 transition-opacity duration-300 ease-out">
+    class="fixed inset-0 z-50 flex items-center justify-center hidden transition-opacity duration-300 ease-out opacity-0 bg-black/50">
     <!-- Modal content -->
     <div
-        class="relative p-4 w-full max-w-2xl h-full md:h-auto transform scale-95 transition-transform duration-300 ease-out bg-white rounded-lg shadow sm:p-5">
+        class="relative w-full h-full max-w-2xl p-4 transition-transform duration-300 ease-out transform scale-95 bg-white rounded-lg shadow md:h-auto sm:p-5">
         <!-- Modal header -->
-        <div class="flex justify-between items-center pb-4 mb-4 rounded-t sm:mb-5">
+        <div class="flex items-center justify-between pb-4 mb-4 rounded-t sm:mb-5">
             <h3 class="text-lg font-semibold text-gray-900">
                 Edit User Details
             </h3>
             <button type="button" onclick="closeEditModal()"
-                class="text-gray-400 focus:ring-4 focus:outline-none focus:ring-gray-300 bg-gray-200 hover:bg-gray-300 hover:text-gray-900 rounded-full text-sm p-2 ml-auto inline-flex items-center"
+                class="inline-flex items-center p-2 ml-auto text-sm text-gray-400 bg-gray-200 rounded-full focus:ring-4 focus:outline-none focus:ring-gray-300 hover:bg-gray-300 hover:text-gray-900"
                 data-modal-toggle="editReportModal">
                 <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
                     xmlns="http://www.w3.org/2000/svg">
@@ -23,7 +23,7 @@
         <!-- Modal body -->
         <form action="{{ route('user.update') }}" method="POST" class="max-h-[80vh] overflow-y-auto ">
             @csrf
-            <div class="grid gap-4 mb-4 sm:grid-cols-2 px-2">
+            <div class="grid gap-4 px-2 mb-4 sm:grid-cols-2">
                 <input type="hidden" value="" name="id" id="user_id"/>
 
                 <!-- First Name Field -->
@@ -82,14 +82,99 @@
 
             <div class="flex items-center justify-end w-full gap-3 mt-6">
                 <button onclick="closeEditModal()" type="button"
-                    class="flex w-full justify-center focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm font-medium text-gray-700 shadow-theme-xs transition-colors hover:bg-gray-50 hover:text-gray-800 sm:w-auto">
+                    class="flex justify-center w-full px-4 py-3 text-sm font-medium text-gray-700 transition-colors bg-white border border-gray-300 rounded-lg focus:ring-4 focus:outline-none focus:ring-gray-300 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 sm:w-auto">
                     Close
                 </button>
                 <button type="submit"
-                    class="flex justify-center focus:ring-4 focus:outline-none focus:ring-green-300 w-full px-4 py-3 text-sm bg-green-500 hover:bg-green-600 font-medium text-white rounded-lg bg-brand-500 shadow-theme-xs hover:bg-brand-600 sm:w-auto">
+                    class="flex justify-center w-full px-4 py-3 text-sm font-medium text-white bg-green-500 rounded-lg focus:ring-4 focus:outline-none focus:ring-green-300 hover:bg-green-600 bg-brand-500 shadow-theme-xs hover:bg-brand-600 sm:w-auto">
                     Save Changes
                 </button>
             </div>
         </form>
     </div>
 </div>
+
+<script>
+function closeEditModal() {
+    const modal = document.getElementById('editFormModal');
+    
+    if (!modal) {
+        console.error('Modal element not found');
+        return;
+    }
+    
+    // Add a debug log to check if the function is being called
+    console.log('Closing edit modal');
+    
+    try {
+        // Apply closing animation
+        modal.classList.remove('opacity-100');
+        modal.classList.add('opacity-0');
+        
+        const modalContent = modal.querySelector('div');
+        if (modalContent) {
+            modalContent.classList.remove('scale-100');
+            modalContent.classList.add('scale-95');
+        }
+        
+        // Hide modal after animation completes
+        setTimeout(() => {
+            modal.classList.add('hidden');
+            console.log('Modal hidden');
+        }, 300);
+    } catch (error) {
+        console.error('Error closing modal:', error);
+        // Fallback: force hide the modal
+        modal.style.display = 'none';
+    }
+}
+
+// Function to open the edit modal with pre-filled data
+function openEditModal(button) {
+    // Get user data from button data attributes
+    const userId = button.getAttribute('data-id');
+    const firstName = button.getAttribute('data-firstname');
+    const lastName = button.getAttribute('data-lastname');
+    const email = button.getAttribute('data-email');
+    const role = button.getAttribute('data-role');
+    const status = button.getAttribute('data-status');
+    
+    // Set values in the form
+    document.getElementById('user_id').value = userId;
+    document.getElementById('edit_first_name').value = firstName;
+    document.getElementById('edit_last_name').value = lastName;
+    document.getElementById('edit_email').value = email;
+    
+    // Set selected values for dropdowns
+    const roleSelect = document.getElementById('edit_role');
+    for (let i = 0; i < roleSelect.options.length; i++) {
+        if (roleSelect.options[i].value === role) {
+            roleSelect.selectedIndex = i;
+            break;
+        }
+    }
+    
+    const statusSelect = document.getElementById('edit_status');
+    for (let i = 0; i < statusSelect.options.length; i++) {
+        if (statusSelect.options[i].value === status) {
+            statusSelect.selectedIndex = i;
+            break;
+        }
+    }
+    
+    // Show the modal with animation
+    const modal = document.getElementById('editFormModal');
+    modal.classList.remove('hidden');
+    
+    // Trigger reflow to ensure transition works
+    void modal.offsetWidth;
+    
+    // Apply opening animation
+    modal.classList.remove('opacity-0');
+    modal.classList.add('opacity-100');
+    
+    const modalContent = modal.querySelector('div');
+    modalContent.classList.remove('scale-95');
+    modalContent.classList.add('scale-100');
+}
+</script>
