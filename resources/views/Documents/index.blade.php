@@ -182,7 +182,7 @@
                 </div>
                 @endif
 
-            @if(!$allTypesCreated)
+            @if($allTypesCreated === false)
             <div class="flex justify-end space-x-4 mt-6">
                     <button onclick="openCreateForm()" type="button"
                         class="bg-[#3CAA38] hover:bg-[#2B8E2F] text-white font-medium py-2 px-4 rounded-md">
