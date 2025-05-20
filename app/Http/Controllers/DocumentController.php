@@ -30,7 +30,7 @@ class DocumentController extends Controller
             'Waiver for Pulmonary Case' => 'documents.waiver_for_pulmonary_case.create',
             'DMDC Consent Form' => 'documents.dmdc_consent_form.create',
         ];
-        
+
         $controlNumber = ControlNumber::all();
         // Check if the document type exists in the view mapping
         if (!array_key_exists($documentType, $views)) {
@@ -50,7 +50,7 @@ class DocumentController extends Controller
             'revision' => 'required|string|max:255',
             'date_issued' => 'required|date',
         ]);
-        
+
         // Check if the document type already exists
         $existing = ControlNumber::where('document_type', $request->input('document_type'))->first();
 
@@ -66,11 +66,11 @@ class DocumentController extends Controller
             'revision' => $request->input('revision'),
             'date_issued' => $request->input('date_issued'),
         ]);
-        
+
         //dd($request->all()); //debugging
         return redirect()->route('documents.index')->with('success', 'Control number created successfully!');
     }
-    
+
     public function updateControlNumber(Request $request, $id)
     {
         //dd($request->all()); //debugging
@@ -99,7 +99,7 @@ class DocumentController extends Controller
             'revision' => $request->input('revision'),
             'date_issued' => $request->input('date_issued'),
         ]);
-        
+
         $models = [
             \App\Models\ExcuseLetter::class,
             \App\Models\AnnualMedicalClearance::class,
@@ -109,7 +109,7 @@ class DocumentController extends Controller
             \App\Models\WaiverForPulmonaryCase::class,
             \App\Models\DMDCConsentForm::class,
         ];
-    
+
         foreach ($models as $model) {
             $model::where('document_type', $request->document_type)->update([
                 'control_number' => $request->control_number,
@@ -126,7 +126,7 @@ class DocumentController extends Controller
         $controlNumber = ControlNumber::findOrFail($id);
         return view('controlNumber.edit', compact('controlNumber'));
     }
-    
+
     public function store(Request $request)
     {
         $document_type = $request->input('document_type');
@@ -161,7 +161,7 @@ class DocumentController extends Controller
                     'revision' => 'nullable|string|max:255',
                     'date_issued' => 'nullable|date',
                 ]);
-                
+
                 ExcuseLetter::create([
                     'document_type' => $request->document_type,
                     'document_id' => $document->id, // link document_id
@@ -466,7 +466,7 @@ class DocumentController extends Controller
 
     public function index(Request $request)
     {
-        
+
         $documentTypes = Document::select('document_type')->distinct()->pluck('document_type');
         $typeOptions = [
             'Medical Certificate',
