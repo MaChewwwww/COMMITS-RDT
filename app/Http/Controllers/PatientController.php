@@ -63,34 +63,45 @@ class PatientController extends Controller
 
     public function checkSimilar(Request $request)
     {
+        // If there are literally no patients yet, skip the fuzzy‐search entirely:
+        if (Patient::count() === 0) {
+            return response()->json([
+                'similarFound'    => false,
+                'similarPatients' => [],
+            ]);
+        }
+
         $first  = $request->input('firstName');
         $middle = $request->input('middleName');
         $last   = $request->input('lastName');
 
         $query = trim(implode(' ', array_filter([$first, $middle, $last])));
-        
+
         if (empty($query)) {
             return response()->json([
-                'similarFound'   => false,
-                'similarPatients'=> [],
+                'similarFound'    => false,
+                'similarPatients' => [],
             ]);
         }
 
-        // Use Laravel Scout with Meilisearch to perform a fuzzy search.
-        $results = Patient::search($query)->get();
-
-        $similarFound = $results->isNotEmpty();
+        try {
+            $results = Patient::search($query)->get();
+        } catch (\Throwable $e) {
+            Log::error('checkSimilar failed: '.$e->getMessage());
+            return response()->json([
+                'message' => 'Search service error — please try again later.'
+            ], 500);
+        }
 
         return response()->json([
-            'similarFound' => $similarFound,
-            'similarPatients' => $results->map(function ($p) {
-                return [
-                    'id' => $p->id,
-                    'firstName' => $p->firstName,
-                    'middleName' => $p->middleName,
-                    'lastName' => $p->lastName,
-                ];
-            }),
+            'similarFound'    => $results->isNotEmpty(),
+            'similarPatients' => $results->map(fn($p) => [
+                'id'         => $p->id,
+                'firstName'  => $p->firstName,
+                'middleName' => $p->middleName,
+                'lastName'   => $p->lastName,
+                'full_name'  => "{$p->firstName} {$p->middleName} {$p->lastName}",
+            ]),
         ]);
     }
 
