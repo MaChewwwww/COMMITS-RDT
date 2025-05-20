@@ -144,6 +144,7 @@ class DocumentController extends Controller
 
         //dd($request->all()); //debugging
 
+        
         // Validation and data insertion based on document type
         switch ($document_type) {
             case 'Excuse Letter':
