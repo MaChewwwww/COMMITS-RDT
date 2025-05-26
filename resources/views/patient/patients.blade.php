@@ -6,53 +6,58 @@
     <div class="container mx-auto">
         <x-page-title class="mb-2" value="Patients Records" />
 
-        <div class="flex flex-wrap items-center justify-end w-full gap-4 mb-3">
-            <!-- Add Button -->
+ <div class="p-4 bg-white rounded-lg shadow">
+    <!-- Top bar with tabs on left and button(s) on right -->
+    <div class="flex items-center justify-between flex-wrap gap-4 mb-3">
+        
+        <!-- Tabs (left-aligned) -->
+        <div class="flex space-x-3 overflow-x-auto" aria-label="Tabs">
+            
             <button type="button"
-                class="inline-flex items-center gap-2 px-6 py-2.5 text-white bg-blue-500 hover:bg-blue-600 rounded-lg
-            transition-all duration-200 shadow-md hover:shadow-lg active:shadow-sm transform hover:-translate-y-0.5 active:translate-y-0"
+                class="px-3 py-2 text-base text-gray-800 border-b-2 border-blue-500 rounded-t bg-blue-50 tab-btn whitespace-nowrap active hover:text-gray-700"
+                data-filter="all">
+                All Patients
+            </button>
+            <button type="button"
+                class="px-3 py-2 text-base text-gray-500 border-b-2 border-gray-300 rounded tab-btn whitespace-nowrap hover:text-gray-700"
+                data-filter="Student">
+                Students
+            </button>
+            <button type="button"
+                class="px-3 py-2 text-base text-gray-500 border-b-2 border-gray-300 rounded tab-btn whitespace-nowrap hover:text-gray-700"
+                data-filter="Faculty">
+                Faculty
+            </button>
+            <button type="button"
+                class="px-3 py-2 text-base text-gray-500 border-b-2 border-gray-300 rounded tab-btn whitespace-nowrap hover:text-gray-700"
+                data-filter="Admin">
+                Administrative
+            </button>
+            <button type="button"
+                class="px-3 py-2 text-base text-gray-500 border-b-2 border-gray-300 rounded tab-btn whitespace-nowrap hover:text-gray-700"
+                data-filter="Visitor">
+                Visitors
+            </button>
+            <button type="button"
+                class="px-3 py-2 text-base text-gray-500 border-b-2 border-gray-300 rounded tab-btn whitespace-nowrap hover:text-gray-700"
+                data-filter="Dependent">
+                Dependents
+            </button>
+        </div>
+
+        <!-- Action Buttons (right-aligned) -->
+        <div class="flex gap-2">
+
+            <!-- Add Patient button -->
+          <button type="button"
+                class="inline-flex items-center gap-2 px-3 py-2 text-white bg-blue-500 hover:bg-blue-600 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg active:shadow-sm transform hover:-translate-y-0.5 active:translate-y-0"
                 data-bs-toggle="modal" data-bs-target="#addPatientModal">
                 <span class="font-medium">+ Add Patient</span>
             </button>
         </div>
+    </div>
 
-        <div class="p-4 bg-white rounded-lg shadow">
-            <!-- Tab Navigation -->
-            <div class="">
-                <nav class="flex -mb-px space-x-3 overflow-x-auto" aria-label="Tabs">
-                    <!-- Tab buttons for filtering patients -->
-                    <button type="button"
-                        class="px-4 py-2 text-base text-gray-800 border-b-2 border-blue-500 rounded rounded-t bg-blue-50 tab-btn whitespace-nowrap active hover:text-gray-700"
-                        data-filter="all">
-                        All Patients
-                    </button>
-                    <button type="button"
-                        class="px-4 py-2 text-base text-gray-500 border-b-2 border-gray-300 rounded cursor-pointer tab-btn whitespace-nowrap hover:text-gray-700"
-                        data-filter="Student">
-                        Students
-                    </button>
-                    <button type="button"
-                        class="px-4 py-2 text-base text-gray-500 border-b-2 border-gray-300 rounded cursor-pointer tab-btn whitespace-nowrap hover:text-gray-700"
-                        data-filter="Faculty">
-                        Faculty
-                    </button>
-                    <button type="button"
-                        class="px-4 py-2 text-base text-gray-500 border-b-2 border-gray-300 rounded cursor-pointer tab-btn whitespace-nowrap hover:text-gray-700"
-                        data-filter="Admin">
-                        Administrative
-                    </button>
-                    <button type="button"
-                        class="px-4 py-2 text-base text-gray-500 border-b-2 border-gray-300 rounded cursor-pointer tab-btn whitespace-nowrap hover:text-gray-700"
-                        data-filter="Visitor">
-                        Visitors
-                    </button>
-                    <button type="button"
-                        class="px-4 py-2 text-base text-gray-500 border-b-2 border-gray-300 rounded cursor-pointer tab-btn whitespace-nowrap hover:text-gray-700"
-                        data-filter="Dependent">
-                        Dependents
-                    </button>
-                </nav>
-            </div>
+
 
             <!-- Table Container -->
             <div class="mt-4">
@@ -343,6 +348,7 @@
             </div>
         </div>
     </div>
+</div>
 
     <!-- Add Patient Modal -->
     <div class="modal fade" id="addPatientModal" tabindex="-1" role="dialog" aria-hidden="true">
