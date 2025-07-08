@@ -13,19 +13,76 @@ use Illuminate\Validation\ValidationException;
 
 class MedicineController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $users = User::all();
 
-        $medicines = Medicine::join('boxes', 'medicines.box_id', '=', 'boxes.id')
+        // Start building the query
+        $query = Medicine::join('boxes', 'medicines.box_id', '=', 'boxes.id')
             ->where('boxes.isReturned', false)
             ->with('box.user')
-            ->orderBy('medicines.expiration_date')
-            ->select('medicines.*')
-            ->simplePaginate(8);
+            ->select('medicines.*');
+
+        // Apply filters
+        $query = $this->applyFilters($query, $request);
+
+        // Order and paginate
+        $medicines = $query->orderBy('medicines.expiration_date')
+            ->simplePaginate(8)
+            ->appends($request->query());
+
+        // Get filter values for form persistence
+        $filters = $request->only([
+            'status', 'medicine_name', 'stock_number', 'user_id',
+            'date_received_from', 'date_received_to', 
+            'expiration_from', 'expiration_to'
+        ]);
 
         return view('inventory.medicines.index', 
-            compact('medicines', 'users'));
+            compact('medicines', 'users', 'filters'));
+    }
+
+    private function applyFilters($query, Request $request)
+    {
+        // Status filter
+        if ($request->filled('status')) {
+            $query->where('medicines.status', $request->status);
+        }
+
+        // Medicine name search
+        if ($request->filled('medicine_name')) {
+            $query->where('medicines.medicine_name', 'LIKE', '%' . $request->medicine_name . '%');
+        }
+
+        // Stock number search
+        if ($request->filled('stock_number')) {
+            $query->where('boxes.stock_number', 'LIKE', '%' . $request->stock_number . '%');
+        }
+
+        // User/MOR filter
+        if ($request->filled('user_id')) {
+            $query->where('boxes.user_id', $request->user_id);
+        }
+
+        // Date received range
+        if ($request->filled('date_received_from')) {
+            $query->whereDate('boxes.date_received', '>=', $request->date_received_from);
+        }
+
+        if ($request->filled('date_received_to')) {
+            $query->whereDate('boxes.date_received', '<=', $request->date_received_to);
+        }
+
+        // Expiration date range
+        if ($request->filled('expiration_from')) {
+            $query->whereDate('medicines.expiration_date', '>=', $request->expiration_from);
+        }
+
+        if ($request->filled('expiration_to')) {
+            $query->whereDate('medicines.expiration_date', '<=', $request->expiration_to);
+        }
+
+        return $query;
     }
 
     public function create(){
