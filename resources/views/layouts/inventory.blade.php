@@ -105,6 +105,7 @@
                                             <option value="In Stock" {{ ($filters['status'] ?? '') === 'In Stock' ? 'selected' : '' }}>In Stock</option>
                                             <option value="Low Stock" {{ ($filters['status'] ?? '') === 'Low Stock' ? 'selected' : '' }}>Low Stock</option>
                                             <option value="Out of Stock" {{ ($filters['status'] ?? '') === 'Out of Stock' ? 'selected' : '' }}>Out of Stock</option>
+                                            <option value="Returned" {{ ($filters['status'] ?? '') === 'Returned' ? 'selected' : '' }}>Returned</option>
                                         </select>
                                     </div>
 
@@ -417,5 +418,4 @@
         @endif
     </div>
 @endsection
-               
-                  
+

@@ -126,13 +126,20 @@
                     <x-inventory.table-cell class="align-middle">{{ $medicine->box->user->first_name }}</x-inventory.table-cell>
                     <x-inventory.table-cell class="align-middle">
                         @php
-                            $status = ucfirst($medicine->status);
-                            $statusColor = match($status) {
-                                'In Stock' => 'bg-green-100 text-green-800',
-                                'Low Stock' => 'bg-yellow-100 text-yellow-800',
-                                'Out of Stock' => 'bg-red-100 text-red-800',
-                                default => 'bg-gray-100 text-gray-800',
-                            };
+                            // Check if the box is returned first
+                            if ($medicine->box->isReturned) {
+                                $status = 'Returned';
+                                $statusColor = 'bg-gray-100 text-gray-800'; // Default text color
+                            } else {
+                                $status = ucfirst($medicine->status);
+                                $statusColor = match($status) {
+                                    'Full' => 'bg-blue-100 text-blue-800',
+                                    'In Stock' => 'bg-green-100 text-green-800',
+                                    'Low Stock' => 'bg-yellow-100 text-yellow-800',
+                                    'Out of Stock' => 'bg-red-100 text-red-800',
+                                    default => 'bg-gray-100 text-gray-800',
+                                };
+                            }
                         @endphp
                         <span class="px-2 py-1 rounded font-semibold text-xs {{ $statusColor }}">
                             {{ $status }}

@@ -17,9 +17,8 @@ class MedicineController extends Controller
     {
         $users = User::all();
 
-        // Start building the query
+        // Start building the query - Remove the isReturned filter to show all medicines
         $query = Medicine::join('boxes', 'medicines.box_id', '=', 'boxes.id')
-            ->where('boxes.isReturned', false)
             ->with('box.user')
             ->select('medicines.*');
 
@@ -46,7 +45,12 @@ class MedicineController extends Controller
     {
         // Status filter
         if ($request->filled('status')) {
-            $query->where('medicines.status', $request->status);
+            if ($request->status === 'Returned') {
+                $query->where('boxes.isReturned', true);
+            } else {
+                $query->where('boxes.isReturned', false)
+                      ->where('medicines.status', $request->status);
+            }
         }
 
         // Medicine name search
