@@ -226,4 +226,65 @@ class MedicineController extends Controller
             'message' => "Medicine '{$medicine->medicine_name}' has been returned successfully."
         ]);
     }
+
+    public function show(Medicine $medicine)
+    {
+        // Load relationships with the medicine, but handle missing relationships gracefully
+        $medicine->load([
+            'box.user',
+            'user'
+        ]);
+
+        // Try to load prescription relationships if they exist
+        try {
+            if (class_exists('App\Models\PrescriptionMedicine')) {
+                $medicine->load(['prescriptionMedicines.patient']);
+            }
+        } catch (\Exception $e) {
+            // If prescription relationships don't exist, continue without them
+        }
+
+        // Calculate additional statistics
+        $stats = [
+            'usage_percentage' => $medicine->initial_quantity > 0 
+                ? round(($medicine->consumed_quantity / $medicine->initial_quantity) * 100, 2) 
+                : 0,
+            'days_until_expiry' => now()->diffInDays($medicine->expiration_date, false),
+            'total_prescriptions' => 0, // Default to 0 if prescriptions don't exist
+            'total_patients_served' => 0, // Default to 0 if patients don't exist
+            'monthly_usage' => 0, // Default to 0
+        ];
+
+        // Try to get prescription statistics if the relationships exist
+        try {
+            if ($medicine->relationLoaded('prescriptionMedicines')) {
+                $stats['total_prescriptions'] = $medicine->prescriptionMedicines->count();
+                $stats['total_patients_served'] = $medicine->prescriptionMedicines->pluck('patient_id')->unique()->count();
+                
+                // Calculate monthly usage (prescriptions in last 30 days)
+                $monthlyPrescriptions = $medicine->prescriptionMedicines()
+                    ->where('created_at', '>=', now()->subDays(30))
+                    ->sum('quantity');
+                $stats['monthly_usage'] = $monthlyPrescriptions;
+            }
+        } catch (\Exception $e) {
+            // Keep default values if relationships don't exist
+        }
+
+        // Get activity logs for this medicine
+        $activityLogs = collect(); // Empty collection as fallback
+        try {
+            $activityLogs = activity()
+                ->performedOn($medicine)
+                ->with('causer')
+                ->latest()
+                ->take(10)
+                ->get();
+        } catch (\Exception $e) {
+            // If activity logging is not set up, use empty collection
+        }
+
+        return view('inventory.medicines.show', compact('medicine', 'stats', 'activityLogs'));
+    }
 }
+

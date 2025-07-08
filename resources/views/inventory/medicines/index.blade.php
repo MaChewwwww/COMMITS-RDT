@@ -148,14 +148,14 @@
                     <x-inventory.table-cell class="align-middle">
                         <div class="flex justify-center gap-2">
                             <!-- View Button (Green, Eye Icon, styled like btn-delete) -->
-                            <button type="button"
+                            <a href="{{ route('medicines.show', $medicine->id) }}"
                                 class="inline-flex items-center gap-2 px-3 py-2 text-sm text-white transition-all duration-200 transform bg-green-500 rounded-lg shadow-md hover:bg-green-600 hover:shadow-lg active:shadow-sm active:bg-green-700 focus:outline-none focus:border-green-700 active:translate-y-0"
-                                title="View"
-                                onclick="alert('View details coming soon!')">
+                                title="View Details">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="size-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M15 12a3 3 0 11-6 0 3 3 0 016 0zm6 0c0 5-9 9-9 9s-9-4-9-9a9 9 0 0118 0z" />
-                            </button>
+                                </svg>
+                            </a>
                             <!-- Return Button -->
                             <x-inventory.btn-return target="{{ 'return-'.$medicine->id }}"/>
                             <x-inventory.confirm-return 
